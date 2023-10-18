@@ -34,8 +34,6 @@ public class P03_ReservationPage
     @FindBy(xpath = "//span[contains(text(),\"Select unit now\")]")
     public WebElement selectUnitNowSpan;
 
-    @FindBy(xpath = "//kendo-dialog")
-    public WebElement selectUnitDialog;
 
     @FindBy(xpath = "//kendo-dialog//kendo-panelbar-item")
     public WebElement panelBar;

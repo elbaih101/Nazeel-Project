@@ -150,13 +150,7 @@ public class D01_MakingReservation
         saveReservationButton.click();
 
     }
-    void sleep(){try
-    {
-        Thread.sleep(2000);
-    } catch (InterruptedException e)
-    {
-        e.printStackTrace();
-    }}
+
 
     @And("when reservation Summary dialouge appears click on save reservatuon Button")
     public void whenReservationSummaryDialougeAppearsClickOnSaveReservatuonButton()
@@ -176,4 +170,11 @@ public class D01_MakingReservation
         Assert.assertTrue(resStatus.getText().contains(confirmationText));
 
     }
+    void sleep(){try
+    {
+        Thread.sleep(2000);
+    } catch (InterruptedException e)
+    {
+        e.printStackTrace();
+    }}
 }
