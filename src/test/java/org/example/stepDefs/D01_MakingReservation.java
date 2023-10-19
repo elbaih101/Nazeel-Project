@@ -6,7 +6,7 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.example.TestData;
 import org.example.pages.P01_LoginPage;
-import org.example.pages.P02_HomePage;
+import org.example.pages.P02_DashBoardPage;
 import org.example.pages.P03_ReservationPage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -24,7 +24,7 @@ import java.util.Random;
 public class D01_MakingReservation
 {
     P01_LoginPage loginPage = new P01_LoginPage();
-    P02_HomePage homePage = new P02_HomePage();
+    P02_DashBoardPage homePage = new P02_DashBoardPage();
     JavascriptExecutor js = (JavascriptExecutor) Hooks.driver;
     P03_ReservationPage reservationPage = new P03_ReservationPage();
     WebDriverWait wait = new WebDriverWait(Hooks.driver, Duration.ofSeconds(10));
@@ -177,4 +177,6 @@ public class D01_MakingReservation
     {
         e.printStackTrace();
     }}
+
+
 }

@@ -3,7 +3,7 @@ package org.example.stepDefs;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.example.TestData;
 import org.example.pages.P01_LoginPage;
-import org.example.pages.P02_HomePage;
+import org.example.pages.P02_DashBoardPage;
 import org.example.pages.P03_ReservationPage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -48,7 +48,7 @@ public class TestNgTest
     {  //initiating pages and waits
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         P01_LoginPage loginPage = new P01_LoginPage(driver);
-        P02_HomePage homePage = new P02_HomePage(driver);
+        P02_DashBoardPage homePage = new P02_DashBoardPage(driver);
         JavascriptExecutor js = (JavascriptExecutor) driver;
         P03_ReservationPage reservationPage = new P03_ReservationPage(driver);
 

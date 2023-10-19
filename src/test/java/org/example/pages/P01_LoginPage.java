@@ -3,8 +3,11 @@ package org.example.pages;
 import org.example.stepDefs.Hooks;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+
+import java.util.List;
 
 public class P01_LoginPage
 {
@@ -29,6 +32,16 @@ public class P01_LoginPage
     public WebElement loginButton;
     @FindBy(xpath = "//span[contains(text(),\"Later\")]/..")
     public WebElement verificationButton;
+
+    @FindBy(xpath = "//input[@name=\"propertyNameOrCode\"]")
+    public WebElement propertyNameField;
+    @FindBy(xpath = "//input[@placeholder=\"Search company\"]")
+    public WebElement companyNameField;
+
+    @FindAll({@FindBy(xpath = "//kendo-grid-list//td/span")})
+    public List<WebElement> companysList;
+
+
 //    button[class="n-button n-button--primary-border ng-star-inserted"]
 //    class="ng-star-inserted"
 }
