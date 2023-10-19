@@ -4,7 +4,7 @@ import io.cucumber.testng.AbstractTestNGCucumberTests;
 import io.cucumber.testng.CucumberOptions;
 
 
-@SuppressWarnings("NewClassNamingConvention")
+
 @CucumberOptions
         (
                 features = "src/main/resources/features",
@@ -22,5 +22,5 @@ import io.cucumber.testng.CucumberOptions;
 
         )
 
-public class Runners extends AbstractTestNGCucumberTests {
+public class runners extends AbstractTestNGCucumberTests {
 }

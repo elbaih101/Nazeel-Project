@@ -1,6 +1,7 @@
 package org.example.pages;
 
 import org.example.stepDefs.Hooks;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
@@ -12,6 +13,9 @@ public class P03_ReservationPage
         PageFactory.initElements(Hooks.driver, this);
     }
 
+    public P03_ReservationPage(WebDriver driver){
+    PageFactory.initElements(driver,this);
+}
     @FindBy(css = "button[class=\"n-button n-button--green ng-star-inserted\"]")
     public WebElement newReservationButton;
 

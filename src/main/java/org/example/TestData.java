@@ -16,6 +16,7 @@ public class TestData
     public static String password = "123456&Mh";
 
     public static String accessCode = "00720";
+    public static String guestName ="mostafa";
     public static void KendoSelectByValue(WebDriver driver, WebElement select, String value)
     {
         var selectElement = new Select(select);
