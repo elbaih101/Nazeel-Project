@@ -6,5 +6,4 @@
             <class name="org.example.stepDefs.TestNgTest"/>
         </classes>
     </test>
-
 </suite>
