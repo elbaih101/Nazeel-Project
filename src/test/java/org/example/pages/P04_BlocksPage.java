@@ -24,6 +24,15 @@ public class P04_BlocksPage {
     public List<WebElement> blocksNames;
     @FindBy(xpath = "//Button[contains(text(),\" New Block \")]")
     public WebElement newBlockButton;
+    @FindBy(xpath = "//Button[contains(text(),\" Filter \")]")
+    public WebElement filterButton;
+    @FindBy(id = "name")
+    public WebElement filterNmeField;
+    @FindBy(id = "description")
+    public WebElement filterDexcriptionField;
+    @FindBy(xpath = "//Button[contains(text(),\" Search \")]")
+    public WebElement filterSearchButton;
+
     @FindBy(xpath = "//kendo-grid-list//td[@data-kendo-grid-column-index=\"3\"]")
     public List<WebElement> blocksDescriptions;
 
@@ -45,20 +54,17 @@ public class P04_BlocksPage {
     public WebElement toastMsg;
 
 
-
-    public WebElement blockViewButton(String nameOFBlock){
-        WebElement viewButton = null;
-        for (WebElement blockName:blocksNames
-             ) {
+    public WebElement blockViewButton(String nameOFBlock) {
+        for (WebElement blockName : blocksNames) {
             if (blockName.getText().contains(nameOFBlock))
-                 viewButton =    blockName.findElement(By.xpath("/following-sibling::td[@data-kendo-grid-column-index=\"4\"]//button[2]"));
-        }
-        return viewButton;
+            {System.out.println(blockName.getText());
+                 return blockName.findElement(By.xpath("..//td[@data-kendo-grid-column-index=\"4\"]//button[2]"));
+        }}
+        return null;
     }
 
-    public WebElement blockDescription(WebElement blockName)
-    {
-        return blockName.findElement(By.xpath("/../td[@data-kendo-grid-column-index=\"3\"]"));
+    public WebElement blockDescription(WebElement blockName) {
+        return blockName.findElement(By.xpath("../td[@data-kendo-grid-column-index=\"3\"]"));
 
     }
 }
