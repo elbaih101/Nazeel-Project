@@ -54,17 +54,40 @@ public class P04_BlocksPage {
     public WebElement toastMsg;
 
 
+    @FindBy(xpath = "//div[@class=\"swal2-popup swal2-modal swal2-show\"]")
+    public WebElement confirmationPopUp;
+
+    @FindBy(xpath = "//div[@class=\"popup__item popup__item--red\"][contains(text(),\" Delete \")]")
+    public WebElement blockDeleteButton;
+
     public WebElement blockViewButton(String nameOFBlock) {
         for (WebElement blockName : blocksNames) {
-            if (blockName.getText().contains(nameOFBlock))
-            {System.out.println(blockName.getText());
-                 return blockName.findElement(By.xpath("..//td[@data-kendo-grid-column-index=\"4\"]//button[2]"));
-        }}
+            if (blockName.getText().contains(nameOFBlock)) {
+                return blockName.findElement(By.xpath("..//td[@data-kendo-grid-column-index=\"4\"]//button[2]"));
+            }
+        }
         return null;
     }
 
-    public WebElement blockDescription(WebElement blockName) {
-        return blockName.findElement(By.xpath("../td[@data-kendo-grid-column-index=\"3\"]"));
+    public WebElement blockMoreMenu(String nameOFBlock) {
+        for (WebElement blockName : blocksNames) {
+            if (blockName.getText().contains(nameOFBlock)) {
+                return blockName.findElement(By.xpath("..//td[@data-kendo-grid-column-index=\"4\"]//div/div/div"));
+            }
+        }
+        return null;
+    }
 
+    public WebElement blockDescription(String nameOFBlock) {
+        for (WebElement blockName : blocksNames) {
+            if (blockName.getText().contains(nameOFBlock)) {
+                return blockName.findElement(By.xpath("..//td[@data-kendo-grid-column-index=\"3\"]"));
+            }
+        }
+        return null;
+    }
+
+    public WebElement confirmationSaveButton() {
+        return confirmationPopUp.findElement(By.xpath("//button[contains(text(),\"Yes\")]"));
     }
 }

@@ -41,7 +41,7 @@ SoftAssert asrt =new SoftAssert();
     String  propertyName= faker.company().name();
     @Given("Logging in with superuser")
     public void loggingInWithSuperuser() {
-        Hooks.superUserLogin("mostafa","Aa@123456");
+        Hooks.superUserLogin("baih","Aa@123456");
     }
 
 

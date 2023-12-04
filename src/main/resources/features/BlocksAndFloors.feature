@@ -36,9 +36,28 @@ Feature: Blocks And Floors
     Given Logging in with superuser
     And Select Property "Boyle-Adams"
     And go to Blocks Page
+    And click on filter button
     And enter the name of block "EditedName" in search criteria
-    And click searchButton
-    Then
-    # #ToDo:: filter with discription
+    And click filter search Button
+    Then check filtered blocks cotains name "EditedName"
 
+    # #ToDo:: filter with discription
+  Scenario: filter block list with description
+    Given Logging in with superuser
+    And Select Property "Boyle-Adams"
+    And go to Blocks Page
+    And click on filter button
+    And click filter search Button
+    And enter discription of the block "EditedBlockDiscription"
+    And click filter search Button
+    Then check filtered blocks cotains description "EditedBlockDiscription"
     # #ToDo:: DElete Block
+
+  Scenario: Delete a block
+    Given Logging in with superuser
+    And Select Property "Boyle-Adams"
+    And go to Blocks Page
+    And clicking on block's more menue button for block "EditedName"
+    And click on block's delete button
+    And click on confirmation messsage yes button
+    Then Check toast mesage contains text "Deleted Successfully !"

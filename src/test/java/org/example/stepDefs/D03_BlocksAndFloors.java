@@ -7,7 +7,6 @@ import org.example.pages.P02_DashBoardPage;
 import org.example.pages.P04_BlocksPage;
 import org.example.pages.P05_SetupPage;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.asserts.SoftAssert;
@@ -62,9 +61,9 @@ public class D03_BlocksAndFloors {
     }
 
     @Then("Check toast mesage contains text {string}")
-    public void checkToastMesageContainsText(String arg0) {
+    public void checkToastMesageContainsText(String mesage) {
         asrt.assertTrue(blocksPage.toastMsg.isDisplayed());
-        asrt.assertEquals(blocksPage.toastMsg.getText(), "Saved Successfully");
+        asrt.assertEquals(blocksPage.toastMsg.getText(), mesage);
         asrt.assertAll();
     }
 
@@ -75,25 +74,20 @@ public class D03_BlocksAndFloors {
 
     @Then("check new block with name {string} and discription {string}")
     public void checkNewBlockIsCreatedWithNameAndDiscription(String name, String discription) {
-        for (WebElement blockName : blocksPage.blocksNames
-        ) {
-            if (blockName.getText().contains(name)) ;
-            asrt.assertTrue(true);
+        asrt.assertTrue(blocksPage.blockDescription(name).getText().contains(discription));
+        asrt.assertAll();
 
-            asrt.assertTrue(blocksPage.blockDescription(blockName).getText().contains(discription));
-            asrt.assertAll();
-
-        }
 
     }
+
     //////////////////////////////////////////////////////////////////////
 //////////////////////////Edit block from view Button/////////////////////////////////
-@And("click on the view Button for Block name {string}")
-public void clickOnTheViewButtonForBlockName(String blockName) {
-    blocksPage.blockViewButton(blockName).click();
-    wait.until(ExpectedConditions.visibilityOf(blocksPage.blockViewButton(blockName)));
+    @And("click on the view Button for Block name {string}")
+    public void clickOnTheViewButtonForBlockName(String blockName) {
+        blocksPage.blockViewButton(blockName).click();
+        wait.until(ExpectedConditions.visibilityOf(blocksPage.blockViewButton(blockName)));
 
-}
+    }
 
 
     @When("click on edit Button")
@@ -116,6 +110,67 @@ public void clickOnTheViewButtonForBlockName(String blockName) {
     @And("click on save button for block edit mood")
     public void clickOnSaveButtonForBlockEditMood() {
         blocksPage.editModeSaveButton.click();
+    }
+
+/////////////////////////////////////////////////////////////////////////
+    ////////////////////////// fliter by name//////////////////////////////
+
+    @And("click on filter button")
+    public void clickOnFilterButton() {
+        blocksPage.filterButton.click();
+
+    }
+
+    @And("enter the name of block {string} in search criteria")
+    public void enterTheNameOfBlockInSearchCriteria(String name) {
+        blocksPage.filterNmeField.sendKeys(name);
+    }
+
+    @And("click filter search Button")
+    public void clickFilterSearchButton() {
+        blocksPage.filterSearchButton.click();
+    }
+
+
+    @Then("check filtered blocks cotains name {string}")
+    public void checkFilteredBlocksCotainsName(String name) {
+        asrt.assertTrue(blocksPage.blocksNames.getFirst().getText().contains(name));
+        asrt.assertAll();
+    }
+
+
+    //////////////////////////////////////////////////////////////////////////////
+    ///////////////////////filter with dicription/////////////////////////////////
+    @And("enter discription of the block {string}")
+    public void enterDiscriptionOfTheBlock(String description) {
+        blocksPage.filterDexcriptionField.sendKeys(description);
+    }
+
+    @Then("check filtered blocks cotains description {string}")
+    public void checkFilteredBlocksCotainsDescription(String description) {
+        asrt.assertTrue(blocksPage.blocksDescriptions.getFirst().getText().contains(description), "description missmatch");
+    }
+
+    //////////////////////////////////////////////////////////////////////////////////////////////
+    //////////////////////////////Delete block///////////////////////////////////////////////
+    @And("clicking on block's more menue button for block {string}")
+    public void clickingOnBlockSMoreMenueButtonForBlock(String name) {
+       wait.until(ExpectedConditions.elementToBeClickable(blocksPage.blockMoreMenu(name)));
+        blocksPage.blockMoreMenu(name).click();
+        wait.until(ExpectedConditions.visibilityOf(blocksPage.blockDeleteButton));
+    }
+
+
+    @And("click on block's delete button")
+    public void clickOnBlockSDeleteButton() {
+        blocksPage.blockDeleteButton.click();
+        wait.until(ExpectedConditions.visibilityOf(blocksPage.confirmationPopUp));
+    }
+
+    @And("click on confirmation messsage yes button")
+    public void clickOnConfirmationMesssageYesButton() {
+        blocksPage.confirmationSaveButton().click();
+        wait.until(ExpectedConditions.visibilityOf(blocksPage.toastMsg));
     }
 
 
