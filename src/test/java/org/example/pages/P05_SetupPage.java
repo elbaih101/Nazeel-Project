@@ -26,5 +26,7 @@ public class P05_SetupPage {
     @FindBy(xpath = "//a[@href=\"/block-Floor/blooks\"]")
     public WebElement blocksLink;
 
+    @FindBy(xpath = "//a[@href=\"/block-Floor/floors\"]")
+    public WebElement floorsLink;
 
 }

@@ -23,25 +23,26 @@ import java.util.Locale;
 public class D02_CreateProperty {
 
     Locale locale = new Locale("SA");
-    Faker faker=new Faker(locale);
-   WebDriver driver =Hooks.driver;
-SoftAssert asrt =new SoftAssert();
-    Actions actions =new Actions(driver);
-   WebDriverWait wait =new WebDriverWait(driver, Duration.ofSeconds(20));
+    Faker faker = new Faker(locale);
+    WebDriver driver = Hooks.driver;
+    SoftAssert asrt = new SoftAssert();
+    Actions actions = new Actions(driver);
+    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
     P01_LoginPage loginPage = new P01_LoginPage(driver);
     P02_DashBoardPage dashBoardPage = new P02_DashBoardPage(driver);
-    P05_SetupPage setupPagec=new P05_SetupPage(driver);
-    P06_PropertiesPage propertiesPage =new P06_PropertiesPage(driver);
-    P06_1_PropeertyDataPage propeertyDataPage= new P06_1_PropeertyDataPage(driver);
-    P06_2_LocationDataPage locationDataPage =new P06_2_LocationDataPage(driver);
-    P06_3_OwnerDataPage ownerDataPage =new P06_3_OwnerDataPage(driver);
-    P06_4_SmsPage smsPage=new P06_4_SmsPage(driver);
-    P06_5_SubscriptionPage subscriptionPage=new P06_5_SubscriptionPage(driver);
-    P06_6_SummaryPage summaryPage=new P06_6_SummaryPage(driver);
-    String  propertyName= faker.company().name();
+    P05_SetupPage setupPagec = new P05_SetupPage(driver);
+    P06_PropertiesPage propertiesPage = new P06_PropertiesPage(driver);
+    P06_1_PropeertyDataPage propeertyDataPage = new P06_1_PropeertyDataPage(driver);
+    P06_2_LocationDataPage locationDataPage = new P06_2_LocationDataPage(driver);
+    P06_3_OwnerDataPage ownerDataPage = new P06_3_OwnerDataPage(driver);
+    P06_4_SmsPage smsPage = new P06_4_SmsPage(driver);
+    P06_5_SubscriptionPage subscriptionPage = new P06_5_SubscriptionPage(driver);
+    P06_6_SummaryPage summaryPage = new P06_6_SummaryPage(driver);
+    String propertyName = faker.company().name();
+
     @Given("Logging in with superuser")
     public void loggingInWithSuperuser() {
-        Hooks.superUserLogin("baih","Aa@123456");
+        Hooks.superUserLogin("baih", "Aa@123456");
     }
 
 
@@ -51,10 +52,10 @@ SoftAssert asrt =new SoftAssert();
         actions.sendKeys(Keys.ENTER);
         actions.perform();
         Thread.sleep(2000);
-        for (WebElement company:
-        loginPage.companysList) {
-         if (company.getText().contains(propertyName))
-             company.click();
+        for (WebElement company :
+                loginPage.companysList) {
+            if (company.getText().contains(propertyName))
+                company.click();
         }
         //close the announcement
         wait.until(ExpectedConditions.visibilityOf(dashBoardPage.setupPageLink));
@@ -88,7 +89,7 @@ SoftAssert asrt =new SoftAssert();
         propeertyDataPage.propertyNameField.sendKeys(propertyName);
         propeertyDataPage.propertyType().get(0).click();
         propeertyDataPage.unitClass().get(0).click();
-        WebElement selection=propeertyDataPage.propertyAccount().get(0);
+        WebElement selection = propeertyDataPage.propertyAccount().get(0);
         wait.until(ExpectedConditions.elementToBeClickable(selection));
         selection.click();
         propeertyDataPage.numberOfUnitsField.sendKeys("80");
@@ -104,8 +105,8 @@ SoftAssert asrt =new SoftAssert();
         locationDataPage.city().get(0).click();
         locationDataPage.district().get(0).click();
         locationDataPage.street().get(0).click();
-        locationDataPage.buildingNumberField.sendKeys(String.valueOf(faker.number().numberBetween(1,99)));
-        locationDataPage.additionalNoField.sendKeys(String.valueOf(faker.number().numberBetween(1,99)));
+        locationDataPage.buildingNumberField.sendKeys(String.valueOf(faker.number().numberBetween(1, 99)));
+        locationDataPage.additionalNoField.sendKeys(String.valueOf(faker.number().numberBetween(1, 99)));
         locationDataPage.addressField.sendKeys(String.valueOf(faker.address()));
         locationDataPage.phoneNumberField.sendKeys(String.valueOf(faker.phoneNumber().cellPhone()));
         locationDataPage.mobileNumberField.sendKeys(String.valueOf(faker.phoneNumber().cellPhone()));
@@ -124,7 +125,7 @@ SoftAssert asrt =new SoftAssert();
     public void fillSmsData() {
         wait.until(ExpectedConditions.visibilityOf(smsPage.smsBalanceField));
         smsPage.smsprovider().get(0).click();
-        WebElement selection =smsPage.smsSender().get(0);
+        WebElement selection = smsPage.smsSender().get(0);
         wait.until(ExpectedConditions.elementToBeClickable(selection));
         selection.click();
         smsPage.smsBalanceField.sendKeys("80");
@@ -155,10 +156,10 @@ SoftAssert asrt =new SoftAssert();
     public void checkNewPropertyIsCreated() {
         wait.until(ExpectedConditions.invisibilityOf(summaryPage.saveButton));
 
-        for (WebElement property:propertiesPage.propertiesNames) {
-                asrt.assertTrue(property.getText().contains(propertyName));
+        for (WebElement property : propertiesPage.propertiesNames) {
+            asrt.assertTrue(property.getText().contains(propertyName));
         }
         asrt.assertAll();
     }
 
-    }
+}
