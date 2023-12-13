@@ -175,6 +175,34 @@ public class D03_BlocksAndFloors {
         wait.until(ExpectedConditions.visibilityOf(blocksPage.toastMsg));
     }
 
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////// check floor number is incrementd with adding floors /////////////////////////////////////////
+
+    int floorsNum;
+    @And("note the number of floors in the grid for block {string}")
+    public void noteTheNumberOfFloorsInTheGridForBlock(String blockName) {
+        floorsNum = Integer.parseInt( blocksPage.blockNumberOfFloors(blockName).getText().trim());
+
+    }
+    @And("check the number of floors is incremented by {int} for block {string}")
+    public void checkTheNumberOfFloorsIsIncrementedByForBlock(int change, String blockName) {
+        asrt.assertEquals(Integer.parseInt( blocksPage.blockNumberOfFloors(blockName).getText().trim()),floorsNum+change,"the floor didn't register");
+        asrt.assertAll();
+    }
+  //////////////////////////////////////////////////
+  ///////////////////////////////// check floor number is decreased with deleting  floors /////////////////////////////////////////
+    @When("click on floor with name {string} more menu button")
+    public void clickOnFloorWithNameMoreMenuButton(String floorName) {
+        WebElement moreMenu = floorsPage.floorMoreMenu(floorName, null);
+        wait.until(ExpectedConditions.elementToBeClickable(moreMenu));
+        moreMenu.click();
+    }
+    @And("check the number of floors is decreased by {int} for block {string}")
+    public void checkTheNumberOfFloorsIsDecreasedByForBlock(int change, String blockName) {
+        asrt.assertEquals(Integer.parseInt( blocksPage.blockNumberOfFloors(blockName).getText().trim()),floorsNum-change,"the floor didn't register");
+        asrt.assertAll();
+    }
+
 //////////////////////////////////////////////////////////////////////////////////////
     //////////////////////////// ##Floors## /////////////////////////////////////
 
@@ -323,10 +351,10 @@ public class D03_BlocksAndFloors {
             wait.until(ExpectedConditions.elementToBeClickable(moreMenu));
             moreMenu.click();
         } else {
-                String topFloorORder =floorsPage.floorsOrder.getLast().getText();
-                if (topFloorORder.equals("1"))
-                    System.out.println("this block has only 1 floor");
-            WebElement moreMenu = floorsPage.floorMoreMenu(null,topFloorORder);
+            String topFloorORder = floorsPage.floorsOrder.getLast().getText();
+            if (topFloorORder.equals("1"))
+                System.out.println("this block has only 1 floor");
+            WebElement moreMenu = floorsPage.floorMoreMenu(null, topFloorORder);
             wait.until(ExpectedConditions.elementToBeClickable(moreMenu));
             moreMenu.click();
         }
@@ -345,4 +373,7 @@ public class D03_BlocksAndFloors {
             floorsPage.floorDeleteButton.click();
         }
     }
+
+
+
 }

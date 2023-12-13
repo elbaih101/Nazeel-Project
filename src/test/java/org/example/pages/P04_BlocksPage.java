@@ -87,6 +87,16 @@ public class P04_BlocksPage {
         return null;
     }
 
+    public WebElement blockNumberOfFloors(String nameOFBlock) {
+        for (WebElement blockName : blocksNames) {
+            if (blockName.getText().contains(nameOFBlock)) {
+                return blockName.findElement(By.xpath("..//td[@data-kendo-grid-column-index=\"2\"]"));
+            }
+        }
+        return null;
+    }
+
+
     public WebElement confirmationSaveButton() {
         return confirmationPopUp.findElement(By.xpath("//button[contains(text(),\"Yes\")]"));
     }

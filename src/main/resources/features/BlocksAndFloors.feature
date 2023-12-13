@@ -1,3 +1,4 @@
+@Regression
 Feature: Blocks And Floors
 
   Scenario: Check default Floor
@@ -57,6 +58,32 @@ Feature: Blocks And Floors
     And click on confirmation messsage yes button
     Then Check toast mesage contains text "Deleted Successfully !"
 
+  Scenario: check number of floors is incremented when adding new floor to the block
+    Given Logging in with superuser
+    And Select Property "Boyle-Adams"
+    And go to Blocks Page
+    And note the number of floors in the grid for block "1"
+    Then go to Floors Page
+    And click on new floor button
+    And Fill the floor name "added floor" and discription "added floor for the default block "
+    Then Check toast mesage contains text "Saved Successfully"
+    Then check new floor with name "added floor" and discription "added floor for the default block"
+    And go to Blocks Page
+    And check the number of floors is incremented by 1 for block "1"
+
+    Scenario: check number of floors is decreases when adding new floor to the block
+      Given Logging in with superuser
+      And Select Property "Boyle-Adams"
+      And go to Blocks Page
+      And note the number of floors in the grid for block "1"
+      Then go to Floors Page
+      When click on floor with name "added floor" more menu button
+      And click on floor's delete button
+      Then Check toast mesage contains text "Deleted Successfully !"
+      And go to Blocks Page
+      And check the number of floors is decreased by 1 for block "1"
+
+
 ###########################################################################################
     ######################### Floors ###################################################
 
@@ -100,9 +127,9 @@ Feature: Blocks And Floors
     And Select Property "Boyle-Adams"
     And go to Floors Page
     And click on filter button
-    When enter name of floor "2" in search criteria
+    When enter name of floor "EditedName" in search criteria
     And click filter search Button
-    Then Check filtered floors contains only name of "2"
+    Then Check filtered floors contains only name of "EditedName"
 
   Scenario: filter floors by floor order
     Given Logging in with superuser
@@ -118,9 +145,9 @@ Feature: Blocks And Floors
     And Select Property "Boyle-Adams"
     And go to Floors Page
     And click on filter button
-    When enter description of floor "2" in search criteria
+    When enter description of floor "EditedFloorDiscription" in search criteria
     And click filter search Button
-    Then Check filtered floors contains only description of "2"
+    Then Check filtered floors contains only description of "EditedFloorDiscription"
 
 
   Scenario: cant delete floors before last floor
@@ -137,4 +164,4 @@ Feature: Blocks And Floors
     And go to Floors Page
     When click on floor with order "topfloor" more menu button
     And click on floor's delete button
-## Todo :: check the code works
+    Then Check toast mesage contains text "Deleted Successfully !"
