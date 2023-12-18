@@ -28,5 +28,9 @@ public class P05_SetupPage {
 
     @FindBy(xpath = "//a[@href=\"/block-Floor/floors\"]")
     public WebElement floorsLink;
+    @FindBy(xpath = "//span[contains(text(),\"Units\")]")
+    public WebElement unitsDroplist;
+    @FindBy(xpath = "//a[@href=\"/units-management/unit-type-customization\"]")
+    public WebElement typeCustomizationLink;
 
 }

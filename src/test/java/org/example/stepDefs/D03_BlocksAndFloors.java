@@ -30,6 +30,13 @@ public class D03_BlocksAndFloors {
     P06_FloorsPage floorsPage = new P06_FloorsPage(driver);
 
 
+    @Then("Check blocks pagination")
+    public void checkBlocksPagination() {
+        asrt.assertTrue(blocksPage.checkPagination());
+        asrt.assertAll();
+    }
+
+
     ////////////////////////// check default block /////////////////////////////////
     @And("go to Blocks Page")
     public void goToBlocksPage() {
@@ -179,27 +186,31 @@ public class D03_BlocksAndFloors {
     ///////////////////////////////// check floor number is incrementd with adding floors /////////////////////////////////////////
 
     int floorsNum;
+
     @And("note the number of floors in the grid for block {string}")
     public void noteTheNumberOfFloorsInTheGridForBlock(String blockName) {
-        floorsNum = Integer.parseInt( blocksPage.blockNumberOfFloors(blockName).getText().trim());
+        floorsNum = Integer.parseInt(blocksPage.blockNumberOfFloors(blockName).getText().trim());
 
     }
+
     @And("check the number of floors is incremented by {int} for block {string}")
     public void checkTheNumberOfFloorsIsIncrementedByForBlock(int change, String blockName) {
-        asrt.assertEquals(Integer.parseInt( blocksPage.blockNumberOfFloors(blockName).getText().trim()),floorsNum+change,"the floor didn't register");
+        asrt.assertEquals(Integer.parseInt(blocksPage.blockNumberOfFloors(blockName).getText().trim()), floorsNum + change, "the floor didn't register");
         asrt.assertAll();
     }
-  //////////////////////////////////////////////////
-  ///////////////////////////////// check floor number is decreased with deleting  floors /////////////////////////////////////////
+
+    //////////////////////////////////////////////////
+    ///////////////////////////////// check floor number is decreased with deleting  floors /////////////////////////////////////////
     @When("click on floor with name {string} more menu button")
     public void clickOnFloorWithNameMoreMenuButton(String floorName) {
         WebElement moreMenu = floorsPage.floorMoreMenu(floorName, null);
         wait.until(ExpectedConditions.elementToBeClickable(moreMenu));
         moreMenu.click();
     }
+
     @And("check the number of floors is decreased by {int} for block {string}")
     public void checkTheNumberOfFloorsIsDecreasedByForBlock(int change, String blockName) {
-        asrt.assertEquals(Integer.parseInt( blocksPage.blockNumberOfFloors(blockName).getText().trim()),floorsNum-change,"the floor didn't register");
+        asrt.assertEquals(Integer.parseInt(blocksPage.blockNumberOfFloors(blockName).getText().trim()), floorsNum - change, "the floor didn't register");
         asrt.assertAll();
     }
 
@@ -375,5 +386,10 @@ public class D03_BlocksAndFloors {
     }
 
 
+    @Then("check floors pagination")
+    public void checkFloorsPagination() {
+    asrt.assertTrue(floorsPage.checkPagination());
+    asrt.assertAll();
+    }
 
 }

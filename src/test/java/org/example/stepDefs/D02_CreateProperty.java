@@ -10,6 +10,7 @@ import org.example.pages.P02_DashBoardPage;
 import org.example.pages.P05_SetupPage;
 import org.example.pages.properties_pages.*;
 import org.openqa.selenium.Keys;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -59,11 +60,17 @@ public class D02_CreateProperty {
         }
         //close the announcement
         wait.until(ExpectedConditions.visibilityOf(dashBoardPage.setupPageLink));
-        if (dashBoardPage.closeAnnouncementButton.isDisplayed())
-            wait.until(ExpectedConditions.elementToBeClickable(dashBoardPage.closeAnnouncementButton));
-        Thread.sleep(2000);
-        dashBoardPage.closeAnnouncementButton.click();
+        try {
 
+
+            if (dashBoardPage.closeAnnouncementButton.isDisplayed())
+                wait.until(ExpectedConditions.elementToBeClickable(dashBoardPage.closeAnnouncementButton));
+            Thread.sleep(2000);
+            dashBoardPage.closeAnnouncementButton.click();
+        }catch (NoSuchElementException e)
+        {
+            System.out.println("no announcements to close");
+        }
     }
 
     @And("Go to Properties Page")
@@ -161,5 +168,6 @@ public class D02_CreateProperty {
         }
         asrt.assertAll();
     }
+
 
 }

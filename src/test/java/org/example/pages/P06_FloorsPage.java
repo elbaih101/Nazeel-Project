@@ -1,6 +1,8 @@
 package org.example.pages;
 
+import org.apache.commons.lang.StringUtils;
 import org.example.stepDefs.Hooks;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -20,10 +22,15 @@ public class P06_FloorsPage {
 
     @FindBy(xpath = "//ul[@role=\"listbox\"]")
     WebElement genralListBox;
-
     @FindBy(xpath = "//Button[contains(text(),\" New Floor  \")]")
     public WebElement newFloorButton;
-    //////floors grid
+    @FindBy(xpath = "//div[contains(@class,\"n-pager__info\")]")
+    WebElement pagination;
+    public boolean checkPagination(){
+     int itemsCount=  Integer.parseInt(StringUtils.substringBetween(pagination.getText(),"-"," "));
+     return floorsNames.size()==itemsCount;
+    }
+    //////  floors grid ///////////
     @FindBy(xpath = "//kendo-grid-list//td[@data-kendo-grid-column-index=\"0\"]")
     public List<WebElement> blocksNames;
     @FindBy(xpath = "//kendo-grid-list//td[@data-kendo-grid-column-index=\"2\"]")
@@ -32,62 +39,6 @@ public class P06_FloorsPage {
     public List<WebElement> floorsDescriptions;
     @FindBy(xpath = "//kendo-grid-list//td[@data-kendo-grid-column-index=\"2\"]")
     public List<WebElement> floorsOrder;
-    /////////////////////////////////////////////
-    ///////filter menu
-    @FindBy(xpath = "//Button[contains(text(),\" Filter \")]")
-    public WebElement filterButton;
-    @FindBy(xpath = "//label[contains(text(),\"Block\")]/..//span/span/span")
-    WebElement filterBlocksDroplistButton;
-    @FindBy(xpath = "//input[@name=\"order\"]")
-    public WebElement filterOrderField;
-    @FindBy(xpath = "//input[@name=\"name\"]")
-    public WebElement filterNmeField;
-    @FindBy(id = "desc")
-    public WebElement filterDescriptionField;
-    @FindBy(xpath = "//Button[contains(text(),\" Search \")]")
-    public WebElement filterSearchButton;
-/////////////////////////////////////////////////////////////////
-
-    //new floor popup
-    @FindBy(xpath = "//div[@role=\"dialog\"]//label[contains(text(),\"Block\")]/..//span/span/span")
-    WebElement blocksDroplistButton;
-    @FindBy(xpath = "//div[1]/input")
-    public WebElement floorNameField;
-    @FindBy(xpath = "//div[1]/textarea[@name=\"text-area\"]")
-    public WebElement descriptionField;
-    @FindBy(xpath = "//Button[contains(text(),\" Add Floor \")]")
-    public WebElement addFloorButton;
-    /////
-
-    //View mode popup
-    @FindBy(xpath = "//Button[contains(text(),\"Edit Floor\")]")
-    public WebElement viewModeEditButton;
-
-    //edit mode popup
-    @FindBy(xpath = "//Button[contains(text(),\"Save Changes\")]")
-    public WebElement editModeSaveButton;
-    @FindBy(className = "toast-message")
-    public WebElement toastMsg;
-
-
-    @FindBy(xpath = "//div[@class=\"swal2-popup swal2-modal swal2-show\"]")
-    public WebElement confirmationPopUp;
-
-    @FindBy(xpath = "//div[@class=\"popup__item popup__item--red\"][contains(text(),\" Delete \")]")
-    public WebElement floorDeleteButton;
-
-
-    public List<WebElement> blocks() {
-        blocksDroplistButton.click();
-        return genralListBox.findElements(By.xpath("//li[@role=\"option\"]"));
-
-    }
-
-    public List<WebElement> filterblocks() {
-        filterBlocksDroplistButton.click();
-        return genralListBox.findElements(By.xpath("//li[@role=\"option\"]"));
-
-    }
 
     public WebElement floorViewButton(String nameOFFloor) {
 
@@ -138,8 +89,67 @@ public class P06_FloorsPage {
         }
         return null;
     }
+    @FindBy(xpath = "//div[@class=\"popup__item popup__item--red\"][contains(text(),\" Delete \")]")
+    public WebElement floorDeleteButton;
+
+
+    /////// filter menu ////////////
+    @FindBy(xpath = "//Button[contains(text(),\" Filter \")]")
+    public WebElement filterButton;
+    @FindBy(xpath = "//label[contains(text(),\"Block\")]/..//span/span/span")
+    WebElement filterBlocksDroplistButton;
+    @FindBy(xpath = "//input[@name=\"order\"]")
+    public WebElement filterOrderField;
+    @FindBy(xpath = "//input[@name=\"name\"]")
+    public WebElement filterNmeField;
+    @FindBy(id = "desc")
+    public WebElement filterDescriptionField;
+    @FindBy(xpath = "//Button[contains(text(),\" Search \")]")
+    public WebElement filterSearchButton;
+
+    //////// new floor popup //////////////
+    @FindBy(xpath = "//div[@role=\"dialog\"]//label[contains(text(),\"Block\")]/..//span/span/span")
+    WebElement blocksDroplistButton;
+    @FindBy(xpath = "//div[1]/input")
+    public WebElement floorNameField;
+    @FindBy(xpath = "//div[1]/textarea[@name=\"text-area\"]")
+    public WebElement descriptionField;
+    @FindBy(xpath = "//Button[contains(text(),\" Add Floor \")]")
+    public WebElement addFloorButton;
+
+
+    //////////// View mode popup ////////////////////
+    @FindBy(xpath = "//Button[contains(text(),\"Edit Floor\")]")
+    public WebElement viewModeEditButton;
+
+    /////////// edit mode popup //////////////
+    @FindBy(xpath = "//Button[contains(text(),\"Save Changes\")]")
+    public WebElement editModeSaveButton;
+    @FindBy(className = "toast-message")
+    public WebElement toastMsg;
+
+
+    @FindBy(xpath = "//div[@class=\"swal2-popup swal2-modal swal2-show\"]")
+    public WebElement confirmationPopUp;
+
+
+
+    public List<WebElement> blocks() {
+        blocksDroplistButton.click();
+        return genralListBox.findElements(By.xpath("//li[@role=\"option\"]"));
+
+    }
+
+    public List<WebElement> filterblocks() {
+        filterBlocksDroplistButton.click();
+        return genralListBox.findElements(By.xpath("//li[@role=\"option\"]"));
+
+    }
+
 
     public WebElement confirmationSaveButton() {
         return confirmationPopUp.findElement(By.xpath("//button[contains(text(),\"Yes\")]"));
     }
+
+
 }

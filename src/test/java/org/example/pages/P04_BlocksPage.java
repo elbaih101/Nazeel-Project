@@ -1,5 +1,6 @@
 package org.example.pages;
 
+import org.apache.commons.lang.StringUtils;
 import org.example.stepDefs.Hooks;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -20,6 +21,13 @@ public class P04_BlocksPage {
     }
 
 
+
+    @FindBy(xpath = "//div[contains(@class,\"n-pager__info\")]")
+    WebElement pagination;
+    public boolean checkPagination(){
+        int itemsCount=  Integer.parseInt(StringUtils.substringBetween(pagination.getText(),"-"," "));
+        return blocksNames.size()==itemsCount;
+    }
     @FindBy(xpath = "//kendo-grid-list//td[@data-kendo-grid-column-index=\"0\"]")
     public List<WebElement> blocksNames;
     @FindBy(xpath = "//Button[contains(text(),\" New Block \")]")
