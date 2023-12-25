@@ -25,7 +25,13 @@ public class P04_BlocksPage {
     @FindBy(xpath = "//div[contains(@class,\"n-pager__info\")]")
     WebElement pagination;
     public boolean checkPagination(){
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            System.out.println(e.getMessage()+"on pagination");
+        }
         int itemsCount=  Integer.parseInt(StringUtils.substringBetween(pagination.getText(),"-"," "));
+        System.out.println(blocksNames.size()+" :"+itemsCount);
         return blocksNames.size()==itemsCount;
     }
     @FindBy(xpath = "//kendo-grid-list//td[@data-kendo-grid-column-index=\"0\"]")

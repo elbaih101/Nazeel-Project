@@ -13,6 +13,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.asserts.SoftAssert;
 
 import java.time.Duration;
+import java.util.NoSuchElementException;
 
 public class D04_UnitTypeCustomization {
 
@@ -32,7 +33,17 @@ public class D04_UnitTypeCustomization {
         setupPagec.unitsDroplist.click();
         setupPagec.typeCustomizationLink.click();
         wait.until(ExpectedConditions.visibilityOf(typeCustomization.pagination));
-        existantUnitType = typeCustomization.unitTypesNames.getLast().getText();
+       try {
+           existantUnitType = typeCustomization.unitTypesNames.getLast().getText();
+
+       }catch (NoSuchElementException e){
+           System.out.println(e.getMessage()+"no unit type created");
+           clickOnNewTypeButton();
+           selectTypeAndEnterDescription("VIP","adding existant type");
+           clickOnTheSubmitButton();
+           wait.until(ExpectedConditions.visibilityOf(typeCustomization.unitTypesNames.getLast()));
+           existantUnitType = typeCustomization.unitTypesNames.getLast().getText();
+       }
 
     }
 
@@ -80,6 +91,7 @@ public class D04_UnitTypeCustomization {
     ///////////////////////////////////// edit unit type ///////////////////////////////////////
     @When("click on edit Button for the unit Type {string}")
     public void clickOnEditButtonForTheUnitType(String unitTypeName) {
+        wait.until(ExpectedConditions.elementToBeClickable(typeCustomization.unitTypeEditButton(unitTypeName)));
         typeCustomization.unitTypeEditButton(unitTypeName).click();
     }
 
@@ -92,6 +104,7 @@ public class D04_UnitTypeCustomization {
     public void clickOnMoreMenuForUnitTypeAndClickDeleteButton(String unitTypeName) {
         delteUnitTyeName = unitTypeName;
         delteUnitTyeDescription = typeCustomization.unitTypeDescription(unitTypeName).getText();
+        wait.until(ExpectedConditions.elementToBeClickable( typeCustomization.moreMenuButton(unitTypeName)));
         typeCustomization.moreMenuButton(unitTypeName).click();
         typeCustomization.unitTypeDeleteButton.click();
     }

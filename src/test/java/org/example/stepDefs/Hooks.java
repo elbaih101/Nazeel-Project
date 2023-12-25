@@ -14,15 +14,13 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 
-public class Hooks
-{
+public class Hooks {
     public static WebDriver driver;
 
     @Before
-public static void start()
-    {
+    public static void start() {
         WebDriverManager.edgedriver().setup();
-        driver=new EdgeDriver();
+        driver = new EdgeDriver();
         driver.manage().window().maximize();
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
         driver.get(TestData.baseUrl);
@@ -32,17 +30,17 @@ public static void start()
 
 
     @After
-    public static void end()
-    { try {
-        Thread.sleep(5000);
-    }catch(InterruptedException e){
-        e.printStackTrace();}
+    public static void end() {
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         driver.quit();
     }
 
 
-
-    public static void endUserLogin(String username,String password,String acc){
+    public static void endUserLogin(String username, String password, String acc) {
         //initiating Waits and Pages
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         P01_LoginPage loginPage = new P01_LoginPage(driver);
@@ -54,30 +52,22 @@ public static void start()
         loginPage.accField.sendKeys(acc);
         loginPage.loginButton.click();
 
-        //clicking on later to bypass user verification
-        wait.until(ExpectedConditions.urlMatches("http://staging.nazeel.net:9002/dashboard"));
-        wait.until(ExpectedConditions.elementToBeClickable(loginPage.verificationButton));
-        js.executeScript("arguments[0].click();", loginPage.verificationButton);
-
-        //pypassing announcements
 
 
     }
 
-    public static void superUserLogin(String username,String password){
+    public static void superUserLogin(String username, String password) {
 
-            //initiating Waits and Pages
-            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-            P01_LoginPage loginPage = new P01_LoginPage(driver);
-            P02_DashBoardPage homePage = new P02_DashBoardPage(driver);
-            JavascriptExecutor js = (JavascriptExecutor) driver;
-            //logging in
-            loginPage.usernameField.sendKeys(username);
-            loginPage.passwordField.sendKeys(password);
-            loginPage.loginButton.click();
-
-
+        //initiating Waits and Pages
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        P01_LoginPage loginPage = new P01_LoginPage(driver);
+        P02_DashBoardPage homePage = new P02_DashBoardPage(driver);
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+        //logging in
+        loginPage.usernameField.sendKeys(username);
+        loginPage.passwordField.sendKeys(password);
+        loginPage.loginButton.click();
 
 
-}
+    }
 }

@@ -32,5 +32,7 @@ public class P05_SetupPage {
     public WebElement unitsDroplist;
     @FindBy(xpath = "//a[@href=\"/units-management/unit-type-customization\"]")
     public WebElement typeCustomizationLink;
+  @FindBy(xpath = "//a[@href=\"/units-management/unit-setup\"]")
+    public WebElement unitSetupLink;
 
 }

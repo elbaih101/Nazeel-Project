@@ -9,10 +9,7 @@ import org.example.pages.P01_LoginPage;
 import org.example.pages.P02_DashBoardPage;
 import org.example.pages.P05_SetupPage;
 import org.example.pages.properties_pages.*;
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -41,6 +38,12 @@ public class D02_CreateProperty {
     P06_6_SummaryPage summaryPage = new P06_6_SummaryPage(driver);
     String propertyName = faker.company().name();
 
+
+    @Given("Logging in with end user {string} {string} {string}")
+    public void loggingInWithEndUser(String username, String password, String acc) {
+        Hooks.endUserLogin(username, password, acc);
+    }
+
     @Given("Logging in with superuser")
     public void loggingInWithSuperuser() {
         Hooks.superUserLogin("baih", "Aa@123456");
@@ -49,27 +52,55 @@ public class D02_CreateProperty {
 
     @And("Select Property {string}")
     public void selectProperty(String propertyName) throws InterruptedException {
-        loginPage.propertyNameField.sendKeys(propertyName);
-        actions.sendKeys(Keys.ENTER);
-        actions.perform();
-        Thread.sleep(2000);
-        for (WebElement company :
-                loginPage.companysList) {
-            if (company.getText().contains(propertyName))
-                company.click();
-        }
-        //close the announcement
-        wait.until(ExpectedConditions.visibilityOf(dashBoardPage.setupPageLink));
+        /// find property ///
         try {
 
+
+            loginPage.propertyNameField.sendKeys(propertyName);
+            actions.sendKeys(Keys.ENTER);
+            actions.perform();
+            Thread.sleep(2000);
+            for (WebElement company :
+                    loginPage.companysList) {
+                if (company.getText().contains(propertyName))
+                    company.click();
+            }
+        } catch (NoSuchElementException e) {
+            System.out.println("property not found");
+        }
+       try {
+           wait.until(ExpectedConditions.visibilityOf(dashBoardPage.setupPageLink));
+       }catch (TimeoutException e){wait.until(ExpectedConditions.visibilityOf(dashBoardPage.setupPageLink));}
+        //close the announcement
+        try {
 
             if (dashBoardPage.closeAnnouncementButton.isDisplayed())
                 wait.until(ExpectedConditions.elementToBeClickable(dashBoardPage.closeAnnouncementButton));
             Thread.sleep(2000);
             dashBoardPage.closeAnnouncementButton.click();
-        }catch (NoSuchElementException e)
-        {
+        } catch (NoSuchElementException e) {
             System.out.println("no announcements to close");
+        }
+
+        //clicking on later to bypass user verification
+        if (dashBoardPage.masterDataLink.isEmpty()) {
+            try {
+                JavascriptExecutor js = (JavascriptExecutor) driver;
+
+                wait.until(ExpectedConditions.urlMatches("http://staging.nazeel.net:9002/dashboard"));
+                wait.until(ExpectedConditions.visibilityOf(loginPage.verificationButton));
+                wait.until(ExpectedConditions.elementToBeClickable(loginPage.verificationButton));
+                js.executeScript("arguments[0].click();", loginPage.verificationButton);
+
+            } catch (TimeoutException e) {
+
+                System.out.println("logged in as super user");
+            }
+            try {
+                dashBoardPage.contractAgreementButton.click();
+            } catch (NoSuchElementException e) {
+                System.out.println("no agreement contract");
+            }
         }
     }
 
@@ -163,9 +194,7 @@ public class D02_CreateProperty {
     public void checkNewPropertyIsCreated() {
         wait.until(ExpectedConditions.invisibilityOf(summaryPage.saveButton));
 
-        for (WebElement property : propertiesPage.propertiesNames) {
-            asrt.assertTrue(property.getText().contains(propertyName));
-        }
+        asrt.assertTrue(propertiesPage.propertiesNames.stream().anyMatch(element -> element.getText().contains(propertyName)));
         asrt.assertAll();
     }
 

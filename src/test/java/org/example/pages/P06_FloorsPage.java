@@ -27,6 +27,11 @@ public class P06_FloorsPage {
     @FindBy(xpath = "//div[contains(@class,\"n-pager__info\")]")
     WebElement pagination;
     public boolean checkPagination(){
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            System.out.println(e.getMessage()+"on pagination");
+        }
      int itemsCount=  Integer.parseInt(StringUtils.substringBetween(pagination.getText(),"-"," "));
      return floorsNames.size()==itemsCount;
     }

@@ -1,4 +1,4 @@
-@essential
+@Regression @essential
 Feature: property Page
   Scenario: Create new Property
 

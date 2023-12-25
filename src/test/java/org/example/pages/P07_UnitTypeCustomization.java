@@ -52,7 +52,7 @@ public class P07_UnitTypeCustomization {
     public List<WebElement> unitTypesNames;
     @FindBy(xpath = "//kendo-grid-list//td[@data-kendo-grid-column-index=\"1\"]")
     public List<WebElement> Descriptions;
-    @FindBy(xpath = "//div[@class=\"popup__item popup__item--red ng-star-inserted\"][contains(text(),\" Delete\")]")
+    @FindBy(xpath = "//div[contains(@class,\"popup__item popup__item--red\")]")
     public WebElement unitTypeDeleteButton;
 
     public WebElement unitTypeDescription(String unitTypeName) {

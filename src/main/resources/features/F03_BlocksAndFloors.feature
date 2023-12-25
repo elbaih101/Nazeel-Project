@@ -3,13 +3,13 @@ Feature: Blocks And Floors
   Rule: blocks
     Background: going to blocks Page
       Given Logging in with superuser
-      And Select Property "Boyle-Adams"
+      And Select Property "Corkery, Bins and Huel"
       And go to Blocks Page
 
     Scenario: Check pagination
       Then Check blocks pagination
 
-    Scenario: Check default Floor
+    Scenario: Check default block
       Then Check Default Block name to be "1" and Description to be "Default Block"
 
     Scenario: Add new Block with empty floors
@@ -72,12 +72,12 @@ Feature: Blocks And Floors
   Rule:floors
 
     Background:going to floors page
-      Given Logging in with superuser
-      And Select Property "Boyle-Adams"
+      Given Logging in with end user "elbaih" "Aa@123456" "00726"
+      And Select Property "Corkery, Bins and Huel"
       And go to Floors Page
 
-      Scenario: check paginations
-        Then check floors pagination
+    Scenario: check paginations
+      Then check floors pagination
     Scenario: check Default Floor name and
       Then Check Default Floor name to be "1" and Description to be "Default Floor"
 

@@ -7,6 +7,7 @@ import org.example.pages.P02_DashBoardPage;
 import org.example.pages.P04_BlocksPage;
 import org.example.pages.P05_SetupPage;
 import org.example.pages.P06_FloorsPage;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -28,7 +29,7 @@ public class D03_BlocksAndFloors {
     P05_SetupPage setupPagec = new P05_SetupPage(driver);
     P04_BlocksPage blocksPage = new P04_BlocksPage(driver);
     P06_FloorsPage floorsPage = new P06_FloorsPage(driver);
-
+JavascriptExecutor js =(JavascriptExecutor) driver;
 
     @Then("Check blocks pagination")
     public void checkBlocksPagination() {
@@ -41,13 +42,15 @@ public class D03_BlocksAndFloors {
     @And("go to Blocks Page")
     public void goToBlocksPage() {
         dashBoardPage.setupPageLink.click();
+        wait.until(ExpectedConditions.elementToBeClickable(setupPagec.blocksAndFloorsDroplist));
         setupPagec.blocksAndFloorsDroplist.click();
+        wait.until(ExpectedConditions.elementToBeClickable(setupPagec.blocksLink));
         setupPagec.blocksLink.click();
     }
 
     @Then("Check Default Block name to be {string} and Description to be {string}")
     public void checkDefaultBlockNameToBeAndDescriptionToBe(String blockName, String blockDescripion) {
-        wait.until(ExpectedConditions.visibilityOf(blocksPage.newBlockButton));
+        wait.until(ExpectedConditions.visibilityOf(blocksPage.blocksNames.get(0)));
         asrt.assertTrue(blocksPage.blocksNames.get(0).getText().contains(blockName));
         asrt.assertTrue(blocksPage.blocksDescriptions.get(0).getText().contains(blockDescripion));
         asrt.assertAll();
@@ -61,14 +64,19 @@ public class D03_BlocksAndFloors {
     @When("click on new block Button")
     public void clickOnNewBlockButton() {
         wait.until(ExpectedConditions.visibilityOfAllElements(blocksPage.newBlockButton));
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            System.out.println("waiting for the new block button failed");;
+        }
         blocksPage.newBlockButton.click();
     }
 
     @And("Fill the Block name {string} and discription {string}")
     public void fillTheBlockNameAndDiscription(String name, String discription) {
-        wait.until(ExpectedConditions.visibilityOf(blocksPage.blockNameField));
         wait.until(ExpectedConditions.elementToBeClickable(blocksPage.blockNameField));
         blocksPage.blockNameField.sendKeys(name);
+        wait.until(ExpectedConditions.elementToBeClickable(blocksPage.descriptionField));
         blocksPage.descriptionField.sendKeys(discription);
         blocksPage.addBlockButton.click();
     }
@@ -83,6 +91,7 @@ public class D03_BlocksAndFloors {
 
     @Then("check new block with name {string} and discription {string}")
     public void checkNewBlockIsCreatedWithNameAndDiscription(String name, String discription) {
+        wait.until(ExpectedConditions.visibilityOfAllElements(blocksPage.blocksNames));
         asrt.assertTrue(blocksPage.blockDescription(name).getText().contains(discription));
         asrt.assertAll();
 
@@ -143,7 +152,7 @@ public class D03_BlocksAndFloors {
 
     @Then("check filtered blocks cotains name {string}")
     public void checkFilteredBlocksCotainsName(String name) {
-        asrt.assertTrue(blocksPage.blocksNames.getFirst().getText().contains(name));
+        asrt.assertFalse(blocksPage.blocksNames.stream().anyMatch(element -> !element.getText().contains(name)));
         asrt.assertAll();
     }
 
@@ -222,6 +231,7 @@ public class D03_BlocksAndFloors {
     public void goToFloorsPage() {
         dashBoardPage.setupPageLink.click();
         setupPagec.blocksAndFloorsDroplist.click();
+        wait.until(ExpectedConditions.elementToBeClickable(setupPagec.blocksLink));
         setupPagec.floorsLink.click();
     }
 
@@ -245,8 +255,9 @@ public class D03_BlocksAndFloors {
     public void fillTheFloorNameAndDiscription(String name, String description) {
         wait.until(ExpectedConditions.visibilityOf(floorsPage.floorNameField));
         wait.until(ExpectedConditions.elementToBeClickable(floorsPage.floorNameField));
-
+        floorsPage.floorNameField.clear();
         floorsPage.floorNameField.sendKeys(name);
+        floorsPage.descriptionField.clear();
         floorsPage.descriptionField.sendKeys(description);
         floorsPage.addFloorButton.click();
     }
@@ -336,7 +347,7 @@ public class D03_BlocksAndFloors {
 
     @Then("Check filtered floors contains only order of {string}")
     public void checkFilteredFloorsContainsOnlyOrderOf(String order) {
-        asrt.assertTrue(floorsPage.floorsOrder.stream().anyMatch(webElement -> !webElement.getText().contains(order)));
+        asrt.assertTrue(floorsPage.floorsOrder.stream().anyMatch(webElement -> webElement.getText().contains(order)));
         asrt.assertAll();
     }
 
@@ -360,14 +371,15 @@ public class D03_BlocksAndFloors {
         if (!order.equals("topfloor")) {
             WebElement moreMenu = floorsPage.floorMoreMenu(null, order);
             wait.until(ExpectedConditions.elementToBeClickable(moreMenu));
-            moreMenu.click();
+            js.executeScript("arguments[0].click();", moreMenu);
         } else {
             String topFloorORder = floorsPage.floorsOrder.getLast().getText();
             if (topFloorORder.equals("1"))
                 System.out.println("this block has only 1 floor");
             WebElement moreMenu = floorsPage.floorMoreMenu(null, topFloorORder);
             wait.until(ExpectedConditions.elementToBeClickable(moreMenu));
-            moreMenu.click();
+            js.executeScript("arguments[0].click();", moreMenu);
+
         }
 
     }
@@ -381,15 +393,16 @@ public class D03_BlocksAndFloors {
 
         } catch (NoSuchElementException e) {
             System.out.println("no confirmation popup");
-            floorsPage.floorDeleteButton.click();
+            js.executeScript("arguments[0].click();", floorsPage.floorDeleteButton);
+            //floorsPage.floorDeleteButton.click();
         }
     }
 
 
     @Then("check floors pagination")
     public void checkFloorsPagination() {
-    asrt.assertTrue(floorsPage.checkPagination());
-    asrt.assertAll();
+        asrt.assertTrue(floorsPage.checkPagination());
+        asrt.assertAll();
     }
 
 }

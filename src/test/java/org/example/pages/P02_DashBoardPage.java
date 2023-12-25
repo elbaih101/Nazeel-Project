@@ -6,6 +6,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
+import java.util.List;
+
 public class P02_DashBoardPage
 {
     public P02_DashBoardPage(){
@@ -22,5 +24,11 @@ public class P02_DashBoardPage
     public WebElement closeAnnouncementButton;
     @FindBy(xpath = "//a[@href=\"/setup\"]")
     public WebElement setupPageLink;
+
+    @FindBy(xpath = "//button[contains(text(),\" Agree on contract terms \")]")
+    public WebElement contractAgreementButton;
+
+    @FindBy(xpath = "//a[@href=\"/master-data\"]")
+    public List<WebElement> masterDataLink;
 
 }
