@@ -31,7 +31,14 @@ Feature: Unit Setup
     ## Todo : assertion needs filtering
     Then check the newly added units
 
+    ## Todo : edit group of units
+  Scenario: edit Group of Units
+
     # #Todo : delete a unit
   Scenario: delete a unit
-    When clicking delete button for a unit
+    When clicking delete button for unit "RANDOM"
+    Then Check the deleted unit number matches the selected unit number
+    When clicking the confirm delete button and Check toast mesage contains text "Saved Successfully"
+
+
     # #Todo :edit group of units

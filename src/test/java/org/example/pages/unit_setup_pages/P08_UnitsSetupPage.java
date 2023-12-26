@@ -9,13 +9,10 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.FluentWait;
-import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 import java.util.List;
-import java.util.function.Function;
 import java.util.regex.Pattern;
 
 public class P08_UnitsSetupPage {
@@ -38,9 +35,6 @@ public class P08_UnitsSetupPage {
 
     }
 
-
-    @FindBy(xpath = "//ul[@role=\"listbox\"]")
-    WebElement genralListBox;
 
     @FindBy(xpath = "//div[contains(text(),\"New Unit\")]")
     public WebElement newUnitButton;
@@ -76,7 +70,7 @@ public class P08_UnitsSetupPage {
     }
 
     public WebElement unitDeleteButton(WebElement unitCard) {
-        return unitCard.findElement(By.xpath("//div[@class=\"unit-card__action--red\"]"));
+        return unitCard.findElement(By.xpath("//div[contains(@class,\"unit-card__action--red\")]"));
     }
 
     @FindBy(xpath = "//div[contains(text(),\"Total\")]")
@@ -88,14 +82,25 @@ public class P08_UnitsSetupPage {
 //        });
         String total = StringUtils.substringAfter(totalDiv.getText().trim(), "Total : ").trim();
         try {
-            int totalUnitNumber = Integer.parseInt(total);
-            return totalUnitNumber;
+            return Integer.parseInt(total);
         } catch (NumberFormatException nfe) {
             System.out.println("NumberFormat Exception: invalid input string");
         }
         System.out.println("Continuing execution...");
         return 0;
     }
+
+    @FindBy(xpath = "//div[@role=\"dialog\"]")
+    public WebElement deleteUnitDialog;
+
+    public WebElement confirmDeleteButton(){
+        return deleteUnitDialog.findElement(By.xpath("//button[contains(text(),\"Confirm\")]"));
+    }
+    public WebElement discardDeleteButton(){
+        return deleteUnitDialog.findElement(By.xpath("//button[contains(text(),\"Discard\")]"));
+    }
+    public WebElement deltedUnitNumber(){return deleteUnitDialog.findElement(By.xpath("//div[contains(text(),\"Unit Number\")]/following-sibling::div"));}
+
 
 
 }

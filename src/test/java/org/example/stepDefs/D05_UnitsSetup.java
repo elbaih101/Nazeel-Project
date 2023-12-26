@@ -6,10 +6,12 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.example.pages.P02_DashBoardPage;
+import org.example.pages.P04_BlocksPage;
 import org.example.pages.P05_SetupPage;
 import org.example.pages.unit_setup_pages.P08_1_NewUnitPage;
 import org.example.pages.unit_setup_pages.P08_2_AddGRoupOfUnitsPopUp;
 import org.example.pages.unit_setup_pages.P08_UnitsSetupPage;
+import org.openqa.selenium.By;
 import org.openqa.selenium.ElementNotInteractableException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -37,6 +39,7 @@ public class D05_UnitsSetup {
     String randomUnitNum = faker.numerify("Ran##");
     int numberofNewUnits;
     Actions actions = new Actions(driver);
+
 
     @And("go to unit Setup page")
     public void goToUnitSetupPage() {
@@ -97,8 +100,8 @@ public class D05_UnitsSetup {
     @When("open the view mode for a unit {string}")
     public void openTheViewModeForAUnit(String unitNum) {
         WebElement card;
-        if (!unitNum.equals("RANDOM"))
-            card = unitsSetupPage.unitsCards.stream().filter(element -> unitsSetupPage.unitNum(element).getText().contains(unitNum)).toList().get(0);
+        if (!unitNum.equals("RANDOM")){
+            card = unitsSetupPage.unitsCards.stream().filter(element -> unitsSetupPage.unitNum(element).getText().contains(unitNum)).toList().get(0);}
         else {
             card = unitsSetupPage.unitsCards.get(new Random().nextInt(unitsSetupPage.unitsCards.size()));
         }
@@ -142,22 +145,22 @@ public class D05_UnitsSetup {
         try {
 
             List<WebElement> blocks = addGRoupOfUnitsPopUp.blocks();
-            WebElement selectedBlock =blocks.get(new Random().nextInt(blocks.size()));
+            WebElement selectedBlock = blocks.get(new Random().nextInt(blocks.size()));
             wait.until(ExpectedConditions.elementToBeClickable(selectedBlock));
             selectedBlock.click();
         } catch (ElementNotInteractableException e) {
             System.out.println("only one block can't select");
         }
         List<WebElement> floors = addGRoupOfUnitsPopUp.floorss();
-        WebElement selectedFlor =floors.get(new Random().nextInt(floors.size()));
+        WebElement selectedFlor = floors.get(new Random().nextInt(floors.size()));
         wait.until(ExpectedConditions.elementToBeClickable(selectedFlor));
         selectedFlor.click();
         List<WebElement> types = addGRoupOfUnitsPopUp.unitType();
-        WebElement selectedType =types.get(new Random().nextInt(types.size()));
+        WebElement selectedType = types.get(new Random().nextInt(types.size()));
         wait.until(ExpectedConditions.elementToBeClickable(selectedType));
         selectedType.click();
         List<WebElement> formats = addGRoupOfUnitsPopUp.formats();
-        WebElement selectedFormat =formats.get(new Random().nextInt(formats.size()));
+        WebElement selectedFormat = formats.get(new Random().nextInt(formats.size()));
         wait.until(ExpectedConditions.elementToBeClickable(selectedFormat));
         selectedFormat.click();
         addGRoupOfUnitsPopUp.fromNumber.sendKeys(Integer.toString(noFrom));
@@ -177,10 +180,55 @@ public class D05_UnitsSetup {
         asrt.assertAll();
     }
 
-    @When("clicking delete button for a unit")
-    public void clickingDeleteButtonForAUnit() {
+
+    WebElement deletedCard;
+
+    @When("clicking delete button for unit {string}")
+    public void clickingDeleteButtonForAUnit(String unitNum) {
+
+
+        if (unitNum.equals("RANDOM")){
+            deletedCard = unitsSetupPage.unitsCards.get(new Random().nextInt(unitsSetupPage.unitsCards.size()));}
+        else {
+            deletedCard = unitsSetupPage.unitsCards.stream().filter(element -> unitsSetupPage.unitNum(element).getText().contains(unitNum)).toList().get(0);
+
+        }
+        actions.moveToElement(deletedCard);
+        actions.perform();
+        // wait.until(ExpectedConditions.visibilityOf(unitsSetupPage.unitViewButton(deletedCard)));
+        actions.moveToElement(unitsSetupPage.unitDeleteButton(deletedCard));
+        actions.click();
+        actions.perform();
     }
+
+    @Then("Check the deleted unit number matches the selected unit number")
+    public void checkTheDeletedUnitNumberMatchesTheSelectedUnitNumber() {
+        asrt.assertTrue(unitsSetupPage.unitNum(deletedCard).getText().trim().equals(unitsSetupPage.deltedUnitNumber().getText().trim()));
+        asrt.assertAll();
+    }
+
+    @When("clicking the confirm delete button and Check toast mesage contains text {string}")
+    public void clickingTheConfirmDeleteButton(String msg) {
+        wait.until(ExpectedConditions.elementToBeClickable(unitsSetupPage.confirmDeleteButton()));
+        unitsSetupPage.confirmDeleteButton().click();
+        D03_BlocksAndFloors blocksAndFloors = new D03_BlocksAndFloors();
+        try {
+            blocksAndFloors.checkToastMesageContainsText(msg);
+
+        } catch (AssertionError e) {
+            if (e.getMessage().contains("Invalid action, had related data")) ;
+            {
+
+                unitsSetupPage.discardDeleteButton().click();
+
+//                wait.until(ExpectedConditions.stalenessOf(unitsSetupPage.deleteUnitDialog));
+                clickingDeleteButtonForAUnit("RANDOM");
+                checkTheDeletedUnitNumberMatchesTheSelectedUnitNumber();
+                clickingTheConfirmDeleteButton(msg);
+            }
+
+        }
+    }
+
 }
-
-
 
