@@ -142,16 +142,24 @@ public class D05_UnitsSetup {
         try {
 
             List<WebElement> blocks = addGRoupOfUnitsPopUp.blocks();
-            blocks.get(new Random().nextInt(blocks.size())).click();
+            WebElement selectedBlock =blocks.get(new Random().nextInt(blocks.size()));
+            wait.until(ExpectedConditions.elementToBeClickable(selectedBlock));
+            selectedBlock.click();
         } catch (ElementNotInteractableException e) {
             System.out.println("only one block can't select");
         }
         List<WebElement> floors = addGRoupOfUnitsPopUp.floorss();
-        floors.get(new Random().nextInt(floors.size())).click();
+        WebElement selectedFlor =floors.get(new Random().nextInt(floors.size()));
+        wait.until(ExpectedConditions.elementToBeClickable(selectedFlor));
+        selectedFlor.click();
         List<WebElement> types = addGRoupOfUnitsPopUp.unitType();
-        types.get(new Random().nextInt(types.size())).click();
+        WebElement selectedType =types.get(new Random().nextInt(types.size()));
+        wait.until(ExpectedConditions.elementToBeClickable(selectedType));
+        selectedType.click();
         List<WebElement> formats = addGRoupOfUnitsPopUp.formats();
-        formats.get(new Random().nextInt(formats.size())).click();
+        WebElement selectedFormat =formats.get(new Random().nextInt(formats.size()));
+        wait.until(ExpectedConditions.elementToBeClickable(selectedFormat));
+        selectedFormat.click();
         addGRoupOfUnitsPopUp.fromNumber.sendKeys(Integer.toString(noFrom));
         addGRoupOfUnitsPopUp.toNumber.sendKeys(Integer.toString(noTo));
 
@@ -164,7 +172,7 @@ public class D05_UnitsSetup {
 
     @Then("check the newly added units")
     public void checkTheNewlyAddedUnits() {
-        List<WebElement> newUnits = unitsSetupPage.unitsCards.stream().filter(element -> Integer.parseInt(unitsSetupPage.unitNum(element).getText()) > unitsSetupPage.totalUnitNumber()).toList();
+        List<WebElement> newUnits = unitsSetupPage.unitsCards.stream().filter(element -> Integer.parseInt(unitsSetupPage.unitNum(element).getText().trim()) > unitsSetupPage.totalUnitNumber()).toList();
         asrt.assertTrue(newUnits.size() == numberofNewUnits);
         asrt.assertAll();
     }

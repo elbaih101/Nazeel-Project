@@ -43,7 +43,7 @@ public class P08_2_AddGRoupOfUnitsPopUp {
     @FindBy(xpath = "//div[@role=\"dialog\"]//label[contains(text(),\"Format\")]//following-sibling::kendo-combobox/span/span/span")
      WebElement formatDroplist;
     public List<WebElement> formats(){
-        blocksDropList.click();
+        formatDroplist.click();
         return genralListBox.findElements(By.xpath("//li[@role=\"option\"]"));
     }
     @FindBy(xpath = "//div[@role=\"dialog\"]//input[@name=\"unit-number-from\"]")

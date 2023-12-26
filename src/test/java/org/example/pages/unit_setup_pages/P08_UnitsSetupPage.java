@@ -8,17 +8,34 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.FluentWait;
+import org.openqa.selenium.support.ui.Wait;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.time.Duration;
 import java.util.List;
+import java.util.function.Function;
+import java.util.regex.Pattern;
 
 public class P08_UnitsSetupPage {
 
+    WebDriver driver;
+    WebDriverWait wait;
+
+
     public P08_UnitsSetupPage() {
         PageFactory.initElements(Hooks.driver, this);
+        this.driver = Hooks.driver;
+        wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+
     }
 
     public P08_UnitsSetupPage(WebDriver driver) {
         PageFactory.initElements(driver, this);
+        this.driver = driver;
+        wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+
     }
 
 
@@ -31,7 +48,10 @@ public class P08_UnitsSetupPage {
     WebElement groupUnitsDropList;
     @FindBy(xpath = "//div[@class=\"k-popup\"]")
     WebElement addGroupUnits;
-    public WebElement addGroupUnitsButton(){
+
+    public WebElement addGroupUnitsButton() {
+        wait.until(ExpectedConditions.elementToBeClickable(groupUnitsDropList));
+        driver.switchTo().activeElement();
         groupUnitsDropList.click();
         return addGroupUnits;
     }
@@ -46,25 +66,36 @@ public class P08_UnitsSetupPage {
     public WebElement unitType(WebElement unitCard) {
         return unitCard.findElement(By.xpath("//p[@class=\"unit-card__type\"]"));
     }
-    public WebElement unitEditButton(WebElement unitCard){
+
+    public WebElement unitEditButton(WebElement unitCard) {
         return unitCard.findElement(By.xpath("//div[@class=\"unit-card__action--primary\"][1]"));
     }
-    public WebElement unitViewButton(WebElement unitCard){
+
+    public WebElement unitViewButton(WebElement unitCard) {
         return unitCard.findElement(By.xpath("//div[contains(@class,\"unit-card__action--primary\")][2]"));
     }
-    public WebElement unitDeleteButton(WebElement unitCard){
+
+    public WebElement unitDeleteButton(WebElement unitCard) {
         return unitCard.findElement(By.xpath("//div[@class=\"unit-card__action--red\"]"));
     }
 
     @FindBy(xpath = "//div[contains(text(),\"Total\")]")
     WebElement totalDiv;
 
-    public int totalUnitNumber(){
-
-        return Integer.parseInt(StringUtils.substringAfter(totalDiv.getText().trim(),"Total : "));
+    public int totalUnitNumber() {
+        wait.until(ExpectedConditions.textMatches(By.xpath("//div[contains(text(),\"Total\")]"), Pattern.compile("^.*\\d$")));
+//        wait.until(new Function <WebDriver, Boolean>() {public Boolean apply(WebDriver driver){return totalDiv.getText().matches("^.*\\\\d$");}
+//        });
+        String total = StringUtils.substringAfter(totalDiv.getText().trim(), "Total : ").trim();
+        try {
+            int totalUnitNumber = Integer.parseInt(total);
+            return totalUnitNumber;
+        } catch (NumberFormatException nfe) {
+            System.out.println("NumberFormat Exception: invalid input string");
+        }
+        System.out.println("Continuing execution...");
+        return 0;
     }
-
-
 
 
 }

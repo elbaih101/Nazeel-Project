@@ -30,6 +30,7 @@ Feature: Unit Setup
     And Check toast mesage contains text "Units Added Successfully"
     ## Todo : assertion needs filtering
     Then check the newly added units
+
     # #Todo : delete a unit
   Scenario: delete a unit
     When clicking delete button for a unit
