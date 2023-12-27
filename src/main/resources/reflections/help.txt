@@ -1,0 +1,13 @@
+the x-path //h2[@class='nameclass...'] will search from top. To search from current node. you can use .(dot) like .//h2[@class='nameclass...'].
+
+for card in cards:
+    name = card.find_element_by_xpath(".//h2[@class='nameclass...']")
+    print(name.text)
+
+
+https://regex101.com/                         for RegEx generating and testing
+
+https://www.regexplanet.com/advanced/java/index.html            for RegEx generating and testing
+
+
+https://stackoverflow.com/questions/76482305/faker-generate-a-phone-number   java faker scenarios

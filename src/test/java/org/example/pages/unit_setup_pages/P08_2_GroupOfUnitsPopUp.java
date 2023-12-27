@@ -8,15 +8,16 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
-public class P08_2_AddGRoupOfUnitsPopUp {
+public class P08_2_GroupOfUnitsPopUp {
 
 
-    public P08_2_AddGRoupOfUnitsPopUp() {
+    public P08_2_GroupOfUnitsPopUp() {
         PageFactory.initElements(Hooks.driver, this);
     }
 
-    public P08_2_AddGRoupOfUnitsPopUp(WebDriver driver) {
+    public P08_2_GroupOfUnitsPopUp(WebDriver driver) {
         PageFactory.initElements(driver, this);
     }
 
@@ -25,7 +26,12 @@ public class P08_2_AddGRoupOfUnitsPopUp {
     @FindBy(xpath = "//div[@role=\"dialog\"]//label[contains(text(),\"Block\")]//following-sibling::kendo-combobox/span/span/span")
      WebElement blocksDropList;
     public List<WebElement> blocks(){
-        blocksDropList.click();
+        try {
+            blocksDropList.click();
+
+        }catch (NoSuchElementException e){
+            System.out.println("");
+        }
         return genralListBox.findElements(By.xpath("//li[@role=\"option\"]"));
     }
     @FindBy(xpath = "//div[@role=\"dialog\"]//label[contains(text(),\"Floor\")]//following-sibling::kendo-combobox/span/span/span")
@@ -54,6 +60,16 @@ public class P08_2_AddGRoupOfUnitsPopUp {
 
     @FindBy(xpath = "//div[@role=\"dialog\"]//button[(text()=\" Save \")]")
     public WebElement saveButton;
+
+
+    /////// delete ////
+    @FindBy(xpath = "//div[@role=\"dialog\"]//button[(text()=\"Next\")]")
+    public WebElement nextButon;
+    @FindBy(xpath = "//div[@role=\"dialog\"]//th//input[@type=\"checkbox\"]")
+    public WebElement selectAllCheckBox;
+  @FindBy(xpath = "//div[@role=\"dialog\"]//input[@placeholder=\"Select Block\"]/../following-sibling::span/span")
+    public WebElement editBlockDropList;
+
 
 
 

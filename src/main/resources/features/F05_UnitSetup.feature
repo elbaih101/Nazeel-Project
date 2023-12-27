@@ -33,8 +33,9 @@ Feature: Unit Setup
 
     ## Todo : edit group of units
   Scenario: edit Group of Units
+    Given  open the edit group of units popup
 
-    # #Todo : delete a unit
+
   Scenario: delete a unit
     When clicking delete button for unit "RANDOM"
     Then Check the deleted unit number matches the selected unit number

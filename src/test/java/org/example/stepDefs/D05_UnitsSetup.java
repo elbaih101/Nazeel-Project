@@ -6,12 +6,10 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.example.pages.P02_DashBoardPage;
-import org.example.pages.P04_BlocksPage;
 import org.example.pages.P05_SetupPage;
 import org.example.pages.unit_setup_pages.P08_1_NewUnitPage;
-import org.example.pages.unit_setup_pages.P08_2_AddGRoupOfUnitsPopUp;
+import org.example.pages.unit_setup_pages.P08_2_GroupOfUnitsPopUp;
 import org.example.pages.unit_setup_pages.P08_UnitsSetupPage;
-import org.openqa.selenium.By;
 import org.openqa.selenium.ElementNotInteractableException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -23,7 +21,6 @@ import org.testng.asserts.SoftAssert;
 import java.time.Duration;
 import java.util.List;
 import java.util.Random;
-import java.util.stream.Collectors;
 
 public class D05_UnitsSetup {
 
@@ -34,7 +31,7 @@ public class D05_UnitsSetup {
     P05_SetupPage setupPagec = new P05_SetupPage(driver);
     P08_UnitsSetupPage unitsSetupPage = new P08_UnitsSetupPage(driver);
     P08_1_NewUnitPage newUnitPage = new P08_1_NewUnitPage(driver);
-    P08_2_AddGRoupOfUnitsPopUp addGRoupOfUnitsPopUp = new P08_2_AddGRoupOfUnitsPopUp(driver);
+    P08_2_GroupOfUnitsPopUp addGRoupOfUnitsPopUp = new P08_2_GroupOfUnitsPopUp(driver);
     Faker faker = new Faker();
     String randomUnitNum = faker.numerify("Ran##");
     int numberofNewUnits;

@@ -42,6 +42,8 @@ public class P08_UnitsSetupPage {
     WebElement groupUnitsDropList;
     @FindBy(xpath = "//div[@class=\"k-popup\"]")
     WebElement addGroupUnits;
+    @FindBy(xpath = "//button[contains(text(),\" Edit Group Of Units \")]")
+    public WebElement editGroupUnitsButton;
 
     public WebElement addGroupUnitsButton() {
         wait.until(ExpectedConditions.elementToBeClickable(groupUnitsDropList));
@@ -54,7 +56,7 @@ public class P08_UnitsSetupPage {
     public List<WebElement> unitsCards;
 
     public WebElement unitNum(WebElement unitCard) {
-        return unitCard.findElement(By.xpath("//p[@class=\"unit-card__no\"]"));
+        return unitCard.findElement(By.xpath(".//p[@class=\"unit-card__no\"]"));
     }
 
     public WebElement unitType(WebElement unitCard) {
@@ -62,15 +64,15 @@ public class P08_UnitsSetupPage {
     }
 
     public WebElement unitEditButton(WebElement unitCard) {
-        return unitCard.findElement(By.xpath("//div[@class=\"unit-card__action--primary\"][1]"));
+        return unitCard.findElement(By.xpath(".//div[@class=\"unit-card__action--primary\"][1]"));
     }
 
     public WebElement unitViewButton(WebElement unitCard) {
-        return unitCard.findElement(By.xpath("//div[contains(@class,\"unit-card__action--primary\")][2]"));
+        return unitCard.findElement(By.xpath(".//div[contains(@class,\"unit-card__action--primary\")][2]"));
     }
 
     public WebElement unitDeleteButton(WebElement unitCard) {
-        return unitCard.findElement(By.xpath("//div[contains(@class,\"unit-card__action--red\")]"));
+        return unitCard.findElement(By.xpath(".//div[contains(@class,\"unit-card__action--red\")]"));
     }
 
     @FindBy(xpath = "//div[contains(text(),\"Total\")]")
