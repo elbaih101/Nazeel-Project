@@ -35,9 +35,12 @@ public class P08_UnitsSetupPage {
 
     }
 
-
+    @FindBy(xpath = "//ul[@role=\"listbox\"]")
+    WebElement genralListBox;
     @FindBy(xpath = "//div[contains(text(),\"New Unit\")]")
     public WebElement newUnitButton;
+    @FindBy(xpath = "//button[contains(text(),\"Filter\")]")
+    public WebElement filterButton;
     @FindBy(xpath = "//div[@class=\"arrow-button__icon\"]")
     WebElement groupUnitsDropList;
     @FindBy(xpath = "//div[@class=\"k-popup\"]")
@@ -52,8 +55,14 @@ public class P08_UnitsSetupPage {
         return addGroupUnits;
     }
 
-    @FindBy(xpath = "//div[@class=\"unit-card unit-setup\"]")
+    @FindBy(xpath = "//div[contains(@class,\"unit-card unit-setup\")]")
     public List<WebElement> unitsCards;
+
+    @FindBy(xpath = "//div[@class=\"unit-card__flags\"]//*[name()='svg']")
+    public List<WebElement> UnitsFlags;
+//    public WebElement unitCardInactivFlag(WebElement unitCard) {
+//        return unitCard.findElement(By.xpath("//div[@class=\"unit-card__flags\"]//*[name()='svg']"));
+//    }
 
     public WebElement unitNum(WebElement unitCard) {
         return unitCard.findElement(By.xpath(".//p[@class=\"unit-card__no\"]"));
@@ -95,14 +104,69 @@ public class P08_UnitsSetupPage {
     @FindBy(xpath = "//div[@role=\"dialog\"]")
     public WebElement deleteUnitDialog;
 
-    public WebElement confirmDeleteButton(){
+    public WebElement confirmDeleteButton() {
         return deleteUnitDialog.findElement(By.xpath("//button[contains(text(),\"Confirm\")]"));
     }
-    public WebElement discardDeleteButton(){
+
+    public WebElement discardDeleteButton() {
         return deleteUnitDialog.findElement(By.xpath("//button[contains(text(),\"Discard\")]"));
     }
-    public WebElement deltedUnitNumber(){return deleteUnitDialog.findElement(By.xpath("//div[contains(text(),\"Unit Number\")]/following-sibling::div"));}
+
+    public WebElement deltedUnitNumber() {
+        return deleteUnitDialog.findElement(By.xpath("//div[contains(text(),\"Unit Number\")]/following-sibling::div"));
+    }
+
+    //////////////// filter menue /////////////
+    @FindBy(xpath = "//button[contains(text(),\"Search\")]")
+    public WebElement filterSearchButton;
+
+    @FindBy(xpath = "//input[@placeholder=\"Select Status\"]/../following-sibling::span/span")
+    WebElement statusdropList;
+
+    public List<WebElement> statusList() {
+        wait.until(ExpectedConditions.elementToBeClickable(statusdropList));
+        statusdropList.click();
+        return genralListBox.findElements(By.xpath("//li[@role=\"option\"]"));
+    }
+
+    @FindBy(xpath = "//input[@placeholder=\"Select Block\"]/../following-sibling::span/span")
+    WebElement blocksDropList;
+
+    public List<WebElement> blocksList() {
+        wait.until(ExpectedConditions.elementToBeClickable(blocksDropList));
+        blocksDropList.click();
+        return genralListBox.findElements(By.xpath("//li[@role=\"option\"]"));
+    }
+
+    @FindBy(xpath = "//input[@placeholder=\"Select Floor\"]/../following-sibling::span/span")
+    WebElement floorsDropList;
+
+    public List<WebElement> floorsList() {
+        wait.until(ExpectedConditions.elementToBeClickable(floorsDropList));
+        floorsDropList.click();
+        return genralListBox.findElements(By.xpath("//li[@role=\"option\"]"));
+    }
+
+    @FindBy(xpath = "//input[@placeholder=\"Pick unit type\"]/../following-sibling::span/span")
+    WebElement unitTypesDropList;
+
+    public List<WebElement> unitTypesList() {
+        wait.until(ExpectedConditions.elementToBeClickable(unitTypesDropList));
+        unitTypesDropList.click();
+        return genralListBox.findElements(By.xpath("//li[@role=\"option\"]"));
+    }
+
+    @FindBy(xpath = "//input[@placeholder=\"Enter Unit No.\"]")
+    public WebElement filterUnitNumber;
 
 
+//    @FindBy(xpath = "//input[@placeholder=\"Pick unit type\"]/../following-sibling::span/span")
+//    WebElement unitGroupsDropList;
+//
+//    public List<WebElement> unitGroupsList() {
+//        wait.until(ExpectedConditions.elementToBeClickable(unitGroupsDropList));
+//        unitGroupsDropList.click();
+//        return genralListBox.findElements(By.xpath("//li[@role=\"option\"]"));
+//    }
 
 }

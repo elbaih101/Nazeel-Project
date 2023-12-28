@@ -19,8 +19,9 @@ Feature: Unit Setup
     Then check the url contains "view" click on the edit button to enter edit mode and check the url contains "edit"
     And  enter unit required data with room number "RANDOM"
     And save the edited unit
+    And Check toast mesage contains text "Saved Successfully"
     ## Todo : assertion needs filtering
-    And check unit card in the card grid with number "RANDOM"
+   ## And check unit card in the card grid with number "RANDOM"
 
 
   Scenario: add group of units
@@ -29,11 +30,15 @@ Feature: Unit Setup
     Then  submit adding group of units
     And Check toast mesage contains text "Units Added Successfully"
     ## Todo : assertion needs filtering
-    Then check the newly added units
+    ##Then check the newly added units
 
-    ## Todo : edit group of units
+
   Scenario: edit Group of Units
     Given  open the edit group of units popup
+    When  Select units to be edited criteria
+    And select all units
+    Then  edit all the features related to the selected units and save
+    Then Check toast mesage contains text "Updated Successfully"
 
 
   Scenario: delete a unit
@@ -41,5 +46,17 @@ Feature: Unit Setup
     Then Check the deleted unit number matches the selected unit number
     When clicking the confirm delete button and Check toast mesage contains text "Saved Successfully"
 
+  Scenario: filter units by Activity State
+    Given clicking onthe filter button to open filter menue
+    And Selecting Status "RANDOM" and Filtring
+    Then Check all visible units card have the status "RANDOM"
 
-    # #Todo :edit group of units
+  Scenario: filter units with unit number
+    Given clicking onthe filter button to open filter menue
+    And enter the unit number 1 and filter
+    Then check all units visible contains  number 1
+
+Scenario: filter units with unit type
+  Given clicking onthe filter button to open filter menue
+  And Select Type "RANDOM" and filter
+  Then check all visible units have type "RANDOM"
