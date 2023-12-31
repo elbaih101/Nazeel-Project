@@ -34,8 +34,8 @@ public class P06_5_SubscriptionPage {
 @FindBy(xpath = "//input[@name=\"startingAmount\"]")
     public WebElement startingAmountField;
 @FindBy(xpath = "//input[@name=\"startingAmountTax\"]")
-    public WebElement startingAmountTaxField;;
-@FindBy(xpath = "//input[@name=\"annualRenewalPrice\"]")
+    public WebElement startingAmountTaxField;
+    @FindBy(xpath = "//input[@name=\"annualRenewalPrice\"]")
     public WebElement annualRenewalPriceField;
 @FindBy(xpath = "//input[@name=\"depositer-name\"]")
     public WebElement depositerNameField;

@@ -22,14 +22,14 @@ import java.util.Random;
 public class D03_BlocksAndFloors {
 
 
-    WebDriver driver = Hooks.driver;
-    SoftAssert asrt = new SoftAssert();
-    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
-    P02_DashBoardPage dashBoardPage = new P02_DashBoardPage(driver);
-    P05_SetupPage setupPagec = new P05_SetupPage(driver);
-    P04_BlocksPage blocksPage = new P04_BlocksPage(driver);
-    P06_FloorsPage floorsPage = new P06_FloorsPage(driver);
-JavascriptExecutor js =(JavascriptExecutor) driver;
+    final WebDriver driver = Hooks.driver;
+    final SoftAssert asrt = new SoftAssert();
+    final WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+    final P02_DashBoardPage dashBoardPage = new P02_DashBoardPage(driver);
+    final P05_SetupPage setupPagec = new P05_SetupPage(driver);
+    final P04_BlocksPage blocksPage = new P04_BlocksPage(driver);
+    final P06_FloorsPage floorsPage = new P06_FloorsPage(driver);
+final JavascriptExecutor js =(JavascriptExecutor) driver;
 
     @Then("Check blocks pagination")
     public void checkBlocksPagination() {
@@ -67,7 +67,7 @@ JavascriptExecutor js =(JavascriptExecutor) driver;
         try {
             Thread.sleep(500);
         } catch (InterruptedException e) {
-            System.out.println("waiting for the new block button failed");;
+            System.out.println("waiting for the new block button failed");
         }
         blocksPage.newBlockButton.click();
     }

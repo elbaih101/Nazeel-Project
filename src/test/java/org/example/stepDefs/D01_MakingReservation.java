@@ -23,12 +23,12 @@ import java.util.Random;
 
 public class D01_MakingReservation
 {
-    P01_LoginPage loginPage = new P01_LoginPage();
-    P02_DashBoardPage homePage = new P02_DashBoardPage();
-    JavascriptExecutor js = (JavascriptExecutor) Hooks.driver;
-    P03_ReservationPage reservationPage = new P03_ReservationPage();
-    WebDriverWait wait = new WebDriverWait(Hooks.driver, Duration.ofSeconds(10));
-    SoftAssert asrt =new SoftAssert();
+    final P01_LoginPage loginPage = new P01_LoginPage();
+    final P02_DashBoardPage homePage = new P02_DashBoardPage();
+    final JavascriptExecutor js = (JavascriptExecutor) Hooks.driver;
+    final P03_ReservationPage reservationPage = new P03_ReservationPage();
+    final WebDriverWait wait = new WebDriverWait(Hooks.driver, Duration.ofSeconds(10));
+    final SoftAssert asrt =new SoftAssert();
 
     @Given("Logging in using The Login TestData username {string} password {string} ACC {string}")
     public void loggingInUsingTheLoginTestDataUsernamePasswordACC(String arg0, String arg1, String arg2)

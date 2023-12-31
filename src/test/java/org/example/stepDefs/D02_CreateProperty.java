@@ -20,23 +20,23 @@ import java.util.Locale;
 
 public class D02_CreateProperty {
 
-    Locale locale = new Locale("SA");
-    Faker faker = new Faker(locale);
-    WebDriver driver = Hooks.driver;
-    SoftAssert asrt = new SoftAssert();
-    Actions actions = new Actions(driver);
-    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
-    P01_LoginPage loginPage = new P01_LoginPage(driver);
-    P02_DashBoardPage dashBoardPage = new P02_DashBoardPage(driver);
-    P05_SetupPage setupPagec = new P05_SetupPage(driver);
-    P06_PropertiesPage propertiesPage = new P06_PropertiesPage(driver);
-    P06_1_PropeertyDataPage propeertyDataPage = new P06_1_PropeertyDataPage(driver);
-    P06_2_LocationDataPage locationDataPage = new P06_2_LocationDataPage(driver);
-    P06_3_OwnerDataPage ownerDataPage = new P06_3_OwnerDataPage(driver);
-    P06_4_SmsPage smsPage = new P06_4_SmsPage(driver);
-    P06_5_SubscriptionPage subscriptionPage = new P06_5_SubscriptionPage(driver);
-    P06_6_SummaryPage summaryPage = new P06_6_SummaryPage(driver);
-    String propertyName = faker.company().name();
+    final Locale locale = new Locale("SA");
+    final Faker faker = new Faker(locale);
+    final WebDriver driver = Hooks.driver;
+    final SoftAssert asrt = new SoftAssert();
+    final Actions actions = new Actions(driver);
+    final WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+    final P01_LoginPage loginPage = new P01_LoginPage(driver);
+    final P02_DashBoardPage dashBoardPage = new P02_DashBoardPage(driver);
+    final P05_SetupPage setupPagec = new P05_SetupPage(driver);
+    final P06_PropertiesPage propertiesPage = new P06_PropertiesPage(driver);
+    final P06_1_PropeertyDataPage propeertyDataPage = new P06_1_PropeertyDataPage(driver);
+    final P06_2_LocationDataPage locationDataPage = new P06_2_LocationDataPage(driver);
+    final P06_3_OwnerDataPage ownerDataPage = new P06_3_OwnerDataPage(driver);
+    final P06_4_SmsPage smsPage = new P06_4_SmsPage(driver);
+    final P06_5_SubscriptionPage subscriptionPage = new P06_5_SubscriptionPage(driver);
+    final P06_6_SummaryPage summaryPage = new P06_6_SummaryPage(driver);
+    final String propertyName = faker.company().name();
 
 
     @Given("Logging in with end user {string} {string} {string}")

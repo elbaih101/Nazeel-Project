@@ -29,7 +29,7 @@ public class TestNgTest
 
 
 
-    SoftAssert asrt = new SoftAssert();
+    final SoftAssert asrt = new SoftAssert();
 
     @BeforeSuite
     public void setUp()

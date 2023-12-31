@@ -17,12 +17,12 @@ import java.util.NoSuchElementException;
 
 public class D04_UnitTypeCustomization {
 
-    WebDriver driver = Hooks.driver;
-    SoftAssert asrt = new SoftAssert();
-    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
-    P02_DashBoardPage dashBoardPage = new P02_DashBoardPage(driver);
-    P05_SetupPage setupPagec = new P05_SetupPage(driver);
-    P07_UnitTypeCustomization typeCustomization = new P07_UnitTypeCustomization(driver);
+    final WebDriver driver = Hooks.driver;
+    final SoftAssert asrt = new SoftAssert();
+    final WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+    final P02_DashBoardPage dashBoardPage = new P02_DashBoardPage(driver);
+    final P05_SetupPage setupPagec = new P05_SetupPage(driver);
+    final P07_UnitTypeCustomization typeCustomization = new P07_UnitTypeCustomization(driver);
     String existantUnitType;
 
 

@@ -13,7 +13,7 @@ import java.time.Duration;
 import java.util.List;
 
 public class P06_4_SmsPage {
-WebDriverWait wait;
+final WebDriverWait wait;
     public P06_4_SmsPage(WebDriver driver){
         PageFactory.initElements(driver,this);
         wait=new WebDriverWait(driver, Duration.ofSeconds(20));
