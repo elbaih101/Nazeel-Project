@@ -6,6 +6,7 @@ import org.example.stepDefs.Hooks;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -17,22 +18,23 @@ import java.util.regex.Pattern;
 
 public class P08_UnitsSetupPage {
 
-    WebDriver driver;
-    WebDriverWait wait;
+    final WebDriver driver;
+    final WebDriverWait wait;
 
+    final Actions actions;
 
     public P08_UnitsSetupPage() {
         PageFactory.initElements(Hooks.driver, this);
         this.driver = Hooks.driver;
         wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-
+        actions = new Actions(driver);
     }
 
     public P08_UnitsSetupPage(WebDriver driver) {
         PageFactory.initElements(driver, this);
         this.driver = driver;
         wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-
+        actions = new Actions(driver);
     }
 
     @FindBy(xpath = "//ul[@role=\"listbox\"]")
@@ -51,6 +53,7 @@ public class P08_UnitsSetupPage {
     public WebElement addGroupUnitsButton() {
         wait.until(ExpectedConditions.elementToBeClickable(groupUnitsDropList));
         driver.switchTo().activeElement();
+        wait.until(ExpectedConditions.elementToBeClickable(groupUnitsDropList));
         groupUnitsDropList.click();
         return addGroupUnits;
     }
@@ -60,12 +63,19 @@ public class P08_UnitsSetupPage {
 
     @FindBy(xpath = "//div[@class=\"unit-card__flags\"]//*[name()='svg']")
     public List<WebElement> UnitsFlags;
-//    public WebElement unitCardInactivFlag(WebElement unitCard) {
+
+    //    public WebElement unitCardInactivFlag(WebElement unitCard) {
 //        return unitCard.findElement(By.xpath("//div[@class=\"unit-card__flags\"]//*[name()='svg']"));
 //    }
 
     public WebElement unitNum(WebElement unitCard) {
-        return unitCard.findElement(By.xpath(".//p[@class=\"unit-card__no\"]"));
+       WebElement unitNum =unitCard.findElement(By.xpath(".//p[@class=\"unit-card__no\"]"));
+        if (unitNum.getText().contains("..")){
+            actions.moveToElement(unitCard);
+            actions.perform();
+            unitNum = driver.findElement(By.xpath("//div[contains(@class,\" p-tooltip-bottom\")]/div[@class=\"p-tooltip-text\"]"));
+            }
+        return unitNum;
     }
 
     public WebElement unitType(WebElement unitCard) {
@@ -169,4 +179,6 @@ public class P08_UnitsSetupPage {
 //        return genralListBox.findElements(By.xpath("//li[@role=\"option\"]"));
 //    }
 
+    @FindBy(xpath = "//li[contains(@class,\"pagination-next\")]")
+    public WebElement nextPageButton;
 }

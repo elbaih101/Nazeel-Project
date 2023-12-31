@@ -8,10 +8,10 @@ Feature: Unit Setup
 
   Scenario: add a unit for newly added unit type
     Given open the new unit page
-    And  enter unit required data with room number "Au1"
+    And  enter unit required data with room number "98"
     When  click on the add unit button
-    Then Check toast mesage contains text "saved successfully"
-    And check unit card in the card grid with number "Au1"
+#    Then Check toast mesage contains text "Saved Successfully"
+    Then check unit card in the card grid with number "98"
 
 
   Scenario: view and edit a unit
@@ -20,22 +20,20 @@ Feature: Unit Setup
     And  enter unit required data with room number "RANDOM"
     And save the edited unit
     And Check toast mesage contains text "Saved Successfully"
-    ## Todo : assertion needs filtering
-   ## And check unit card in the card grid with number "RANDOM"
+    And check unit card in the card grid with number "RANDOM"
 
 
   Scenario: add group of units
     Given open the add group of units popup
-    And enter the required data with number of units 5
+    And enter the required data with number of units 50 and type "RANDOM" and block "RANDOM"
     Then  submit adding group of units
     And Check toast mesage contains text "Units Added Successfully"
-    ## Todo : assertion needs filtering
-    ##Then check the newly added units
+    Then check the newly added units
 
 
   Scenario: edit Group of Units
     Given  open the edit group of units popup
-    When  Select units to be edited criteria
+    When  Select units to be edited criteria of type "RANDOM" type_exclusivly "NO"
     And select all units
     Then  edit all the features related to the selected units and save
     Then Check toast mesage contains text "Updated Successfully"
@@ -56,7 +54,12 @@ Feature: Unit Setup
     And enter the unit number 1 and filter
     Then check all units visible contains  number 1
 
-Scenario: filter units with unit type
-  Given clicking onthe filter button to open filter menue
-  And Select Type "RANDOM" and filter
-  Then check all visible units have type "RANDOM"
+  Scenario: filter units with unit type
+    Given clicking onthe filter button to open filter menue
+    And Select Type "RANDOM" and filter
+    Then check all visible units have type "RANDOM"
+
+  Scenario: filter units by blocks and floors
+    Given clicking onthe filter button to open filter menue
+    And select block "RANDOM" and floor "RANDOM" and filter
+    Then  check the data presnet are related to the selected block

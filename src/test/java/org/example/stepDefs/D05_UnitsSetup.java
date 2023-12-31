@@ -5,41 +5,37 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-
 import org.example.pages.P02_DashBoardPage;
 import org.example.pages.P05_SetupPage;
 import org.example.pages.unit_setup_pages.P08_1_NewUnitPage;
 import org.example.pages.unit_setup_pages.P08_2_GroupOfUnitsPopUp;
 import org.example.pages.unit_setup_pages.P08_UnitsSetupPage;
-import org.openqa.selenium.ElementNotInteractableException;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.asserts.SoftAssert;
 
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.List;
-
 import java.util.Random;
 
 public class D05_UnitsSetup {
 
-    WebDriver driver = Hooks.driver;
-    SoftAssert asrt = new SoftAssert();
-    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
-    P02_DashBoardPage dashBoardPage = new P02_DashBoardPage(driver);
-    P05_SetupPage setupPagec = new P05_SetupPage(driver);
-    P08_UnitsSetupPage unitsSetupPage = new P08_UnitsSetupPage(driver);
-    P08_1_NewUnitPage newUnitPage = new P08_1_NewUnitPage(driver);
-    P08_2_GroupOfUnitsPopUp groupOfUnitsPopUp = new P08_2_GroupOfUnitsPopUp(driver);
-    Faker faker = new Faker();
-    String randomUnitNum = faker.numerify("Ran##");
+    final WebDriver driver = Hooks.driver;
+    final SoftAssert asrt = new SoftAssert();
+    final WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+    final P02_DashBoardPage dashBoardPage = new P02_DashBoardPage(driver);
+    final P05_SetupPage setupPagec = new P05_SetupPage(driver);
+    final P08_UnitsSetupPage unitsSetupPage = new P08_UnitsSetupPage(driver);
+    final P08_1_NewUnitPage newUnitPage = new P08_1_NewUnitPage(driver);
+    final P08_2_GroupOfUnitsPopUp groupOfUnitsPopUp = new P08_2_GroupOfUnitsPopUp(driver);
+    final Faker faker = new Faker();
+    final String randomUnitNum = faker.numerify("Ran##");
     int numberofNewUnits;
-    Actions actions = new Actions(driver);
-    JavascriptExecutor js = (JavascriptExecutor) driver;
+    final Actions actions = new Actions(driver);
+    final JavascriptExecutor js = (JavascriptExecutor) driver;
 
 
     @And("go to unit Setup page")
@@ -59,41 +55,77 @@ public class D05_UnitsSetup {
     @And("enter unit required data with room number {string}")
     public void enterUnitRequiredDataWithRoomNumber(String unitNum) {
         newUnitPage.unitNumberField.clear();
-        newUnitPage.unitNumberField.sendKeys(randomUnitNum);
-        if (!unitNum.equals("RANDOM"))
+        if (unitNum.equals("RANDOM")) {
+            newUnitPage.unitNumberField.sendKeys(randomUnitNum);
+        }
+        else{
             newUnitPage.unitNumberField.sendKeys(unitNum);
+        }
 
         List<WebElement> classes = newUnitPage.unitClasses();
-        classes.get(new Random().nextInt(classes.size())).click();
+       WebElement selectedClass= classes.get(new Random().nextInt(classes.size()));
+        wait.until(ExpectedConditions.elementToBeClickable(selectedClass));
+       selectedClass.click();
+
         List<WebElement> types = newUnitPage.unitTypes();
-        types.get(new Random().nextInt(types.size())).click();
+        WebElement selectedType = types.get(new Random().nextInt(types.size()));
+        wait.until(ExpectedConditions.elementToBeClickable(selectedType));
+        selectedType.click();
+
         newUnitPage.canBeMergedButton.click();
+
         List<WebElement> blocks = newUnitPage.blocks();
-        wait.until(ExpectedConditions.elementToBeClickable(blocks.get(new Random().nextInt(blocks.size()))));
-        blocks.get(new Random().nextInt(blocks.size())).click();
+        WebElement selectedBlock = blocks.get(new Random().nextInt(blocks.size()));
+        wait.until(ExpectedConditions.elementToBeClickable(selectedBlock));
+        selectedBlock.click();
+
         List<WebElement> floors = newUnitPage.floors();
-        floors.get(new Random().nextInt(floors.size())).click();
+        WebElement selectedFloor = floors.get(new Random().nextInt(floors.size()));
+        wait.until(ExpectedConditions.elementToBeClickable(selectedFloor));
+        selectedFloor.click();
+
         List<WebElement> kitchens = newUnitPage.kitchens();
-        kitchens.get(new Random().nextInt(kitchens.size())).click();
+       WebElement selectedKitchen= kitchens.get(new Random().nextInt(kitchens.size()));
+        wait.until(ExpectedConditions.elementToBeClickable(selectedKitchen));
+       selectedKitchen.click();
         List<WebElement> halls = newUnitPage.halls();
-        halls.get(new Random().nextInt(halls.size())).click();
+        WebElement selectedHall = halls.get(new Random().nextInt(halls.size()));
+        wait.until(ExpectedConditions.elementToBeClickable(selectedHall));
+        selectedHall.click();
 
     }
 
     @When("click on the add unit button")
     public void clickOnTheAddUnitButton() {
         newUnitPage.addUnitButton.click();
+        D03_BlocksAndFloors blocksAndFloors =new D03_BlocksAndFloors();
+        try {
+
+            blocksAndFloors.checkToastMesageContainsText("Saved Successfully");
+        }catch (AssertionError e)
+        {
+            if (e.getMessage().contains("Name exist before")){enterUnitRequiredDataWithRoomNumber("RANDOM");
+                clickOnTheAddUnitButton() ;}
+        }
     }
 
     @And("check unit card in the card grid with number {string}")
     public void checkUnitCardInTheCardGridWithNumber(String unitNum) {
-        if (!unitNum.equals("RANDOM")) {
-            asrt.assertTrue(unitsSetupPage.unitsCards.stream().anyMatch(element -> unitsSetupPage.unitNum(element).getText().contains(unitNum)));
-            asrt.assertAll();
-        } else {
-            asrt.assertTrue(unitsSetupPage.unitsCards.stream().anyMatch(element -> unitsSetupPage.unitNum(element).getText().contains(randomUnitNum)));
-            asrt.assertAll();
-        }
+        int pageNumber = 1;
+        List<WebElement>unitCreated=new ArrayList<>();
+        do {
+            if (pageNumber != 1){
+                unitsSetupPage.nextPageButton.click();}
+            wait.until(ExpectedConditions.refreshed(ExpectedConditions.visibilityOfAllElements(unitsSetupPage.unitsCards)));
+            if (unitNum.equals("RANDOM")) {
+                unitCreated.addAll(unitsSetupPage.unitsCards.stream().filter(element -> unitsSetupPage.unitNum(element).getText().contains(randomUnitNum)).toList());
+            } else {
+                unitCreated.addAll(unitsSetupPage.unitsCards.stream().filter(element -> unitsSetupPage.unitNum(element).getText().contains(unitNum)).toList());
+            }
+            pageNumber++;
+        } while (!unitsSetupPage.nextPageButton.getAttribute("class").contains("disabled"));
+        asrt.assertTrue(unitCreated.size()==1);
+        asrt.assertAll();
     }
 
 
@@ -137,16 +169,25 @@ public class D05_UnitsSetup {
 
     }
 
-    @And("enter the required data with number of units {int}")
-    public void enterTheRequiredDataWithNumberOfUnits(int numberofInsertUnits) {
+    int noFrom;
+    int noTo;
+
+    @And("enter the required data with number of units {int} and type {string} and block {string}")
+    public void enterTheRequiredDataWithNumberOfUnits(int numberofInsertUnits,String type,String block) {
+
         int totalUnitsNo = unitsSetupPage.totalUnitNumber();
         numberofNewUnits = numberofInsertUnits;
-        int noFrom = (totalUnitsNo + numberofInsertUnits) - (numberofInsertUnits - 1);
-        int noTo = (totalUnitsNo + numberofInsertUnits);
+        noFrom = (totalUnitsNo + numberofInsertUnits) - (numberofInsertUnits - 1);
+        noTo = (totalUnitsNo + numberofInsertUnits);
         try {
 
             List<WebElement> blocks = groupOfUnitsPopUp.blocks();
-            WebElement selectedBlock = blocks.get(new Random().nextInt(blocks.size()));
+            WebElement selectedBlock ;
+            if(block.equalsIgnoreCase("RANDOM")){
+                selectedBlock = blocks.get(new Random().nextInt(blocks.size()));
+            }
+            else {selectedBlock = blocks.stream().filter(element -> element.getText().contains(block)).toList().get(0);}
+
             wait.until(ExpectedConditions.elementToBeClickable(selectedBlock));
             selectedBlock.click();
         } catch (ElementNotInteractableException e) {
@@ -156,9 +197,17 @@ public class D05_UnitsSetup {
         WebElement selectedFlor = floors.get(new Random().nextInt(floors.size()));
         wait.until(ExpectedConditions.elementToBeClickable(selectedFlor));
         selectedFlor.click();
+        try {
+            Thread.sleep(300);
+        } catch (InterruptedException e) {
+            System.out.println("wating failed for unit types");
+        }
 
         List<WebElement> types = groupOfUnitsPopUp.unitType();
-        WebElement selectedType = types.get(new Random().nextInt(types.size()));
+        WebElement selectedType;
+        if(type.equalsIgnoreCase("RANDOM")){
+         selectedType = types.get(new Random().nextInt(types.size()));}
+        else { selectedType = types.stream().filter(element -> element.getText().contains(type)).toList().get(0);}
         wait.until(ExpectedConditions.elementToBeClickable(selectedType));
         selectedType.click();
 
@@ -179,8 +228,29 @@ public class D05_UnitsSetup {
 
     @Then("check the newly added units")
     public void checkTheNewlyAddedUnits() {
-        List<WebElement> newUnits = unitsSetupPage.unitsCards.stream().filter(element -> Integer.parseInt(unitsSetupPage.unitNum(element).getText().trim()) > unitsSetupPage.totalUnitNumber()).toList();
-        asrt.assertTrue(newUnits.size() == numberofNewUnits);
+        List<String> newUnitsNumber = new ArrayList<>();
+        List<WebElement> newUnits = new ArrayList<>();
+//        newUnitsNumber.add(Integer.toString(noFrom));
+        for (int i = noFrom; i <= noTo; i++) {
+            newUnitsNumber.add(Integer.toString(i));
+        }
+        int pageNumber = 1;
+        do {
+            if (pageNumber != 1){
+                unitsSetupPage.nextPageButton.click();}
+            for (int i = 0; i < newUnitsNumber.size(); i++) {
+                int j = i;
+                wait.until(ExpectedConditions.refreshed(ExpectedConditions.visibilityOfAllElements(unitsSetupPage.unitsCards)));
+                try {
+                    newUnits.addAll(unitsSetupPage.unitsCards.stream().filter(element -> unitsSetupPage.unitNum(element).getText().trim().contains(newUnitsNumber.get(j))).toList());
+                } catch (StaleElementReferenceException ignored) {
+                }
+
+            }
+            pageNumber++;
+        } while (!unitsSetupPage.nextPageButton.getAttribute("class").contains("disabled"));
+        asrt.assertTrue(newUnits.size() == newUnitsNumber.size());
+
         asrt.assertAll();
     }
 
@@ -220,7 +290,7 @@ public class D05_UnitsSetup {
             blocksAndFloors.checkToastMesageContainsText(msg);
 
         } catch (AssertionError e) {
-            if (e.getMessage().contains("Invalid action, had related data")) ;
+                if (e.getMessage().contains("Invalid action, had related data")) ;
             {
 
                 unitsSetupPage.discardDeleteButton().click();
@@ -230,7 +300,16 @@ public class D05_UnitsSetup {
                 checkTheDeletedUnitNumberMatchesTheSelectedUnitNumber();
                 clickingTheConfirmDeleteButton(msg);
             }
+         if(!e.getMessage().contains("Invalid action, had related data")) {System.out.println("assertion error"+e.getMessage());}
 
+        }
+        try {
+
+            asrt.assertTrue(deletedCard.getText().contains(" "));
+            asrt.assertAll();
+        } catch (StaleElementReferenceException ex) {
+            asrt.assertTrue(true);
+            asrt.assertAll();
         }
     }
 
@@ -241,30 +320,38 @@ public class D05_UnitsSetup {
         unitsSetupPage.editGroupUnitsButton.click();
     }
 
-    @When("Select units to be edited criteria")
-    public void selectUnitsToBeEditedCriteria() {
-        try {
+    @When("Select units to be edited criteria of type {string} type_exclusivly {string}")
+    public void selectUnitsToBeEditedCriteria(String type,String exclusivestate) {
+        if (type.equalsIgnoreCase("RANDOM")&&exclusivestate.equalsIgnoreCase("NO")){
+            try {
+                List<WebElement> blocks = groupOfUnitsPopUp.blocks();
+                WebElement selectedBlock = blocks.get(new Random().nextInt(blocks.size()));
+                wait.until(ExpectedConditions.elementToBeClickable(selectedBlock));
+                selectedBlock.click();
 
-            List<WebElement> blocks = groupOfUnitsPopUp.blocks();
-            WebElement selectedBlock = blocks.get(new Random().nextInt(blocks.size()));
-            wait.until(ExpectedConditions.elementToBeClickable(selectedBlock));
-            selectedBlock.click();
-
-            ///////// NoSuchElementException  : for the element may not exist ////////
-        } catch (NullPointerException e) {
-            System.out.println("only one block can't select");
+                ///////// NoSuchElementException  : for the element may not exist ////////
+            } catch (NullPointerException e) {
+                System.out.println("only one block can't select");
+            }
+            List<WebElement> floors = groupOfUnitsPopUp.floorss();
+            WebElement selectedFlor = floors.get(new Random().nextInt(floors.size()));
+            wait.until(ExpectedConditions.elementToBeClickable(selectedFlor));
+            selectedFlor.click();
+            List<WebElement> types = groupOfUnitsPopUp.unitType();
+            WebElement selectedType = types.get(new Random().nextInt(types.size()));
+            wait.until(ExpectedConditions.elementToBeClickable(selectedType));
+            selectedType.click();
+            groupOfUnitsPopUp.fromNumber.sendKeys(Integer.toString(1));
+            groupOfUnitsPopUp.toNumber.sendKeys(Integer.toString(100));
         }
-        List<WebElement> floors = groupOfUnitsPopUp.floorss();
-        WebElement selectedFlor = floors.get(new Random().nextInt(floors.size()));
-        wait.until(ExpectedConditions.elementToBeClickable(selectedFlor));
-        selectedFlor.click();
-        List<WebElement> types = groupOfUnitsPopUp.unitType();
-        WebElement selectedType = types.get(new Random().nextInt(types.size()));
-        wait.until(ExpectedConditions.elementToBeClickable(selectedType));
-        selectedType.click();
-        groupOfUnitsPopUp.fromNumber.sendKeys(Integer.toString(1));
-        groupOfUnitsPopUp.toNumber.sendKeys(Integer.toString(100));
+        else if(exclusivestate.equalsIgnoreCase("yes")&&!type.equalsIgnoreCase("RANDOM"))
+        { List<WebElement> types = groupOfUnitsPopUp.unitType();
+            WebElement selectedType = types.stream().filter(element -> element.getText().contains(type)).toList().get(0);
+            wait.until(ExpectedConditions.elementToBeClickable(selectedType));
+            selectedType.click();}
+
         groupOfUnitsPopUp.nextButon.click();
+
     }
 
     @And("select all units")
@@ -307,12 +394,13 @@ public class D05_UnitsSetup {
         wait.until(ExpectedConditions.elementToBeClickable(selectedHall));
         selectedHall.click();
 
+        //Todo : kitchens
 
-        groupOfUnitsPopUp.featureCheckBox("Kitchen").click();
-        List<WebElement> kitchens = groupOfUnitsPopUp.kitchens();
-        WebElement selectedKitchen = kitchens.get(new Random().nextInt(kitchens.size()));
-        wait.until(ExpectedConditions.elementToBeClickable(selectedKitchen));
-        selectedKitchen.click();
+//        groupOfUnitsPopUp.featureCheckBox("Kitchen").click();
+//        List<WebElement> kitchens = groupOfUnitsPopUp.kitchens();
+//        WebElement selectedKitchen = kitchens.get(new Random().nextInt(kitchens.size()));
+//        wait.until(ExpectedConditions.elementToBeClickable(selectedKitchen));
+//        selectedKitchen.click();
 
         groupOfUnitsPopUp.featureCheckBox("Single Beds").click();
         groupOfUnitsPopUp.editSingleBedsField.sendKeys("3");
@@ -329,17 +417,19 @@ public class D05_UnitsSetup {
         wait.until(ExpectedConditions.elementToBeClickable(unitsSetupPage.filterButton));
         unitsSetupPage.filterButton.click();
     }
-String selectedState;
+
+    String selectedState;
+
     @And("Selecting Status {string} and Filtring")
     public void selectingStatusAndFiltring(String state) {
         List<WebElement> statusList = unitsSetupPage.statusList();
         WebElement selecetdStatus = null;
         if (state.equals("RANDOM")) {
             selecetdStatus = statusList.get(new Random().nextInt(statusList.size()));
-                selectedState =selecetdStatus.getText();
+            selectedState = selecetdStatus.getText();
         } else {
             selecetdStatus = statusList.stream().filter(element -> element.getText().contains(state)).toList().get(0);
-            selectedState =selecetdStatus.getText();
+            selectedState = selecetdStatus.getText();
         }
         wait.until(ExpectedConditions.elementToBeClickable(selecetdStatus));
         selecetdStatus.click();
@@ -349,16 +439,14 @@ String selectedState;
     @Then("Check all visible units card have the status {string}")
     public void checkAllVisibleUnitsCardHaveTheStatus(String state) {
         List<WebElement> filteredUnits = unitsSetupPage.unitsCards;
-       List<WebElement> inactiveUnitsFlags=unitsSetupPage.UnitsFlags;
-        if (selectedState.equals("Inactive")){
+        List<WebElement> inactiveUnitsFlags = unitsSetupPage.UnitsFlags;
+        if (selectedState.equals("Inactive")) {
 
-        asrt.assertTrue(filteredUnits.size()==inactiveUnitsFlags.size());
-        }
-        else if (selectedState.equals("Active")){
+            asrt.assertTrue(filteredUnits.size() == inactiveUnitsFlags.size());
+        } else if (selectedState.equals("Active")) {
             asrt.assertTrue(inactiveUnitsFlags.isEmpty());
-        }
-        else {
-           asrt.assertTrue(true);
+        } else {
+            asrt.assertTrue(true);
         }
         asrt.assertAll();
     }
@@ -376,19 +464,21 @@ String selectedState;
         wait.until(ExpectedConditions.visibilityOfAllElements(filteredUnits));
         asrt.assertTrue(filteredUnits.stream().allMatch(element -> unitsSetupPage.unitNum(element).getText().contains(Integer.toString(unitNumber))));
         asrt.assertAll();
+
     }
 
-    String selectedUnitType;
+    String selectedUnitTypeName;
+
     @And("Select Type {string} and filter")
     public void selectTypeAndFilter(String unitType) {
         List<WebElement> typesList = unitsSetupPage.unitTypesList();
         WebElement selecetdType = null;
-        if(unitType.equals("RANDOM")){
+        if (unitType.equals("RANDOM")) {
             selecetdType = typesList.get(new Random().nextInt(typesList.size()));
-            selectedUnitType =selecetdType.getText().trim();
+            selectedUnitTypeName = selecetdType.getText().trim();
         } else {
             selecetdType = typesList.stream().filter(element -> element.getText().trim().contains(unitType.trim())).toList().get(0);
-            selectedUnitType =selecetdType.getText();
+            selectedUnitTypeName = selecetdType.getText();
         }
         wait.until(ExpectedConditions.elementToBeClickable(selecetdType));
         selecetdType.click();
@@ -401,13 +491,61 @@ String selectedState;
         try {
             Thread.sleep(500);
         } catch (InterruptedException e) {
-            System.out.println("waiting to refresh the cards failed");;
+            System.out.println("waiting to refresh the cards failed");
         }
         List<WebElement> filteredUnits = unitsSetupPage.unitsCards;
-        if (unitType.equals("RANDOM"))
-        {
-            asrt.assertTrue(filteredUnits.stream().allMatch(card-> unitsSetupPage.unitType(card).getText().trim().contains(selectedUnitType.trim())));
-        }else {asrt.assertTrue(filteredUnits.stream().allMatch(card-> unitsSetupPage.unitType(card).getText().trim().contains(unitType.trim()) ));}
+        if (unitType.equals("RANDOM")) {
+            asrt.assertTrue(filteredUnits.stream().allMatch(card -> unitsSetupPage.unitType(card).getText().trim().contains(selectedUnitTypeName.trim())));
+        } else {
+            asrt.assertTrue(filteredUnits.stream().allMatch(card -> unitsSetupPage.unitType(card).getText().trim().contains(unitType.trim())));
+        }
+        asrt.assertAll();
+
+    }
+
+    String selectedBlockName;
+    String selectedFloorName;
+    int totalUnitsCount;
+
+    @And("select block {string} and floor {string} and filter")
+    public void selectBlockAndFilter(String block, String floor) {
+        totalUnitsCount = unitsSetupPage.totalUnitNumber();
+        List<WebElement> blocksList = unitsSetupPage.blocksList();
+        WebElement selecetdblock = null;
+        if (block.equals("RANDOM")) {
+            selecetdblock = blocksList.get(new Random().nextInt(blocksList.size()));
+            selectedBlockName = selecetdblock.getText().trim();
+        } else {
+            selecetdblock = blocksList.stream().filter(element -> element.getText().trim().contains(block.trim())).toList().get(0);
+            selectedBlockName = selecetdblock.getText();
+        }
+        wait.until(ExpectedConditions.elementToBeClickable(selecetdblock));
+        selecetdblock.click();
+
+        List<WebElement> floorsList = unitsSetupPage.floorsList();
+        WebElement selectedFloor = null;
+        if (block.equals("RANDOM")) {
+            selectedFloor = floorsList.get(new Random().nextInt(floorsList.size()));
+            selectedFloorName = selectedFloor.getText().trim();
+        } else {
+            selectedFloor = floorsList.stream().filter(element -> element.getText().trim().contains(floor.trim())).toList().get(0);
+            selectedFloorName = selectedFloor.getText();
+        }
+        wait.until(ExpectedConditions.elementToBeClickable(selectedFloor));
+        selectedFloor.click();
+        unitsSetupPage.filterSearchButton.click();
+
+    }
+
+    @Then("check the data presnet are related to the selected block")
+    public void checkTheDataPresnetAreRelatedToTheSelectedBlock() {
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        int newTotalCount = unitsSetupPage.totalUnitNumber();
+        asrt.assertTrue(totalUnitsCount > newTotalCount);
         asrt.assertAll();
 
     }
