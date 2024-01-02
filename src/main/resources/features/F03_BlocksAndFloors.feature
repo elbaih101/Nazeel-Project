@@ -1,9 +1,10 @@
 @Regression @Sprint36
 Feature: Blocks And Floors
+  Background: selecting property
+    Given Logging in with superuser
+    And Select Property "Corkery, Bins and Huel"
   Rule: blocks
     Background: going to blocks Page
-      Given Logging in with superuser
-      And Select Property "Corkery, Bins and Huel"
       And go to Blocks Page
 
     Scenario: Check pagination
@@ -70,10 +71,7 @@ Feature: Blocks And Floors
 ###########################################################################################
     ######################### Floors ###################################################
   Rule:floors
-
     Background:going to floors page
-      Given Logging in with end user "elbaih" "Aa@123456" "00726"
-      And Select Property "Corkery, Bins and Huel"
       And go to Floors Page
 
     Scenario: check paginations

@@ -12,6 +12,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
 import java.util.List;
 
+@SuppressWarnings("unused")
 public class P06_2_LocationDataPage {
     WebDriverWait wait;
     public P06_2_LocationDataPage(WebDriver driver){
@@ -64,31 +65,31 @@ public List<WebElement> country()
 {
     wait.until(ExpectedConditions.elementToBeClickable(countrySelectionBox));
     countrySelectionBox.click();
-    wait.until(ExpectedConditions.visibilityOf((WebElement) genralListBox));
+    wait.until(ExpectedConditions.visibilityOf(genralListBox));
     return genralListBox.findElements(By.xpath("//li[@role=\"option\"]"));
 }
 public List<WebElement> region ()
 {wait.until(ExpectedConditions.elementToBeClickable(regionSelectionBox));
     regionSelectionBox.click();
-    wait.until(ExpectedConditions.visibilityOf((WebElement) genralListBox));
+    wait.until(ExpectedConditions.visibilityOf(genralListBox));
     return genralListBox.findElements(By.xpath("//li[@role=\"option\"]"));
 }
 public List<WebElement> city()
 {wait.until(ExpectedConditions.elementToBeClickable(citySelectionBox));
     citySelectionBox.click();
-    wait.until(ExpectedConditions.visibilityOf((WebElement) genralListBox));
+    wait.until(ExpectedConditions.visibilityOf(genralListBox));
     return genralListBox.findElements(By.xpath("//li[@role=\"option\"]"));
 }
 public List<WebElement> district()
 {wait.until(ExpectedConditions.elementToBeClickable(districtSelectionBox));
     districtSelectionBox.click();
-    wait.until(ExpectedConditions.visibilityOf((WebElement) genralListBox));
+    wait.until(ExpectedConditions.visibilityOf(genralListBox));
     return genralListBox.findElements(By.xpath("//li[@role=\"option\"]"));
 }
 public List<WebElement> street()
 {wait.until(ExpectedConditions.elementToBeClickable(streetSelectionBox));
     streetSelectionBox.click();
-    wait.until(ExpectedConditions.visibilityOf((WebElement) genralListBox));
+    wait.until(ExpectedConditions.visibilityOf(genralListBox));
     return genralListBox.findElements(By.xpath("//li[@role=\"option\"]"));
 }
 

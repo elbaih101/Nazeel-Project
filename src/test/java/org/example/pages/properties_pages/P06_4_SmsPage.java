@@ -12,6 +12,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
 import java.util.List;
 
+@SuppressWarnings("unused")
 public class P06_4_SmsPage {
 final WebDriverWait wait;
     public P06_4_SmsPage(WebDriver driver){

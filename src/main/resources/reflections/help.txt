@@ -11,3 +11,10 @@ https://www.regexplanet.com/advanced/java/index.html            for RegEx genera
 
 
 https://stackoverflow.com/questions/76482305/faker-generate-a-phone-number   java faker scenarios
+
+
+https://stackoverflow.com/questions/40956546/selenium-html-input-text-displays-text-but-doesnt-contain-value  getting value of input element
+
+
+
+https://www.selenium.dev/documentation/webdriver/interactions/windows/   reflections on selenium

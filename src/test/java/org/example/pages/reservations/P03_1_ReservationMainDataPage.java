@@ -1,4 +1,4 @@
-package org.example.pages;
+package org.example.pages.reservations;
 
 import org.example.stepDefs.Hooks;
 import org.openqa.selenium.WebDriver;
@@ -6,14 +6,15 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
-public class P03_ReservationPage
+@SuppressWarnings("unused")
+public class P03_1_ReservationMainDataPage
 {
-    public P03_ReservationPage()
+    public P03_1_ReservationMainDataPage()
     {
         PageFactory.initElements(Hooks.driver, this);
     }
 
-    public P03_ReservationPage(WebDriver driver){
+    public P03_1_ReservationMainDataPage(WebDriver driver){
     PageFactory.initElements(driver,this);
 }
     @FindBy(css = "button[class=\"n-button n-button--green ng-star-inserted\"]")
@@ -59,5 +60,8 @@ public class P03_ReservationPage
     public  WebElement toastMessage;
     @FindBy(xpath = "//div[@class=\"page-header\"]//h2//span")
     public WebElement reservationStatus;
+
+
+
 
 }

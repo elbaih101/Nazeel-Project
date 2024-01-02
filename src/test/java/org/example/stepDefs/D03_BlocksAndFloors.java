@@ -237,7 +237,6 @@ final JavascriptExecutor js =(JavascriptExecutor) driver;
 
     @Then("Check Default Floor name to be {string} and Description to be {string}")
     public void checkDefaultFloorNameToBeAndDescriptionToBe(String name, String description) {
-        WebElement floor;
         if (floorsPage.floorsNames.stream().anyMatch(webElement -> webElement.getText().contains(name)))
             asrt.assertEquals(floorsPage.floorDescription(name).getText().trim(), description);
         asrt.assertAll();

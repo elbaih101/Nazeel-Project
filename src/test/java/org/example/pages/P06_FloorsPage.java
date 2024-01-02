@@ -2,7 +2,6 @@ package org.example.pages;
 
 import org.apache.commons.lang.StringUtils;
 import org.example.stepDefs.Hooks;
-
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -11,6 +10,7 @@ import org.openqa.selenium.support.PageFactory;
 
 import java.util.List;
 
+@SuppressWarnings("unused")
 public class P06_FloorsPage {
     public P06_FloorsPage() {
         PageFactory.initElements(Hooks.driver, this);

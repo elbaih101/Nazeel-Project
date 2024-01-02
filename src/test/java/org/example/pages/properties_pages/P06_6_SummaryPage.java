@@ -6,6 +6,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 
+@SuppressWarnings("unused")
 public class P06_6_SummaryPage {
 
     public P06_6_SummaryPage(WebDriver driver){

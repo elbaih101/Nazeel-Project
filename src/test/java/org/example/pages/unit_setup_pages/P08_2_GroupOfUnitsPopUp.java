@@ -11,6 +11,7 @@ import org.openqa.selenium.support.PageFactory;
 import java.util.List;
 
 
+@SuppressWarnings("unused")
 public class P08_2_GroupOfUnitsPopUp {
 
 

@@ -19,25 +19,33 @@ public class P01_LoginPage
     public P01_LoginPage(WebDriver driver){
         PageFactory.initElements(driver,this);
     }
+    @SuppressWarnings("unused")
     @FindBy(id="usern")
    public WebElement usernameField;
 
+    @SuppressWarnings("unused")
     @FindBy(id="pass")
    public WebElement passwordField;
 
+    @SuppressWarnings("unused")
     @FindBy(id="acc")
     public WebElement accField;
 
+    @SuppressWarnings("unused")
     @FindBy(xpath = "//button[contains(text(),\"Login\")]")
     public WebElement loginButton;
+    @SuppressWarnings("unused")
     @FindBy(xpath = "//span[contains(text(),\"Later\")]/..")
     public WebElement verificationButton;
 
+    @SuppressWarnings("unused")
     @FindBy(xpath = "//input[@name=\"propertyNameOrCode\"]")
     public WebElement propertyNameField;
+    @SuppressWarnings("unused")
     @FindBy(xpath = "//input[@placeholder=\"Search company\"]")
     public WebElement companyNameField;
 
+    @SuppressWarnings("unused")
     @FindAll({@FindBy(xpath = "//kendo-grid-list//td/span")})
     public List<WebElement> companysList;
 

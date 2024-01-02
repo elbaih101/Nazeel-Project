@@ -9,6 +9,7 @@ import org.openqa.selenium.support.PageFactory;
 
 import java.util.List;
 
+@SuppressWarnings("unused")
 public class P06_5_SubscriptionPage {
 
 

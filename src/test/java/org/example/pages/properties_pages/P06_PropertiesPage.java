@@ -8,6 +8,7 @@ import org.openqa.selenium.support.PageFactory;
 
 import java.util.List;
 
+@SuppressWarnings("unused")
 public class P06_PropertiesPage {
     public P06_PropertiesPage(WebDriver driver){
         PageFactory.initElements(driver,this);

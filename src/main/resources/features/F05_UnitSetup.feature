@@ -8,10 +8,10 @@ Feature: Unit Setup
 
   Scenario: add a unit for newly added unit type
     Given open the new unit page
-    And  enter unit required data with room number "98"
+    And  enter unit required data with room number "RANDOM"
     When  click on the add unit button
 #    Then Check toast mesage contains text "Saved Successfully"
-    Then check unit card in the card grid with number "98"
+    Then check unit card in the card grid with number "RANDOM"
 
 
   Scenario: view and edit a unit

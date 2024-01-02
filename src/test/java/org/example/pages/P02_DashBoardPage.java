@@ -8,15 +8,16 @@ import org.openqa.selenium.support.PageFactory;
 
 import java.util.List;
 
-public class P02_DashBoardPage
-{
-    public P02_DashBoardPage(){
-        PageFactory.initElements(Hooks.driver,this);
+@SuppressWarnings("ALL")
+public class P02_DashBoardPage {
+    public P02_DashBoardPage() {
+        PageFactory.initElements(Hooks.driver, this);
 
     }
-    public P02_DashBoardPage(WebDriver driver){
-    PageFactory.initElements(driver,this);
-}
+
+    public P02_DashBoardPage(WebDriver driver) {
+        PageFactory.initElements(driver, this);
+    }
 
     @FindBy(css = "a[class=\"n-sidebar__item ng-star-inserted\"]")
     public WebElement ReservationLink;
@@ -30,5 +31,27 @@ public class P02_DashBoardPage
 
     @FindBy(xpath = "//a[@href=\"/master-data\"]")
     public List<WebElement> masterDataLink;
+    @FindBy(xpath = "//span[contains(text(),\"Vouchers\")]")
+    public WebElement vouchersDropList;
+
+    @FindBy(xpath = "//a[@href=\"/financial/receipt-vouchers\"]")
+    public WebElement receiptsLink;
+    @FindBy(xpath = "//a[@href=\"/financial/payment-vouchers\"]")
+    public WebElement paymentsLink;
+    @FindBy(xpath = "//a[@href=\"/financial/draft-vouchers\"]")
+    public WebElement draftsLink;
+
+    @FindBy(xpath = "//a[@href=\"/invoices\"]")
+    public WebElement invoicesLink;
+    @FindBy(xpath = "//a[@href=\"/invoices/manage-credit-invoices\"]")
+    public WebElement creditNotesLink;
+
+    @FindBy(xpath = "//a[@href=\"/vouchers/drop-cash\"]")
+    public WebElement dropCashVoucherssLink;
+
+    @FindBy(xpath = "//span[contains(text(),\"SMS\")]")
+    public WebElement smsDropList;
+    @FindBy(xpath = "//a[@href=\"/notifications/sms-logs\"]")
+    public WebElement smsLogPage;
 
 }

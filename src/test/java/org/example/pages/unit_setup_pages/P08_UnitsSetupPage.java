@@ -16,6 +16,7 @@ import java.time.Duration;
 import java.util.List;
 import java.util.regex.Pattern;
 
+@SuppressWarnings("unused")
 public class P08_UnitsSetupPage {
 
     final WebDriver driver;
@@ -72,8 +73,9 @@ public class P08_UnitsSetupPage {
        WebElement unitNum =unitCard.findElement(By.xpath(".//p[@class=\"unit-card__no\"]"));
         if (unitNum.getText().contains("..")){
             actions.moveToElement(unitCard);
-            actions.perform();
-            unitNum = driver.findElement(By.xpath("//div[contains(@class,\" p-tooltip-bottom\")]/div[@class=\"p-tooltip-text\"]"));
+            actions.moveToElement(unitCard,3,4).build().perform();
+            wait.until(ExpectedConditions.invisibilityOf(driver.findElement(By.xpath("//div[contains(@class,\"p-tooltip-bottom\")]/div[@class=\"p-tooltip-text\"]"))));
+            unitNum = driver.findElement(By.xpath("//div[contains(@class,\"p-tooltip-bottom\")]/div[@class=\"p-tooltip-text\"]"));
             }
         return unitNum;
     }

@@ -6,7 +6,7 @@ import io.cucumber.java.en.When;
 import org.example.Utils;
 import org.example.pages.P02_DashBoardPage;
 import org.example.pages.P05_SetupPage;
-import org.example.pages.P07_UnitTypeCustomization;
+import org.example.pages.unit_setup_pages.P07_UnitTypeCustomization;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;

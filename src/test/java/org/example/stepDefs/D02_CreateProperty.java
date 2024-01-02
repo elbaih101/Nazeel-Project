@@ -105,7 +105,7 @@ public class D02_CreateProperty {
     }
 
     @And("Go to Properties Page")
-    public void goToPropertiesPage() throws InterruptedException {
+    public void goToPropertiesPage() {
 
 
         dashBoardPage.setupPageLink.click();
@@ -199,4 +199,4 @@ public class D02_CreateProperty {
     }
 
 
-}
+  }

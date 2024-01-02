@@ -1,9 +1,10 @@
 @Regression @Sprint36
 Feature: unit Type Customization
+  Background: selecting property
+    Given Logging in with superuser
+    And Select Property "Corkery, Bins and Huel"
   Rule: customization
     Background: going to the customization page
-      Given Logging in with superuser
-      And Select Property "Corkery, Bins and Huel"
       And go to unit type customization page
 
     Scenario: Check paginations

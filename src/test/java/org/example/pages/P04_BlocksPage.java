@@ -10,6 +10,7 @@ import org.openqa.selenium.support.PageFactory;
 
 import java.util.List;
 
+@SuppressWarnings("unused")
 public class P04_BlocksPage {
 
     public P04_BlocksPage() {

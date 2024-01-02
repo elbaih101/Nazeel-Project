@@ -1,4 +1,4 @@
-package org.example.pages;
+package org.example.pages.unit_setup_pages;
 
 import org.example.stepDefs.Hooks;
 import org.openqa.selenium.WebDriver;
@@ -8,6 +8,7 @@ import org.openqa.selenium.support.PageFactory;
 
 import java.util.List;
 
+@SuppressWarnings("unused")
 public class P09_BaseRatePage {
 
     public P09_BaseRatePage() {

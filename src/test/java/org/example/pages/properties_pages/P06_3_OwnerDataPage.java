@@ -7,6 +7,7 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.Select;
 
+@SuppressWarnings("unused")
 public class P06_3_OwnerDataPage {
 
     public P06_3_OwnerDataPage(WebDriver driver){

@@ -1,4 +1,4 @@
-package org.example.pages;
+package org.example.pages.unit_setup_pages;
 
 import org.apache.commons.lang.StringUtils;
 import org.example.stepDefs.Hooks;
@@ -10,6 +10,7 @@ import org.openqa.selenium.support.PageFactory;
 
 import java.util.List;
 
+@SuppressWarnings("unused")
 public class P07_UnitTypeCustomization {
 
     public P07_UnitTypeCustomization() {

@@ -7,7 +7,7 @@ import io.cucumber.java.en.When;
 import org.example.TestData;
 import org.example.pages.P01_LoginPage;
 import org.example.pages.P02_DashBoardPage;
-import org.example.pages.P03_ReservationPage;
+import org.example.pages.reservations.P03_1_ReservationMainDataPage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
@@ -26,7 +26,7 @@ public class D01_MakingReservation
     final P01_LoginPage loginPage = new P01_LoginPage();
     final P02_DashBoardPage homePage = new P02_DashBoardPage();
     final JavascriptExecutor js = (JavascriptExecutor) Hooks.driver;
-    final P03_ReservationPage reservationPage = new P03_ReservationPage();
+    final P03_1_ReservationMainDataPage reservationPage = new P03_1_ReservationMainDataPage();
     final WebDriverWait wait = new WebDriverWait(Hooks.driver, Duration.ofSeconds(10));
     final SoftAssert asrt =new SoftAssert();
 
