@@ -64,19 +64,19 @@ public class TestNgTest
         js.executeScript("arguments[0].click();", loginPage.verificationButton);
 
         //click on Reservation link to open reservation
-        homePage.ReservationLink.click();
+        homePage.ReservationsLink.click();
 
         // Click on Add new Reservation
         wait.until(ExpectedConditions.urlContains("/reservations"));
         reservationPage.newReservationButton.click();
 
         //Select Reservation source
-        reservationPage.reservationSource.click();
+        reservationPage.reservationSourceDropList.click();
         wait.until(ExpectedConditions.visibilityOf(reservationPage.test3ReservationSource));
         reservationPage.test3ReservationSource.click()
         ;
         //Select Visit purpose
-        reservationPage.visitPurposeButton.click();
+        reservationPage.visitPurposeDropList.click();
         wait.until(ExpectedConditions.visibilityOf(reservationPage.familyOrFriendsSelection));
         reservationPage.familyOrFriendsSelection.click();
 

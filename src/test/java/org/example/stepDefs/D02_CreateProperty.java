@@ -73,7 +73,6 @@ public class D02_CreateProperty {
        }catch (TimeoutException e){wait.until(ExpectedConditions.visibilityOf(dashBoardPage.setupPageLink));}
         //close the announcement
         try {
-
             if (dashBoardPage.closeAnnouncementButton.isDisplayed())
                 wait.until(ExpectedConditions.elementToBeClickable(dashBoardPage.closeAnnouncementButton));
             Thread.sleep(2000);

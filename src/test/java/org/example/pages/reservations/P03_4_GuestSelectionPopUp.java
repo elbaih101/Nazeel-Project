@@ -18,6 +18,7 @@ public class P03_4_GuestSelectionPopUp {
     final WebDriver driver;
     final WebDriverWait wait;
     final Actions actions;
+
     public P03_4_GuestSelectionPopUp() {
         PageFactory.initElements(Hooks.driver, this);
         this.driver = Hooks.driver;
@@ -41,7 +42,8 @@ public class P03_4_GuestSelectionPopUp {
     public WebElement nameButton() {
         return guestFormDialogContainer.findElement(By.xpath(".//button[contains(text(),\"Name\")]"));
     }
- public WebElement mobileButton() {
+
+    public WebElement mobileButton() {
         return guestFormDialogContainer.findElement(By.xpath(".//button[contains(text(),\"Mobile Number\")]"));
     }
 
@@ -50,15 +52,30 @@ public class P03_4_GuestSelectionPopUp {
     }
 
     public List<WebElement> guestClasses() {
-       WebElement guestClassesDropList = guestFormDialogContainer.findElement(By.xpath(".//label[contains(text(),\"Guest Classes\")]/following-sibling::kendo-combobox/span/span/span"));
-wait.until(ExpectedConditions.elementToBeClickable(guestClassesDropList));
-       guestClassesDropList.click();
+        WebElement guestClassesDropList = guestFormDialogContainer.findElement(By.xpath(".//label[contains(text(),\"Guest Classes\")]/following-sibling::kendo-combobox/span/span/span"));
+        wait.until(ExpectedConditions.elementToBeClickable(guestClassesDropList));
+        guestClassesDropList.click();
         return genralListBox.findElements(By.xpath("//li[@role=\"option\"]"));
 
     }
 
-    public WebElement searchButton(){return guestFormDialogContainer.findElement(By.xpath(".//button[contains(text(),\"Search\")]"));}
-    public List<WebElement> guestsNames() {return  guestFormDialogContainer.findElements(By.xpath(".//td[@data-kendo-grid-column-index=\"0\"]//span"));}
-    public WebElement confirmButton(){return guestFormDialogContainer.findElement(By.xpath(".//button[contains(text(),\"Confirm\")]"));}
+    public WebElement searchButton() {
+        return guestFormDialogContainer.findElement(By.xpath(".//button[contains(text(),\"Search\")]"));
+    }
+
+    public List<WebElement> guestsNames() {
+        return guestFormDialogContainer.findElements(By.xpath(".//td[@data-kendo-grid-column-index=\"0\"]//span"));
+    }
+
+    public WebElement confirmButton() {
+        return guestFormDialogContainer.findElement(By.xpath(".//button[contains(text(),\"Confirm\")]"));
+    }
+
+    @FindBy(xpath = "//button[contains(text(),\"Ignore Discount\")]")
+    public List<WebElement> ignoreDiscountButton;
+    @FindBy(xpath = "//button[contains(text(),\"Apply Discount\")]")
+    public WebElement applyDiscountButton;
+
+
 
 }

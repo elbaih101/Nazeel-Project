@@ -1,22 +1,44 @@
 package org.example.pages.reservations;
 
+import org.example.pages.mutlipurposes.P00_multiPurposes;
 import org.example.stepDefs.Hooks;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.time.Duration;
+import java.util.List;
 
 @SuppressWarnings("unused")
 public class P03_1_ReservationMainDataPage
 {
+    final WebDriver driver;
+    final WebDriverWait wait;
+    final Actions actions;
     public P03_1_ReservationMainDataPage()
     {
         PageFactory.initElements(Hooks.driver, this);
+        this.driver = Hooks.driver;
+        wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        actions = new Actions(driver);
     }
 
     public P03_1_ReservationMainDataPage(WebDriver driver){
     PageFactory.initElements(driver,this);
+        this.driver = driver;
+        wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        actions = new Actions(driver);
 }
+
+
+
+    @FindBy(xpath = "//ul[@role=\"listbox\"]")
+    WebElement genralListBox;
     @FindBy(css = "button[class=\"n-button n-button--green ng-star-inserted\"]")
     public WebElement newReservationButton;
 
@@ -24,14 +46,20 @@ public class P03_1_ReservationMainDataPage
     //http://staging.nazeel.net:9002/reservations/wizard/add
 
     @FindBy(xpath = "//label[contains(text(),\"Reservation source \")]//following-sibling::kendo-dropdownlist")
-    public WebElement reservationSource;
+    public WebElement reservationSourceDropList;
+
+    public List<WebElement> reservationSources(){
+        wait.until(ExpectedConditions.invisibilityOf( new P00_multiPurposes().loadingScreen));
+        wait.until(ExpectedConditions.elementToBeClickable( reservationSourceDropList));
+        reservationSourceDropList.click();
+        return genralListBox.findElements(By.xpath("//li[@role=\"option\"]"));    }
 
 
     @FindBy(xpath = "//kendo-popup//div[contains(text(),\"test3\")]")
     public WebElement test3ReservationSource;
 
     @FindBy(xpath = "//label[contains(text(),\"Visit purpose\")]//following-sibling::kendo-dropdownlist")
-    public WebElement visitPurposeButton;
+    public WebElement visitPurposeDropList;
 
     @FindBy(xpath = "//kendo-popup//li[contains(text(),\"Family or friends\")]")
     public WebElement familyOrFriendsSelection;

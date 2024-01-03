@@ -20,7 +20,7 @@ public class P02_DashBoardPage {
     }
 
     @FindBy(css = "a[class=\"n-sidebar__item ng-star-inserted\"]")
-    public WebElement ReservationLink;
+    public WebElement ReservationsLink;
     @FindBy(xpath = "//Button[contains(text(),\"Close\")]")
     public WebElement closeAnnouncementButton;
     @FindBy(xpath = "//a[@href=\"/setup\"]")

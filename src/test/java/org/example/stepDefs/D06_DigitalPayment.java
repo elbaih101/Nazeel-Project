@@ -117,6 +117,10 @@ public class D06_DigitalPayment {
 
         wait.until(ExpectedConditions.elementToBeClickable(guestSelectionPopUp.confirmButton()));
         guestSelectionPopUp.confirmButton().click();
+        if(!guestSelectionPopUp.ignoreDiscountButton.isEmpty())
+        {
+            guestSelectionPopUp.ignoreDiscountButton.get(0).click();
+        }
 
     }
     final D03_BlocksAndFloors blocksAndFloors = new D03_BlocksAndFloors();
