@@ -33,6 +33,6 @@ public class P00_multiPurposes {
 
     @FindBy(xpath = "//div[contains(@class,\"p-tooltip-bottom\")]/div[@class=\"p-tooltip-text\"]")
     public WebElement bottomToolTip;
-    @FindBy(xpath = "//div[@class=\"page-loading\"]")
-    public WebElement loadingScreen;
+    @FindBy(xpath = "//div[@class=\"loader-circle\"]")
+    public WebElement loadingAnimation;
 }

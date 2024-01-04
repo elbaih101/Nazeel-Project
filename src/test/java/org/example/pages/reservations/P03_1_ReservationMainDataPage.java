@@ -39,8 +39,16 @@ public class P03_1_ReservationMainDataPage
 
     @FindBy(xpath = "//ul[@role=\"listbox\"]")
     WebElement genralListBox;
+    @FindBy(xpath = "//div[contains(text(),\"Financial & Payments\")]")
+   public WebElement financialAndPaymentsPage;
     @FindBy(css = "button[class=\"n-button n-button--green ng-star-inserted\"]")
     public WebElement newReservationButton;
+    @FindBy(xpath = "//div[contains(@class,\"popup__btn\")]")
+    public WebElement reservatinMoreActionsMenu;
+
+    @FindBy(xpath = "//kendo-popup//span[contains(text(),\"Check-In\")]")
+    public WebElement checkInMenuButton;
+
 
     //waitfor that
     //http://staging.nazeel.net:9002/reservations/wizard/add
@@ -49,7 +57,7 @@ public class P03_1_ReservationMainDataPage
     public WebElement reservationSourceDropList;
 
     public List<WebElement> reservationSources(){
-        wait.until(ExpectedConditions.invisibilityOf( new P00_multiPurposes().loadingScreen));
+        wait.until(ExpectedConditions.invisibilityOf( new P00_multiPurposes().loadingAnimation));
         wait.until(ExpectedConditions.elementToBeClickable( reservationSourceDropList));
         reservationSourceDropList.click();
         return genralListBox.findElements(By.xpath("//li[@role=\"option\"]"));    }
@@ -71,9 +79,6 @@ public class P03_1_ReservationMainDataPage
     @FindBy(xpath = "//kendo-dialog//kendo-panelbar-item")
     public WebElement panelBar;
 
-    @FindBy(xpath = "//kendo-dialog-actions//span[contains(text(),\"Confirm\")]/..")
-    public WebElement confirmBtn;
-
     @FindBy(xpath = "//span[contains(text(),\"Select guest now\")]/..")
     public WebElement selectGestButton;
 
@@ -81,6 +86,8 @@ public class P03_1_ReservationMainDataPage
     public WebElement guestFormDialogContainer;
     @FindBy(xpath = "//button[contains(text(),\"Save reservation\")]")
     public WebElement saveReservationButton;
+    @FindBy(xpath = "//button[contains(text(),\"Check-In\")]")
+    public WebElement checkInButton;
 
     @FindBy(xpath = "//kendo-dialog-actions//button")
     public WebElement reservationSummarySaveButton;

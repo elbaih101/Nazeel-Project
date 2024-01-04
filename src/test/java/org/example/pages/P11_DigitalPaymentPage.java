@@ -74,6 +74,7 @@ public class P11_DigitalPaymentPage {
          WebElement collectViaDropList =   digitalPayDialog.findElement(By.xpath(".//label[contains(text(),\"Collect Via\")]/..//span/span/span"));
          wait.until(ExpectedConditions.elementToBeClickable(collectViaDropList));
          collectViaDropList.click();
+         wait.until(ExpectedConditions.visibilityOfAllElements(genralListBox.findElements(By.xpath("//li[@role=\"option\"]"))));
         return genralListBox.findElements(By.xpath("//li[@role=\"option\"]"));
     }
 

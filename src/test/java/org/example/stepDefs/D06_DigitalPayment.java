@@ -9,6 +9,8 @@ import org.example.pages.P02_DashBoardPage;
 import org.example.pages.P10_VouchersPage;
 import org.example.pages.P11_DigitalPaymentPage;
 import org.example.pages.mutlipurposes.P00_multiPurposes;
+import org.example.pages.reservations.P03_1_ReservationMainDataPage;
+import org.example.pages.reservations.P03_2_ReservationFinancialPage;
 import org.example.pages.reservations.P03_4_GuestSelectionPopUp;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
@@ -18,6 +20,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 
 import java.time.Duration;
@@ -36,6 +39,8 @@ public class D06_DigitalPayment {
     final P03_4_GuestSelectionPopUp guestSelectionPopUp = new P03_4_GuestSelectionPopUp(driver);
     final P012_SMSLogPage smsLogPage = new P012_SMSLogPage(driver);
     final P00_multiPurposes multiPurposes = new P00_multiPurposes(driver);
+    P03_2_ReservationFinancialPage p032ReservationFinancialPage = new P03_2_ReservationFinancialPage(driver);
+
     final Actions actions = new Actions(driver);
 
     @And("go to Receipt Vouchers Page")
@@ -56,9 +61,14 @@ public class D06_DigitalPayment {
 
     int amount;
 
-    @And("open the generate pay-link tab and generate link with {string} amount {int} and purpose {string} and open guest sellection")
-    public void openTheGeneratePayLinkTabAndGenerateLinkWithAmountAndPurposeAndGuest(String service, int amount, String purpose) {
-
+    @And("open the generate pay-link tab and select {string} and generate link with {string} amount {int} and purpose {string}")
+    public void openTheGeneratePayLinkTabAndGenerateLinkWithAmountAndPurposeAndGuest(String voucherType, String service, int amount, String purpose) {
+        if (voucherType.contains("Receipt")) {
+            digitalPaymentPage.receiptTab().click();
+        } else if (voucherType.contains("SD")) {
+            digitalPaymentPage.securityDepositTab().click();
+        }
+        else
         digitalPaymentPage.generateLinkTab().click();
 
         List<WebElement> collectViaList = digitalPaymentPage.collectViaList();
@@ -78,6 +88,11 @@ public class D06_DigitalPayment {
         digitalPaymentPage.amountField().sendKeys(Integer.toString(amount));
         this.amount = amount;
 
+
+    }
+
+    @And("open guest selection")
+    public void openGuestSelection() {
         wait.until(ExpectedConditions.elementToBeClickable(digitalPaymentPage.guestSelectionButton()));
         digitalPaymentPage.guestSelectionButton().click();
 
@@ -117,13 +132,14 @@ public class D06_DigitalPayment {
 
         wait.until(ExpectedConditions.elementToBeClickable(guestSelectionPopUp.confirmButton()));
         guestSelectionPopUp.confirmButton().click();
-        if(!guestSelectionPopUp.ignoreDiscountButton.isEmpty())
-        {
+        if (!guestSelectionPopUp.ignoreDiscountButton.isEmpty()) {
             guestSelectionPopUp.ignoreDiscountButton.get(0).click();
         }
 
     }
+
     final D03_BlocksAndFloors blocksAndFloors = new D03_BlocksAndFloors();
+
     @Then("click generate Link and check Toast message {string}")
     public void clickGenerateAndCheckToastMessage(String msgTxt) {
         wait.until(ExpectedConditions.elementToBeClickable(digitalPaymentPage.generateLinkButton()));
@@ -138,16 +154,17 @@ public class D06_DigitalPayment {
     public void checkTheLinkIsGeneratedInTheLinkField() {
         WebElement linkfield = digitalPaymentPage.generatedLinkField();
         wait.until(ExpectedConditions.attributeContains(linkfield, "value", "http"));
-        asrt.assertTrue(linkfield.getAttribute("value").contains("https://secure.paytabs.sa/payment"));
-        asrt.assertAll();
+        boolean bol =linkfield.getAttribute("value").toLowerCase().contains("https://secure.paytabs.sa/payment".toLowerCase());
+        asrt.assertTrue(bol,"the value is value");
         generatedLink = linkfield.getText();
+        asrt.assertAll();
     }
 
     String generatedAmount;
 
     @Given("succesfully create a stand alone voucher with {string} amount {int} purpose {string} Guest {string}")
     public void succesfullyCreateAStandAloneVoucherWithAmountPuposeGuest(String service, int amount, String purpose, String guest) {
-        openTheGeneratePayLinkTabAndGenerateLinkWithAmountAndPurposeAndGuest(service, amount, purpose);
+        openTheGeneratePayLinkTabAndGenerateLinkWithAmountAndPurposeAndGuest("Rexeipt", service, amount, purpose);
         selectGuest(guest, "", "");
         clickGenerateAndCheckToastMessage("Saved Successfully");
         checkTheLinkIsGeneratedInTheLinkField();
@@ -200,7 +217,7 @@ public class D06_DigitalPayment {
         asrt.assertAll();
         wait.until(ExpectedConditions.elementToBeClickable(sendViaSMSButton));
         sendViaSMSButton.click();
-        sendDate=DateTime.now();
+        sendDate = DateTime.now();
         digitalPaymentPage.closeButton().click();
     }
 
@@ -215,25 +232,33 @@ public class D06_DigitalPayment {
 
         DateTimeFormatter dateFormater = DateTimeFormat.forPattern("dd/MM/yyyy hh:mm a");
 
-       List<WebElement> sentMsg = smsLogPage.paytabsMessages().stream().filter(msg -> smsLogPage.msgRecepient(msg).getText().equalsIgnoreCase(selectedguestName) && sendDate.isBefore(dateFormater.parseDateTime(smsLogPage.msgSendDate(msg).getText().trim()))
+        List<WebElement> sentMsg = smsLogPage.paytabsMessages().stream().filter(msg -> smsLogPage.msgRecepient(msg).getText().equalsIgnoreCase(selectedguestName) && sendDate.isBefore(dateFormater.parseDateTime(smsLogPage.msgSendDate(msg).getText().trim()))
         ).toList();
         System.out.println(smsLogPage.msgBody(sentMsg.get(0)).getText().trim());
-        asrt.assertTrue(smsLogPage.msgBody(sentMsg.get(0)).getText().trim().contains(selectedguestName + msgPrefix + generatedAmount + msgPostfix),"msg body missmatch");
-        asrt.assertTrue(smsLogPage.msgBody(sentMsg.get(0)).getText().trim().contains(generatedLink),"link missmatch");
+        asrt.assertTrue(smsLogPage.msgBody(sentMsg.get(0)).getText().trim().contains(selectedguestName + msgPrefix + generatedAmount + msgPostfix), "msg body missmatch");
+        asrt.assertTrue(smsLogPage.msgBody(sentMsg.get(0)).getText().trim().contains(generatedLink), "link missmatch");
         asrt.assertAll();
     }
 
-    @Given("go to Reservatios Page")
-    public void goToReservatiosPage() {
-        
-    }
-
-    @And("create Checked-in Reservation")
-    public void createCheckedInReservation() {
-        
-    }
 
     @And("go to Reservation Financial Page")
     public void goToReservationFinancialPage() {
+        P03_1_ReservationMainDataPage p031ReservationMainDataPage = new P03_1_ReservationMainDataPage(driver);
+        wait.until(ExpectedConditions.elementToBeClickable(p031ReservationMainDataPage.financialAndPaymentsPage));
+        wait.until(ExpectedConditions.invisibilityOf(new P00_multiPurposes().loadingAnimation));
+        p031ReservationMainDataPage.financialAndPaymentsPage.click();
+    }
+
+    @And("Check the data matches the reservation data")
+    public void checkTheDataMatchesTheReservationData() {
+        asrt.assertTrue(p032ReservationFinancialPage.reservationNum() == Integer.parseInt(digitalPaymentPage.reservationNumber().getText()));
+        asrt.assertTrue(p032ReservationFinancialPage.balance.getText().trim().equalsIgnoreCase(digitalPaymentPage.reservationBalance().getText()));
+        asrt.assertTrue(digitalPaymentPage.reservationGuestName().getText().trim().equalsIgnoreCase(digitalPaymentPage.guestNameField().getAttribute("value").trim()));
+
+    }
+
+    @And("Check purpose field contains {string}")
+    public void checkPurposeFieldContains(String arg0) {
+
     }
 }

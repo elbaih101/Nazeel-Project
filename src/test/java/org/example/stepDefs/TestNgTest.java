@@ -91,8 +91,8 @@ public class TestNgTest
         action.moveToElement(element);
         sleep();
         element.click();
-        WebElement confirmBtn = reservationPage.confirmBtn;
-        confirmBtn.click();
+//        WebElement confirmBtn = reservationPage.confirmBtn;
+//        confirmBtn.click();
 
         //click on selectguest now button
         js.executeScript("arguments[0].click();", reservationPage.selectGestButton);

@@ -11,7 +11,8 @@ Feature: PayTabs integration
       Given go to Receipt Vouchers Page
       And open the digital payment popup
     Scenario: create a stand alone PayTabs link for receipt Voucher with
-      When open the generate pay-link tab and generate link with "PayTabs" amount 200 and purpose "creating receipt voucher" and open guest sellection
+      When open the generate pay-link tab and select "" and generate link with "PayTabs" amount 200 and purpose "creating receipt voucher"
+      And open guest selection
       And Select Guest "RANDOM" or ID "" or Mobile ""
       Then click generate Link and check Toast message "Saved Successfully"
       And Check the link is generated in the link field
@@ -33,11 +34,22 @@ Feature: PayTabs integration
 
   Rule:Reservations
     Background:
-      Given go to Reservatios Page
-      And create Checked-in Reservation
+      Given create a successfull reservation Source "RANDOM" purpose "RANDOM" Unit "RANDOM" Guest "RANDOM"
       And go to Reservation Financial Page
+      And open the digital payment popup
+    Scenario: create PayTabs link for receipt Voucher with
+      When open the generate pay-link tab and select "ReceiptVoucher" and generate link with "PayTabs" amount 200 and purpose ""
+      And Check the data matches the reservation data
+      And Check purpose field contains "Rent fees for units"
+      Then click generate Link and check Toast message "Saved Successfully"
+      And Check the link is generated in the link field
 
-  Scenario: create PayTabs link for receipt Voucher with
+  Scenario: create Link for SD Voucher
+    When open the generate pay-link tab and select "SD" and generate link with "PayTabs" amount 200 and purpose ""
+    And Check the data matches the reservation data
+    And Check purpose field contains "Security Deposit fees for units"
+    Then click generate Link and check Toast message "Saved Successfully"
+    And Check the link is generated in the link field
 
   ##TODO :: reservation vouchers
 
