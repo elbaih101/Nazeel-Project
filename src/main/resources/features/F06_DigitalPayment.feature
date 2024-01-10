@@ -37,25 +37,55 @@ Feature: PayTabs integration
       Given create a successfull reservation Source "RANDOM" purpose "RANDOM" Unit "RANDOM" Guest "RANDOM"
       And go to Reservation Financial Page
       And open the digital payment popup
-    Scenario: create PayTabs link for receipt Voucher with
+    Scenario: create PayTabs link for receipt Voucher
       When open the generate pay-link tab and select "ReceiptVoucher" and generate link with "PayTabs" amount 200 and purpose ""
       And Check the data matches the reservation data
       And Check purpose field contains "Rent fees for units"
       Then click generate Link and check Toast message "Saved Successfully"
       And Check the link is generated in the link field
 
-  Scenario: create Link for SD Voucher
-    When open the generate pay-link tab and select "SD" and generate link with "PayTabs" amount 200 and purpose ""
-    And Check the data matches the reservation data
-    And Check purpose field contains "Security Deposit fees for units"
-    Then click generate Link and check Toast message "Saved Successfully"
-    And Check the link is generated in the link field
+    Scenario: create Link for SD Voucher
+      When open the generate pay-link tab and select "SD" and generate link with "PayTabs" amount 200 and purpose ""
+      And Check the data matches the reservation data
+      And Check purpose field contains "Security Deposit fees for units"
+      Then click generate Link and check Toast message "Saved Successfully"
+      And Check the link is generated in the link field
 
-  ##TODO :: reservation vouchers
+    Scenario: Check a generated receipt is logged in the log tab
+      Given create PayTabs link for receipt Voucher with "ReceiptVoucher" and generate link with "PayTabs" amount 200 and purpose ""
+      When open the log tab and select "paytabs"
+      Then check the generated link is present in the grid with state "pending" and Voucher type "Receipt Voucher"
 
+    Scenario: successfully pay a link generated on reservation
+      Given create PayTabs link for receipt Voucher with "ReceiptVoucher" and generate link with "PayTabs" amount 200 and purpose ""
+      And open the link and pay it successfully
+      When open the log tab and select "paytabs"
+      Then check the generated link is present in the grid with state "Paid" and Voucher type "Receipt Voucher"
+
+    Scenario: Check a generated SD is logged in the log tab
+      Given create PayTabs link for receipt Voucher with "SD" and generate link with "PayTabs" amount 200 and purpose ""
+      When open the log tab and select "paytabs"
+      Then check the generated link is present in the grid with state "pending" and Voucher type "Security Deposit Receipt Voucher"
+
+    Scenario: Check paid  paytabs Receipt state is  Paid
+      Given create PayTabs link for receipt Voucher with "ReceiptVoucher" and generate link with "PayTabs" amount 200 and purpose ""
+      When oppen the link and pay it successfully
+      When open the log tab and select "paytabs"
+      Then check the generated link is present in the grid with state "pending" and Voucher type "Receipt Voucher"
   ##TODO :: Draft collection
+  Rule: Drafts
+    Background:
+      Given go to Draft Vouchers Page
+      And click on a draft more menu and choose collect by digital payment
+
+    Scenario:succefully create a paytabs draftcollection link with amount less than remaining amount
+      When succefully create a paytabs draftcollection link with amount "less than" remaining amount
+      Then Check purpose field contains "Collection of draft voucher no"
+      And open the log tab and select "paytabs"
+      And check the generated link is present in the grid with state "pending" and Voucher type "Draft"
 
   ##TODO :: report actions
+
   ##TODO ::
    ##TODO:  Scenario: check created stand alone voucher is logged in the paytabs log
 

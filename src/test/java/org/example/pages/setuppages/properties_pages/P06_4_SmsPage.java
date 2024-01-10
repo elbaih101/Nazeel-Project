@@ -1,4 +1,4 @@
-package org.example.pages.properties_pages;
+package org.example.pages.setuppages.properties_pages;
 
 import org.example.stepDefs.Hooks;
 import org.openqa.selenium.By;

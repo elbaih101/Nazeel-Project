@@ -7,8 +7,8 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.example.pages.P01_LoginPage;
 import org.example.pages.P02_DashBoardPage;
-import org.example.pages.P05_SetupPage;
-import org.example.pages.properties_pages.*;
+import org.example.pages.setuppages.P05_SetupPage;
+import org.example.pages.setuppages.properties_pages.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -54,7 +54,7 @@ public class D02_CreateProperty {
     public void selectProperty(String propertyName) throws InterruptedException {
         /// find property ///
         try {
-
+            wait.until(ExpectedConditions.visibilityOf(loginPage.propertyNameField));
 
             loginPage.propertyNameField.sendKeys(propertyName);
             actions.sendKeys(Keys.ENTER);

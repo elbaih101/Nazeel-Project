@@ -1,11 +1,10 @@
 package org.example;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.StaleElementReferenceException;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Utils {
 
@@ -87,5 +86,17 @@ public class Utils {
             }
         }
         return false;
+    }
+
+    public void openNewTab(WebDriver driver) throws InterruptedException {
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+        js.executeScript("window.open('');");
+        Thread.sleep(100);
+    }
+
+    public void gotoTab(WebDriver driver, int tabIndex) throws InterruptedException {
+        List<String> winHandles = new ArrayList<>(driver.getWindowHandles());
+        Thread.sleep(500);
+        driver.switchTo().window(winHandles.get(tabIndex));
     }
 }

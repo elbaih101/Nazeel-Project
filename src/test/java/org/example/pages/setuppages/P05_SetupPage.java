@@ -1,4 +1,4 @@
-package org.example.pages;
+package org.example.pages.setuppages;
 
 import org.example.stepDefs.Hooks;
 import org.openqa.selenium.WebDriver;
@@ -31,9 +31,16 @@ public class P05_SetupPage {
     public WebElement floorsLink;
     @FindBy(xpath = "//span[contains(text(),\"Units\")]")
     public WebElement unitsDroplist;
+
     @FindBy(xpath = "//a[@href=\"/units-management/unit-type-customization\"]")
     public WebElement typeCustomizationLink;
   @FindBy(xpath = "//a[@href=\"/units-management/unit-setup\"]")
     public WebElement unitSetupLink;
+
+    @FindBy(xpath = "//span[contains(text(),\"Reporting\")]")
+    public WebElement printingDropList;
+  @FindBy(xpath = "//a[@href=\"/reporting/printing-options\"]")
+    public WebElement printingOptionLink;
+
 
 }

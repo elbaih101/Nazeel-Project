@@ -25,7 +25,7 @@ WebElement reservationNumberHeader;
     }
 
     public int reservationNum(){
-        String reservationNumber = StringUtils.substringAfter(reservationNumberHeader.getText().trim(), " Reservation ").trim();
+        String reservationNumber = StringUtils.substringAfter(reservationNumberHeader.getText().trim(), "Reservation ").trim();
         try {
             return Integer.parseInt(reservationNumber);
         } catch (NumberFormatException nfe) {

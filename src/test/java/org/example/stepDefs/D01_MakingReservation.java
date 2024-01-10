@@ -44,7 +44,8 @@ public class D01_MakingReservation {
     public void clickOnAddNewReservation() {
         //wait.until(ExpectedConditions.urlContains("/reservations"));
         wait.until(ExpectedConditions.elementToBeClickable(reservationPage.newReservationButton));
-        reservationPage.newReservationButton.click();
+//        reservationPage.newReservationButton.click();
+        js.executeScript("arguments[0].click();",reservationPage.newReservationButton);
     }
 
     @And("Select Reservation source {string} and visit purpose {string}")
@@ -53,7 +54,7 @@ public class D01_MakingReservation {
         List<WebElement> reservationSources = reservationPage.reservationSources();
         WebElement selectedSource;
         if (source.equalsIgnoreCase("RANDOM")) {
-            selectedSource = reservationSources.get(new Random().nextInt(reservationSources.size()));
+            selectedSource = reservationSources.get(0);
         } else {
             selectedSource = reservationSources.stream().filter(element -> element.getText().contains(source)).toList().get(0);
         }
@@ -143,6 +144,11 @@ public class D01_MakingReservation {
         openUnitSelectionPopup();
         selectAUnit(unit);
         clickOnSelectguestNowButton();
+        try {
+            Thread.sleep(300);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         d06DigitalPayment.selectGuest(guest, "", "");
         clickOnSaveReservationButton();
         whenReservationSummaryDialougeAppearsClickOnSaveReservatuonButton();

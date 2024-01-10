@@ -18,6 +18,7 @@ public class P11_DigitalPaymentPage {
     final WebDriver driver;
     final WebDriverWait wait;
     final Actions actions;
+
     public P11_DigitalPaymentPage() {
         PageFactory.initElements(Hooks.driver, this);
         this.driver = Hooks.driver;
@@ -41,6 +42,7 @@ public class P11_DigitalPaymentPage {
         return digitalPayDialog.findElement(By.xpath("./kendo-dialog-titlebar//span"));
     }
 
+    //// guest data /////////
     public WebElement reservationNumber() {
         return digitalPayDialog.findElement(By.xpath(".//div[contains(text(),\"Res. No.\")]/following-sibling::div"));
     }
@@ -57,6 +59,18 @@ public class P11_DigitalPaymentPage {
         return digitalPayDialog.findElement(By.xpath(".//div[contains(text(),\"Balance\")]/following-sibling::div"));
     }
 
+    /////////// Draft Data /////
+    public WebElement draftRemainingBalance() {
+        return digitalPayDialog.findElement(By.xpath(".//div[contains(text(),\"Remaining Amount\")]/following-sibling::div"));
+    }
+
+    public WebElement draftCollectedAmount() {
+        return digitalPayDialog.findElement(By.xpath(".//div[contains(text(),\"Collected Amount\")]/following-sibling::div"));
+    }
+    public WebElement draftNumber() {
+        return digitalPayDialog.findElement(By.xpath(".//div[contains(text(),\"Draft No\")]/following-sibling::div"));
+    }
+
     public WebElement generateLinkTab() {
         return digitalPayDialog.findElement(By.xpath(".//li[@role=\"tab\"]/span[contains(text(),\"Generate\")]"));
     }
@@ -67,21 +81,22 @@ public class P11_DigitalPaymentPage {
     }
 
     public WebElement securityDepositTab() {
-        return digitalPayDialog.findElement(By.xpath(".//div[@role=\"dialog\"]//li[@role=\"tab\"]/span[contains(text(),\"Security Deposit\")]"));
+        return digitalPayDialog.findElement(By.xpath(".//li[@role=\"tab\"]/span[contains(text(),\"Security Deposit\")]"));
     }
 
     public List<WebElement> collectViaList() {
-         WebElement collectViaDropList =   digitalPayDialog.findElement(By.xpath(".//label[contains(text(),\"Collect Via\")]/..//span/span/span"));
-         wait.until(ExpectedConditions.elementToBeClickable(collectViaDropList));
-         collectViaDropList.click();
-         wait.until(ExpectedConditions.visibilityOfAllElements(genralListBox.findElements(By.xpath("//li[@role=\"option\"]"))));
+        WebElement collectViaDropList = digitalPayDialog.findElement(By.xpath(".//label[contains(text(),\"Collect Via\")]/..//span/span/span"));
+        wait.until(ExpectedConditions.elementToBeClickable(collectViaDropList));
+        collectViaDropList.click();
+        wait.until(ExpectedConditions.visibilityOfAllElements(genralListBox.findElements(By.xpath("//li[@role=\"option\"]"))));
         return genralListBox.findElements(By.xpath("//li[@role=\"option\"]"));
     }
 
     public WebElement guestSelectionButton() {
         return digitalPayDialog.findElement(By.xpath(".//label[contains(text(),\"Guest Name\")]/../../..//*[name()=\"svg\"]"));
     }
-public WebElement guestNameField() {
+
+    public WebElement guestNameField() {
         return digitalPayDialog.findElement(By.xpath(".//label[contains(text(),\"Guest Name\")]/..//input"));
     }
 
@@ -116,6 +131,7 @@ public WebElement guestNameField() {
     public WebElement copyLinkButton() {
         return digitalPayDialog.findElement(By.xpath("(.//button/*[name()='svg'])[1]"));
     }
+
     public WebElement closeButton() {
         return digitalPayDialog.findElement(By.xpath(".//button[contains(text(),\"Close\")]"));
     }
@@ -147,9 +163,10 @@ public WebElement guestNameField() {
         return link.findElement(By.xpath("../../..//td[@data-kendo-grid-column-index=\"3\"]"));
     }
 
-    public WebElement linkStatus(WebElement link) {
+    public WebElement   receiptsLinkStatus(WebElement link) {
         return link.findElement(By.xpath("../../..//td[@data-kendo-grid-column-index=\"4\"]/span"));
     }
+
 
     public WebElement generatedDays(WebElement link) {
         return link.findElement(By.xpath("../../..//td[@data-kendo-grid-column-index=\"5\"]/div/div"));
@@ -158,6 +175,7 @@ public WebElement guestNameField() {
     public WebElement generatedTimes(WebElement link) {
         return link.findElement(By.xpath("../../..//td[@data-kendo-grid-column-index=\"5\"]/div/div/following-sibling::div"));
     }
+
     public WebElement moreActons(WebElement link) {
         return link.findElement(By.xpath("../../..//td[@data-kendo-grid-column-index=\"7\"]//*[name()=\"svg\"]"));
     }
@@ -165,19 +183,26 @@ public WebElement guestNameField() {
     public WebElement sendViaSmsAction(WebElement link) {
         return link.findElement(By.xpath("//kendo-popup//div[contains(text(),\"SMS\")]"));
     }
-  public WebElement sendViaWhattsappAction(WebElement link) {
+
+    public WebElement sendViaWhattsappAction(WebElement link) {
         return link.findElement(By.xpath("//kendo-popup//div[contains(text(),\"WhatsApp\")]"));
     }
 
-public WebElement getLatestStatusAction(WebElement link) {
+    public WebElement getLatestStatusAction(WebElement link) {
         return link.findElement(By.xpath("//kendo-popup//div[contains(text(),\"Get Latest Status\")]"));
     }
 
-public WebElement copyAction(WebElement link) {
+    public WebElement copyAction(WebElement link) {
         return link.findElement(By.xpath("//kendo-popup//div[contains(text(),\"Copy\")]"));
     }
-
-/// whatsapp page///
+    // draft //
+    public WebElement draftLinkStatus(WebElement link) {
+        return link.findElement(By.xpath("../../..//td[@data-kendo-grid-column-index=\"3\"]/span"));
+    }
+    public WebElement drafNoinGrid(WebElement link) {
+        return link.findElement(By.xpath("../../..//td[@data-kendo-grid-column-index=\"0\"]/span"));
+    }
+    /// whatsapp page///
     @FindBy(xpath = "//div[@id=\"main_block\"]/p")
     public WebElement whattsappBodyMsg;
 

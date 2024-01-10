@@ -6,6 +6,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
@@ -33,6 +34,13 @@ public class P00_multiPurposes {
 
     @FindBy(xpath = "//div[contains(@class,\"p-tooltip-bottom\")]/div[@class=\"p-tooltip-text\"]")
     public WebElement bottomToolTip;
-    @FindBy(xpath = "//div[@class=\"loader-circle\"]")
+    @FindBy(xpath = "//div[@class=\"loader-line\"]")
     public WebElement loadingAnimation;
+
+
+
+    public void waitLoading(){
+        wait.withTimeout(Duration.ofSeconds(5));
+        wait.until(ExpectedConditions.invisibilityOf(loadingAnimation));
+    }
 }

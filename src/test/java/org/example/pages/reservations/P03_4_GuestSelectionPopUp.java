@@ -1,5 +1,6 @@
 package org.example.pages.reservations;
 
+import org.example.pages.mutlipurposes.P00_multiPurposes;
 import org.example.stepDefs.Hooks;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -54,6 +55,12 @@ public class P03_4_GuestSelectionPopUp {
     public List<WebElement> guestClasses() {
         WebElement guestClassesDropList = guestFormDialogContainer.findElement(By.xpath(".//label[contains(text(),\"Guest Classes\")]/following-sibling::kendo-combobox/span/span/span"));
         wait.until(ExpectedConditions.elementToBeClickable(guestClassesDropList));
+        try {
+            Thread.sleep(300);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        new P00_multiPurposes(driver).waitLoading();
         guestClassesDropList.click();
         return genralListBox.findElements(By.xpath("//li[@role=\"option\"]"));
 

@@ -1,4 +1,4 @@
-package org.example.pages;
+package org.example.pages.setuppages;
 
 import org.apache.commons.lang.StringUtils;
 import org.example.stepDefs.Hooks;
