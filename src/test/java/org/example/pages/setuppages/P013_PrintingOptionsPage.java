@@ -37,9 +37,9 @@ public class P013_PrintingOptionsPage {
     public WebElement letterHeadSelectionButton;
     @FindBy(xpath = "//button[contains(text(),\"Blank\")]")
     public WebElement blankSelectionButton;
-    @FindBy(xpath = "//div[contains(text(),\"Single Language\")]")
+    @FindBy(xpath = "//div[contains(text(),\"Single Language\")]/../../../preceding-sibling::div/input")
     public WebElement contractSingleLanguageRadioButton;
-    @FindBy(xpath = "//div[contains(text(),\"Double Language\")]")
+    @FindBy(xpath = "//div[contains(text(),\"Double Language\")]/../../../preceding-sibling::div/input")
     public WebElement contractDoubleLanguageRadioButton;
 
     @FindBy(xpath = "//th//input")

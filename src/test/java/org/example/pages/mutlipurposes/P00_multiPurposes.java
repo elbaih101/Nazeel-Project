@@ -34,13 +34,13 @@ public class P00_multiPurposes {
 
     @FindBy(xpath = "//div[contains(@class,\"p-tooltip-bottom\")]/div[@class=\"p-tooltip-text\"]")
     public WebElement bottomToolTip;
-    @FindBy(xpath = "//div[@class=\"loader-line\"]")
+    @FindBy(xpath = "//div[@class=\"page-loading\"]")
     public WebElement loadingAnimation;
 
 
 
     public void waitLoading(){
         wait.withTimeout(Duration.ofSeconds(5));
-        wait.until(ExpectedConditions.invisibilityOf(loadingAnimation));
+        wait.until(ExpectedConditions.refreshed(ExpectedConditions.invisibilityOf(loadingAnimation)));
     }
 }
