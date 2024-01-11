@@ -26,15 +26,17 @@ public class P06_FloorsPage {
     public WebElement newFloorButton;
     @FindBy(xpath = "//div[contains(@class,\"n-pager__info\")]")
     WebElement pagination;
-    public boolean checkPagination(){
+
+    public boolean checkPagination() {
         try {
             Thread.sleep(1000);
         } catch (InterruptedException e) {
-            System.out.println(e.getMessage()+"on pagination");
+            System.out.println(e.getMessage() + "on pagination");
         }
-     int itemsCount=  Integer.parseInt(StringUtils.substringBetween(pagination.getText(),"-"," "));
-     return floorsNames.size()==itemsCount;
+        int itemsCount = Integer.parseInt(StringUtils.substringBetween(pagination.getText(), "-", " "));
+        return floorsNames.size() == itemsCount;
     }
+
     //////  floors grid ///////////
     @FindBy(xpath = "//kendo-grid-list//td[@data-kendo-grid-column-index=\"0\"]")
     public List<WebElement> blocksNames;
@@ -94,6 +96,7 @@ public class P06_FloorsPage {
         }
         return null;
     }
+
     @FindBy(xpath = "//div[@class=\"popup__item popup__item--red\"][contains(text(),\" Delete \")]")
     public WebElement floorDeleteButton;
 
@@ -136,7 +139,6 @@ public class P06_FloorsPage {
 
     @FindBy(xpath = "//div[@class=\"swal2-popup swal2-modal swal2-show\"]")
     public WebElement confirmationPopUp;
-
 
 
     public List<WebElement> blocks() {

@@ -5,7 +5,7 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import org.example.pages.P012_SMSLogPage;
+import org.example.pages.P12_SMSLogPage;
 import org.example.pages.P02_DashBoardPage;
 import org.example.pages.P10_VouchersPage;
 import org.example.pages.P11_DigitalPaymentPage;
@@ -36,7 +36,7 @@ public class D06_DigitalPayment {
     final P10_VouchersPage vouchersPage = new P10_VouchersPage(driver);
     final P11_DigitalPaymentPage digitalPaymentPage = new P11_DigitalPaymentPage(driver);
     final P03_4_GuestSelectionPopUp guestSelectionPopUp = new P03_4_GuestSelectionPopUp(driver);
-    final P012_SMSLogPage smsLogPage = new P012_SMSLogPage(driver);
+    final P12_SMSLogPage smsLogPage = new P12_SMSLogPage(driver);
     final P00_multiPurposes multiPurposes = new P00_multiPurposes(driver);
     final P00_1_PaytabsExternalPage paytabsExternalPage =new P00_1_PaytabsExternalPage(driver);
     P03_2_ReservationFinancialPage p032ReservationFinancialPage = new P03_2_ReservationFinancialPage(driver);

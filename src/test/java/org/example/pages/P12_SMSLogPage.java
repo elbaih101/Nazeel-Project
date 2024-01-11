@@ -14,19 +14,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings("unused")
-public class P012_SMSLogPage {
+public class P12_SMSLogPage {
     final WebDriver driver;
     final WebDriverWait wait;
     final Actions actions;
 
-    public P012_SMSLogPage() {
+    public P12_SMSLogPage() {
         PageFactory.initElements(Hooks.driver, this);
         this.driver = Hooks.driver;
         wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         actions = new Actions(driver);
     }
 
-    public P012_SMSLogPage(WebDriver driver) {
+    public P12_SMSLogPage(WebDriver driver) {
         PageFactory.initElements(driver, this);
         this.driver = driver;
         wait = new WebDriverWait(driver, Duration.ofSeconds(10));

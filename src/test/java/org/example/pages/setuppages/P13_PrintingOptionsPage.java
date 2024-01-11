@@ -12,19 +12,19 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
 import java.util.List;
 
-public class P013_PrintingOptionsPage {
+public class P13_PrintingOptionsPage {
     final WebDriver driver;
     final WebDriverWait wait;
     final Actions actions;
 
-    public P013_PrintingOptionsPage() {
+    public P13_PrintingOptionsPage() {
         PageFactory.initElements(Hooks.driver, this);
         this.driver = Hooks.driver;
         wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         actions = new Actions(driver);
     }
 
-    public P013_PrintingOptionsPage(WebDriver driver) {
+    public P13_PrintingOptionsPage(WebDriver driver) {
         PageFactory.initElements(driver, this);
         this.driver = driver;
         wait = new WebDriverWait(driver, Duration.ofSeconds(10));

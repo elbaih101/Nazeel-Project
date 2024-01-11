@@ -5,7 +5,7 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.example.pages.P02_DashBoardPage;
 import org.example.pages.mutlipurposes.P00_multiPurposes;
-import org.example.pages.setuppages.P013_PrintingOptionsPage;
+import org.example.pages.setuppages.P13_PrintingOptionsPage;
 import org.example.pages.setuppages.P05_SetupPage;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -23,7 +23,7 @@ public class D07_PrintingOptions {
     final SoftAssert asrt = new SoftAssert();
     final WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
     final P02_DashBoardPage dashBoardPage = new P02_DashBoardPage(driver);
-    final P013_PrintingOptionsPage printingOptionsPage = new P013_PrintingOptionsPage(driver);
+    final P13_PrintingOptionsPage printingOptionsPage = new P13_PrintingOptionsPage(driver);
     final P05_SetupPage setupPage = new P05_SetupPage(driver);
 
 
