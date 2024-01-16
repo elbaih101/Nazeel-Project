@@ -66,7 +66,7 @@ public class P04_BlocksPage {
     @FindBy(xpath = "//Button[contains(text(),\"Save Changes\")]")
     public WebElement editModeSaveButton;
     @FindBy(className = "toast-message")
-    public WebElement toastMsg;
+    public WebElement   toastMsg;
 
 
     @FindBy(xpath = "//div[@class=\"swal2-popup swal2-modal swal2-show\"]")

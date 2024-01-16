@@ -9,6 +9,31 @@ Feature: Unit Setup
     Background: going to units master data
       Given go to units master Data
 
+    Scenario: filter units types with name
+      Given click on filter button and enter name of type "single" and status "" and click search
+      Then Check the grid contains only types with names "single" and statues ""
+
+    Scenario:filter units types with status
+      Given click on filter button and enter name of type "" and status "active" and click search
+      Then Check the grid contains only types with names "" and statues "active"
+
+    Scenario: add new unit type
+      When add anew unit type with name "zeka"
+      Then Check the type "zeka" is visible in the grid
+
+    Scenario: edit type name
+      Given click on edit button for type "zeka" and change name to "zeko"
+      Then Check the type "zeko" is visible in the grid
+
+    Scenario: can't delete unit type associated with units
+      Given click on delete button for unit type associated with units
+      Then Check toast mesage contains text "Invalid action, this unit type had related data."
+
+    Scenario: can delete a unit type not associated with units
+      Given create a unit type "RANDOM"
+      And delete the created unit type
+      Then  Check toast mesage contains text "Task Type is deleted successfully"
+
 
 
   Rule: setup Page

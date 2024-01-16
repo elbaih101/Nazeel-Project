@@ -1,5 +1,6 @@
 package org.example.pages.mutlipurposes;
 
+import org.apache.commons.lang.StringUtils;
 import org.example.stepDefs.Hooks;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -10,6 +11,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
+import java.util.List;
 
 public class P00_multiPurposes {
     final WebDriver driver;
@@ -42,5 +44,17 @@ public class P00_multiPurposes {
     public void waitLoading(){
         wait.withTimeout(Duration.ofSeconds(5));
         wait.until(ExpectedConditions.refreshed(ExpectedConditions.invisibilityOf(loadingAnimation)));
+    }
+    @FindBy(xpath = "//div[contains(@class,\"n-pager__info\")]")
+    WebElement pagination;
+    public boolean checkPagination(List<WebElement> gridItems){
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            System.out.println(e.getMessage()+"on pagination");
+        }
+        int itemsCount=  Integer.parseInt(StringUtils.substringBetween(pagination.getText(),"-"," "));
+        System.out.println(gridItems.size()+" :"+itemsCount);
+        return gridItems.size()==itemsCount;
     }
 }

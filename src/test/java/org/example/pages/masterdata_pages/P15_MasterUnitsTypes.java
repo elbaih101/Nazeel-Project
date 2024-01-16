@@ -65,13 +65,38 @@ public class P15_MasterUnitsTypes {
 
 
     public List<WebElement> moreActions(WebElement typeName) {
-        WebElement moreMenu= typeName.findElement(By.xpath("../..//td[@data-kendo-grid-column-index=\"3\"]//div/div"));
+        WebElement moreMenu= typeName.findElement(By.xpath("../..//td[@data-kendo-grid-column-index=\"3\"]//div/div/div"));
         wait.until(ExpectedConditions.elementToBeClickable(moreMenu));
         moreMenu.click();
-        return moreMenu.findElements(By.xpath("//div[@class=\"popup__content\"]/div"));
+        return moreMenu.findElements(By.xpath("..//div[@class=\"popup__content\"]/div"));
     } public WebElement viewButton(WebElement typeName) {
-        WebElement viewButton= typeName.findElement(By.xpath("../..//td[@data-kendo-grid-column-index=\"3\"]//div/button[2]"));
-        return viewButton;
+        return typeName.findElement(By.xpath("../..//td[@data-kendo-grid-column-index=\"3\"]//div/button[2]"));
+    }public WebElement editButton(WebElement typeName) {
+       return typeName.findElement(By.xpath("../..//td[@data-kendo-grid-column-index=\"3\"]//div/button[1]"));
+
     }
+
+
+
+    @FindBy(xpath = "//div[@role=\"dialog\"]")
+    WebElement unitTypeDialog;
+
+
+    public WebElement typeNameField(){
+        return unitTypeDialog.findElement(By.xpath(".//input"));
+    }
+
+    public WebElement submitButton(){
+        return unitTypeDialog.findElement(By.xpath("./kendo-dialog-actions/button[contains(@class,\"button--primary\")]"));
+    }
+    public WebElement modifyTypeButton(){
+        return unitTypeDialog.findElement(By.xpath("./kendo-dialog-actions/button[contains(@class,\"button--primary\")][2]"));
+    }
+    public WebElement confirmDeleteButton(){
+        return unitTypeDialog.findElement(By.xpath(".//button[contains(@class,\"n-button--danger \")]"));
+    }
+
     //todo : containue the rest
+
+
 }

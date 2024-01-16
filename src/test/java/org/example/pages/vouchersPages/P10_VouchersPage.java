@@ -1,4 +1,4 @@
-package org.example.pages;
+package org.example.pages.vouchersPages;
 
 import org.example.pages.mutlipurposes.P00_multiPurposes;
 import org.example.stepDefs.Hooks;

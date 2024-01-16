@@ -7,7 +7,7 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.example.pages.P12_SMSLogPage;
 import org.example.pages.P02_DashBoardPage;
-import org.example.pages.P10_VouchersPage;
+import org.example.pages.vouchersPages.P10_VouchersPage;
 import org.example.pages.P11_DigitalPaymentPage;
 import org.example.pages.mutlipurposes.P00_1_PaytabsExternalPage;
 import org.example.pages.mutlipurposes.P00_multiPurposes;

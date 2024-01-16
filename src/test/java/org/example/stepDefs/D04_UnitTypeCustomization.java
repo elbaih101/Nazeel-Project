@@ -1,13 +1,21 @@
 package org.example.stepDefs;
 
+import com.github.javafaker.Faker;
 import io.cucumber.java.en.And;
+import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.example.Utils;
 import org.example.pages.P02_DashBoardPage;
+import org.example.pages.masterdata_pages.P14_MasterData;
+import org.example.pages.masterdata_pages.P15_MasterUnitsTypes;
+import org.example.pages.mutlipurposes.P00_multiPurposes;
+import org.example.pages.setuppages.P04_BlocksPage;
 import org.example.pages.setuppages.P05_SetupPage;
 import org.example.pages.setuppages.unit_setup_pages.P07_UnitTypeCustomization;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.asserts.SoftAssert;
@@ -23,9 +31,11 @@ public class D04_UnitTypeCustomization {
     final P02_DashBoardPage dashBoardPage = new P02_DashBoardPage(driver);
     final P05_SetupPage setupPagec = new P05_SetupPage(driver);
     final P07_UnitTypeCustomization typeCustomization = new P07_UnitTypeCustomization(driver);
+    P14_MasterData masterData = new P14_MasterData(driver);
+    P15_MasterUnitsTypes masterUnitsTypes = new P15_MasterUnitsTypes(driver);
     String existantUnitType;
-
-
+    Faker faker = new Faker();
+JavascriptExecutor js=(JavascriptExecutor) driver;
     @And("go to unit type customization page")
 
     public void goToUnitTypeCustomizationPage() {
@@ -33,17 +43,17 @@ public class D04_UnitTypeCustomization {
         setupPagec.unitsDroplist.click();
         setupPagec.typeCustomizationLink.click();
         wait.until(ExpectedConditions.visibilityOf(typeCustomization.pagination));
-       try {
-           existantUnitType = typeCustomization.unitTypesNames.getLast().getText();
+        try {
+            existantUnitType = typeCustomization.unitTypesNames.getLast().getText();
 
-       }catch (NoSuchElementException e){
-           System.out.println(e.getMessage()+"no unit type created");
-           clickOnNewTypeButton();
-           selectTypeAndEnterDescription("VIP","adding existant type");
-           clickOnTheSubmitButton();
-           wait.until(ExpectedConditions.visibilityOf(typeCustomization.unitTypesNames.getLast()));
-           existantUnitType = typeCustomization.unitTypesNames.getLast().getText();
-       }
+        } catch (NoSuchElementException e) {
+            System.out.println(e.getMessage() + "no unit type created");
+            clickOnNewTypeButton();
+            selectTypeAndEnterDescription("VIP", "adding existant type");
+            clickOnTheSubmitButton();
+            wait.until(ExpectedConditions.visibilityOf(typeCustomization.unitTypesNames.getLast()));
+            existantUnitType = typeCustomization.unitTypesNames.getLast().getText();
+        }
 
     }
 
@@ -72,8 +82,8 @@ public class D04_UnitTypeCustomization {
 
 
     @And("upload photos {string} {int} of the unit")
-    public void uploadPhotoOfTheUnit(String photoPath,int count) {
-        Utils.fileUpload(typeCustomization.imageUpload, photoPath,count);
+    public void uploadPhotoOfTheUnit(String photoPath, int count) {
+        Utils.fileUpload(typeCustomization.imageUpload, photoPath, count);
 
     }
 
@@ -104,7 +114,7 @@ public class D04_UnitTypeCustomization {
     public void clickOnMoreMenuForUnitTypeAndClickDeleteButton(String unitTypeName) {
         delteUnitTyeName = unitTypeName;
         delteUnitTyeDescription = typeCustomization.unitTypeDescription(unitTypeName).getText();
-        wait.until(ExpectedConditions.elementToBeClickable( typeCustomization.moreMenuButton(unitTypeName)));
+        wait.until(ExpectedConditions.elementToBeClickable(typeCustomization.moreMenuButton(unitTypeName)));
         typeCustomization.moreMenuButton(unitTypeName).click();
         typeCustomization.unitTypeDeleteButton.click();
     }
@@ -129,7 +139,96 @@ public class D04_UnitTypeCustomization {
 
     @Then("check unit Type pagination")
     public void checkUnitTypePagination() {
-      asrt.assertTrue(typeCustomization.checkPagination());
-      asrt.assertAll();
+        asrt.assertTrue(typeCustomization.checkPagination());
+        asrt.assertAll();
+    }
+
+    @Given("go to units master Data")
+    public void goToUnitsMasterData() {
+        wait.until(ExpectedConditions.elementToBeClickable(dashBoardPage.masterDataLink.get(0)));
+        dashBoardPage.masterDataLink.get(0).click();
+        wait.until(ExpectedConditions.elementToBeClickable(masterData.unitsDropList));
+        masterData.unitsDropList.click();
+        wait.until(ExpectedConditions.elementToBeClickable(masterData.unitsTypes));
+        masterData.unitsTypes.click();
+    }
+
+    @Given("click on filter button and enter name of type {string} and status {string} and click search")
+    public void clickOnFilterButtonAndEnterNameOfTypeAndStatusAndClickSearch(String typeName, String status) {
+        wait.until(ExpectedConditions.elementToBeClickable(masterUnitsTypes.filterButton));
+        new P00_multiPurposes().waitLoading();
+        masterUnitsTypes.filterButton.click();
+        if (!typeName.isEmpty()) {
+            masterUnitsTypes.nameSearchField.clear();
+            masterUnitsTypes.nameSearchField.sendKeys(typeName);
+        }
+        if (!status.isEmpty()) {
+            masterUnitsTypes.statuses().stream().filter(element -> element.getText().equalsIgnoreCase(status)).toList().get(0).click();
+        }
+        masterUnitsTypes.searchButton.click();
+        wait.until(ExpectedConditions.refreshed(ExpectedConditions.visibilityOfAllElements(masterUnitsTypes.typesNames)));
+    }
+
+    @Then("Check the grid contains only types with names {string} and statues {string}")
+    public void checkTheGridContainsOnlyTypesWithNamesAndStatues(String typeName, String status) {
+        if (!typeName.isEmpty())
+            asrt.assertFalse(masterUnitsTypes.typesNames.stream().anyMatch(element -> !element.getText().toLowerCase().contains(typeName.toLowerCase())), "wrong type name");
+        if (!status.isEmpty())
+            asrt.assertFalse(masterUnitsTypes.typesStatuses.stream().anyMatch(element -> !element.getText().equalsIgnoreCase(status)), "wrong status");
+        asrt.assertAll();
+
+    }
+
+    @When("add anew unit type with name {string}")
+    public void addAnewUnitTypeWithName(String typeName) {
+        new P00_multiPurposes(driver).waitLoading();
+        wait.until(ExpectedConditions.elementToBeClickable(masterUnitsTypes.newUnitTypeButton));
+        masterUnitsTypes.newUnitTypeButton.click();
+        masterUnitsTypes.typeNameField().clear();
+        masterUnitsTypes.typeNameField().sendKeys(typeName);
+        masterUnitsTypes.submitButton().click();
+        new D03_BlocksAndFloors().checkToastMesageContainsText("Saved Successfully");
+    }
+
+    @Then("Check the type {string} is visible in the grid")
+    public void checkTheTypeIsVisibleInTheGrid(String typeName) {
+        clickOnFilterButtonAndEnterNameOfTypeAndStatusAndClickSearch(typeName, "");
+        checkTheGridContainsOnlyTypesWithNamesAndStatues(typeName, "active");
+    }
+
+    @Given("click on edit button for type {string} and change name to {string}")
+    public void clickOnEditButtonForTypeAndChangeNameTo(String oldName, String newName) {
+        clickOnFilterButtonAndEnterNameOfTypeAndStatusAndClickSearch(oldName, "");
+        WebElement type = masterUnitsTypes.typesNames.stream().findAny().get();
+        js.executeScript("arguments[0].click();",masterUnitsTypes.editButton(type));
+      //  masterUnitsTypes.editButton(type).click();
+wait.until(ExpectedConditions.visibilityOf(masterUnitsTypes.typeNameField()));
+        masterUnitsTypes.typeNameField().clear();
+        masterUnitsTypes.typeNameField().sendKeys(newName);
+        masterUnitsTypes.submitButton().click();
+        clickOnFilterButtonAndEnterNameOfTypeAndStatusAndClickSearch(newName, "");
+
+    }
+
+    @Given("click on delete button for unit type associated with units")
+    public void clickOnDeleteButtonForUnitTypeAssociatedWithUnits() {
+        masterUnitsTypes.moreActions(masterUnitsTypes.typesNames.get(0)).stream().filter(element -> element.getText().trim().equalsIgnoreCase("delete")).toList().get(0).click();
+        wait.until(ExpectedConditions.elementToBeClickable(masterUnitsTypes.confirmDeleteButton()));
+        masterUnitsTypes.confirmDeleteButton().click();
+
+    }
+
+    @Given("create a unit type {string}")
+    public void createAUnitType(String typeName) {
+        if (typeName.equalsIgnoreCase("RANDOM")) {
+            typeName = faker.funnyName().name();
+        }
+        addAnewUnitTypeWithName(typeName);
+        checkTheTypeIsVisibleInTheGrid(typeName);
+    }
+
+    @And("delete the created unit type")
+    public void deleteTheCreatedUnitType() {
+        clickOnDeleteButtonForUnitTypeAssociatedWithUnits();
     }
 }
