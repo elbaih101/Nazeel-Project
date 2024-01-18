@@ -40,7 +40,8 @@ public class P00_multiPurposes {
     public WebElement loadingAnimation;
 
 
-
+    @FindBy(className = "toast-message")
+    public WebElement   toastMsg;
     public void waitLoading(){
         wait.withTimeout(Duration.ofSeconds(5));
         wait.until(ExpectedConditions.refreshed(ExpectedConditions.invisibilityOf(loadingAnimation)));

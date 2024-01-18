@@ -50,6 +50,10 @@ public class P03_1_ReservationMainDataPage {
 
     @FindBy(xpath = "//kendo-popup//span[contains(text(),\"Check-In\")]")
     public WebElement checkInMenuButton;
+    @FindBy(xpath = "//kendo-popup//div[contains(text(),\"Check-Out\")]")
+    public WebElement checkoutMenuButton;
+    @FindBy(xpath = "//kendo-popup//div[contains(text(),\"Cancel reservation\")]")
+    public WebElement cancelReservationButton;
 
 
     //waitfor that

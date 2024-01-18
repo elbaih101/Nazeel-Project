@@ -4,6 +4,7 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.example.pages.P02_DashBoardPage;
+import org.example.pages.mutlipurposes.P00_multiPurposes;
 import org.example.pages.setuppages.P04_BlocksPage;
 import org.example.pages.setuppages.P05_SetupPage;
 import org.example.pages.setuppages.P06_FloorsPage;
@@ -29,6 +30,7 @@ public class D03_BlocksAndFloors {
     final P05_SetupPage setupPagec = new P05_SetupPage(driver);
     final P04_BlocksPage blocksPage = new P04_BlocksPage(driver);
     final P06_FloorsPage floorsPage = new P06_FloorsPage(driver);
+    final P00_multiPurposes multiPurposes=new P00_multiPurposes(driver);
 final JavascriptExecutor js =(JavascriptExecutor) driver;
 
     @Then("Check blocks pagination")
@@ -83,8 +85,8 @@ final JavascriptExecutor js =(JavascriptExecutor) driver;
 
     @Then("Check toast mesage contains text {string}")
     public void checkToastMesageContainsText(String mesage) {
-        asrt.assertTrue(blocksPage.toastMsg.isDisplayed());
-        asrt.assertEquals(blocksPage.toastMsg.getText().trim(), mesage);
+        asrt.assertTrue(multiPurposes.toastMsg.isDisplayed());
+        asrt.assertEquals(multiPurposes.toastMsg.getText().trim(), mesage);
         asrt.assertAll();
     }
 

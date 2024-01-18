@@ -112,6 +112,7 @@ public class D06_DigitalPayment {
         if (guestName.equalsIgnoreCase("RANDOM") || guestName.equalsIgnoreCase("class")) {
             List<WebElement> guestClasses = guestSelectionPopUp.guestClasses();
             WebElement selectedClass = guestClasses.get(new Random().nextInt(guestClasses.size()));
+            wait.until(ExpectedConditions.visibilityOfAllElements(guestClasses));
             wait.until(ExpectedConditions.elementToBeClickable(selectedClass));
             selectedClass.click();
         } else if (id.equalsIgnoreCase("") && mobile.equalsIgnoreCase("")) {

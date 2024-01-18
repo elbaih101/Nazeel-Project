@@ -72,7 +72,7 @@ Feature: PayTabs integration
       When oppen the link and pay it successfully
       When open the log tab and select "paytabs"
       Then check the generated link is present in the grid with state "pending" and Voucher type "Receipt Voucher"
-  ##TODO :: Draft collection
+
   Rule: Drafts
     Background:
       Given go to Draft Vouchers Page

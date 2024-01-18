@@ -6,6 +6,7 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.example.pages.P01_LoginPage;
 import org.example.pages.P02_DashBoardPage;
+import org.example.pages.mutlipurposes.P00_multiPurposes;
 import org.example.pages.reservations.P03_1_ReservationMainDataPage;
 import org.example.pages.reservations.P03_5_UnitSelectionPopup;
 import org.openqa.selenium.By;
@@ -37,6 +38,11 @@ public class D01_MakingReservation {
     @And("open reservations Page")
     public void openReservationsPage() {
         wait.until(ExpectedConditions.elementToBeClickable(homePage.ReservationsLink));
+        try {
+            Thread.sleep(300);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         homePage.ReservationsLink.click();
     }
 
@@ -45,7 +51,7 @@ public class D01_MakingReservation {
         //wait.until(ExpectedConditions.urlContains("/reservations"));
         wait.until(ExpectedConditions.elementToBeClickable(reservationPage.newReservationButton));
 //        reservationPage.newReservationButton.click();
-        js.executeScript("arguments[0].click();",reservationPage.newReservationButton);
+        js.executeScript("arguments[0].click();", reservationPage.newReservationButton);
     }
 
     @And("Select Reservation source {string} and visit purpose {string}")
@@ -101,6 +107,7 @@ public class D01_MakingReservation {
     public void clickOnSaveReservationButton() {
         WebElement saveReservationButton = reservationPage.saveReservationButton;
         wait.until(ExpectedConditions.elementToBeClickable(saveReservationButton));
+        new P00_multiPurposes(driver).waitLoading();
         saveReservationButton.click();
 
     }
@@ -121,8 +128,6 @@ public class D01_MakingReservation {
         asrt.assertAll();
         WebElement resStatus = reservationPage.reservationStatus;
         Assert.assertTrue(resStatus.getText().contains(confirmationText));
-        clickOnSaveReservationButton();
-        whenReservationSummaryDialougeAppearsClickOnSaveReservatuonButton();
 
     }
 
@@ -137,7 +142,6 @@ public class D01_MakingReservation {
 
     @Given("create a successfull reservation Source {string} purpose {string} Unit {string} Guest {string}")
     public void createASuccessfullReservation(String source, String purpose, String unit, String guest) {
-        openReservationsPage();
         D06_DigitalPayment d06DigitalPayment = new D06_DigitalPayment();
         clickOnAddNewReservation();
         selectReservationSourceAndPurpose(source, purpose);
@@ -156,12 +160,35 @@ public class D01_MakingReservation {
 
     @And("Choose Reservation Status as {string}")
     public void chooseReservationStatusAs(String status) {
-        if (status.equalsIgnoreCase("Checked-In")) {
-            wait.until(ExpectedConditions.elementToBeClickable(reservationPage.reservatinMoreActionsMenu));
-            reservationPage.reservatinMoreActionsMenu.click();
-            reservationPage.checkInMenuButton.click();
+        WebElement actionButton = null;
+        wait.until(ExpectedConditions.elementToBeClickable(reservationPage.reservatinMoreActionsMenu));
+        new P00_multiPurposes(driver).waitLoading();
+        reservationPage.reservatinMoreActionsMenu.click();
+        if (status.contains("In")) {
+            actionButton = reservationPage.checkInMenuButton;
+        } else if (status.contains("Out")) {
+            actionButton = reservationPage.checkoutMenuButton;
+        } else if (status.contains("canceled")) {
+            actionButton = reservationPage.cancelReservationButton;
         }
+        wait.until(ExpectedConditions.elementToBeClickable(actionButton));
+        actionButton.click();
+
+    }
 
 
+    @Given("Create {string} Reservation withSource {string} purpose {string} Unit {string} Guest {string}")
+    public void createReservationWithSourcePurposeUnitGuest(String reservationState, String source, String purpose, String unit, String guest) {
+        createASuccessfullReservation(source, purpose, unit, guest);
+        chooseReservationStatusAs(reservationState);
+        String confirmationMessage ="";
+        if (reservationState.contains("In")) {
+            confirmationMessage = "Checked In";
+        } else if (reservationState.contains("Out")) {
+            confirmationMessage = "Checked Out";
+        } else if (reservationState.contains("canceled")) {
+            confirmationMessage = "Canceled";
+        }
+        verifyToastMessageAppearsWithTextAndTheReservationStatusToBe("Saved Successfully",confirmationMessage);
     }
 }

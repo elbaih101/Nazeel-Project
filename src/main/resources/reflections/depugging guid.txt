@@ -1,0 +1,3 @@
+cd to the location first
+msedge.exe --remote-debugging-port=9222 --user-data-dir=E:\edgeData
+msedge.exe --user-data-dir=<some directory>
