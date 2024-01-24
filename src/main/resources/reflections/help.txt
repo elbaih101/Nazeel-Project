@@ -19,9 +19,5 @@ https://stackoverflow.com/questions/40956546/selenium-html-input-text-displays-t
 
 https://www.selenium.dev/documentation/webdriver/interactions/windows/   reflections on selenium
 
-
-
-date fields send value attribute as dd/mm/yyyy     public void setAttribute(WebElement element, String attName, String attValue) {
-                                                           driver.executeScript("arguments[0].setAttribute(arguments[1], arguments[2]);",
-                                                                   element, attName, attValue);
+https://stackoverflow.com/questions/6252678/converting-a-date-string-to-a-datetime-object-using-joda-time-library  Date Time Handling
                                                        }

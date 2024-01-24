@@ -5,6 +5,8 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.example.enums.PaymentMethods;
+import org.example.enums.Vouchers;
 import org.example.pages.P12_SMSLogPage;
 import org.example.pages.P02_DashBoardPage;
 import org.example.pages.vouchersPages.P10_VouchersPage;
@@ -51,6 +53,7 @@ public class D06_DigitalPayment {
         wait.until(ExpectedConditions.elementToBeClickable(dashBoardPage.receiptsLink));
         dashBoardPage.receiptsLink.click();
     }
+
 
     @Given("open the digital payment popup")
     public void openTheDigitalPaymentPopup() {
@@ -366,14 +369,8 @@ public class D06_DigitalPayment {
         checkTheLinkIsGeneratedInTheLinkField();
     }
 
-    String draftNo;
-    @And("click on a draft more menu and choose collect by digital payment")
-    public void clickOnADraftMoreMenuAndChooseCollectByDigitalPayment() {
-        List<WebElement> amountsOfDraftNotFullyPaied = vouchersPage.draftsRemainigAmounts().stream().filter(element -> Character.valueOf(element.getText().trim().charAt(0)).compareTo('0')!=0).toList();
-        WebElement selectedDraftAmount = amountsOfDraftNotFullyPaied.get(new Random().nextInt(amountsOfDraftNotFullyPaied.size()));
-        vouchersPage.moreActions(selectedDraftAmount).stream().filter(element -> element.getText().trim().contains("Collect Via Digital Payment")).toList().get(0).click();
-        draftNo=digitalPaymentPage.draftNumber().getText();
-    }
+   public static String draftNo;
+
 
 
 

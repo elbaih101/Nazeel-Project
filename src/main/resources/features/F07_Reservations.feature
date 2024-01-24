@@ -24,6 +24,6 @@ Feature: Making Reservation with Nazeel PMS (web application)
     And Choose Reservation Status as "Checked-In"
     And verify toast message appears with text "Saved Successfully" and the reservation status to be "Checked In"
 
-    Scenario:
-      Given  Create "Checked-In" Reservation withSource "RANDOM" purpose "RANDOM" Unit "RANDOM" Guest "RANDOM"
-
+  Scenario: Check out a reservation
+    Given  Create "Checked-In" Reservation withSource "RANDOM" purpose "RANDOM" Unit "RANDOM" Guest "RANDOM"
+    Then Choose Reservation Status as "Checked-Out"

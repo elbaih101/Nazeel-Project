@@ -63,7 +63,7 @@ public class P03_1_ReservationMainDataPage {
     public WebElement reservationSourceDropList;
 
     public List<WebElement> reservationSources() {
-        wait.until(ExpectedConditions.invisibilityOf(new P00_multiPurposes().loadingAnimation));
+      new P00_multiPurposes(driver).waitLoading();
         wait.until(ExpectedConditions.elementToBeClickable(reservationSourceDropList));
         reservationSourceDropList.click();
         return genralListBox.findElements(By.xpath("//li[@role=\"option\"]"));

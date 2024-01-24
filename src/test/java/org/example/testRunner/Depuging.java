@@ -28,8 +28,8 @@ public class Depuging {
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
 
 // now you can use now existing Browser
-        new D08_Vouchers(driver).clickOnTheAddVoucherButton();
-        new D08_Vouchers(driver).selectPaymentMethodAndEnterAmount("Cash", "50");
+//        new D08_Vouchers(driver).clickOnTheAddVoucherButton();
+//        new D08_Vouchers(driver).selectPaymentMethodAndEnterAmount("Cash", "50");
 
     }
 

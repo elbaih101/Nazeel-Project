@@ -76,7 +76,7 @@ Feature: PayTabs integration
   Rule: Drafts
     Background:
       Given go to Draft Vouchers Page
-      And click on a draft more menu and choose collect by digital payment
+      And click on draft more menu and choose collect by "digital" payment
 
     Scenario:succefully create a paytabs draftcollection link with amount less than remaining amount
       When succefully create a paytabs draftcollection link with amount "less than" remaining amount

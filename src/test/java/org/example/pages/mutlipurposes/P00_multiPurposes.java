@@ -43,7 +43,7 @@ public class P00_multiPurposes {
     @FindBy(className = "toast-message")
     public WebElement   toastMsg;
     public void waitLoading(){
-        wait.withTimeout(Duration.ofSeconds(5));
+        wait.withTimeout(Duration.ofSeconds(7));
         wait.until(ExpectedConditions.refreshed(ExpectedConditions.invisibilityOf(loadingAnimation)));
     }
     @FindBy(xpath = "//div[contains(@class,\"n-pager__info\")]")

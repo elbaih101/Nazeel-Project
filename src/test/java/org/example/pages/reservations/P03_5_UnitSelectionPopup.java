@@ -57,8 +57,10 @@ public class P03_5_UnitSelectionPopup {
     public WebElement confirmBtn;
     /////////// alert pop up ///////////
     @FindBy(xpath = "//div[contains(text(),\"Alert\")]")
-
     WebElement alertHeader;
+
+    @FindBy(xpath = "//div[contains(@class,\"backdrop-show\")]//button[contains(@class,\"swal2-confirm\")]")
+    public  List<WebElement> checkInConflictionConfirmBtn;
 }
 
 

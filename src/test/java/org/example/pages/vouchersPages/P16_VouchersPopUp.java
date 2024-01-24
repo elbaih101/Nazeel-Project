@@ -1,5 +1,6 @@
 package org.example.pages.vouchersPages;
 
+import org.example.enums.Vouchers;
 import org.example.stepDefs.Hooks;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -32,22 +33,15 @@ public class P16_VouchersPopUp {
     }
 
 
-//todo :check the  fontcolor is  #979a97!important and for received from #636562  background-color #fafafa
-    //date picker ,time, payment method and amount go above input to span to get background-color color
-
-
-    ////String expectedColor ="#979a97!important";
-    //        String actualColor = (flash.getCssValue("background-color"));
-    //        actualColor = Color.fromString(actualColor).asHex();
-
-
     @FindBy(xpath = "//ul[@role=\"listbox\"]")
-    public WebElement genralListBox;
+    WebElement genralListBox;
 
-
+    @FindBy(xpath = "//div[contains(@class,\"k-window-title k-dialog-title\")]")
+    public WebElement popupTitle;
     @FindBy(xpath = "//div[@role=\"dialog\"]")
     WebElement voucherPopUp;
-/// header ///
+
+    /// header ///
     public WebElement voucherNo() {
         return voucherPopUp.findElement(By.xpath(".//div[contains(text(),\"Voucher No\")]/following-sibling::div[1]"));
     }
@@ -63,13 +57,29 @@ public class P16_VouchersPopUp {
     public WebElement guestName() {
         return voucherPopUp.findElement(By.xpath("//div[contains(text(),\"Guest\")]/following-sibling::div[1]"));
     }
+
     /////// tabs //////
-    public WebElement receiptTab(){return voucherPopUp.findElement(By.xpath("(.//kendo-tabstrip//li//span[contains(text(),\"Receipt\")])[1]"));}
-    public WebElement securityDepositetTab(){return voucherPopUp.findElement(By.xpath("(.//kendo-tabstrip//li//span[contains(text(),\"Receipt\")])[2]"));}
-    public WebElement draftTab(){return voucherPopUp.findElement(By.xpath(".//kendo-tabstrip//li//span[contains(text(),\"Draft\")]"));}
-    public WebElement refundTab(){return voucherPopUp.findElement(By.xpath("(.//kendo-tabstrip//li//span[contains(text(),\"Refund\")])[1]"));}
-    public WebElement securityDeposuteRefundTab(){return voucherPopUp.findElement(By.xpath("(.//kendo-tabstrip//li//span[contains(text(),\"Refund\")])[2]"));}
-////// bdy ////////
+    public WebElement receiptTab() {
+        return voucherPopUp.findElement(By.xpath("(.//kendo-tabstrip//li//span[contains(text(),\"Receipt\")])[1]"));
+    }
+
+    public WebElement securityDepositetTab() {
+        return voucherPopUp.findElement(By.xpath("(.//kendo-tabstrip//li//span[contains(text(),\"Receipt\")])[2]"));
+    }
+
+    public WebElement draftTab() {
+        return voucherPopUp.findElement(By.xpath(".//kendo-tabstrip//li//span[contains(text(),\"Draft\")]"));
+    }
+
+    public WebElement refundTab() {
+        return voucherPopUp.findElement(By.xpath("(.//kendo-tabstrip//li//span[contains(text(),\"Refund\")])[1]"));
+    }
+
+    public WebElement securityDeposuteRefundTab() {
+        return voucherPopUp.findElement(By.xpath("(.//kendo-tabstrip//li//span[contains(text(),\"Refund\")])[2]"));
+    }
+
+    ////// bdy ////////
     public WebElement dateField() {
         return voucherPopUp.findElement(By.xpath(".//kendo-datepicker//input"));
     }
@@ -81,20 +91,26 @@ public class P16_VouchersPopUp {
     public WebElement timeField() {
         return voucherPopUp.findElement(By.xpath(".//kendo-timepicker//input"));
     }
+
     public WebElement selctGuestButton() {
         return voucherPopUp.findElement(By.xpath(".//div[@class=\"form__action-icon\"]"));
     }
+
     public WebElement guestField(String voucherType) {
-        if (voucherType.equalsIgnoreCase("receipt")) {
+        if (voucherType.equalsIgnoreCase(Vouchers.Receipt.toString())) {
             return voucherPopUp.findElement(By.xpath(".//label[contains(text(),\"Received From\")]/following-sibling::div//input"));
-        } else if (voucherType.equalsIgnoreCase("refund")) {
+        } else if (voucherType.equalsIgnoreCase(Vouchers.Refund.toString())) {
             return voucherPopUp.findElement(By.xpath(".//label[contains(text(),\"Paid to\")]/following-sibling::div//input"));
-        } else {
+        } else { //TODO : Expenses Vouchers when the Cr is applied
             return voucherPopUp.findElement(By.xpath(".//label[contains(text(),\"Guest\")]/../following-sibling::input"));
         }
 
     }
-public WebElement paymentMethodField(){return voucherPopUp.findElement(By.xpath(".//label[contains(text(),\"Payment\")]/following-sibling::kendo-combobox//input"));}
+
+    public WebElement paymentMethodField() {
+        return voucherPopUp.findElement(By.xpath(".//label[contains(text(),\"Payment\")]/following-sibling::kendo-combobox//input"));
+    }
+
     public List<WebElement> paymentMethos() {
         voucherPopUp.findElement(By.xpath(".//label[contains(text(),\"Payment\")]/following-sibling::kendo-combobox//span/span/span")).click();
         return genralListBox.findElements(By.xpath("//li[@role=\"option\"]"));
@@ -104,7 +120,8 @@ public WebElement paymentMethodField(){return voucherPopUp.findElement(By.xpath(
         return voucherPopUp.findElement(By.xpath(".//kendo-numerictextbox//input"));
 
     }
-    public List<WebElement> banks(){
+
+    public List<WebElement> banks() {
         voucherPopUp.findElement(By.xpath(".//label[contains(text(),\"Receiving Bank\")]/../following-sibling::kendo-combobox//span/span/span")).click();
         return genralListBox.findElements(By.xpath("\"//li[@role=\\\"option\\\"]\""));
     }
@@ -116,7 +133,6 @@ public WebElement paymentMethodField(){return voucherPopUp.findElement(By.xpath(
     public WebElement discardButton() {
         return voucherPopUp.findElement(By.xpath(".//button[contains(@class,\"n-button--danger-border\")]"));
     }
-
 
 
 }

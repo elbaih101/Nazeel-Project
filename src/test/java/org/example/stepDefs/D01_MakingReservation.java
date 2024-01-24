@@ -9,10 +9,8 @@ import org.example.pages.P02_DashBoardPage;
 import org.example.pages.mutlipurposes.P00_multiPurposes;
 import org.example.pages.reservations.P03_1_ReservationMainDataPage;
 import org.example.pages.reservations.P03_5_UnitSelectionPopup;
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.example.pages.reservations.P03_6_EndReservationPopUp;
+import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -22,15 +20,17 @@ import org.testng.asserts.SoftAssert;
 import java.time.Duration;
 import java.util.List;
 import java.util.Random;
+import java.util.regex.Pattern;
 
 public class D01_MakingReservation {
     final WebDriver driver = Hooks.driver;
     final P01_LoginPage loginPage = new P01_LoginPage();
     final P02_DashBoardPage homePage = new P02_DashBoardPage();
     final JavascriptExecutor js = (JavascriptExecutor) driver;
-    final P03_1_ReservationMainDataPage reservationPage = new P03_1_ReservationMainDataPage(driver);
+    final P03_1_ReservationMainDataPage reservationMainDataPage = new P03_1_ReservationMainDataPage(driver);
     final WebDriverWait wait = new WebDriverWait(Hooks.driver, Duration.ofSeconds(15));
     final P03_5_UnitSelectionPopup unitSelectionPopup = new P03_5_UnitSelectionPopup(driver);
+    final P03_6_EndReservationPopUp endReservationPopUp = new P03_6_EndReservationPopUp(driver);
     final SoftAssert asrt = new SoftAssert();
     Actions action = new Actions(Hooks.driver);
 
@@ -49,15 +49,15 @@ public class D01_MakingReservation {
     @When("Click on Add new Reservation")
     public void clickOnAddNewReservation() {
         //wait.until(ExpectedConditions.urlContains("/reservations"));
-        wait.until(ExpectedConditions.elementToBeClickable(reservationPage.newReservationButton));
+        wait.until(ExpectedConditions.elementToBeClickable(reservationMainDataPage.newReservationButton));
 //        reservationPage.newReservationButton.click();
-        js.executeScript("arguments[0].click();", reservationPage.newReservationButton);
+        js.executeScript("arguments[0].click();", reservationMainDataPage.newReservationButton);
     }
 
     @And("Select Reservation source {string} and visit purpose {string}")
     public void selectReservationSourceAndPurpose(String source, String purpose) {
 
-        List<WebElement> reservationSources = reservationPage.reservationSources();
+        List<WebElement> reservationSources = reservationMainDataPage.reservationSources();
         WebElement selectedSource;
         if (source.equalsIgnoreCase("RANDOM")) {
             selectedSource = reservationSources.get(0);
@@ -67,20 +67,20 @@ public class D01_MakingReservation {
         wait.until(ExpectedConditions.visibilityOf(selectedSource));
         selectedSource.click();
 
-        reservationPage.visitPurposeDropList.click();
-        wait.until(ExpectedConditions.visibilityOf(reservationPage.familyOrFriendsSelection));
-        reservationPage.familyOrFriendsSelection.click();
+        reservationMainDataPage.visitPurposeDropList.click();
+        wait.until(ExpectedConditions.visibilityOf(reservationMainDataPage.familyOrFriendsSelection));
+        reservationMainDataPage.familyOrFriendsSelection.click();
     }
 
     @And("open unit selection Popup")
     public void openUnitSelectionPopup() {
-        reservationPage.selectUnitNowSpan.click();
+        reservationMainDataPage.selectUnitNowSpan.click();
     }
 
     @And("select a unit {string}")
     public void selectAUnit(String unit) {
 
-        wait.until(ExpectedConditions.visibilityOf(reservationPage.panelBar));
+        wait.until(ExpectedConditions.visibilityOf(reservationMainDataPage.panelBar));
         List<WebElement> cards = unitSelectionPopup.availableUnits();
         WebElement unitCaerd;
         if (unit.equalsIgnoreCase("RANDOM")) {
@@ -92,6 +92,10 @@ public class D01_MakingReservation {
         unitCaerd.click();
         WebElement confirmBtn = unitSelectionPopup.confirmBtn;
 //        wait.until(ExpectedConditions.attributeToBe(confirmBtn,"disabled","null"));
+        if (!unitSelectionPopup.checkInConflictionConfirmBtn.isEmpty())
+        {
+            unitSelectionPopup.checkInConflictionConfirmBtn.get(0).click();
+        }
         confirmBtn.click();
         wait.until(ExpectedConditions.invisibilityOf(unitCaerd));
     }
@@ -99,13 +103,13 @@ public class D01_MakingReservation {
 
     @And("click on selectguest now button")
     public void clickOnSelectguestNowButton() {
-        js.executeScript("arguments[0].click();", reservationPage.selectGestButton);
+        js.executeScript("arguments[0].click();", reservationMainDataPage.selectGestButton);
     }
 
 
     @Then("click on save Reservation button")
     public void clickOnSaveReservationButton() {
-        WebElement saveReservationButton = reservationPage.saveReservationButton;
+        WebElement saveReservationButton = reservationMainDataPage.saveReservationButton;
         wait.until(ExpectedConditions.elementToBeClickable(saveReservationButton));
         new P00_multiPurposes(driver).waitLoading();
         saveReservationButton.click();
@@ -116,19 +120,19 @@ public class D01_MakingReservation {
     @And("when reservation Summary dialouge appears click on save reservatuon Button")
     public void whenReservationSummaryDialougeAppearsClickOnSaveReservatuonButton() {
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//kendo-dialog")));
-        wait.until(ExpectedConditions.elementToBeClickable(reservationPage.reservationSummarySaveButton));
-        reservationPage.reservationSummarySaveButton.click();
+        wait.until(ExpectedConditions.elementToBeClickable(reservationMainDataPage.reservationSummarySaveButton));
+        reservationMainDataPage.reservationSummarySaveButton.click();
     }
 
     @And("verify toast message appears with text {string} and the reservation status to be {string}")
-    public void verifyToastMessageAppearsWithTextAndTheReservationStatusToBe(String successText, String confirmationText) {
-        WebElement succesMessage = reservationPage.toastMessage;
+    public void verifyToastMessageAppearsWithTextAndTheReservationStatusToBe(String successText, String reservationState) {
+        WebElement succesMessage = reservationMainDataPage.toastMessage;
         wait.until(ExpectedConditions.visibilityOf(succesMessage));
-        asrt.assertTrue(succesMessage.getText().contains(successText));
+        asrt.assertTrue(succesMessage.getText().contains(successText), "wrong toast");
+        new P00_multiPurposes(driver).waitLoading();
+        WebElement resStatus = reservationMainDataPage.reservationStatus;
+        asrt.assertEquals(resStatus.getText(), reservationState);
         asrt.assertAll();
-        WebElement resStatus = reservationPage.reservationStatus;
-        Assert.assertTrue(resStatus.getText().contains(confirmationText));
-
     }
 
     void sleep() {
@@ -161,34 +165,62 @@ public class D01_MakingReservation {
     @And("Choose Reservation Status as {string}")
     public void chooseReservationStatusAs(String status) {
         WebElement actionButton = null;
-        wait.until(ExpectedConditions.elementToBeClickable(reservationPage.reservatinMoreActionsMenu));
-        new P00_multiPurposes(driver).waitLoading();
-        reservationPage.reservatinMoreActionsMenu.click();
-        if (status.contains("In")) {
-            actionButton = reservationPage.checkInMenuButton;
-        } else if (status.contains("Out")) {
-            actionButton = reservationPage.checkoutMenuButton;
-        } else if (status.contains("canceled")) {
-            actionButton = reservationPage.cancelReservationButton;
+        wait.until(ExpectedConditions.elementToBeClickable(reservationMainDataPage.reservatinMoreActionsMenu));
+        try {
+            Thread.sleep(300);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
-        wait.until(ExpectedConditions.elementToBeClickable(actionButton));
-        actionButton.click();
-
+        new P00_multiPurposes(driver).waitLoading();
+        reservationMainDataPage.reservatinMoreActionsMenu.click();
+        if (status.contains("In")) {
+            actionButton = reservationMainDataPage.checkInMenuButton;
+            wait.until(ExpectedConditions.elementToBeClickable(actionButton));
+            actionButton.click();
+        } else if (status.contains("Out")) {
+            actionButton = reservationMainDataPage.checkoutMenuButton;
+            wait.until(ExpectedConditions.elementToBeClickable(actionButton));
+            actionButton.click();
+            checkOutReservation();
+        } else if (status.contains("canceled")) {
+            actionButton = reservationMainDataPage.cancelReservationButton;
+            wait.until(ExpectedConditions.elementToBeClickable(actionButton));
+            actionButton.click();
+        }
     }
 
+    void checkOutReservation() {
+        endReservationPopUp.confirmCheckOutButton.click();
+        while (!endReservationPopUp.header().isEmpty())
+            try {
+                if (endReservationPopUp.skipButton().isDisplayed()) {
+                    wait.until(ExpectedConditions.refreshed(ExpectedConditions.elementToBeClickable(endReservationPopUp.skipButton())));
+                    new P00_multiPurposes(driver).waitLoading();
+                    endReservationPopUp.skipButton().click();
+                }
+            } catch (NoSuchElementException e) {
+
+                List<WebElement> methods = endReservationPopUp.paymentMethos();
+                wait.until(ExpectedConditions.visibilityOfAllElements(methods));
+                methods.stream().filter(method -> method.getText().contains("Cash")).toList().get(0).click();
+                new P00_multiPurposes(driver).waitLoading();
+                endReservationPopUp.confirmationButton().click();
+                wait.until(ExpectedConditions.refreshed(ExpectedConditions.visibilityOf(endReservationPopUp.amountField())));
+            }
+    }
 
     @Given("Create {string} Reservation withSource {string} purpose {string} Unit {string} Guest {string}")
     public void createReservationWithSourcePurposeUnitGuest(String reservationState, String source, String purpose, String unit, String guest) {
         createASuccessfullReservation(source, purpose, unit, guest);
         chooseReservationStatusAs(reservationState);
-        String confirmationMessage ="";
+        String reservationStatus = "";
         if (reservationState.contains("In")) {
-            confirmationMessage = "Checked In";
+            reservationStatus = "Checked In";
         } else if (reservationState.contains("Out")) {
-            confirmationMessage = "Checked Out";
+            reservationStatus = "Checked Out";
         } else if (reservationState.contains("canceled")) {
-            confirmationMessage = "Canceled";
+            reservationStatus = "Canceled";
         }
-        verifyToastMessageAppearsWithTextAndTheReservationStatusToBe("Saved Successfully",confirmationMessage);
+        verifyToastMessageAppearsWithTextAndTheReservationStatusToBe("Saved Successfully", reservationStatus);
     }
 }
