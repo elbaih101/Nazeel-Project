@@ -12,9 +12,9 @@ Feature: Vouchers
     Scenario: Create a draft Voucher
       Given click on the add voucher button
       And select voucher "Draft" tab
-      And eneter maturity Date "01122024" and amount "20"
+      And enter maturity Date "01122024" and amount "20"
       Then submit the voucher and check success message prefix "Draft Voucher Number. " postfix " Generated successfully!"
-#todo : containue vouchers creation and cycles
+#todo : continue vouchers creation and cycles
     Scenario: Create Receipt Voucher
       Given click on the add voucher button
       And select voucher "Receipt" tab
@@ -55,7 +55,7 @@ Feature: Vouchers
       When go to Receipt Vouchers Page
       Then Check "receipt" Voucher with state "ended" edit mode
 
-    Scenario: Check edit mode for SD receipt Voucher for ended reservatio
+    Scenario: Check edit mode for SD receipt Voucher for ended reservation
       Given successfully create a voucher of type "SD" amount "200" payment Method "Cash" maturity Date ""
       And Choose Reservation Status as "Checked-Out"
       When go to Receipt Vouchers Page
@@ -77,12 +77,12 @@ Feature: Vouchers
       When go to Payment Vouchers Page
       Then Check "Refund" Voucher with state "ended" edit mode
 
-  Rule: Drafts Colection
+  Rule: Drafts Collection
 
     Background:
       Given go to Draft Vouchers Page
       #Todo : create solution to generate stand alone vouchers
-      And successfully create a voucher of type "StandAloneDraft" amount "200" payment Method "Cash" maturity Date ""
+      And successfully create a voucher of type "SADraft" amount "200" payment Method "Cash" maturity Date "25012024"
 
     Scenario: Check edit mode for Receipt Voucher for Collected Draft
       And click on draft more menu and choose collect by "Normal" payment

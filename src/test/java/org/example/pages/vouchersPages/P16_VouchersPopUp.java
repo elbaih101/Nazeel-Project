@@ -133,6 +133,9 @@ public class P16_VouchersPopUp {
     public WebElement discardButton() {
         return voucherPopUp.findElement(By.xpath(".//button[contains(@class,\"n-button--danger-border\")]"));
     }
+    public WebElement purposeField() {
 
+            return voucherPopUp.findElement(By.xpath(".//label[contains(text(),\"Purpose\")]/following-sibling::div//input"));
+        }
 
 }

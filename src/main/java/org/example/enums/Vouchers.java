@@ -1,6 +1,6 @@
 package org.example.enums;
 
 public enum Vouchers {
-    Receipt,SD,Refund,SDRefund,Draft,Expenses,
+    Receipt,SD,Refund,SDRefund,Draft,Expenses,SADraft,SAReceipt
 }
 

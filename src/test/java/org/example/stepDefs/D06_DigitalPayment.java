@@ -48,8 +48,10 @@ public class D06_DigitalPayment {
 
     @And("go to Receipt Vouchers Page")
     public void goToReceiptVouchersPage() {
+        if (!dashBoardPage.receiptsLink.isDisplayed()){
+        multiPurposes.waitLoading();
         wait.until(ExpectedConditions.elementToBeClickable(dashBoardPage.vouchersDropList));
-        dashBoardPage.vouchersDropList.click();
+        dashBoardPage.vouchersDropList.click();}
         wait.until(ExpectedConditions.elementToBeClickable(dashBoardPage.receiptsLink));
         dashBoardPage.receiptsLink.click();
     }
@@ -109,7 +111,7 @@ public class D06_DigitalPayment {
     String selectedguestName;
 
     @And("Select Guest {string} or ID {string} or Mobile {string}")
-    public void selectGuest(String guestName, String id, String mobile) {
+    public  void selectGuest(String guestName, String id, String mobile) {
 
 
         if (guestName.equalsIgnoreCase("RANDOM") || guestName.equalsIgnoreCase("class")) {

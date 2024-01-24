@@ -38,6 +38,8 @@ public class P10_VouchersPage {
         actions = new Actions(driver);
     }
 
+    @FindBy(xpath = "//*[contains(text(),\"New\")]")
+    public WebElement newVoucherButton;
     @FindBy(xpath = "//div[contains(@class,\"button--green\")]/button[contains(@class,\"arrow\")]")
     WebElement moreAddOptionsButton;
 
@@ -47,7 +49,7 @@ public class P10_VouchersPage {
     public List<WebElement> vouchersNums;
 
     @FindBy(xpath = "//td[@data-kendo-grid-column-index=\"8\"]")
-     public  List<WebElement> receitRelatedDrafts;
+    public List<WebElement> receitRelatedDrafts;
 
     public WebElement digialPaymentButton() {
         wait.until(ExpectedConditions.elementToBeClickable(moreAddOptionsButton));
