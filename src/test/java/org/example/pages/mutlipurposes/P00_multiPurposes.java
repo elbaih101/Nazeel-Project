@@ -2,6 +2,7 @@ package org.example.pages.mutlipurposes;
 
 import org.apache.commons.lang.StringUtils;
 import org.example.stepDefs.Hooks;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -11,6 +12,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.List;
 
 public class P00_multiPurposes {
@@ -57,5 +59,18 @@ public class P00_multiPurposes {
         int itemsCount=  Integer.parseInt(StringUtils.substringBetween(pagination.getText(),"-"," "));
         System.out.println(gridItems.size()+" :"+itemsCount);
         return gridItems.size()==itemsCount;
+    }
+    @FindBy(xpath = "//div[@role=\"dialog\"]")
+    public WebElement popUp;
+
+    public WebElement closeButton(){
+        List<WebElement> buttons =new ArrayList<>();
+        buttons = popUp.findElements(By.xpath(".//button[contains(text(),\"Close\")]"));
+        if (buttons.isEmpty()){
+        buttons=popUp.findElements(By.xpath(".//button[contains(@class,\"n-button--danger-border\")]"));}
+
+
+
+        return buttons.get(0);
     }
 }

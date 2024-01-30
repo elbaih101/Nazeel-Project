@@ -99,7 +99,7 @@ public class P16_VouchersPopUp {
     public WebElement guestField(String voucherType) {
         if (voucherType.equalsIgnoreCase(Vouchers.Receipt.toString())) {
             return voucherPopUp.findElement(By.xpath(".//label[contains(text(),\"Received From\")]/following-sibling::div//input"));
-        } else if (voucherType.equalsIgnoreCase(Vouchers.Refund.toString())) {
+        } else if (voucherType.equalsIgnoreCase(Vouchers.Refund.toString())||voucherType.equalsIgnoreCase(Vouchers.DropCash.toString())) {
             return voucherPopUp.findElement(By.xpath(".//label[contains(text(),\"Paid to\")]/following-sibling::div//input"));
         } else { //TODO : Expenses Vouchers when the Cr is applied
             return voucherPopUp.findElement(By.xpath(".//label[contains(text(),\"Guest\")]/../following-sibling::input"));

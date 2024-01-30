@@ -47,6 +47,8 @@ public class P10_VouchersPage {
     WebElement digitalPaymentOption;
     @FindBy(xpath = "//td[@data-kendo-grid-column-index=\"0\"]")
     public List<WebElement> vouchersNums;
+  @FindBy(xpath = "//td[@data-kendo-grid-column-index=\"3\"]")
+    public List<WebElement> paymentMethods;
 
     @FindBy(xpath = "//td[@data-kendo-grid-column-index=\"8\"]")
     public List<WebElement> receitRelatedDrafts;

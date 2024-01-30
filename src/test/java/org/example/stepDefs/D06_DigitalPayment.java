@@ -24,6 +24,7 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.asserts.SoftAssert;
+
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,7 +41,7 @@ public class D06_DigitalPayment {
     final P03_4_GuestSelectionPopUp guestSelectionPopUp = new P03_4_GuestSelectionPopUp(driver);
     final P12_SMSLogPage smsLogPage = new P12_SMSLogPage(driver);
     final P00_multiPurposes multiPurposes = new P00_multiPurposes(driver);
-    final P00_1_PaytabsExternalPage paytabsExternalPage =new P00_1_PaytabsExternalPage(driver);
+    final P00_1_PaytabsExternalPage paytabsExternalPage = new P00_1_PaytabsExternalPage(driver);
     P03_2_ReservationFinancialPage p032ReservationFinancialPage = new P03_2_ReservationFinancialPage(driver);
 
     final Actions actions = new Actions(driver);
@@ -48,10 +49,11 @@ public class D06_DigitalPayment {
 
     @And("go to Receipt Vouchers Page")
     public void goToReceiptVouchersPage() {
-        if (!dashBoardPage.receiptsLink.isDisplayed()){
-        multiPurposes.waitLoading();
-        wait.until(ExpectedConditions.elementToBeClickable(dashBoardPage.vouchersDropList));
-        dashBoardPage.vouchersDropList.click();}
+        if (!dashBoardPage.receiptsLink.isDisplayed()) {
+            multiPurposes.waitLoading();
+            wait.until(ExpectedConditions.elementToBeClickable(dashBoardPage.vouchersDropList));
+            dashBoardPage.vouchersDropList.click();
+        }
         wait.until(ExpectedConditions.elementToBeClickable(dashBoardPage.receiptsLink));
         dashBoardPage.receiptsLink.click();
     }
@@ -74,9 +76,9 @@ public class D06_DigitalPayment {
 
     @And("open the generate pay-link tab and select {string} and generate link with {string} amount {int} and purpose {string}")
     public void openTheGeneratePayLinkTabAndGenerateLinkWithAmountAndPurposeAndGuest(String voucherType, String service, int amount, String purpose) {
-        if (voucherType.contains("Receipt")) {
+        if (voucherType.equalsIgnoreCase(Vouchers.Receipt.toString())) {
             digitalPaymentPage.receiptTab().click();
-        } else if (voucherType.contains("SD")) {
+        } else if (voucherType.equalsIgnoreCase(Vouchers.SD.toString())) {
             digitalPaymentPage.securityDepositTab().click();
         } else
             digitalPaymentPage.generateLinkTab().click();
@@ -111,7 +113,7 @@ public class D06_DigitalPayment {
     String selectedguestName;
 
     @And("Select Guest {string} or ID {string} or Mobile {string}")
-    public  void selectGuest(String guestName, String id, String mobile) {
+    public void selectGuest(String guestName, String id, String mobile) {
 
 
         if (guestName.equalsIgnoreCase("RANDOM") || guestName.equalsIgnoreCase("class")) {
@@ -177,7 +179,8 @@ public class D06_DigitalPayment {
 
     @Given("succesfully create a stand alone voucher with {string} amount {int} purpose {string} Guest {string}")
     public void succesfullyCreateAStandAloneVoucherWithAmountPuposeGuest(String service, int amount, String purpose, String guest) {
-        openTheGeneratePayLinkTabAndGenerateLinkWithAmountAndPurposeAndGuest("Receipt", service, amount, purpose);
+        openTheGeneratePayLinkTabAndGenerateLinkWithAmountAndPurposeAndGuest(Vouchers.SAReceipt.toString(), service, amount, purpose);
+       openGuestSelection();
         selectGuest(guest, "", "");
         clickGenerateAndCheckToastMessage("Saved Successfully");
         checkTheLinkIsGeneratedInTheLinkField();
@@ -289,15 +292,16 @@ public class D06_DigitalPayment {
         checkTheLinkIsGeneratedInTheLinkField();
 
     }
+
     //paying paytabs link //
     @And("open the link and pay it successfully")
     public void openTheLinkAndPayItSuccessfully() {
-        Faker faker =new Faker();
+        Faker faker = new Faker();
         digitalPaymentPage.copyLinkButton().click();
-        String paste = Keys.chord(Keys.CONTROL,"v");
+        String paste = Keys.chord(Keys.CONTROL, "v");
         digitalPaymentPage.commentField().sendKeys(paste);
         String copiedurl = digitalPaymentPage.commentField().getAttribute("value");
-        String nazeelWindow= driver.getWindowHandle();
+        String nazeelWindow = driver.getWindowHandle();
         driver.switchTo().newWindow(WindowType.TAB);
         driver.navigate().to(copiedurl);
         wait.until(ExpectedConditions.visibilityOf(paytabsExternalPage.cardNumberField));
@@ -306,9 +310,10 @@ public class D06_DigitalPayment {
         paytabsExternalPage.expMonth.sendKeys("12");
         paytabsExternalPage.cvv.sendKeys("123");
         paytabsExternalPage.customeInfoButton.click();
-        if(paytabsExternalPage.email.getAttribute("value").isEmpty()){
-        paytabsExternalPage.email.sendKeys(faker.internet().emailAddress());}
-        paytabsExternalPage.address.sendKeys(faker.address().streetAddress()+faker.address().country());
+        if (paytabsExternalPage.email.getAttribute("value").isEmpty()) {
+            paytabsExternalPage.email.sendKeys(faker.internet().emailAddress());
+        }
+        paytabsExternalPage.address.sendKeys(faker.address().streetAddress() + faker.address().country());
         paytabsExternalPage.city.sendKeys("ryad");
         paytabsExternalPage.country().selectByVisibleText("Saudi Arabia");
         paytabsExternalPage.state().selectByIndex(1);
@@ -319,7 +324,10 @@ public class D06_DigitalPayment {
         wait.until(ExpectedConditions.visibilityOf(paytabsExternalPage.transactionState));
         asrt.assertTrue(paytabsExternalPage.transactionState.getText().contains("successful"));
         driver.switchTo().window(nazeelWindow);
+
+        D08_Vouchers.voucherNums.add("autoGenerated");
     }
+
     //////
     @When("open the log tab and select {string}")
     public void openTheLogTabAndSelectPaytabs(String service) {
@@ -332,16 +340,18 @@ public class D06_DigitalPayment {
     public void checkTheGeneratedLinkIsPresentInTheGridWithStateAndVoucherType(String state, String voucherType) {
         wait.until(ExpectedConditions.visibilityOfAllElements(digitalPaymentPage.links()));
         WebElement link = digitalPaymentPage.links().stream().filter(element -> element.getAttribute("href").trim().contains(generatedLink)).toList().get(0);
-        if(voucherType.equalsIgnoreCase("Draft"))
-        {
+        if (voucherType.equalsIgnoreCase("Draft")) {
             asrt.assertTrue(digitalPaymentPage.draftLinkStatus(link).getText().toLowerCase().contains(state.toLowerCase()));
             asrt.assertTrue(digitalPaymentPage.drafNoinGrid(link).getText().toLowerCase().contains(draftNo));
 
-        }else {asrt.assertTrue(digitalPaymentPage.linkType(link).getText().trim().equalsIgnoreCase(voucherType.trim()), digitalPaymentPage.linkType(link).getText().trim() + ":" + voucherType.trim());
-            asrt.assertEquals(digitalPaymentPage.receiptsLinkStatus(link).getText().toLowerCase(),state.toLowerCase());}
+        } else {
+            asrt.assertTrue(digitalPaymentPage.linkType(link).getText().trim().equalsIgnoreCase(voucherType.trim()), digitalPaymentPage.linkType(link).getText().trim() + ":" + voucherType.trim());
+            asrt.assertEquals(digitalPaymentPage.receiptsLinkStatus(link).getText().toLowerCase(), state.toLowerCase());
+        }
 
         asrt.assertAll();
     }
+
     @When("oppen the link and pay it successfully")
     public void oppenTheLinkAndPayItSuccessfully() {
     }
@@ -366,14 +376,12 @@ public class D06_DigitalPayment {
             amount = remaining;
         }
 
-        openTheGeneratePayLinkTabAndGenerateLinkWithAmountAndPurposeAndGuest("", "Paytabs",(int)amount, "");
+        openTheGeneratePayLinkTabAndGenerateLinkWithAmountAndPurposeAndGuest("", "Paytabs", (int) amount, "");
         clickGenerateAndCheckToastMessage("Saved Successfully");
         checkTheLinkIsGeneratedInTheLinkField();
     }
 
-   public static String draftNo;
-
-
+    public static String draftNo;
 
 
 }

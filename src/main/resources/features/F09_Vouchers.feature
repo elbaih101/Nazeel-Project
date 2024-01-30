@@ -28,7 +28,7 @@ Feature: Vouchers
       Then submit the voucher and check success message prefix "Security Deposit Receipt Voucher Number. " postfix " Generated successfully!"
 
     Scenario: Create Refund Voucher
-      Given successfully create a voucher of type "Receipt" amount "200" payment Method "Cash" maturity Date ""
+      Given successfully create a voucher of type "Receipt" amount "200" payment Method "Cash" maturity Date "" and Creatian Date ""
       Given open Refund Vouchers tab
       And click on the add voucher button
       And select voucher "Refund" tab
@@ -36,7 +36,7 @@ Feature: Vouchers
       Then submit the voucher and check success message prefix "Refund Voucher Number. " postfix " Generated successfully!"
 
     Scenario: Create SD Refund Voucher
-      Given successfully create a voucher of type "SD" amount "200" payment Method "Cash" maturity Date ""
+      Given successfully create a voucher of type "SD" amount "200" payment Method "Cash" maturity Date "" and Creatian Date ""
       Given open Refund Vouchers tab
       And click on the add voucher button
       And select voucher "SDRefund" tab
@@ -50,29 +50,29 @@ Feature: Vouchers
       And go to Reservation Financial Page
 
     Scenario: Check edit mode for receipt voucher for ended reservation
-      Given successfully create a voucher of type "Receipt" amount "200" payment Method "Cash" maturity Date ""
+      Given successfully create a voucher of type "Receipt" amount "200" payment Method "Cash" maturity Date "" and Creatian Date ""
       And Choose Reservation Status as "Checked-Out"
       When go to Receipt Vouchers Page
       Then Check "receipt" Voucher with state "ended" edit mode
 
     Scenario: Check edit mode for SD receipt Voucher for ended reservation
-      Given successfully create a voucher of type "SD" amount "200" payment Method "Cash" maturity Date ""
+      Given successfully create a voucher of type "SD" amount "200" payment Method "Cash" maturity Date "" and Creatian Date ""
       And Choose Reservation Status as "Checked-Out"
       When go to Receipt Vouchers Page
       Then Check "Receipt" Voucher with state "ended" edit mode
 
     Scenario: Check edit mode for Refund receipt Voucher for ended reservation
-      Given successfully create a voucher of type "Receipt" amount "200" payment Method "Cash" maturity Date ""
+      Given successfully create a voucher of type "Receipt" amount "200" payment Method "Cash" maturity Date "" and Creatian Date ""
       Given open Refund Vouchers tab
-      And successfully create a voucher of type "Refund" amount "200" payment Method "Cash" maturity Date ""
+      And successfully create a voucher of type "Refund" amount "200" payment Method "Cash" maturity Date "" and Creatian Date ""
       And Choose Reservation Status as "Checked-Out"
       When go to Payment Vouchers Page
       Then Check "Refund" Voucher with state "ended" edit mode
 
     Scenario: Check edit mode for SDRefund receipt Voucher for ended reservation
-      Given successfully create a voucher of type "SD" amount "200" payment Method "Cash" maturity Date ""
+      Given successfully create a voucher of type "SD" amount "200" payment Method "Cash" maturity Date "" and Creatian Date ""
       Given open Refund Vouchers tab
-      And successfully create a voucher of type "SDRefund" amount "200" payment Method "Cash" maturity Date ""
+      And successfully create a voucher of type "SDRefund" amount "200" payment Method "Cash" maturity Date "" and Creatian Date ""
       And Choose Reservation Status as "Checked-Out"
       When go to Payment Vouchers Page
       Then Check "Refund" Voucher with state "ended" edit mode
@@ -81,11 +81,37 @@ Feature: Vouchers
 
     Background:
       Given go to Draft Vouchers Page
-      #Todo : create solution to generate stand alone vouchers
-      And successfully create a voucher of type "SADraft" amount "200" payment Method "Cash" maturity Date "25012024"
+      And successfully create a voucher of type "SADraft" amount "200" payment Method "Cash" maturity Date "25012024" and Creatian Date ""
 
     Scenario: Check edit mode for Receipt Voucher for Collected Draft
       And click on draft more menu and choose collect by "Normal" payment
       When finish Draft Normal collecting process with amount "200" PaymentMethod "Cash"
       When go to Receipt Vouchers Page
       Then Check "receipt" Voucher with state "Collected" edit mode
+
+#Todo : Check the pay tabs operations and receipts and Complete it
+  Rule: Digital Payment auto generated Vouchers
+    Background:
+      Given go to Receipt Vouchers Page
+      And open the digital payment popup
+#Todo Check the code Works (Run and See)
+    Scenario: Check edit mode for auto Generated Vucher after successfull Paytabs operation
+      Given succesfully create a stand alone voucher with "PayTabs" amount 200 purpose "Checking auto generated receipts" Guest "RANDOM"
+      And open the link and pay it successfully
+      And Close the open popup
+      When go to Receipt Vouchers Page
+      Then Check "receipt" Voucher with state "Generated" edit mode
+
+
+  Rule: Drop Cash ACtions
+    Background:
+      Given open reservations Page
+      And create a successfull reservation Source "RANDOM" purpose "RANDOM" Unit "RANDOM" Guest "RANDOM"
+      And go to Reservation Financial Page
+
+    Scenario: check the voucers edit mode after drop cash actions
+      Given successfully create a voucher of type "SD" amount "200" payment Method "Cash" maturity Date "" and Creatian Date "28112023"
+      Given successfully create a voucher of type "Receipt" amount "200" payment Method "Cash" maturity Date "" and Creatian Date "28112023"
+      And create a drop cash action to date "28112023"
+      And go to Receipt Vouchers Page
+      Then Check "receipt" Voucher with state "CashDrop" edit mode
