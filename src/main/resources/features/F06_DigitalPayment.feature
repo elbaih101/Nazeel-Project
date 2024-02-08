@@ -1,3 +1,4 @@
+@Sprint38 @Regression
 Feature: PayTabs integration
 
   Background:
@@ -86,6 +87,5 @@ Feature: PayTabs integration
 
   ##TODO :: report actions
 
-  ##TODO ::
-   ##TODO:  Scenario: check created stand alone voucher is logged in the paytabs log
+     ##TODO:  Scenario: check created stand alone voucher is logged in the paytabs log
 

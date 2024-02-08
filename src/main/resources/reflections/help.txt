@@ -20,4 +20,6 @@ https://stackoverflow.com/questions/40956546/selenium-html-input-text-displays-t
 https://www.selenium.dev/documentation/webdriver/interactions/windows/   reflections on selenium
 
 https://stackoverflow.com/questions/6252678/converting-a-date-string-to-a-datetime-object-using-joda-time-library  Date Time Handling
-                                                       }
+
+https://toolsqa.com/extent-report/extent-report-for-cucumber-testng-project/       Reports creation and maintaining   [Extent Reports]
+    continue  https://www.linkedin.com/pulse/creating-cucumber-extent-report-right-way-praveen-mathew/

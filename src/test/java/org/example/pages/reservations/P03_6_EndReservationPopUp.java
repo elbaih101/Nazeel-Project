@@ -49,7 +49,7 @@ public class P03_6_EndReservationPopUp {
         return endReservationPopup.findElement(By.xpath(".//input[@id=\"amount\"]"));
     }
 
-    public List<WebElement> paymentMethos() {
+    public List<WebElement> paymentMethods() {
         endReservationPopup.findElement(By.xpath(".//label[contains(text(),\"Payment\")]/following-sibling::kendo-combobox//span/span/span")).click();
         return genralListBox.findElements(By.xpath("//li[@role=\"option\"]"));
     }
@@ -60,5 +60,14 @@ public class P03_6_EndReservationPopUp {
 
     public WebElement skipButton() {
         return endReservationPopup.findElement(By.xpath(".//div[contains(@class,\"skip\")]"));
+    }
+
+    public WebElement confirmCancelButton(){
+        return endReservationPopup.findElement(By.xpath(".//button[contains(@class,\"n-button--danger\")]"));
+    }
+
+    public List<WebElement> reasons(){
+        endReservationPopup.findElement(By.xpath(".//label[contains(text(),\"reason\")]/following-sibling::kendo-combobox//span/span/span")).click();
+        return genralListBox.findElements(By.xpath("//li[@role=\"option\"]"));
     }
 }

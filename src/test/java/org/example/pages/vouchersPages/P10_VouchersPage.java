@@ -1,5 +1,6 @@
 package org.example.pages.vouchersPages;
 
+import org.apache.commons.lang.NullArgumentException;
 import org.bouncycastle.jcajce.provider.asymmetric.X509;
 import org.example.enums.Vouchers;
 import org.example.pages.mutlipurposes.P00_multiPurposes;
@@ -47,7 +48,7 @@ public class P10_VouchersPage {
     WebElement digitalPaymentOption;
     @FindBy(xpath = "//td[@data-kendo-grid-column-index=\"0\"]")
     public List<WebElement> vouchersNums;
-  @FindBy(xpath = "//td[@data-kendo-grid-column-index=\"3\"]")
+    @FindBy(xpath = "//td[@data-kendo-grid-column-index=\"3\"]")
     public List<WebElement> paymentMethods;
 
     @FindBy(xpath = "//td[@data-kendo-grid-column-index=\"8\"]")
@@ -67,7 +68,7 @@ public class P10_VouchersPage {
         WebElement moreMenu = null;
         if (voucherType.equalsIgnoreCase(Vouchers.Draft.toString())) {
             moreMenu = voucherAmount.findElement(By.xpath("..//td[@data-kendo-grid-column-index=\"11\"]//div/div"));
-        } else if (voucherType.equalsIgnoreCase(Vouchers.Receipt.toString()) || voucherType.equalsIgnoreCase(Vouchers.Refund.toString()) || voucherType.equalsIgnoreCase(Vouchers.Expenses.toString())) {
+        } else if (voucherType.equalsIgnoreCase(Vouchers.Receipt.toString()) || voucherType.equalsIgnoreCase(Vouchers.Expenses.toString()) || voucherType.equalsIgnoreCase(Vouchers.Refund.toString()) || voucherType.equalsIgnoreCase(Vouchers.SAReceipt.toString()) || voucherType.equalsIgnoreCase(Vouchers.SD.toString()) || voucherType.equalsIgnoreCase(Vouchers.SDRefund.toString()) || voucherType.equalsIgnoreCase(Vouchers.GenReceipt.toString())) {
             moreMenu = voucherAmount.findElement(By.xpath("..//td[@data-kendo-grid-column-index=\"10\"]//div/div"));
         }
         wait.until(ExpectedConditions.elementToBeClickable(moreMenu));
@@ -83,10 +84,14 @@ public class P10_VouchersPage {
 
     public WebElement editButton(WebElement voucherAmount, String voucherType) {
         WebElement button = null;
+
         if (voucherType.equalsIgnoreCase(Vouchers.Draft.toString())) {
             button = voucherAmount.findElement(By.xpath("..//td[@data-kendo-grid-column-index=\"11\"]//div/button[1]"));
-        } else if (voucherType.equalsIgnoreCase(Vouchers.Receipt.toString()) || voucherType.equalsIgnoreCase("payment") || voucherType.equalsIgnoreCase("refund")) {
+        } else if (voucherType.equalsIgnoreCase(Vouchers.Receipt.toString()) || voucherType.equalsIgnoreCase(Vouchers.Expenses.toString()) || voucherType.equalsIgnoreCase(Vouchers.Refund.toString()) || voucherType.equalsIgnoreCase(Vouchers.SAReceipt.toString()) || voucherType.equalsIgnoreCase(Vouchers.SD.toString()) || voucherType.equalsIgnoreCase(Vouchers.SDRefund.toString()) || voucherType.equalsIgnoreCase(Vouchers.GenReceipt.toString())) {
             button = voucherAmount.findElement(By.xpath("..//td[@data-kendo-grid-column-index=\"10\"]//div/button[1]"));
+        }
+        if (button.equals(null)) {
+            throw new NullArgumentException("the edit btton wasn't retreaved");
         }
         return button;
     }

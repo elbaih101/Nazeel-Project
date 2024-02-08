@@ -38,7 +38,7 @@ public class TestNgTest
         driver = new EdgeDriver();
         driver.manage().window().maximize();
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
-        driver.get(TestData.baseUrl);
+        driver.get(TestData.stageUrl);
 
 
     }

@@ -14,13 +14,11 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import org.testng.Assert;
 import org.testng.asserts.SoftAssert;
 
 import java.time.Duration;
 import java.util.List;
 import java.util.Random;
-import java.util.regex.Pattern;
 
 public class D01_MakingReservation {
     final WebDriver driver = Hooks.driver;
@@ -172,6 +170,7 @@ public class D01_MakingReservation {
             e.printStackTrace();
         }
         new P00_multiPurposes(driver).waitLoading();
+        new P00_multiPurposes(driver).waitLoading();
         reservationMainDataPage.reservatinMoreActionsMenu.click();
         if (status.contains("In")) {
             actionButton = reservationMainDataPage.checkInMenuButton;
@@ -181,16 +180,19 @@ public class D01_MakingReservation {
             actionButton = reservationMainDataPage.checkoutMenuButton;
             wait.until(ExpectedConditions.elementToBeClickable(actionButton));
             actionButton.click();
-            checkOutReservation();
-        } else if (status.contains("canceled")) {
+            endReservation(status);
+        } else if (status.contains("Canceled")) {
             actionButton = reservationMainDataPage.cancelReservationButton;
             wait.until(ExpectedConditions.elementToBeClickable(actionButton));
             actionButton.click();
+            endReservation(status);
         }
     }
 
-    void checkOutReservation() {
+    void endReservation(String status) {
+        if (status.contains("out")){
         endReservationPopUp.confirmCheckOutButton.click();
+
         while (!endReservationPopUp.header().isEmpty())
             try {
                 if (endReservationPopUp.skipButton().isDisplayed()) {
@@ -200,13 +202,33 @@ public class D01_MakingReservation {
                 }
             } catch (NoSuchElementException e) {
 
-                List<WebElement> methods = endReservationPopUp.paymentMethos();
+                List<WebElement> methods = endReservationPopUp.paymentMethods();
                 wait.until(ExpectedConditions.visibilityOfAllElements(methods));
                 methods.stream().filter(method -> method.getText().contains("Cash")).toList().get(0).click();
                 new P00_multiPurposes(driver).waitLoading();
                 endReservationPopUp.confirmationButton().click();
                 wait.until(ExpectedConditions.refreshed(ExpectedConditions.visibilityOf(endReservationPopUp.amountField())));
-            }
+            }}
+
+         else if(status.contains("Canceled")){endReservationPopUp.confirmCancelButton().click();
+            while (!endReservationPopUp.header().isEmpty())
+                try {
+                    if (endReservationPopUp.skipButton().isDisplayed()) {
+                        wait.until(ExpectedConditions.refreshed(ExpectedConditions.elementToBeClickable(endReservationPopUp.skipButton())));
+                        new P00_multiPurposes(driver).waitLoading();
+                        endReservationPopUp.skipButton().click();
+                    }
+                } catch (NoSuchElementException e) {
+                    endReservationPopUp.reasons().get(0).click();
+                    endReservationPopUp.confirmationButton().click();
+                    List<WebElement> methods = endReservationPopUp.paymentMethods();
+                    wait.until(ExpectedConditions.visibilityOfAllElements(methods));
+                    methods.stream().filter(method -> method.getText().contains("Cash")).toList().get(0).click();
+                    new P00_multiPurposes(driver).waitLoading();
+                    endReservationPopUp.confirmationButton().click();
+                    wait.until(ExpectedConditions.refreshed(ExpectedConditions.visibilityOf(endReservationPopUp.amountField())));
+                }}
+
     }
 
     @Given("Create {string} Reservation withSource {string} purpose {string} Unit {string} Guest {string}")

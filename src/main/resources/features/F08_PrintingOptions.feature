@@ -1,3 +1,5 @@
+@Regression @Sprint38
+
 Feature: printing options page
 
   Background:

@@ -7,11 +7,8 @@ import io.cucumber.java.Before;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.example.TestData;
 import org.example.pages.P01_LoginPage;
-import org.example.pages.P02_DashBoardPage;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.edge.EdgeDriver;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 
@@ -24,7 +21,7 @@ public class Hooks {
         driver = new EdgeDriver();
         driver.manage().window().maximize();
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
-        driver.get(TestData.baseUrl);
+        driver.get(TestData.stageUrl);
       //EdgeOptions options =new EdgeOptions();
 
         //options.setExperimentalOption("prefs", new String[]{"download.default_directory", "download_path"});

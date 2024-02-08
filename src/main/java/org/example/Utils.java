@@ -9,20 +9,43 @@ import java.util.List;
 public class Utils {
 
     /**
-     *
      * @param dateInput Webelement input
-     * @param date date on format DDMMYYYY
+     * @param date      date on format DDMMYYYY
      */
-    public static void setDate(WebElement dateInput,String date) {
+    public static void setDate(WebElement dateInput, String date) {
         dateInput.click();
         dateInput.sendKeys(Keys.ARROW_LEFT);
         dateInput.sendKeys(Keys.ARROW_LEFT);
         dateInput.sendKeys(date);
     }
+   public static String getStyles = "var s = '';" +
+            "var o = getComputedStyle(arguments[0]);" +
+            "for(var i = 0; i < o.length; i++){" +
+            "s+=o[i] + ':' + o.getPropertyValue(o[i])+';';}" +
+            "return s;";
 
     public static void setAttribute(JavascriptExecutor js, WebElement element, String attName, String attValue) {
         js.executeScript("arguments[0].setAttribute(arguments[1], arguments[2]);",
                 element, attName, attValue);
+    }
+
+    public static boolean isEnabled(WebElement element) {
+        boolean bol = true;
+        try {
+            element.findElement(By.xpath("./ancestor-or-self::*[contains(@class,\"k-state-disabled\")]"));
+            bol=false;
+
+        }catch (NoSuchElementException e)
+        {
+        }
+//
+//        // String state = (String) js.executeScript("var form= arguments[0].form.className; return form;",element);
+//        if (state.contains("ng-touched")) {
+//            bol = true;
+//        } else if (state.contains("ng-untouched")) {
+//            bol = false;
+//        }
+        return bol;
     }
 
     public static void click(JavascriptExecutor js, WebElement element) {

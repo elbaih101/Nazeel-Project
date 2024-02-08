@@ -101,7 +101,10 @@ public class P16_VouchersPopUp {
             return voucherPopUp.findElement(By.xpath(".//label[contains(text(),\"Received From\")]/following-sibling::div//input"));
         } else if (voucherType.equalsIgnoreCase(Vouchers.Refund.toString())||voucherType.equalsIgnoreCase(Vouchers.DropCash.toString())) {
             return voucherPopUp.findElement(By.xpath(".//label[contains(text(),\"Paid to\")]/following-sibling::div//input"));
-        } else { //TODO : Expenses Vouchers when the Cr is applied
+        }else if (voucherType.equalsIgnoreCase(Vouchers.GenReceipt.toString())||voucherType.equalsIgnoreCase(Vouchers.SAReceipt.toString())){
+            return voucherPopUp.findElement(By.xpath(".//label[contains(text(),\"Guest Name\")]/following-sibling::div//input"));
+        }
+        else  { //TODO : Expenses Vouchers when the Cr is applied
             return voucherPopUp.findElement(By.xpath(".//label[contains(text(),\"Guest\")]/../following-sibling::input"));
         }
 
@@ -111,7 +114,7 @@ public class P16_VouchersPopUp {
         return voucherPopUp.findElement(By.xpath(".//label[contains(text(),\"Payment\")]/following-sibling::kendo-combobox//input"));
     }
 
-    public List<WebElement> paymentMethos() {
+    public List<WebElement> paymentMethods() {
         voucherPopUp.findElement(By.xpath(".//label[contains(text(),\"Payment\")]/following-sibling::kendo-combobox//span/span/span")).click();
         return genralListBox.findElements(By.xpath("//li[@role=\"option\"]"));
     }

@@ -1,8 +1,9 @@
+@Regression @Sprint38
 Feature: Vouchers
 
   Background:  login and choose property
     Given Logging in with superuser
-    And Select Property "Boyle-Adams"
+    And Select Property "P00166"
   Rule:Reservations Related Receipt Vouchers
     Background:
       Given open reservations Page
@@ -42,6 +43,14 @@ Feature: Vouchers
       And select voucher "SDRefund" tab
       And select Payment Method "Cash" and enter amount "50"
       Then submit the voucher and check success message prefix "Security Deposit Refund Voucher Number. " postfix " Generated successfully!"
+
+    Scenario: check the voucers edit mode after drop cash actions
+      Given successfully create a voucher of type "SD" amount "200" payment Method "Cash" maturity Date "" and Creatian Date "28112023"
+      Given successfully create a voucher of type "Receipt" amount "200" payment Method "Cash" maturity Date "" and Creatian Date "28112023"
+      And create a drop cash action to date "28112023"
+      And go to Receipt Vouchers Page
+      Then Check "receipt" Voucher with state "CashDrop" edit mode
+
 #  todo : keep trying for failure >> (D01_MakingReservation.java:136)
   Rule:ended Reservations Vouchers
     Background:
@@ -57,10 +66,10 @@ Feature: Vouchers
 
     Scenario: Check edit mode for SD receipt Voucher for ended reservation
       Given successfully create a voucher of type "SD" amount "200" payment Method "Cash" maturity Date "" and Creatian Date ""
-      And Choose Reservation Status as "Checked-Out"
+      And Choose Reservation Status as "Canceled"
       When go to Receipt Vouchers Page
       Then Check "Receipt" Voucher with state "ended" edit mode
-
+# Todo : Switch some of the scenarios as no show
     Scenario: Check edit mode for Refund receipt Voucher for ended reservation
       Given successfully create a voucher of type "Receipt" amount "200" payment Method "Cash" maturity Date "" and Creatian Date ""
       Given open Refund Vouchers tab
@@ -76,6 +85,12 @@ Feature: Vouchers
       And Choose Reservation Status as "Checked-Out"
       When go to Payment Vouchers Page
       Then Check "Refund" Voucher with state "ended" edit mode
+  # Todo : Scenario for Draft on a Reservation and Collection on it
+    Scenario: check edit mode for draft voucher on ended reservation
+      Given successfully create a voucher of type "Draft" amount "200" payment Method "Cash" maturity Date "15122025" and Creatian Date ""
+      And Choose Reservation Status as "Checked-Out"
+      When go to Draft Vouchers Page
+      Then Check "Draft" Voucher with state "ended" edit mode
 
   Rule: Drafts Collection
 
@@ -100,18 +115,20 @@ Feature: Vouchers
       And open the link and pay it successfully
       And Close the open popup
       When go to Receipt Vouchers Page
-      Then Check "receipt" Voucher with state "Generated" edit mode
+      Then Check "GenReceipt" Voucher with state "Generated" edit mode
 
 
-  Rule: Drop Cash ACtions
+  Rule: Drop Cash Actions
     Background:
-      Given open reservations Page
-      And create a successfull reservation Source "RANDOM" purpose "RANDOM" Unit "RANDOM" Guest "RANDOM"
-      And go to Reservation Financial Page
+      Given create a drop cash action to date "29112023"
+    Scenario: Can't Create a Cash Voucher with Date Before Last DropCash Date
+      Given go to Receipt Vouchers Page
+      Then successfully create a voucher of type "SAReceipt" amount "200" payment Method "Cash" maturity Date "" and Creatian Date "28112023"
+    Scenario: Can't edit a cash voucher to a date before last drop cash Date
+      Given go to Receipt Vouchers Page
+      And successfully create a voucher of type "SAReceipt" amount "200" payment Method "Cash" maturity Date "" and Creatian Date ""
+      When editing the Created Voucher's  amount "" payment Method "" maturity Date "" and Creatian Date "28112023"
+      Then Check toast mesage contains text "issue date/ time of cash vouchers could not be changed"
 
-    Scenario: check the voucers edit mode after drop cash actions
-      Given successfully create a voucher of type "SD" amount "200" payment Method "Cash" maturity Date "" and Creatian Date "28112023"
-      Given successfully create a voucher of type "Receipt" amount "200" payment Method "Cash" maturity Date "" and Creatian Date "28112023"
-      And create a drop cash action to date "28112023"
-      And go to Receipt Vouchers Page
-      Then Check "receipt" Voucher with state "CashDrop" edit mode
+
+ # TODO : REceipts and Refunds on wlakin Orders

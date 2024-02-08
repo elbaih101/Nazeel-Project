@@ -5,10 +5,13 @@ import org.example.TestData;
 import org.example.Utils;
 import org.example.pages.P17_CashDrawerPage;
 import org.example.pages.mutlipurposes.P00_multiPurposes;
+import org.example.pages.reservations.P03_1_ReservationMainDataPage;
+import org.example.pages.reservations.P03_6_EndReservationPopUp;
 import org.example.pages.vouchersPages.P10_VouchersPage;
 import org.example.pages.vouchersPages.P16_VouchersPopUp;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Capabilities;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.edge.EdgeOptions;
@@ -23,23 +26,22 @@ public class Depuging {
 
 
     public static void main(String[] args) {
-
         EdgeDriver driver;
        //  initiateDepuggingBrowser();
         driver = attatchDepugger();
-        WebDriverWait wait =new WebDriverWait(driver,Duration.ofSeconds(3));
-      //  driver.get(TestData.baseUrl);
-        WebElement closeButton=new  P00_multiPurposes(driver).closeButton();
-        wait.until(ExpectedConditions.elementToBeClickable(closeButton));
-        closeButton.click();
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(3));
+     //     driver.get(TestData.baseUrl);
+        System.out.println( js.executeScript(Utils.getStyles, new P16_VouchersPopUp(driver).dateField()));
+
+//          System.out.println("disabled");
+//      }else {
+//          System.out.println("enabled");
+//      }
+//        WebElement form = (WebElement) new P16_VouchersPopUp(driver).purposeField().getDomProperty("form.clas");
+//
 
     }
-
-
-
-
-
-
 
 
     public static EdgeDriver attatchDepugger() {
@@ -51,7 +53,7 @@ public class Depuging {
         EdgeOptions opt = new EdgeOptions();
 
 // pass the debuggerAddress and pass the port along with host. Since I am running test on local so using localhost
-        opt.setExperimentalOption("debuggerAddress", "localhost:59587");
+        opt.setExperimentalOption("debuggerAddress", "localhost:62694");
 
 // pass ChromeOptions object to ChromeDriver constructor
         EdgeDriver driver = new EdgeDriver(opt);

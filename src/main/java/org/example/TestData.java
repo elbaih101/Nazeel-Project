@@ -10,7 +10,7 @@ import java.util.List;
 public class TestData
 {
 
-    public static final String baseUrl ="http://staging.nazeel.net:9002/";
+    public static final String stageUrl ="http://staging.nazeel.net:9002/";
     public static final String username= "Mostafa Hamed";
 
     public static final String password = "123456&Mh";
