@@ -41,7 +41,7 @@ public class P03_6_EndReservationPopUp {
         return driver.findElements(By.xpath("//kendo-dialog-titlebar"));
     }
 
-    @FindBy(xpath = "//button[contains(@class,\"sweet-alert__button--primary\")]")
+    @FindBy(xpath = "//div[@role=\"dialog\"]//button[contains(@class,\"button--primary\")]")
     public WebElement confirmCheckOutButton;
 
 

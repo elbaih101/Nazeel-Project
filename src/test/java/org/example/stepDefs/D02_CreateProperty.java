@@ -7,6 +7,7 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.example.pages.P01_LoginPage;
 import org.example.pages.P02_DashBoardPage;
+import org.example.pages.mutlipurposes.P00_multiPurposes;
 import org.example.pages.setuppages.P05_SetupPage;
 import org.example.pages.setuppages.properties_pages.*;
 import org.openqa.selenium.*;
@@ -68,15 +69,18 @@ public class D02_CreateProperty {
         } catch (NoSuchElementException e) {
             System.out.println("property not found");
         }
-       try {
-           wait.until(ExpectedConditions.visibilityOf(dashBoardPage.setupPageLink));
-       }catch (TimeoutException e){wait.until(ExpectedConditions.visibilityOf(dashBoardPage.setupPageLink));}
+        try {
+            wait.until(ExpectedConditions.visibilityOf(dashBoardPage.setupPageLink));
+        } catch (TimeoutException e) {
+            wait.until(ExpectedConditions.visibilityOf(dashBoardPage.setupPageLink));
+        }
         //close the announcement
         try {
             if (dashBoardPage.closeAnnouncementButton.isDisplayed())
-                wait.until(ExpectedConditions.elementToBeClickable(dashBoardPage.closeAnnouncementButton));
-            Thread.sleep(2000);
-            dashBoardPage.closeAnnouncementButton.click();
+            {  new P00_multiPurposes(driver).waitLoading();
+            wait.until(ExpectedConditions.elementToBeClickable(dashBoardPage.closeAnnouncementButton));
+
+            dashBoardPage.closeAnnouncementButton.click();}
         } catch (NoSuchElementException e) {
             System.out.println("no announcements to close");
         }
@@ -196,7 +200,6 @@ public class D02_CreateProperty {
         asrt.assertTrue(propertiesPage.propertiesNames.stream().anyMatch(element -> element.getText().contains(propertyName)));
         asrt.assertAll();
     }
-
 
 
 }

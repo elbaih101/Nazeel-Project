@@ -17,9 +17,9 @@ import java.util.List;
 
 @SuppressWarnings("unused")
 public class P03_1_ReservationMainDataPage {
-    final WebDriver driver;
-    final WebDriverWait wait;
-    final Actions actions;
+     WebDriver driver;
+     WebDriverWait wait;
+     Actions actions;
 
     JavascriptExecutor js;
 
@@ -33,8 +33,8 @@ public class P03_1_ReservationMainDataPage {
     public P03_1_ReservationMainDataPage(WebDriver driver) {
         PageFactory.initElements(driver, this);
         this.driver = driver;
-        wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        actions = new Actions(driver);
+        wait = new WebDriverWait(this.driver, Duration.ofSeconds(10));
+        actions = new Actions(this.driver);
         js = (JavascriptExecutor) this.driver;
     }
 

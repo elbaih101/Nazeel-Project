@@ -9,7 +9,7 @@ import org.example.Utils;
 import org.example.enums.PaymentMethods;
 import org.example.enums.Vouchers;
 import org.example.pages.P02_DashBoardPage;
-import org.example.pages.P11_DigitalPaymentPage;
+import org.example.pages.vouchersPages.P11_DigitalPaymentPage;
 import org.example.pages.P17_CashDrawerPage;
 import org.example.pages.mutlipurposes.P00_multiPurposes;
 import org.example.pages.reservations.P03_2_ReservationFinancialPage;
@@ -34,6 +34,14 @@ public class D08_Vouchers {
     WebDriver driver = Hooks.driver;
 
     JavascriptExecutor js = (JavascriptExecutor) driver;
+
+    public D08_Vouchers() {
+    }
+
+    public D08_Vouchers(WebDriver driver) {
+        this.driver = driver;
+    }
+
     final SoftAssert asrt = new SoftAssert();
     final WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
     final P03_2_ReservationFinancialPage reservationFinancialPage = new P03_2_ReservationFinancialPage(driver);
@@ -84,6 +92,7 @@ public class D08_Vouchers {
 
     @And("enter maturity Date {string} and amount {string}")
     public void enterMaturityDate(String date, String amount) {
+        multiPurposes.waitLoading();
         Utils.setDate(vouchersPopUp.draftMaturityDate(), date);
         Utils.setAttribute(js, vouchersPopUp.draftMaturityDate(), "value", date);
         vouchersPopUp.amountField().clear();
@@ -192,7 +201,14 @@ public class D08_Vouchers {
         }
 
         if (voucherType.contains("Draft")) {
-            enterMaturityDate(maturityDate, amount);
+            if (amount.toLowerCase().contains("less")) {
+                enterMaturityDate(maturityDate, String.valueOf(new Random().nextDouble(reservationFinancialPage.reservationBalance())));
+            } else if (amount.toLowerCase().contains("more")) {
+                enterMaturityDate(maturityDate, String.valueOf(new Random().nextDouble(reservationFinancialPage.reservationBalance() + 1, reservationFinancialPage.reservationBalance() + 5)));
+            } else {
+                enterMaturityDate(maturityDate, amount);
+            }
+
         } else {
             selectPaymentMethodAndEnterAmount(paymentMethod, amount);
         }
@@ -272,7 +288,7 @@ public class D08_Vouchers {
             actualColor = (vouchersPopUp.guestField(voucherType).getCssValue("background-color"));
             actualColor = Color.fromString(actualColor).asHex();
             asrt.assertEquals(actualColor, expectedColor);
-            asrt.assertTrue(!vouchersPopUp.guestName().isEnabled(), "Guest field is enabled");
+            asrt.assertTrue(!vouchersPopUp.guestField(voucherType).isEnabled(), "Guest field is enabled");
 
             actualColor = (vouchersPopUp.amountField().findElement(By.xpath("..")).getCssValue("background-color"));
             actualColor = Color.fromString(actualColor).asHex();

@@ -21,7 +21,12 @@ import java.util.List;
 import java.util.Random;
 
 public class D01_MakingReservation {
-    final WebDriver driver = Hooks.driver;
+     WebDriver driver = Hooks.driver;
+
+  public   D01_MakingReservation(){}
+    public D01_MakingReservation(WebDriver debugDriver){
+        this.driver = debugDriver;
+    }
     final P01_LoginPage loginPage = new P01_LoginPage();
     final P02_DashBoardPage homePage = new P02_DashBoardPage();
     final JavascriptExecutor js = (JavascriptExecutor) driver;
@@ -190,7 +195,7 @@ public class D01_MakingReservation {
     }
 
     void endReservation(String status) {
-        if (status.contains("out")){
+        if (status.toLowerCase().contains("Out".toLowerCase())){
         endReservationPopUp.confirmCheckOutButton.click();
 
         while (!endReservationPopUp.header().isEmpty())
@@ -210,7 +215,7 @@ public class D01_MakingReservation {
                 wait.until(ExpectedConditions.refreshed(ExpectedConditions.visibilityOf(endReservationPopUp.amountField())));
             }}
 
-         else if(status.contains("Canceled")){endReservationPopUp.confirmCancelButton().click();
+     else if(status.toLowerCase().contains("Canceled".toLowerCase())){endReservationPopUp.confirmCancelButton().click();
             while (!endReservationPopUp.header().isEmpty())
                 try {
                     if (endReservationPopUp.skipButton().isDisplayed()) {

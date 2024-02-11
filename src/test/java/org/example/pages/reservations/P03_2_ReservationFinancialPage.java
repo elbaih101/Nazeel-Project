@@ -1,16 +1,35 @@
 package org.example.pages.reservations;
 
 import org.apache.commons.lang.StringUtils;
+import org.example.stepDefs.Hooks;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.time.Duration;
 
 @SuppressWarnings("unused")
 public class P03_2_ReservationFinancialPage {
+    final WebDriver driver;
+    final WebDriverWait wait;
+    final Actions actions;
+
+    public P03_2_ReservationFinancialPage() {
+        PageFactory.initElements(Hooks.driver, this);
+        this.driver = Hooks.driver;
+        wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        actions = new Actions(driver);
+    }
 
     public P03_2_ReservationFinancialPage(WebDriver driver) {
         PageFactory.initElements(driver, this);
+        this.driver = driver;
+        wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        actions = new Actions(driver);
     }
 
     @FindBy(xpath = "//h2")
@@ -47,6 +66,10 @@ public class P03_2_ReservationFinancialPage {
         return 0;
     }
 
+    public double reservationBalance (){
+         WebElement balance = driver.findElement(By.xpath("//div[@class=\"financial-summary\"]//div[contains(text(),\"Balance\")]/following-sibling::div/span"));
+        return Double.parseDouble(balance.getText().replaceFirst("-","").trim());
+    }
     @FindBy(xpath = "//div[@class=\"financial-summary\"]//div[contains(text(),\"Balance\")]/following-sibling::div/span")
     public WebElement balance;
 

@@ -1,4 +1,4 @@
-package org.example.pages;
+package org.example.pages.vouchersPages;
 
 import org.example.stepDefs.Hooks;
 import org.openqa.selenium.By;

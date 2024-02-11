@@ -53,7 +53,9 @@ public class P02_DashBoardPage {
     public WebElement smsDropList;
     @FindBy(xpath = "//a[@href=\"/notifications/sms-logs\"]")
     public WebElement smsLogPage;
-  @FindBy(xpath = "//a[@href=\"/financial/cash-drawer-balance\"]")
+    @FindBy(xpath = "//a[@href=\"/financial/cash-drawer-balance\"]")
     public WebElement cashDrawer;
 
+    @FindBy(xpath = "//a[@href=\"/reports/menu\"]")
+    public WebElement reportsPageLink;
 }

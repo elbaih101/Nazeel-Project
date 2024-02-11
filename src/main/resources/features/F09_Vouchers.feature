@@ -85,12 +85,18 @@ Feature: Vouchers
       And Choose Reservation Status as "Checked-Out"
       When go to Payment Vouchers Page
       Then Check "Refund" Voucher with state "ended" edit mode
-  # Todo : Scenario for Draft on a Reservation and Collection on it
+
     Scenario: check edit mode for draft voucher on ended reservation
-      Given successfully create a voucher of type "Draft" amount "200" payment Method "Cash" maturity Date "15122025" and Creatian Date ""
+      Given successfully create a voucher of type "Draft" amount "less than balance" payment Method "Cash" maturity Date "15122025" and Creatian Date ""
       And Choose Reservation Status as "Checked-Out"
       When go to Draft Vouchers Page
       Then Check "Draft" Voucher with state "ended" edit mode
+
+    Scenario: Check edit mode for payed digital vouchers on a reservation
+      Given create PayTabs link for receipt Voucher with "ReceiptVoucher" and generate link with "PayTabs" amount 200 and purpose ""
+      And open the link and pay it successfully
+      And Close the open popup
+      Then Check "GenReceipt" Voucher with state "Generated" edit mode
 
   Rule: Drafts Collection
 
@@ -109,7 +115,7 @@ Feature: Vouchers
     Background:
       Given go to Receipt Vouchers Page
       And open the digital payment popup
-#Todo Check the code Works (Run and See)
+
     Scenario: Check edit mode for auto Generated Vucher after successfull Paytabs operation
       Given succesfully create a stand alone voucher with "PayTabs" amount 200 purpose "Checking auto generated receipts" Guest "RANDOM"
       And open the link and pay it successfully

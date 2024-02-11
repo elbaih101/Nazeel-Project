@@ -10,6 +10,7 @@ import java.util.List;
 
 @SuppressWarnings("unused")
 public class P09_BaseRatePage {
+    //Todo : finish the Base Rate page automation
 
     public P09_BaseRatePage() {
         PageFactory.initElements(Hooks.driver, this);
