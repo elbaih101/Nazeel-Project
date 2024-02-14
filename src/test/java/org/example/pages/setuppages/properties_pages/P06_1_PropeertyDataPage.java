@@ -52,7 +52,11 @@ public class P06_1_PropeertyDataPage {
  public List<WebElement> propertyClass()
  {
     propertyClassificationSelectionBox.click();
-
+     try {
+         Thread.sleep(300);
+     } catch (InterruptedException e) {
+         e.printStackTrace();
+     }
      return genralListBox.findElements(By.xpath("//li[@role=\"option\"]"));
  }
  public List<WebElement> unitClass()

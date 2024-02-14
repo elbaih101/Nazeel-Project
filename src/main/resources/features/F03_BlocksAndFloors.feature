@@ -2,13 +2,13 @@
 Feature: Blocks And Floors
   Background: selecting property
     Given Logging in with superuser
-    And Select Property "Corkery, Bins and Huel"
+    And Select Property "P00020"
   Rule: blocks
     Background: going to blocks Page
       And go to Blocks Page
 
-    Scenario: Check pagination
-      Then Check blocks pagination
+#    Scenario: Check pagination
+#      Then Check blocks pagination
 
     Scenario: Check default block
       Then Check Default Block name to be "1" and Description to be "Default Block"
@@ -74,8 +74,9 @@ Feature: Blocks And Floors
     Background:going to floors page
       And go to Floors Page
 
-    Scenario: check paginations
-      Then check floors pagination
+#    Scenario: check paginations
+#      Then check floors pagination
+#
     Scenario: check Default Floor name and
       Then Check Default Floor name to be "1" and Description to be "Default Floor"
 

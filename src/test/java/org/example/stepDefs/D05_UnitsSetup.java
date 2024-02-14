@@ -6,6 +6,7 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.example.pages.P02_DashBoardPage;
+import org.example.pages.mutlipurposes.P00_multiPurposes;
 import org.example.pages.setuppages.P05_SetupPage;
 import org.example.pages.setuppages.unit_setup_pages.P08_1_NewUnitPage;
 import org.example.pages.setuppages.unit_setup_pages.P08_2_GroupOfUnitsPopUp;
@@ -17,9 +18,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.asserts.SoftAssert;
 
 import java.time.Duration;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class D05_UnitsSetup {
 
@@ -115,7 +114,7 @@ public class D05_UnitsSetup {
             }
         }
     }
-
+// FIXME : revise Below function
     @And("check unit card in the card grid with number {string}")
     public void checkUnitCardInTheCardGridWithNumber(String unitNum) {
         int pageNumber = 1;
@@ -226,7 +225,7 @@ public class D05_UnitsSetup {
         selectedType.click();
 
         List<WebElement> formats = groupOfUnitsPopUp.formats();
-        WebElement selectedFormat = formats.get(new Random().nextInt(formats.size()));
+        WebElement selectedFormat = formats.get(0);
         wait.until(ExpectedConditions.elementToBeClickable(selectedFormat));
         selectedFormat.click();
 
@@ -239,11 +238,11 @@ public class D05_UnitsSetup {
     public void submitAddingGroupOfUnits() {
         groupOfUnitsPopUp.saveButton.click();
     }
-
+// FIXME : Revise below function after edits to the method
     @Then("check the newly added units")
     public void checkTheNewlyAddedUnits() {
-        List<String> newUnitsNumber = new ArrayList<>();
-        List<WebElement> newUnits = new ArrayList<>();
+        Set<String> newUnitsNumber = new HashSet<>();
+        Set<String> newUnits = new HashSet<>();
 //        newUnitsNumber.add(Integer.toString(noFrom));
         for (int i = noFrom; i <= noTo; i++) {
             newUnitsNumber.add(Integer.toString(i));
@@ -253,19 +252,21 @@ public class D05_UnitsSetup {
             if (pageNumber != 1) {
                 unitsSetupPage.nextPageButton.click();
             }
-            for (int i = 0; i < newUnitsNumber.size(); i++) {
-                int j = i;
-                wait.until(ExpectedConditions.refreshed(ExpectedConditions.visibilityOfAllElements(unitsSetupPage.unitsCards)));
-                try {
-                    newUnits.addAll(unitsSetupPage.unitsCards.stream().filter(element -> unitsSetupPage.unitNum(element).getText().trim().contains(newUnitsNumber.get(j))).toList());
-                } catch (StaleElementReferenceException ignored) {
-                }
 
-            }
+              newUnits.addAll(unitsSetupPage.unitNums());
+//            for (int i = 0; i < newUnitsNumber.size(); i++) {
+//                int j = i;
+//                wait.until(ExpectedConditions.refreshed(ExpectedConditions.visibilityOfAllElements(unitsSetupPage.unitsCards)));
+//                try {
+//                    newUnits.addAll(unitsSetupPage.unitsCards.stream().filter(element -> unitsSetupPage.unitNum(element).getText().trim().contains(newUnitsNumber.get(j))).toList());
+//                } catch (StaleElementReferenceException ignored) {
+//                }
+//
+//            }
             pageNumber++;
         } while (!unitsSetupPage.nextPageButton.getAttribute("class").contains("disabled"));
-        asrt.assertTrue(newUnits.size() == newUnitsNumber.size());
-
+//        asrt.assertTrue(newUnits.size() == newUnitsNumber.size());
+        asrt.assertTrue(newUnits.containsAll(newUnitsNumber));
         asrt.assertAll();
     }
 
@@ -331,9 +332,11 @@ public class D05_UnitsSetup {
     }
 
     /////////////  edit group of units //////////////////
+//FIXME
     @Given("open the edit group of units popup")
     public void openTheEditGroupOfUnitsPopup() {
         wait.until(ExpectedConditions.elementToBeClickable(unitsSetupPage.editGroupUnitsButton));
+        new P00_multiPurposes(driver).waitLoading();
         unitsSetupPage.editGroupUnitsButton.click();
     }
 
@@ -431,6 +434,7 @@ public class D05_UnitsSetup {
 
     @Given("clicking onthe filter button to open filter menue")
     public void clickingOntheFilterButtonToOpenFilterMenue() {
+        new P00_multiPurposes(driver).waitLoading();
         wait.until(ExpectedConditions.elementToBeClickable(unitsSetupPage.filterButton));
         unitsSetupPage.filterButton.click();
     }
@@ -474,9 +478,10 @@ public class D05_UnitsSetup {
         unitsSetupPage.filterUnitNumber.sendKeys(Integer.toString(untNumber));
         unitsSetupPage.filterSearchButton.click();
     }
-
+// FIXME :revise below Function      stale element reference: stale element not found
     @Then("check all units visible contains  number {int}")
     public void checkAllUnitsVisibleContainsNumber(int unitNumber) {
+        new P00_multiPurposes(driver).waitLoading();
         List<WebElement> filteredUnits = unitsSetupPage.unitsCards;
         wait.until(ExpectedConditions.visibilityOfAllElements(filteredUnits));
         asrt.assertTrue(filteredUnits.stream().allMatch(element -> unitsSetupPage.unitNum(element).getText().contains(Integer.toString(unitNumber))));

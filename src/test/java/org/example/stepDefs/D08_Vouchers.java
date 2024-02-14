@@ -226,7 +226,7 @@ public class D08_Vouchers {
         for (String s : vouchersNums) {
             try {
 //todo : pay tabs Generated Voucher button and number from the digital paytsabs report
-
+                multiPurposes.waitLoading();
                 if (voucherState.equalsIgnoreCase("Ended") || voucherState.equalsIgnoreCase("CashDrop") || voucherState.equalsIgnoreCase("Created")) {
                     vouchersPage.editButton(vouchersPage.vouchersNums.stream().filter(num -> num.getText().equalsIgnoreCase(s)).toList().get(0), voucherType).click();
                 } else if (voucherState.equalsIgnoreCase("Collected")) {

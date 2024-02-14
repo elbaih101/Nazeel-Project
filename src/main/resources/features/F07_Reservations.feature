@@ -3,7 +3,7 @@ Feature: Making Reservation with Nazeel PMS (web application)
   Background:
 #   Given Logging in with end user "elbaih" "Aa@123456" '00726'
     Given Logging in with superuser
-    And Select Property "Boyle-Adams"
+    And Select Property "P00020"
     And open reservations Page
 
   Scenario:Create confirmed Reservation

@@ -3,7 +3,7 @@ Feature: Unit Setup
 
   Background: selecting property
     Given Logging in with superuser
-    And Select Property "Boyle-Adams"
+    And Select Property "P00020"
 
   Rule:masterdata
     Background: going to units master data

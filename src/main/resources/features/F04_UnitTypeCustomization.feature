@@ -2,7 +2,7 @@
 Feature: unit Type Customization
   Background: selecting property
     Given Logging in with superuser
-    And Select Property "Corkery, Bins and Huel"
+    And Select Property "P00020"
   Rule: customization
     Background: going to the customization page
       And go to unit type customization page

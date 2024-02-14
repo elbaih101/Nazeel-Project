@@ -116,6 +116,7 @@ JavascriptExecutor js=(JavascriptExecutor) driver;
         delteUnitTyeDescription = typeCustomization.unitTypeDescription(unitTypeName).getText();
         wait.until(ExpectedConditions.elementToBeClickable(typeCustomization.moreMenuButton(unitTypeName)));
         typeCustomization.moreMenuButton(unitTypeName).click();
+        // FIXME  org.openqa.selenium.ElementClickInterceptedException: element click intercepted: Element <div _ngcontent-tix-c1074="" translate="" class="popup__item popup__item--red ng-star-inserted">...</div> is not clickable at point (1787, 312). Other element would receive the click: <button _ngcontent-tix-c1074="" kendobutton="" class="button--primary n-table-action k-button ng-star-inserted" tabindex="0" role="button" aria-disabled="false" dir="ltr">...</button>
         typeCustomization.unitTypeDeleteButton.click();
     }
 
@@ -152,7 +153,7 @@ JavascriptExecutor js=(JavascriptExecutor) driver;
         wait.until(ExpectedConditions.elementToBeClickable(masterData.unitsTypes));
         masterData.unitsTypes.click();
     }
-
+//FIXME : revise the below function
     @Given("click on filter button and enter name of type {string} and status {string} and click search")
     public void clickOnFilterButtonAndEnterNameOfTypeAndStatusAndClickSearch(String typeName, String status) {
         wait.until(ExpectedConditions.elementToBeClickable(masterUnitsTypes.filterButton));
@@ -171,7 +172,9 @@ JavascriptExecutor js=(JavascriptExecutor) driver;
 
     @Then("Check the grid contains only types with names {string} and statues {string}")
     public void checkTheGridContainsOnlyTypesWithNamesAndStatues(String typeName, String status) {
+        new P00_multiPurposes(driver).waitLoading();
         if (!typeName.isEmpty())
+
             asrt.assertFalse(masterUnitsTypes.typesNames.stream().anyMatch(element -> !element.getText().toLowerCase().contains(typeName.toLowerCase())), "wrong type name");
         if (!status.isEmpty())
             asrt.assertFalse(masterUnitsTypes.typesStatuses.stream().anyMatch(element -> !element.getText().equalsIgnoreCase(status)), "wrong status");
@@ -212,12 +215,12 @@ wait.until(ExpectedConditions.visibilityOf(masterUnitsTypes.typeNameField()));
 
     @Given("click on delete button for unit type associated with units")
     public void clickOnDeleteButtonForUnitTypeAssociatedWithUnits() {
+        new P00_multiPurposes(driver).waitLoading();
         masterUnitsTypes.moreActions(masterUnitsTypes.typesNames.get(0)).stream().filter(element -> element.getText().trim().equalsIgnoreCase("delete")).toList().get(0).click();
         wait.until(ExpectedConditions.elementToBeClickable(masterUnitsTypes.confirmDeleteButton()));
         masterUnitsTypes.confirmDeleteButton().click();
 
     }
-
     @Given("create a unit type {string}")
     public void createAUnitType(String typeName) {
         if (typeName.equalsIgnoreCase("RANDOM")) {

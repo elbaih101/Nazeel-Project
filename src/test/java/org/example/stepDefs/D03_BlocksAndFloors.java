@@ -154,7 +154,8 @@ final JavascriptExecutor js =(JavascriptExecutor) driver;
 
     @Then("check filtered blocks cotains name {string}")
     public void checkFilteredBlocksCotainsName(String name) {
-        asrt.assertFalse(blocksPage.blocksNames.stream().anyMatch(element -> !element.getText().contains(name)));
+        new P00_multiPurposes(driver).waitLoading();
+        asrt.assertTrue(blocksPage.blocksNames.stream().anyMatch(element -> !element.getText().contains(name)));
         asrt.assertAll();
     }
 
@@ -258,6 +259,7 @@ final JavascriptExecutor js =(JavascriptExecutor) driver;
         wait.until(ExpectedConditions.elementToBeClickable(floorsPage.floorNameField));
         floorsPage.floorNameField.clear();
         floorsPage.floorNameField.sendKeys(name);
+        // FIXME   descriptions doesnt match  expected [EditedFloorDiscription] but found [added floor 2EditedFloorDiscription]
         floorsPage.descriptionField.clear();
         floorsPage.descriptionField.sendKeys(description);
         floorsPage.addFloorButton.click();

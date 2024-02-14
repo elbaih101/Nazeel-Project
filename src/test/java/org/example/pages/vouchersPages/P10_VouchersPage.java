@@ -63,7 +63,7 @@ public class P10_VouchersPage {
 
     //Grid //
 
-    //todo : dont forget the error
+    //FIXME : dont forget the error
     public List<WebElement> moreActions(WebElement voucherAmount, String voucherType) {
         WebElement moreMenu = null;
         if (voucherType.equalsIgnoreCase(Vouchers.Draft.toString())) {

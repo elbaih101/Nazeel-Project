@@ -3,7 +3,7 @@ Feature: Vouchers
 
   Background:  login and choose property
     Given Logging in with superuser
-    And Select Property "P00166"
+    And Select Property "P00020"
   Rule:Reservations Related Receipt Vouchers
     Background:
       Given open reservations Page

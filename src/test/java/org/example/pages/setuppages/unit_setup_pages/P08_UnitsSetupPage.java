@@ -13,7 +13,10 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 @SuppressWarnings("unused")
@@ -31,7 +34,7 @@ public class P08_UnitsSetupPage {
         actions = new Actions(driver);
     }
 
-    public P08_UnitsSetupPage(WebDriver driver) {
+public P08_UnitsSetupPage(WebDriver driver) {
         PageFactory.initElements(driver, this);
         this.driver = driver;
         wait = new WebDriverWait(driver, Duration.ofSeconds(10));
@@ -68,7 +71,13 @@ public class P08_UnitsSetupPage {
     //    public WebElement unitCardInactivFlag(WebElement unitCard) {
 //        return unitCard.findElement(By.xpath("//div[@class=\"unit-card__flags\"]//*[name()='svg']"));
 //    }
+public Set<String> unitNums (){
+    List <WebElement> unitNumsElements = driver.findElements(By.xpath("//p[@class=\"unit-card__no\"]"));
+    Set<String>unitNums = new HashSet<>();
 
+    unitNumsElements.forEach(element -> unitNums.add(element.getText()));
+    return unitNums;
+}
     public WebElement unitNum(WebElement unitCard) {
        WebElement unitNum =unitCard.findElement(By.xpath(".//p[@class=\"unit-card__no\"]"));
         if (unitNum.getText().contains("..")){
