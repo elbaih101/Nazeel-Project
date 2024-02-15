@@ -34,7 +34,7 @@ public class P06_1_PropeertyDataPage {
     @FindBy(xpath = "//kendo-combobox[@name=\"propertyAccount\"]/span/span/span")
      WebElement propertAccountSelectionBox;
 
-    @FindBy(xpath = "//input[@role=\"spinbutton\"]")
+    @FindBy(xpath = "//label[contains(text(),\"Units\")] /following-sibling::kendo-numerictextbox//input[@role=\"spinbutton\"]")
     public WebElement numberOfUnitsField;
 
     @FindBy(xpath = " //label[contains(text(),\"Property Classification\")]/following-sibling::kendo-combobox[@name=\"Classification\"]/span/span/span")

@@ -115,8 +115,8 @@ JavascriptExecutor js=(JavascriptExecutor) driver;
         delteUnitTyeName = unitTypeName;
         delteUnitTyeDescription = typeCustomization.unitTypeDescription(unitTypeName).getText();
         wait.until(ExpectedConditions.elementToBeClickable(typeCustomization.moreMenuButton(unitTypeName)));
+        new P00_multiPurposes(driver).waitLoading();
         typeCustomization.moreMenuButton(unitTypeName).click();
-        // FIXME  org.openqa.selenium.ElementClickInterceptedException: element click intercepted: Element <div _ngcontent-tix-c1074="" translate="" class="popup__item popup__item--red ng-star-inserted">...</div> is not clickable at point (1787, 312). Other element would receive the click: <button _ngcontent-tix-c1074="" kendobutton="" class="button--primary n-table-action k-button ng-star-inserted" tabindex="0" role="button" aria-disabled="false" dir="ltr">...</button>
         typeCustomization.unitTypeDeleteButton.click();
     }
 

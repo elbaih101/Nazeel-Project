@@ -130,11 +130,10 @@ public class D02_CreateProperty {
         propeertyDataPage.propertyNameField.sendKeys(propertyName);
         propeertyDataPage.propertyType().get(0).click();
         propeertyDataPage.unitClass().get(0).click();
-       // WebElement selection = propeertyDataPage.propertyAccount().get(0);
-        //wait.until(ExpectedConditions.elementToBeClickable(selection));
-        //selection.click();
-       // propeertyDataPage.numberOfUnitsField.sendKeys("80");
+
+
         propeertyDataPage.propertyClass().get(0).click();
+        subscriptionPage.salesman().get(0).click();
         propeertyDataPage.nextButton.click();
     }
 
@@ -182,7 +181,10 @@ public class D02_CreateProperty {
         subscriptionPage.startingAmountField.sendKeys("8000");
         subscriptionPage.startingAmountTaxField.sendKeys("800");
         subscriptionPage.annualRenewalPriceField.sendKeys("18");
-        subscriptionPage.salesman().get(0).click();
+         WebElement selection = propeertyDataPage.propertyAccount().get(0);
+        wait.until(ExpectedConditions.elementToBeClickable(selection));
+        selection.click();
+         propeertyDataPage.numberOfUnitsField.sendKeys("80");
         subscriptionPage.commentField.sendKeys("some comment");
         subscriptionPage.nextButton.click();
     }
