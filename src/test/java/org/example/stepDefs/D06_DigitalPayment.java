@@ -179,7 +179,7 @@ public class D06_DigitalPayment {
     @Given("succesfully create a stand alone voucher with {string} amount {int} purpose {string} Guest {string}")
     public void succesfullyCreateAStandAloneVoucherWithAmountPuposeGuest(String service, int amount, String purpose, String guest) {
         openTheGeneratePayLinkTabAndGenerateLinkWithAmountAndPurposeAndGuest(Vouchers.SAReceipt.toString(), service, amount, purpose);
-       openGuestSelection();
+        openGuestSelection();
         selectGuest(guest, "", "");
         clickGenerateAndCheckToastMessage("Saved Successfully");
         checkTheLinkIsGeneratedInTheLinkField();
@@ -246,7 +246,7 @@ public class D06_DigitalPayment {
         smsLogPage.viewButton.click();
 
         DateTimeFormatter dateFormater = DateTimeFormat.forPattern("dd/MM/yyyy hh:mm a");
-
+        multiPurposes.waitLoading();
         List<WebElement> sentMsg = smsLogPage.paytabsMessages().stream().filter(msg -> smsLogPage.msgRecepient(msg).getText().equalsIgnoreCase(selectedguestName) && sendDate.isBefore(dateFormater.parseDateTime(smsLogPage.msgSendDate(msg).getText().trim()))
         ).toList();
         System.out.println(smsLogPage.msgBody(sentMsg.get(0)).getText().trim());

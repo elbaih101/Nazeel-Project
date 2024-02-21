@@ -19,7 +19,9 @@ public class P02_DashBoardPage {
         PageFactory.initElements(driver, this);
     }
 
-    @FindBy(css = "a[class=\"n-sidebar__item ng-star-inserted\"]")
+    @FindBy(xpath = "//div[@class=\"n-topbar__logo ng-star-inserted\"]")
+    public WebElement homePageLink;
+    @FindBy(xpath = "//a[@href=\"/reservations\"]")
     public WebElement ReservationsLink;
     @FindBy(xpath = "//Button[contains(text(),\"Close\")]")
     public WebElement closeAnnouncementButton;

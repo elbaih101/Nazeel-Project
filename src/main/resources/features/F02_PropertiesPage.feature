@@ -14,4 +14,3 @@ Feature: property Page
     And Finish the Summary
     Then Check new property is created
 
-# FIXME rearangement of elements change in the step def

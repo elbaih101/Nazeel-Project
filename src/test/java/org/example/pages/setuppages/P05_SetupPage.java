@@ -9,10 +9,12 @@ import org.openqa.selenium.support.PageFactory;
 @SuppressWarnings("unused")
 public class P05_SetupPage {
 
-    public P05_SetupPage(WebDriver driver){
-        PageFactory.initElements(driver,this);
-    }   public P05_SetupPage(){
-        PageFactory.initElements(Hooks.driver,this);
+    public P05_SetupPage(WebDriver driver) {
+        PageFactory.initElements(driver, this);
+    }
+
+    public P05_SetupPage() {
+        PageFactory.initElements(Hooks.driver, this);
     }
 
 
@@ -34,12 +36,18 @@ public class P05_SetupPage {
 
     @FindBy(xpath = "//a[@href=\"/units-management/unit-type-customization\"]")
     public WebElement typeCustomizationLink;
-  @FindBy(xpath = "//a[@href=\"/units-management/unit-setup\"]")
+    @FindBy(xpath = "//a[@href=\"/units-management/unit-setup\"]")
     public WebElement unitSetupLink;
+    @FindBy(xpath = "//a[@href=\"/financial/base-rate/edit\"]")
+    public WebElement baseRateLink;
+    @FindBy(xpath = "//a[@href=\"/financial/seasonal-rates\"]")
+    public WebElement seasonalRateLink;
+ @FindBy(xpath = "//a[@href=\"/financial/special-rates\"]")
+    public WebElement specialRateLink;
 
     @FindBy(xpath = "//span[contains(text(),\"Reporting\")]")
     public WebElement printingDropList;
-  @FindBy(xpath = "//a[@href=\"/reporting/printing-options\"]")
+    @FindBy(xpath = "//a[@href=\"/reporting/printing-options\"]")
     public WebElement printingOptionLink;
 
 

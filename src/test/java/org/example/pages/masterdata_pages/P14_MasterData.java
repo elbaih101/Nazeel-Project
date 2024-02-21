@@ -31,7 +31,11 @@ public class P14_MasterData {
 
     @FindBy(xpath = "//span[contains(text(),\"Units\")]")
     public WebElement unitsDropList;
+    @FindBy(xpath = "//span[contains(text(),\"Services\")]")
+    public WebElement servicesDropList;
     @FindBy(xpath = "//a[@href=\"/master-amenities/unitsTypes\"]")
-    public WebElement unitsTypes;
+    public WebElement unitsTypesLink;
+    @FindBy(xpath = "//a[@href=\"/subscription-management/Subscriptions-Prices\"]")
+    public WebElement subscriptionsPricesLink;
 
 }

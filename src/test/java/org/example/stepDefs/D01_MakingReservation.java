@@ -4,6 +4,7 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.example.Utils;
 import org.example.pages.P01_LoginPage;
 import org.example.pages.P02_DashBoardPage;
 import org.example.pages.mutlipurposes.P00_multiPurposes;
@@ -21,12 +22,15 @@ import java.util.List;
 import java.util.Random;
 
 public class D01_MakingReservation {
-     WebDriver driver = Hooks.driver;
+    WebDriver driver = Hooks.driver;
 
-  public   D01_MakingReservation(){}
-    public D01_MakingReservation(WebDriver debugDriver){
+    public D01_MakingReservation() {
+    }
+
+    public D01_MakingReservation(WebDriver debugDriver) {
         this.driver = debugDriver;
     }
+
     final P01_LoginPage loginPage = new P01_LoginPage();
     final P02_DashBoardPage homePage = new P02_DashBoardPage();
     final JavascriptExecutor js = (JavascriptExecutor) driver;
@@ -40,13 +44,13 @@ public class D01_MakingReservation {
 
     @And("open reservations Page")
     public void openReservationsPage() {
-        wait.until(ExpectedConditions.elementToBeClickable(homePage.ReservationsLink));
-        try {
-            Thread.sleep(300);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        homePage.ReservationsLink.click();
+
+       // homePage.homePageLink.click();
+       // new P00_multiPurposes(driver).waitLoading();
+       // wait.until(ExpectedConditions.refreshed(ExpectedConditions.elementToBeClickable(homePage.ReservationsLink)));
+           //     homePage.ReservationsLink.click();
+        js.executeScript("arguments[0].click();",  homePage.ReservationsLink);
+        new P00_multiPurposes(driver).waitLoading();
     }
 
     @When("Click on Add new Reservation")
@@ -95,8 +99,7 @@ public class D01_MakingReservation {
         unitCaerd.click();
         WebElement confirmBtn = unitSelectionPopup.confirmBtn;
 //        wait.until(ExpectedConditions.attributeToBe(confirmBtn,"disabled","null"));
-        if (!unitSelectionPopup.checkInConflictionConfirmBtn.isEmpty())
-        {
+        if (!unitSelectionPopup.checkInConflictionConfirmBtn.isEmpty()) {
             unitSelectionPopup.checkInConflictionConfirmBtn.get(0).click();
         }
         confirmBtn.click();
@@ -195,27 +198,27 @@ public class D01_MakingReservation {
     }
 
     void endReservation(String status) {
-        if (status.toLowerCase().contains("Out".toLowerCase())){
-        endReservationPopUp.confirmCheckOutButton.click();
+        if (status.toLowerCase().contains("Out".toLowerCase())) {
+            endReservationPopUp.confirmCheckOutButton.click();
 
-        while (!endReservationPopUp.header().isEmpty())
-            try {
-                if (endReservationPopUp.skipButton().isDisplayed()) {
-                    wait.until(ExpectedConditions.refreshed(ExpectedConditions.elementToBeClickable(endReservationPopUp.skipButton())));
+            while (!endReservationPopUp.header().isEmpty())
+                try {
+                    if (endReservationPopUp.skipButton().isDisplayed()) {
+                        wait.until(ExpectedConditions.refreshed(ExpectedConditions.elementToBeClickable(endReservationPopUp.skipButton())));
+                        new P00_multiPurposes(driver).waitLoading();
+                        endReservationPopUp.skipButton().click();
+                    }
+                } catch (NoSuchElementException e) {
+
+                    List<WebElement> methods = endReservationPopUp.paymentMethods();
+                    wait.until(ExpectedConditions.visibilityOfAllElements(methods));
+                    methods.stream().filter(method -> method.getText().contains("Cash")).toList().get(0).click();
                     new P00_multiPurposes(driver).waitLoading();
-                    endReservationPopUp.skipButton().click();
+                    endReservationPopUp.confirmationButton().click();
+                    wait.until(ExpectedConditions.refreshed(ExpectedConditions.visibilityOf(endReservationPopUp.amountField())));
                 }
-            } catch (NoSuchElementException e) {
-
-                List<WebElement> methods = endReservationPopUp.paymentMethods();
-                wait.until(ExpectedConditions.visibilityOfAllElements(methods));
-                methods.stream().filter(method -> method.getText().contains("Cash")).toList().get(0).click();
-                new P00_multiPurposes(driver).waitLoading();
-                endReservationPopUp.confirmationButton().click();
-                wait.until(ExpectedConditions.refreshed(ExpectedConditions.visibilityOf(endReservationPopUp.amountField())));
-            }}
-
-     else if(status.toLowerCase().contains("Canceled".toLowerCase())){endReservationPopUp.confirmCancelButton().click();
+        } else if (status.toLowerCase().contains("Canceled".toLowerCase())) {
+            endReservationPopUp.confirmCancelButton().click();
             while (!endReservationPopUp.header().isEmpty())
                 try {
                     if (endReservationPopUp.skipButton().isDisplayed()) {
@@ -232,7 +235,8 @@ public class D01_MakingReservation {
                     new P00_multiPurposes(driver).waitLoading();
                     endReservationPopUp.confirmationButton().click();
                     wait.until(ExpectedConditions.refreshed(ExpectedConditions.visibilityOf(endReservationPopUp.amountField())));
-                }}
+                }
+        }
 
     }
 
@@ -252,4 +256,16 @@ public class D01_MakingReservation {
     }
 
 
+    @And("elect start date {string} and end Date {string}")
+    public void electStartDateAndEndDate(String sDate, String eDate) {
+        new P00_multiPurposes(driver).waitLoading();
+        Utils.setDate(reservationMainDataPage.startDateField, sDate);
+        Utils.setDate(reservationMainDataPage.endDateField, eDate);
+    }
+
+    @Then("Check the rent to equal {string}")
+    public void checkTheRentToEqual(String rate) {
+        asrt.assertEquals(rate, reservationMainDataPage.renttotal.getText());
+        asrt.assertAll();
+    }
 }

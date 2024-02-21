@@ -10,7 +10,6 @@ import org.example.pages.P02_DashBoardPage;
 import org.example.pages.masterdata_pages.P14_MasterData;
 import org.example.pages.masterdata_pages.P15_MasterUnitsTypes;
 import org.example.pages.mutlipurposes.P00_multiPurposes;
-import org.example.pages.setuppages.P04_BlocksPage;
 import org.example.pages.setuppages.P05_SetupPage;
 import org.example.pages.setuppages.unit_setup_pages.P07_UnitTypeCustomization;
 import org.openqa.selenium.JavascriptExecutor;
@@ -150,8 +149,8 @@ JavascriptExecutor js=(JavascriptExecutor) driver;
         dashBoardPage.masterDataLink.get(0).click();
         wait.until(ExpectedConditions.elementToBeClickable(masterData.unitsDropList));
         masterData.unitsDropList.click();
-        wait.until(ExpectedConditions.elementToBeClickable(masterData.unitsTypes));
-        masterData.unitsTypes.click();
+        wait.until(ExpectedConditions.elementToBeClickable(masterData.unitsTypesLink));
+        masterData.unitsTypesLink.click();
     }
 //FIXME : revise the below function
     @Given("click on filter button and enter name of type {string} and status {string} and click search")

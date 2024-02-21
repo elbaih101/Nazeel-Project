@@ -1,6 +1,7 @@
 package org.example.stepDefs;
 
 import io.cucumber.java.en.And;
+import io.cucumber.java.en.Given;
 import org.example.pages.mutlipurposes.P00_multiPurposes;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
@@ -27,4 +28,6 @@ public class D00_multipurpose {
         wait.until(ExpectedConditions.elementToBeClickable(closeButton));
         closeButton.click();
     }
+
+
 }

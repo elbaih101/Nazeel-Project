@@ -3,7 +3,7 @@ Feature: PayTabs integration
 
   Background:
     Given Logging in with superuser
-    And Select Property "P00166"
+    And Select Property "P00020"
 
 
   Rule: Receipt Vouchers
@@ -88,6 +88,6 @@ Feature: PayTabs integration
   ##TODO :: report actions
 
 
-    Scenario: check created stand alone voucher is logged in the paytabs log
-      Given succesfully create a stand alone voucher with "PayTabs" amount 200 purpose "Checking SMS button" Guest "RANDOM"
+#    Scenario: check created stand alone voucher is logged in the paytabs log
+#      Given succesfully create a stand alone voucher with "PayTabs" amount 200 purpose "Checking SMS button" Guest "RANDOM"
 

@@ -27,6 +27,7 @@ import org.testng.asserts.SoftAssert;
 
 import java.time.Duration;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -368,5 +369,20 @@ public class D08_Vouchers {
         }
         wait.until(ExpectedConditions.elementToBeClickable(vouchersPopUp.submitButton()));
         vouchersPopUp.submitButton().click();
+    }
+
+    @And("edit {string} Voucher with state {string} Payment method to {string}")
+    public void editVoucherPaymentMethodTo(String voucherType,String voucherState ,String newMethod) {
+        multiPurposes.waitLoading();
+        openEditModeForVoucher(voucherType, voucherState, voucherNums);
+        wait.withTimeout(Duration.ofSeconds(1));
+        PaymentMethods p= Arrays.stream(PaymentMethods.values()).filter(pM->pM.toString().toLowerCase().contains(newMethod.toLowerCase())).toList().get(0);
+        vouchersPopUp.paymentMethods().stream().filter(pM->pM.getText().equals(p.toString())).toList().get(0).click();
+        if (!p.equals(PaymentMethods.Cash))
+        {
+            vouchersPopUp.banks().get(0).click();
+        }
+    vouchersPopUp.submitButton().click();
+
     }
 }

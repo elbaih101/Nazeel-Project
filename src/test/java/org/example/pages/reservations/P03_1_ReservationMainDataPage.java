@@ -54,6 +54,14 @@ public class P03_1_ReservationMainDataPage {
     public WebElement checkoutMenuButton;
     @FindBy(xpath = "//kendo-popup//div[contains(text(),\"Cancel reservation\")]")
     public WebElement cancelReservationButton;
+    @FindBy(xpath = "//label[contains(text(),\"Check-in\")]/following-sibling::div//input")
+    public WebElement startDateField;
+
+    @FindBy(xpath = "//label[contains(text(),\"Check-out\")]/following-sibling::div//input")
+    public WebElement endDateField;
+
+    @FindBy(xpath = "//div[@class=\"financial-summary__title\"][contains(text(),\"Rent\")]/following-sibling::div")
+    public WebElement renttotal;
 
 
     //waitfor that

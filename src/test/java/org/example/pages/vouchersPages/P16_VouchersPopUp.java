@@ -1,6 +1,7 @@
 package org.example.pages.vouchersPages;
 
 import org.example.enums.Vouchers;
+import org.example.pages.mutlipurposes.P00_multiPurposes;
 import org.example.stepDefs.Hooks;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -99,7 +100,7 @@ public class P16_VouchersPopUp {
     public WebElement guestField(String voucherType) {
         if (voucherType.equalsIgnoreCase(Vouchers.Receipt.toString())) {
             return voucherPopUp.findElement(By.xpath(".//label[contains(text(),\"Received From\")]/following-sibling::div//input"));
-        } else if (voucherType.equalsIgnoreCase(Vouchers.Refund.toString())||voucherType.equalsIgnoreCase(Vouchers.DropCash.toString())) {
+        } else if (voucherType.equalsIgnoreCase(Vouchers.Refund.toString())||voucherType.equalsIgnoreCase(Vouchers.SDRefund.toString())||voucherType.equalsIgnoreCase(Vouchers.DropCash.toString())) {
             return voucherPopUp.findElement(By.xpath(".//label[contains(text(),\"Paid to\")]/following-sibling::div//input"));
         }else if (voucherType.equalsIgnoreCase(Vouchers.GenReceipt.toString())||voucherType.equalsIgnoreCase(Vouchers.SAReceipt.toString())){
             return voucherPopUp.findElement(By.xpath(".//label[contains(text(),\"Guest Name\")]/following-sibling::div//input"));
@@ -115,7 +116,12 @@ public class P16_VouchersPopUp {
     }
 
     public List<WebElement> paymentMethods() {
-        voucherPopUp.findElement(By.xpath(".//label[contains(text(),\"Payment\")]/following-sibling::kendo-combobox//span/span/span")).click();
+        voucherPopUp.findElement(By.xpath(".//label[contains(text(),\"Payment\")]/following-sibling::kendo-combobox//span/span")).click();
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         return genralListBox.findElements(By.xpath("//li[@role=\"option\"]"));
     }
 
@@ -126,7 +132,7 @@ public class P16_VouchersPopUp {
 
     public List<WebElement> banks() {
         voucherPopUp.findElement(By.xpath(".//label[contains(text(),\"Receiving Bank\")]/../following-sibling::kendo-combobox//span/span/span")).click();
-        return genralListBox.findElements(By.xpath("\"//li[@role=\\\"option\\\"]\""));
+        return genralListBox.findElements(By.xpath("//li[@role=\"option\"]"));
     }
 
     public WebElement submitButton() {

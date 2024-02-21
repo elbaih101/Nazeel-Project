@@ -97,3 +97,85 @@ Feature: Unit Setup
       Given clicking onthe filter button to open filter menue
       And select block "RANDOM" and floor "RANDOM" and filter
       Then  check the data presnet are related to the selected block
+
+
+  Rule: Base Rate Customization
+    Background:going to the Base Rate page
+      Given go to Base Rate Page
+      And open baseRate edit mode
+
+    Scenario: can't Save Without filling all rates Fields
+      And Clear fields
+      When clicking on save
+      Then Check toast mesage contains text "Please fill empty rates fields"
+
+
+    Scenario: successfully updating all base rates with valid inputs
+      When fill rates "all" with low "200" high "300" min "120" mon "1000" monmin "800"
+      And clicking on save
+      Then Check toast mesage contains text "Updated Successfully"
+
+    Scenario: high weekdays must be containuos
+      When selecting week day "mon"
+      Then check weekdays after next  or before previous "mon" are disabled
+
+    Scenario Outline:cant set the base rates with min greater than high or low
+      When fill rates "all" with low "200" high "300" min "<min>" mon "1000" monmin "800"
+      And clicking on save
+      Then Check toast mesage contains text "<msg>"
+
+      Examples:
+        | min | msg                                                                                                               |
+        | 201 | Min Rate' value must be lower than or equal to 'High Weekdays Rate' and 'Low Weekdays Rate' values for Daily Rate |
+        | 200 | Updated Successfull                                                                                               |
+
+  Rule:seasonal Rate Customization
+    Background:go to Seasonal Rate Page
+      Given open "Seasonal" Rate Page
+
+    Scenario Outline: seasonal Rates
+      Given open new rate page
+      And fill "seasonal" rate name "<rateName>" startDate "<sDate>" endDate "<eDate>" type "all" with low "200" high "300" min "<min>"
+      When clicking on save
+      Then Check toast mesage contains text "<msg>"
+      Examples:
+        | rateName                            | sDate    | eDate    | min | msg                                                                                                               |
+        | the new rate                        | 18022024 | 19022024 | 120 | Added Successfully                                                                                                |
+        | rate with name                      | 18022024 | 17022024 | 120 | Start date must be less than end date                                                                             |
+        | the new rate                        | 16022024 | 20022024 | 120 | Duplicated rate name                                                                                              |
+        | rate with min less than high or low | 16022024 | 20022024 | 201 | Min Rate' value must be lower than or equal to 'High Weekdays Rate' and 'Low Weekdays Rate' values for Daily Rate |
+
+  Rule:Special Rate Customization
+    Background:go to Special Rate Page
+      Given open "Special" Rate Page
+
+    Scenario Outline: Special Rates
+      Given open new rate page
+      And fill "special" rate name "<rateName>" startDate "<sDate>" endDate "<eDate>" type "all" with low "200" high "300" min "<min>"
+      When clicking on save
+      Then Check toast mesage contains text "<msg>"
+      Examples:
+        | rateName                            | sDate    | eDate    | min | msg                                                                                                               |
+        | the new rate                        | 18022024 | 19022024 | 120 | Added Successfully                                                                                                |
+        | rate with name                      | 18022024 | 17022024 | 120 | Start date must be less than end date                                                                             |
+        | the new rate                        | 16022024 | 20022024 | 120 | Duplicated rate name                                                                                              |
+        | rate with min less than high or low | 16022024 | 20022024 | 201 | Min Rate' value must be lower than or equal to 'High Weekdays Rate' and 'Low Weekdays Rate' values for Daily Rate |
+
+
+  Rule: Rates application priority
+    Scenario Outline: check the priority of rates to be applied
+      Given open "<rateType>" Rate Page
+      And open new rate page
+      And fill "<rateType>" rate name "<rateName>" startDate "<sDate>" endDate "<eDate>" type "all" with low "<low>" high "300" min "<min>"
+      When clicking on save
+      Then Check toast mesage contains text "<msg>"
+      And open reservations Page
+      When Click on Add new Reservation
+      And elect start date "<sDate>" and end Date "<eDate>"
+      And open unit selection Popup
+      And select a unit "RANDOM"
+      Then Check the rent to equal "<low>"
+      Examples:
+        | rateType | rateName      | sDate    | eDate    | low | min | msg                |
+        | seasonal | seasonal rate | 20022024 | 21022024 | 200 | 120 | Added Successfully |
+        | special  | special rate  | 20022024 | 21022024 | 300 | 100 | Added Successfully |
