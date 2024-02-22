@@ -46,9 +46,9 @@ public class P03_5_UnitSelectionPopup {
         return lockedCards;
     }
 
-    public List<WebElement> availableUnits() {
+    public WebElement availableUnits() {
         this.driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(1));
-        List<WebElement> availableCards=unitCards.stream().filter(card -> card.findElements(By.xpath(".//div[contains(@class,\"card__comments-flag\")]//*[name()='use' and contains(@*,\"lock\")]")).isEmpty()).toList();
+        WebElement availableCards=unitCards.stream().filter(card -> card.findElements(By.xpath(".//div[contains(@class,\"card__comments-flag\")]//*[name()='use' and contains(@*,\"lock\")]")).isEmpty()).findFirst().get();
         this.driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
         return availableCards;
     }

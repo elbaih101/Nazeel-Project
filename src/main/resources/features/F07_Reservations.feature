@@ -19,8 +19,8 @@ Feature: Making Reservation with Nazeel PMS (web application)
 
   Scenario: Create Checked in Reservation
     Given create a successfull reservation Source "RANDOM" purpose "RANDOM" Unit "RANDOM" Guest "RANDOM"
-    Then click on save Reservation button
-    And when reservation Summary dialouge appears click on save reservatuon Button
+#    Then click on save Reservation button
+#    And when reservation Summary dialouge appears click on save reservatuon Button
     And Choose Reservation Status as "Checked-In"
     And verify toast message appears with text "Saved Successfully" and the reservation status to be "Checked In"
 

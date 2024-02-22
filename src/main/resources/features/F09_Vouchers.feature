@@ -76,7 +76,6 @@ Feature: Vouchers
         | SD      | 200    | Cash   |       |       | ended  | cheque    | Canceled    |
 
 
-
     Scenario Outline: Check edit mode for Refund Vouchers
       Given successfully create a voucher of type "<vType>" amount "<amount>" payment Method "<method>" maturity Date "<mDate>" and Creatian Date "<cDate>"
       Given open Refund Vouchers tab
@@ -88,6 +87,19 @@ Feature: Vouchers
         | vType   | amount | method | mDate | cDate | rvType   | rvState | rState      |
         | Receipt | 200    | Cash   |       |       | Refund   | ended   | Checked-Out |
         | SD      | 200    | Cash   |       |       | SDRefund | ended   | Canceled    |
+
+    Scenario Outline: edit Refund Vouchers Payment Method
+      Given successfully create a voucher of type "<vType>" amount "<amount>" payment Method "<method>" maturity Date "<mDate>" and Creatian Date "<cDate>"
+      Given open Refund Vouchers tab
+      Given successfully create a voucher of type "<rvType>" amount "<amount>" payment Method "<method>" maturity Date "<mDate>" and Creatian Date "<cDate>"
+      And Choose Reservation Status as "<rState>"
+      When go to Payment Vouchers Page
+      And edit "<rvType>" Voucher with state "<rvState>" Payment method to "<newMethod>"
+      Then Check toast mesage contains text "Updated Successfully"
+      Examples:
+        | vType   | amount | method | mDate | cDate | rvType   | rvState | newMethod | rState      |
+        | Receipt | 200    | Cash   |       |       | Refund   | ended   | mada      | Checked-Out |
+        | SD      | 200    | Cash   |       |       | SDRefund | ended   | cheque    | Canceled    |
 
     # Todo : Switch some of the scenarios as no show
     Scenario: Check edit mode for payed digital vouchers on a reservation

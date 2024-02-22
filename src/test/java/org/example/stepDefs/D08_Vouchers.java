@@ -108,7 +108,7 @@ public class D08_Vouchers {
     public void submitTheVoucherAndCheckSuccessMessage(String prefix, String postfix) {
         wait.until(ExpectedConditions.elementToBeClickable(vouchersPopUp.submitButton()));
         vouchersPopUp.submitButton().click();
-        voucherNums.add(StringUtils.substringBetween(multiPurposes.toastMsg.getText().toLowerCase(), prefix.toLowerCase(), postfix.toLowerCase()));
+        voucherNums.add(0,StringUtils.substringBetween(multiPurposes.toastMsg.getText().toLowerCase(), prefix.toLowerCase(), postfix.toLowerCase()));
         try {
 
             new D03_BlocksAndFloors().checkToastMesageContainsText(prefix + voucherNums.get(i) + postfix);
@@ -230,8 +230,10 @@ public class D08_Vouchers {
                 multiPurposes.waitLoading();
                 if (voucherState.equalsIgnoreCase("Ended") || voucherState.equalsIgnoreCase("CashDrop") || voucherState.equalsIgnoreCase("Created")) {
                     vouchersPage.editButton(vouchersPage.vouchersNums.stream().filter(num -> num.getText().equalsIgnoreCase(s)).toList().get(0), voucherType).click();
+                    break;
                 } else if (voucherState.equalsIgnoreCase("Collected")) {
                     vouchersPage.editButton(vouchersPage.receitRelatedDrafts.stream().filter(num -> num.getText().equalsIgnoreCase(s)).toList().get(0), voucherType).click();
+                    break;
                 } else if (voucherState.equalsIgnoreCase("Generated")) {
                     //TODO : Check the Voucher number from the paytabs Report and use it
                     vouchersPage.editButton(vouchersPage.paymentMethods.stream().filter(method -> method.getText().equalsIgnoreCase("PayTabs")).toList().get(0), voucherType).click();
@@ -376,8 +378,8 @@ public class D08_Vouchers {
         multiPurposes.waitLoading();
         openEditModeForVoucher(voucherType, voucherState, voucherNums);
         wait.withTimeout(Duration.ofSeconds(1));
-        PaymentMethods p= Arrays.stream(PaymentMethods.values()).filter(pM->pM.toString().toLowerCase().contains(newMethod.toLowerCase())).toList().get(0);
-        vouchersPopUp.paymentMethods().stream().filter(pM->pM.getText().equals(p.toString())).toList().get(0).click();
+        PaymentMethods p= Arrays.stream(PaymentMethods.values()).filter(pM->pM.toString().toLowerCase().contains(newMethod.toLowerCase())).findFirst().get();
+        vouchersPopUp.paymentMethods().stream().filter(pM->pM.getText().equals(p.toString())).findFirst().get().click();
         if (!p.equals(PaymentMethods.Cash))
         {
             vouchersPopUp.banks().get(0).click();

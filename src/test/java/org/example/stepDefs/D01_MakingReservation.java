@@ -88,22 +88,22 @@ public class D01_MakingReservation {
     public void selectAUnit(String unit) {
 
         wait.until(ExpectedConditions.visibilityOf(reservationMainDataPage.panelBar));
-        List<WebElement> cards = unitSelectionPopup.availableUnits();
-        WebElement unitCaerd;
+
+       WebElement unitCard;
         if (unit.equalsIgnoreCase("RANDOM")) {
-            unitCaerd = cards.get(new Random().nextInt(cards.size()));
+            unitCard = unitSelectionPopup.availableUnits();
         } else {
-            unitCaerd = cards.get(new Random().nextInt(cards.size()));
+            unitCard =unitSelectionPopup.availableUnits();
         }
-        action.moveToElement(unitCaerd).perform();
-        unitCaerd.click();
+        action.moveToElement(unitCard).perform();
+        unitCard.click();
         WebElement confirmBtn = unitSelectionPopup.confirmBtn;
 //        wait.until(ExpectedConditions.attributeToBe(confirmBtn,"disabled","null"));
         if (!unitSelectionPopup.checkInConflictionConfirmBtn.isEmpty()) {
             unitSelectionPopup.checkInConflictionConfirmBtn.get(0).click();
         }
         confirmBtn.click();
-        wait.until(ExpectedConditions.invisibilityOf(unitCaerd));
+        wait.until(ExpectedConditions.invisibilityOf(unitCard));
     }
 
 
@@ -133,8 +133,7 @@ public class D01_MakingReservation {
     @And("verify toast message appears with text {string} and the reservation status to be {string}")
     public void verifyToastMessageAppearsWithTextAndTheReservationStatusToBe(String successText, String reservationState) {
         WebElement succesMessage = reservationMainDataPage.toastMessage;
-        wait.until(ExpectedConditions.visibilityOf(succesMessage));
-        asrt.assertTrue(succesMessage.getText().contains(successText), "wrong toast");
+        asrt.assertTrue(succesMessage.getText().contains(successText), "Expected toast: "+successText+"\n actual: "+succesMessage.getText()+"\n");
         new P00_multiPurposes(driver).waitLoading();
         WebElement resStatus = reservationMainDataPage.reservationStatus;
         asrt.assertEquals(resStatus.getText(), reservationState);
@@ -229,13 +228,18 @@ public class D01_MakingReservation {
                 } catch (NoSuchElementException e) {
                     endReservationPopUp.reasons().get(0).click();
                     endReservationPopUp.confirmationButton().click();
+                    if (endReservationPopUp.skipButton().isDisplayed()) {
+                        wait.until(ExpectedConditions.refreshed(ExpectedConditions.elementToBeClickable(endReservationPopUp.skipButton())));
+                        new P00_multiPurposes(driver).waitLoading();
+                        endReservationPopUp.skipButton().click();
+                    }else{
                     List<WebElement> methods = endReservationPopUp.paymentMethods();
                     wait.until(ExpectedConditions.visibilityOfAllElements(methods));
                     methods.stream().filter(method -> method.getText().contains("Cash")).toList().get(0).click();
                     new P00_multiPurposes(driver).waitLoading();
                     endReservationPopUp.confirmationButton().click();
                     wait.until(ExpectedConditions.refreshed(ExpectedConditions.visibilityOf(endReservationPopUp.amountField())));
-                }
+                }}
         }
 
     }

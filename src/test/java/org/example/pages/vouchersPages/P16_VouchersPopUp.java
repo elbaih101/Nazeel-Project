@@ -131,7 +131,7 @@ public class P16_VouchersPopUp {
     }
 
     public List<WebElement> banks() {
-        voucherPopUp.findElement(By.xpath(".//label[contains(text(),\"Receiving Bank\")]/../following-sibling::kendo-combobox//span/span/span")).click();
+        voucherPopUp.findElement(By.xpath(".//label[contains(text(),\"Bank\")]/../following-sibling::kendo-combobox//span/span/span")).click();
         return genralListBox.findElements(By.xpath("//li[@role=\"option\"]"));
     }
 
