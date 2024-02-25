@@ -272,4 +272,10 @@ public class D01_MakingReservation {
         asrt.assertEquals(rate, reservationMainDataPage.renttotal.getText());
         asrt.assertAll();
     }
+
+    @And("click on select corporate")
+    public void clickOnSelectCorporate() {
+        new P00_multiPurposes(driver).waitLoading();
+        reservationMainDataPage.selectCorporateButton.click();
+    }
 }
