@@ -88,7 +88,9 @@ public Set<String> unitNums (){
             }
         return unitNum;
     }
-
+public List <WebElement> unitMergeIcon(WebElement unitCard){
+    return unitCard.findElements(By.xpath(".//div[contains(@class,\"unit-card unit-setup\")]//div[contains(@class,\"unit-card__flags\")]//*[name()=\"use\" and @*=\"/assets/img/svg-icons.svg#icon-link2\"]"));
+}
     public WebElement unitType(WebElement unitCard) {
         return unitCard.findElement(By.xpath("//p[@class=\"unit-card__type\"]"));
     }

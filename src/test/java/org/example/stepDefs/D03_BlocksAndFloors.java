@@ -259,7 +259,6 @@ final JavascriptExecutor js =(JavascriptExecutor) driver;
         wait.until(ExpectedConditions.elementToBeClickable(floorsPage.floorNameField));
         floorsPage.floorNameField.clear();
         floorsPage.floorNameField.sendKeys(name);
-        // FIXME   descriptions doesnt match  expected [EditedFloorDiscription] but found [added floor 2EditedFloorDiscription]
         floorsPage.descriptionField.clear();
         floorsPage.descriptionField.sendKeys(description);
         floorsPage.addFloorButton.click();

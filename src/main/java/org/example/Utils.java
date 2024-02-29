@@ -31,6 +31,10 @@ public class Utils {
 
     public static boolean isEnabled(WebElement element) {
         boolean bol = true;
+        if (!element.isEnabled())
+        {
+            return false;
+        }
         try {
             element.findElement(By.xpath("./ancestor-or-self::*[contains(@class,\"k-state-disabled\")]"));
             bol=false;

@@ -36,12 +36,7 @@ public class D08_Vouchers {
 
     JavascriptExecutor js = (JavascriptExecutor) driver;
 
-    public D08_Vouchers() {
-    }
 
-    public D08_Vouchers(WebDriver driver) {
-        this.driver = driver;
-    }
 
     final SoftAssert asrt = new SoftAssert();
     final WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
@@ -133,7 +128,7 @@ public class D08_Vouchers {
         methods.stream().filter(method -> method.getText().contains(paymentMethod)).toList().get(0).click();
         multiPurposes.waitLoading();
         if (!paymentMethod.equalsIgnoreCase(PaymentMethods.Cash.toString()) && !paymentMethod.equalsIgnoreCase(PaymentMethods.PayTabs.toString())) {
-            vouchersPopUp.banks().get(new Random().nextInt(vouchersPopUp.banks().size()));
+            vouchersPopUp.banks().get(new Random().nextInt(vouchersPopUp.banks().size())).click();
         }
         vouchersPopUp.amountField().clear();
         vouchersPopUp.amountField().sendKeys(amount);
@@ -306,9 +301,9 @@ public class D08_Vouchers {
 
     @And("click on draft more menu and choose collect by {string} payment")
     public void clickOnDraftMoreMenuAndChooseCollectByPayment(String paymentMethod) {
-        //todo :: implement draft creation for easy testing
+
         if (paymentMethod.equalsIgnoreCase(PaymentMethods.Digital.toString())) {
-            List<WebElement> amountsOfDraftNotFullyPaid = vouchersPage.draftsRemainigAmounts().stream().filter(element -> Character.valueOf(element.getText().trim().charAt(0)).compareTo('0') != 0).toList();
+            List<WebElement> amountsOfDraftNotFullyPaid = vouchersPage.draftsRemainigAmounts().stream().filter(element -> Character.compare(element.getText().trim().charAt(0), '0') != 0).toList();
             WebElement selectedDraftAmount = amountsOfDraftNotFullyPaid.get(new Random().nextInt(amountsOfDraftNotFullyPaid.size()));
             vouchersPage.moreActions(selectedDraftAmount, "draft").stream().filter(element -> element.getText().trim().contains("Collect Via Digital Payment")).toList().get(0).click();
             D06_DigitalPayment.draftNo = digitalPaymentPage.draftNumber().getText();

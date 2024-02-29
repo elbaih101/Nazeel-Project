@@ -20,12 +20,7 @@ public class P03_5_UnitSelectionPopup {
     final WebDriverWait wait;
     final Actions actions;
 
-    public P03_5_UnitSelectionPopup() {
-        PageFactory.initElements(Hooks.driver, this);
-        this.driver = Hooks.driver;
-        wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        actions = new Actions(driver);
-    }
+
 
     public P03_5_UnitSelectionPopup(WebDriver driver) {
         PageFactory.initElements(driver, this);
@@ -33,7 +28,7 @@ public class P03_5_UnitSelectionPopup {
         wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         actions = new Actions(driver);
     }
-//todo :: finish the unit selection popup
+//todo :: add  units by type
 
     @FindBy(xpath = "//div[@class=\"usc-wid unit-card ng-star-inserted\"]")
     List<WebElement> unitCards;

@@ -4,20 +4,33 @@ import org.example.stepDefs.Hooks;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.time.Duration;
 import java.util.List;
 
 @SuppressWarnings("unused")
 public class P08_1_NewUnitPage {
 
+    final WebDriver driver;
+    final WebDriverWait wait;
+    final Actions actions;
+
     public P08_1_NewUnitPage() {
         PageFactory.initElements(Hooks.driver, this);
+        this.driver = Hooks.driver;
+        wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        actions = new Actions(driver);
     }
 
     public P08_1_NewUnitPage(WebDriver driver) {
         PageFactory.initElements(driver, this);
+        this.driver = driver;
+        wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        actions = new Actions(driver);
     }
 
     @FindBy(xpath = "//ul[@role=\"listbox\"]")
@@ -87,9 +100,9 @@ public class P08_1_NewUnitPage {
     @FindBy(xpath = "//textarea[@name=\"text-area\"][1]")
     public WebElement descriptionField;
 
-    @FindBy(xpath = "//Button[contains(text(),\"Add Unit\")]")
+    @FindBy(xpath = "//button[contains(@class,\"n-button--primary \")]")
     public WebElement addUnitButton;
-    @FindBy(xpath = "//Button[contains(text(),\" Save & Add More \")]")
+    @FindBy(xpath = "//button[contains(@class,\"n-button--primary-border \")]")
     public WebElement save_addMoreButton;
 
 
@@ -99,6 +112,11 @@ public class P08_1_NewUnitPage {
     @FindBy(xpath = "//Button[contains(text(),\"Save Changes\")]")
     public WebElement saveChangesButton;
 
+    public List<WebElement> amenities()
+    {
+        return driver.findElements(By.xpath("//div[contains(@class,\"chips-multiselect__item \")]"));
+
+    }
 
 
 }

@@ -19,12 +19,6 @@ public class P15_MasterUnitsTypes {
     final WebDriverWait wait;
     final Actions actions;
 
-    public P15_MasterUnitsTypes() {
-        PageFactory.initElements(Hooks.driver, this);
-        this.driver = Hooks.driver;
-        wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        actions = new Actions(driver);
-    }
 
     public P15_MasterUnitsTypes(WebDriver driver) {
         PageFactory.initElements(driver, this);
@@ -85,7 +79,9 @@ public class P15_MasterUnitsTypes {
     public WebElement typeNameField(){
         return unitTypeDialog.findElement(By.xpath(".//input"));
     }
-
+    public WebElement statusButton() {
+        return unitTypeDialog.findElement(By.xpath(".//span[@role=\"switch\"]"));
+    }
     public WebElement submitButton(){
         return unitTypeDialog.findElement(By.xpath("./kendo-dialog-actions/button[contains(@class,\"button--primary\")]"));
     }

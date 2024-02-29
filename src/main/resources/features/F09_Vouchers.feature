@@ -43,10 +43,10 @@ Feature: Vouchers
       Given successfully create a voucher of type "SD" amount "200" payment Method "Cash" maturity Date "" and Creatian Date "28112023"
       Given successfully create a voucher of type "Receipt" amount "200" payment Method "Cash" maturity Date "" and Creatian Date "28112023"
       And create a drop cash action to date "28112023"
-      And go to Receipt Vouchers Page
+      And go to "Receipt" Vouchers Page
       Then Check "receipt" Voucher with state "CashDrop" edit mode
-
-#  todo : keep trying for failure >> (D01_MakingReservation.java:136)
+# TODO NO show Scenario
+# TODO  :: Create one scenario to check all vouchers with one reservation
   Rule:ended Reservations Vouchers
     Background:
       Given open reservations Page
@@ -56,7 +56,9 @@ Feature: Vouchers
     Scenario Outline: Check edit mode for Receipt vouchers
       Given successfully create a voucher of type "<type>" amount "<amount>" payment Method "<method>" maturity Date "<mDate>" and Creatian Date "<cDate>"
       And Choose Reservation Status as "<rState>"
-      When go to Receipt Vouchers Page
+      #change the behaviour to open as draft or receipts
+      When go to "<type>" Vouchers Page
+
       Then Check "<type>" Voucher with state "<vState>" edit mode
       Examples:
         | type    | amount            | method | mDate    | cDate | vState | rState      |
@@ -67,7 +69,7 @@ Feature: Vouchers
     Scenario Outline: edit payment method for Receipt vouchers
       Given successfully create a voucher of type "<type>" amount "<amount>" payment Method "<method>" maturity Date "<mDate>" and Creatian Date "<cDate>"
       And Choose Reservation Status as "<rState>"
-      When go to Receipt Vouchers Page
+      When go to "receipt" Vouchers Page
       And edit "<type>" Voucher with state "<vState>" Payment method to "<newMethod>"
       Then Check toast mesage contains text "Updated Successfully"
       Examples:
@@ -117,20 +119,20 @@ Feature: Vouchers
     Scenario: Check edit mode for Receipt Voucher for Collected Draft
       And click on draft more menu and choose collect by "Normal" payment
       When finish Draft Normal collecting process with amount "200" PaymentMethod "Cash"
-      When go to Receipt Vouchers Page
+      When go to "Receipt" Vouchers Page
       Then Check "receipt" Voucher with state "Collected" edit mode
 
 #Todo : Check the pay tabs operations and receipts and Complete it
   Rule: Digital Payment auto generated Vouchers
     Background:
-      Given go to Receipt Vouchers Page
+      Given go to "Receipt" Vouchers Page
       And open the digital payment popup
 
     Scenario: Check edit mode for auto Generated Vucher after successfull Paytabs operation
       Given succesfully create a stand alone voucher with "PayTabs" amount 200 purpose "Checking auto generated receipts" Guest "RANDOM"
       And open the link and pay it successfully
       And Close the open popup
-      When go to Receipt Vouchers Page
+      When go to "Receipt" Vouchers Page
       Then Check "GenReceipt" Voucher with state "Generated" edit mode
 
 
@@ -139,10 +141,10 @@ Feature: Vouchers
       Given create a drop cash action to date "29112023"
 
     Scenario: Can't Create a Cash Voucher with Date Before Last DropCash Date
-      Given go to Receipt Vouchers Page
+      Given go to "Receipt" Vouchers Page
       Then successfully create a voucher of type "SAReceipt" amount "200" payment Method "Cash" maturity Date "" and Creatian Date "28112023"
     Scenario: Can't edit a cash voucher to a date before last drop cash Date
-      Given go to Receipt Vouchers Page
+      Given go to "Receipt" Vouchers Page
       And successfully create a voucher of type "SAReceipt" amount "200" payment Method "Cash" maturity Date "" and Creatian Date ""
       When editing the Created Voucher's  amount "" payment Method "" maturity Date "" and Creatian Date "28112023"
       Then Check toast mesage contains text "issue date/ time of cash vouchers could not be changed"

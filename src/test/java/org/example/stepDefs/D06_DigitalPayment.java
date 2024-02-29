@@ -46,8 +46,16 @@ public class D06_DigitalPayment {
     final Actions actions = new Actions(driver);
     JavascriptExecutor js = (JavascriptExecutor) driver;
 
-    @And("go to Receipt Vouchers Page")
-    public void goToReceiptVouchersPage() {
+    @And("go to {string} Vouchers Page")
+    public void goToDesiredVouchersPage(String vType) {
+        if (vType.equalsIgnoreCase("drft"))
+        {
+            wait.until(ExpectedConditions.elementToBeClickable(dashBoardPage.vouchersDropList));
+            dashBoardPage.vouchersDropList.click();
+            wait.until(ExpectedConditions.elementToBeClickable(dashBoardPage.draftsLink));
+            dashBoardPage.draftsLink.click();
+        }else if (vType.equalsIgnoreCase("receipt")||vType.equalsIgnoreCase("sd")){
+
         if (!dashBoardPage.receiptsLink.isDisplayed()) {
             multiPurposes.waitLoading();
             wait.until(ExpectedConditions.elementToBeClickable(dashBoardPage.vouchersDropList));
@@ -55,6 +63,11 @@ public class D06_DigitalPayment {
         }
         wait.until(ExpectedConditions.elementToBeClickable(dashBoardPage.receiptsLink));
         dashBoardPage.receiptsLink.click();
+        }else if(vType.equalsIgnoreCase("payment")){
+            wait.until(ExpectedConditions.elementToBeClickable(dashBoardPage.vouchersDropList));
+            dashBoardPage.vouchersDropList.click();
+            wait.until(ExpectedConditions.elementToBeClickable(dashBoardPage.paymentsLink));
+            dashBoardPage.paymentsLink.click();}
     }
 
 
@@ -91,9 +104,7 @@ public class D06_DigitalPayment {
         }
         wait.until(ExpectedConditions.elementToBeClickable(selectedService));
         selectedService.click();
-        if (purpose.equalsIgnoreCase("")) {
-        } else {
-            digitalPaymentPage.purposeField().sendKeys(purpose);
+        if (!purpose.isEmpty()) {digitalPaymentPage.purposeField().sendKeys(purpose);
         }
 
         digitalPaymentPage.amountField().sendKeys(Integer.toString(amount));
@@ -205,7 +216,7 @@ public class D06_DigitalPayment {
         String nazeelTab = driver.getWindowHandle();
         assert driver.getWindowHandles().size() == 1;
         wait.until(ExpectedConditions.numberOfWindowsToBe(2));
-        ArrayList<String> tabs = new ArrayList<String>(driver.getWindowHandles());
+        ArrayList<String> tabs = new ArrayList<>(driver.getWindowHandles());
         driver.switchTo().window(tabs.get(1));
         wait.until(ExpectedConditions.visibilityOf(digitalPaymentPage.whattsappBodyMsg));
 

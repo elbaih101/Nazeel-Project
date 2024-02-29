@@ -5,15 +5,11 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import org.example.Utils;
 import org.example.pages.P02_DashBoardPage;
 import org.example.pages.P22_Corporates;
 import org.example.pages.mutlipurposes.P00_multiPurposes;
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.*;
+
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.asserts.SoftAssert;
 
@@ -55,8 +51,9 @@ public class D11_CorporatesSetup {
     }
 
     private void corporatedata(String name, String country, String ignoredFields, String vat, String bNumb, String secBNumb) {
-        corporates.corpoateNameField.clear();
-        corporates.corpoateNameField.sendKeys(name);
+        if (!name.isEmpty())
+        {corporates.corpoateNameField.clear();
+        corporates.corpoateNameField.sendKeys(name);}
         if (!country.isEmpty()) {
             corporates.countries().stream().filter(c -> c.getText().toLowerCase().contains(country.toLowerCase())).findFirst().get().click();
         }
@@ -64,17 +61,15 @@ public class D11_CorporatesSetup {
             corporates.vatField.clear();
             corporates.vatField.sendKeys(vat);
         }
-        if (!ignoredFields.equalsIgnoreCase("all")) {
-            if (!ignoredFields.equalsIgnoreCase("postalcode")) {
+        if (!ignoredFields.toLowerCase().contains("all")) {
+            if (!ignoredFields.toLowerCase().contains("postalcode")) {
                 corporates.postalCodeField.clear();
-                corporates.postalCodeField.click();
                 corporates.postalCodeField.sendKeys("65487");
             } else {
-                corporates.postalCodeField.clear();
+                corporates.postalCodeField.sendKeys((Keys.chord(Keys.CONTROL,"a",Keys.BACK_SPACE)));
             }
             if (!ignoredFields.equalsIgnoreCase("cRNumber")) {
                 corporates.cRNumberField.clear();
-                corporates.cRNumberField.click();
                 corporates.cRNumberField.sendKeys("987654");
             }
             if (!ignoredFields.equalsIgnoreCase("city")) {
@@ -82,20 +77,20 @@ public class D11_CorporatesSetup {
                 corporates.cityField.click();
                 corporates.cityField.sendKeys(Faker.instance().address().city());
             } else {
-                corporates.cityField.clear();
-                corporates.cityField.click();
+                corporates.cityField.sendKeys((Keys.chord(Keys.CONTROL,"a",Keys.BACK_SPACE)));
+
             }
             if (!ignoredFields.equalsIgnoreCase("district")) {
                 corporates.districtField.clear();
                 corporates.districtField.sendKeys(Faker.instance().address().state());
             } else {
-                corporates.districtField.clear();
+                corporates.districtField.sendKeys((Keys.chord(Keys.CONTROL,"a",Keys.BACK_SPACE)));
             }
             if (!ignoredFields.equalsIgnoreCase("street")) {
                 corporates.streetField.clear();
                 corporates.streetField.sendKeys(Faker.instance().address().streetName());
             } else {
-                corporates.streetField.clear();
+                corporates.streetField.sendKeys((Keys.chord(Keys.CONTROL,"a",Keys.BACK_SPACE)));
             }
             if (!ignoredFields.equalsIgnoreCase("bNumber")) {
                 corporates.bNoField.clear();
@@ -152,5 +147,22 @@ public class D11_CorporatesSetup {
         corporatedata(name, country, ignoredFields, vat, bNumb, secBNumb);
         new P00_multiPurposes(driver).waitLoading();
         corporates.saveButton.click();
+    }
+
+    @Given("delete corporate {string}")
+    public void deleteCorporate(String name) {
+        new P00_multiPurposes(driver).waitLoading();
+        corporates.deleteButton(corporates.corporates.stream().filter(cor -> cor.getText().contains(name)).findFirst().get()).click();
+        driver.findElement(By.xpath("//div[@role=\"dialog\"]//button[contains(@class,\"n-button--danger\")][2]")).click();
+    }
+
+    @And("Remove postal-code")
+    public void removePostalCode() {
+        new P00_multiPurposes(driver).waitLoading();
+
+        corporates.postalCodeField.sendKeys((Keys.chord(Keys.CONTROL,"a",Keys.BACK_SPACE)));
+
+        corporates.saveButton.click();
+        new P00_multiPurposes(driver).waitLoading();
     }
 }

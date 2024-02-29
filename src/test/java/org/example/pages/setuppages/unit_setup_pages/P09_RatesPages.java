@@ -11,7 +11,7 @@ import java.util.List;
 
 @SuppressWarnings("unused")
 public class P09_RatesPages {
-    //Todo : finish the Base Rate page automation
+
 
     public P09_RatesPages() {
         PageFactory.initElements(Hooks.driver, this);

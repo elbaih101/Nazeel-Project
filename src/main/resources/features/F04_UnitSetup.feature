@@ -4,22 +4,35 @@ Feature: Unit Setup
   Background: selecting property
     Given Logging in with superuser
     And Select Property "P00020"
-
-  Rule:masterdata
+## masterdata unit Type Customization ##
+  Rule:masterdata unit Type Customization
     Background: going to units master data
       Given go to units master Data
 
-    Scenario: filter units types with name
-      Given click on filter button and enter name of type "single" and status "" and click search
-      Then Check the grid contains only types with names "single" and statues ""
+    Scenario Outline:filter units types
+      Given click on filter button and enter name of type "<name>" and status "<status>" and click search
+      Then Check the grid contains only types with names "<name>" and statues "<status>"
+      Examples:
+        | name   | status |
+        | single |        |
+        |        | active |
 
-    Scenario:filter units types with status
-      Given click on filter button and enter name of type "" and status "active" and click search
-      Then Check the grid contains only types with names "" and statues "active"
+#    Scenario: filter units types with name
+#      Given click on filter button and enter name of type "single" and status "" and click search
+#      Then Check the grid contains only types with names "single" and statues ""
+#
+#    Scenario:filter units types with status
+#      Given click on filter button and enter name of type "" and status "active" and click search
+#      Then Check the grid contains only types with names "" and statues "active"
 
     Scenario: add new unit type
       When add anew unit type with name "zeka"
       Then Check the type "zeka" is visible in the grid
+  # TODO :: add full cycle to create unit from created type
+
+    Scenario: edit type  status
+      Given click on edit button for type "zeka" and change status to "inactive"
+      Then Check the grid contains only types with names "zeka" and statues "inactive"
 
     Scenario: edit type name
       Given click on edit button for type "zeka" and change name to "zeko"
@@ -33,16 +46,64 @@ Feature: Unit Setup
       Given create a unit type "RANDOM"
       And delete the created unit type
       Then  Check toast mesage contains text "Task Type is deleted successfully"
+  ##end masterdata unit Type Customization ##
+## Setup Unit Type Customization ##
+  Rule: property unit type customization
+    Background: going to the customization page
+      And go to unit type customization page
 
+    Scenario: Check paginations
+      Then check unit Type pagination
 
+    Scenario:can't add new unit type with ore than 10 photos
+      When click on new type button
+      And select type "Single Room" and enter description "the new unit type"
+      And upload photos "src/main/resources/Images" 11 of the unit
+      And click on the submit button
+      Then Check toast mesage contains text "Maximum photos number is 10"
 
-  Rule: setup Page
+    Scenario: add new unit type
+      When click on new type button
+      And select type "Single Room" and enter description "the new unit type"
+      And upload photos "src/main/resources/Images" 1 of the unit
+      And click on the submit button
+      Then check the room type "Single Room" is added
+      And Check toast mesage contains text "Saved Successed"
+
+    Scenario: edit unit type and description
+      When click on edit Button for the unit Type "Single Room"
+      And select type "Two Rooms" and enter description "the edited unit type"
+      And upload photos "src/main/resources/Images" 1 of the unit
+      And click on the submit button
+      Then check the room type "Two Rooms" is added
+      And Check toast mesage contains text "Saved Successed"
+
+    Scenario: can't add duplicated uni types
+      When click on new type button
+      And select type "duplicate" and enter description "duplicate type"
+      And click on the submit button
+      Then Check toast mesage contains text "This unit type already exists"
+
+    Scenario: can't edit type to an existing type
+      When click on edit Button for the unit Type "Two Rooms"
+      And select type "duplicate" and enter description "the duplicate edited room type"
+      And click on the submit button
+      Then Check toast mesage contains text "This unit type already exists"
+
+    Scenario: delete a unit type
+      When click on more menu for unit type "Two Rooms" and click delete button
+      Then  check del unit type dialog contains selected unit type and description
+      When click on del unit type dilaog's confirm button
+      Then Check toast mesage contains text "Unit Type Customization Deleted Successfully"
+      And Check the room type "Single Room" isn't visible in the grid
+## end Setup Unit Type Customization ##
+  Rule: property unit creation and merge settings
     Background: going to the Unit setup page
       Given go to unit Setup page
-
+## units setup settings ##
     Scenario: add a unit for newly added unit type
       Given open the new unit page
-      And  enter unit required data with room number "RANDOM"
+      And  enter unit required data with room number "RANDOM" mergable "false" class "Random"
       When  click on the add unit button
 #    Then Check toast mesage contains text "Saved Successfully"
       Then check unit card in the card grid with number "RANDOM"
@@ -51,7 +112,7 @@ Feature: Unit Setup
     Scenario: view and edit a unit
       When open the view mode for a unit "RANDOM"
       Then check the url contains "view" click on the edit button to enter edit mode and check the url contains "edit"
-      And  enter unit required data with room number "RANDOM"
+      And  enter unit required data with room number "RANDOM" mergable "false" class "Random"
       And save the edited unit
       And Check toast mesage contains text "Saved Successfully"
       And check unit card in the card grid with number "RANDOM"
@@ -85,8 +146,8 @@ Feature: Unit Setup
 
     Scenario: filter units with unit number
       Given clicking onthe filter button to open filter menue
-      And enter the unit number 1 and filter
-      Then check all units visible contains  number 1
+      And enter the unit number "1" and filter
+      Then check all units visible contains  number "1"
 
     Scenario: filter units with unit type
       Given clicking onthe filter button to open filter menue
@@ -97,8 +158,37 @@ Feature: Unit Setup
       Given clicking onthe filter button to open filter menue
       And select block "RANDOM" and floor "RANDOM" and filter
       Then  check the data presnet are related to the selected block
+ ## end units setup settings ##
+ ## Merge Settings ##
+    Scenario: create new merge setting bet two units
+      Given successfully create 2 unit with room number "RANDOM" mergable "true" class "unit"
+      And create new merge rule between the two created units with class "unit" unitA "generated" unitB "generated"
+      Then Check toast mesage contains text "Saved Successfully"
+      And the merge setting bet the two numbers is visible on the grid with class "unit"
+
+    Scenario Outline:
+      Given create new merge rule between the two created units with class "" unitA "<unitA>" unitB "<unitB>"
+      Then Check toast mesage contains text "<msg>"
+      Examples:
+        | unitA  | unitB  | msg                                   |
+        | Random |        | Select Second Unit                    |
+        |        | Random | Select First Unit                     |
+        |        |        | Select First Unit\nSelect Second Unit |
+
+    Scenario Outline: Filter the merge records whith unit number
+      Given  Filter the merge unit page with unit "<uNum>"
+      Then  Check only one record is visible with the unit "<uNum>"
+      Examples:
+        | uNum   |
+        | Random |
 
 
+    Scenario: Delete Created merge setting
+      Given delete any merge setting and note the related units
+      Then Check toast mesage contains text "Unit Merge Deleted Successfully"
+      And check the units no more merged
+## end Merge Settings ##
+## Rates Customization ##
   Rule: Base Rate Customization
     Background:going to the Base Rate page
       Given go to Base Rate Page
@@ -179,3 +269,30 @@ Feature: Unit Setup
         | rateType | rateName      | sDate    | eDate    | low | min | msg                |
         | seasonal | seasonal rate | 20022024 | 21022024 | 200 | 120 | Added Successfully |
         | special  | special rate  | 20022024 | 21022024 | 300 | 100 | Added Successfully |
+## end Rates Customization ##
+
+  Rule:unit amenities settings
+    Background:navigating to amenities settings
+      Given go to amenities Page
+
+    Scenario: adding amenities
+      When adding new amenity
+      Then Check toast mesage contains text "Amenity added successfully"
+      And Check the newly added amenity is added
+
+    Scenario: edit unit amenity
+      Given edit unit amenity description "the newly added description" and state "inactive"
+      Then  Check toast mesage contains text "Amenity updated successfully"
+      And Check the edited amenity ddescriptioon "the newly added description" and state "inactive"
+
+    Scenario: applying aminities for all units
+      Given apply "Random" amenity to all units
+      Then  Check the amenity is applied for any unit
+
+    Scenario Outline: delte amenities
+      Given delete amenity "<amenity>"
+      Then Check toast mesage contains text "<msg>" and the amenity is removed
+      Examples:
+        | amenity    | msg                                                      |
+        | nonRelated | Amenity deleted successfully                             |
+        | related    | Can not delete this amenity because it has related units |

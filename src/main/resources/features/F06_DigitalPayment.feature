@@ -9,7 +9,7 @@ Feature: PayTabs integration
   Rule: Receipt Vouchers
 
     Background:
-      Given go to Receipt Vouchers Page
+      Given go to "Receipt" Vouchers Page
       And open the digital payment popup
     Scenario: create a stand alone PayTabs link for receipt Voucher with
       When open the generate pay-link tab and select "" and generate link with "PayTabs" amount 200 and purpose "creating receipt voucher"

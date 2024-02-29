@@ -5,12 +5,11 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.apache.commons.lang.StringUtils;
 import org.example.pages.P02_DashBoardPage;
 import org.example.pages.mutlipurposes.P00_multiPurposes;
 import org.example.pages.setuppages.P05_SetupPage;
-import org.example.pages.setuppages.unit_setup_pages.P08_1_NewUnitPage;
-import org.example.pages.setuppages.unit_setup_pages.P08_2_GroupOfUnitsPopUp;
-import org.example.pages.setuppages.unit_setup_pages.P08_UnitsSetupPage;
+import org.example.pages.setuppages.unit_setup_pages.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -30,12 +29,14 @@ public class D05_UnitsSetup {
     final P08_UnitsSetupPage unitsSetupPage = new P08_UnitsSetupPage(driver);
     final P08_1_NewUnitPage newUnitPage = new P08_1_NewUnitPage(driver);
     final P08_2_GroupOfUnitsPopUp groupOfUnitsPopUp = new P08_2_GroupOfUnitsPopUp(driver);
+    P23_MergeSettings mergeSettings = new P23_MergeSettings(driver);
+    P24_Amenities amenities = new P24_Amenities(driver);
     final Faker faker = new Faker();
-    final String randomUnitNum = faker.numerify("Ran##");
+    String randomUnitNum;
     int numberofNewUnits;
     final Actions actions = new Actions(driver);
     final JavascriptExecutor js = (JavascriptExecutor) driver;
-
+    List<String> tobemergedUnits = new ArrayList<>();
 
     @And("go to unit Setup page")
     public void goToUnitSetupPage() {
@@ -45,29 +46,36 @@ public class D05_UnitsSetup {
     }
 
     @Given("open the new unit page")
-    public void openTheNewUnitPageAndEnterTheRequiredDataWithRoomNumber() {
-        try {
-            Thread.sleep(300);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+    public void openTheNewUnitPage() {
+
+        new P00_multiPurposes(driver).waitLoading();
         wait.until(ExpectedConditions.elementToBeClickable(unitsSetupPage.newUnitButton));
         unitsSetupPage.newUnitButton.click();
 
     }
 
 
-    @And("enter unit required data with room number {string}")
-    public void enterUnitRequiredDataWithRoomNumber(String unitNum) {
+    @And("enter unit required data with room number {string} mergable {string} class {string}")
+    public void enterUnitRequiredDataWithRoomNumber(String unitNum, String mergable, String uClass) {
+
         newUnitPage.unitNumberField.clear();
+        randomUnitNum = faker.numerify("R####");
         if (unitNum.equals("RANDOM")) {
             newUnitPage.unitNumberField.sendKeys(randomUnitNum);
         } else {
             newUnitPage.unitNumberField.sendKeys(unitNum);
         }
+        if (mergable.equalsIgnoreCase("true")) {
+            newUnitPage.canBeMergedButton.click();
+        }
 
         List<WebElement> classes = newUnitPage.unitClasses();
-        WebElement selectedClass = classes.get(new Random().nextInt(classes.size()));
+        WebElement selectedClass ;
+        if (uClass.equalsIgnoreCase("Random")) {
+            selectedClass = classes.get(new Random().nextInt(classes.size()));
+        } else {
+            selectedClass = classes.stream().filter(uC -> uC.getText().equalsIgnoreCase(uClass)).findFirst().get();
+        }
         wait.until(ExpectedConditions.elementToBeClickable(selectedClass));
         selectedClass.click();
 
@@ -76,25 +84,43 @@ public class D05_UnitsSetup {
         wait.until(ExpectedConditions.elementToBeClickable(selectedType));
         selectedType.click();
 
-        wait.until(ExpectedConditions.elementToBeClickable(newUnitPage.canBeMergedButton));
-        newUnitPage.canBeMergedButton.click();
-
         List<WebElement> blocks = newUnitPage.blocks();
         WebElement selectedBlock = blocks.get(new Random().nextInt(blocks.size()));
+        try {
+            Thread.sleep(300);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         wait.until(ExpectedConditions.elementToBeClickable(selectedBlock));
         selectedBlock.click();
 
         List<WebElement> floors = newUnitPage.floors();
         WebElement selectedFloor = floors.get(new Random().nextInt(floors.size()));
+        try {
+            Thread.sleep(300);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         wait.until(ExpectedConditions.elementToBeClickable(selectedFloor));
         selectedFloor.click();
 
         List<WebElement> kitchens = newUnitPage.kitchens();
         WebElement selectedKitchen = kitchens.get(new Random().nextInt(kitchens.size()));
+        try {
+            Thread.sleep(300);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         wait.until(ExpectedConditions.elementToBeClickable(selectedKitchen));
         selectedKitchen.click();
+
         List<WebElement> halls = newUnitPage.halls();
         WebElement selectedHall = halls.get(new Random().nextInt(halls.size()));
+        try {
+            Thread.sleep(300);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         wait.until(ExpectedConditions.elementToBeClickable(selectedHall));
         selectedHall.click();
 
@@ -107,14 +133,16 @@ public class D05_UnitsSetup {
         try {
 
             blocksAndFloors.checkToastMesageContainsText("Saved Successfully");
+
         } catch (AssertionError e) {
             if (e.getMessage().contains("Name exist before")) {
-                enterUnitRequiredDataWithRoomNumber("RANDOM");
+                enterUnitRequiredDataWithRoomNumber("RANDOM", "Flase", "unit");
                 clickOnTheAddUnitButton();
             }
         }
+        tobemergedUnits.add(randomUnitNum);
     }
-// FIXME : revise Below function
+
     @And("check unit card in the card grid with number {string}")
     public void checkUnitCardInTheCardGridWithNumber(String unitNum) {
         int pageNumber = 1;
@@ -124,14 +152,16 @@ public class D05_UnitsSetup {
                 unitsSetupPage.nextPageButton.click();
             }
             wait.until(ExpectedConditions.refreshed(ExpectedConditions.visibilityOfAllElements(unitsSetupPage.unitsCards)));
-                if (unitNum.equals("RANDOM")) {
-                    wait.until(ExpectedConditions.refreshed(ExpectedConditions.visibilityOfAllElements(unitsSetupPage.unitsCards)));
-                    anymatch =unitsSetupPage.unitsCards.stream().anyMatch(element -> unitsSetupPage.unitNum(element).getText().trim().contains(randomUnitNum));
-                } else {
-                    wait.until(ExpectedConditions.refreshed(ExpectedConditions.visibilityOfAllElements(unitsSetupPage.unitsCards)));
-                    anymatch =unitsSetupPage.unitsCards.stream().anyMatch(element -> unitsSetupPage.unitNum(element).getText().trim().equalsIgnoreCase(unitNum));
-                }
-                if (anymatch){break;}
+            if (unitNum.equals("RANDOM")) {
+                wait.until(ExpectedConditions.refreshed(ExpectedConditions.visibilityOfAllElements(unitsSetupPage.unitsCards)));
+                anymatch = unitsSetupPage.unitsCards.stream().anyMatch(element -> unitsSetupPage.unitNum(element).getText().trim().contains(randomUnitNum));
+            } else {
+                wait.until(ExpectedConditions.refreshed(ExpectedConditions.visibilityOfAllElements(unitsSetupPage.unitsCards)));
+                anymatch = unitsSetupPage.unitsCards.stream().anyMatch(element -> unitsSetupPage.unitNum(element).getText().trim().equalsIgnoreCase(unitNum));
+            }
+            if (anymatch) {
+                break;
+            }
             pageNumber++;
         } while (!unitsSetupPage.nextPageButton.getAttribute("class").contains("disabled"));
         asrt.assertTrue(anymatch);
@@ -143,7 +173,8 @@ public class D05_UnitsSetup {
     @When("open the view mode for a unit {string}")
     public void openTheViewModeForAUnit(String unitNum) {
         WebElement card;
-        if (!unitNum.equals("RANDOM")) {
+        new P00_multiPurposes(driver).waitLoading();
+        if (!unitNum.equalsIgnoreCase("RANDOM")) {
             card = unitsSetupPage.unitsCards.stream().filter(element -> unitsSetupPage.unitNum(element).getText().contains(unitNum)).toList().get(0);
         } else {
             card = unitsSetupPage.unitsCards.get(new Random().nextInt(unitsSetupPage.unitsCards.size()));
@@ -159,6 +190,7 @@ public class D05_UnitsSetup {
     @Then("check the url contains {string} click on the edit button to enter edit mode and check the url contains {string}")
     public void checkTheUrlContainsClickOnTheEditButtonToEnterEditModeAndCheckTheUrlContains(String view, String edit) {
         asrt.assertTrue(driver.getCurrentUrl().contains(view));
+        wait.until(ExpectedConditions.elementToBeClickable(newUnitPage.editButton));
         newUnitPage.editButton.click();
         asrt.assertTrue(driver.getCurrentUrl().contains(edit));
         asrt.assertAll();
@@ -238,7 +270,8 @@ public class D05_UnitsSetup {
     public void submitAddingGroupOfUnits() {
         groupOfUnitsPopUp.saveButton.click();
     }
-// FIXME : Revise below function after edits to the method
+
+    // FIXME : Revise below function after edits to the method
     @Then("check the newly added units")
     public void checkTheNewlyAddedUnits() {
         Set<String> newUnitsNumber = new HashSet<>();
@@ -253,7 +286,7 @@ public class D05_UnitsSetup {
                 unitsSetupPage.nextPageButton.click();
             }
 
-              newUnits.addAll(unitsSetupPage.unitNums());
+            newUnits.addAll(unitsSetupPage.unitNums());
 //            for (int i = 0; i < newUnitsNumber.size(); i++) {
 //                int j = i;
 //                wait.until(ExpectedConditions.refreshed(ExpectedConditions.visibilityOfAllElements(unitsSetupPage.unitsCards)));
@@ -306,7 +339,7 @@ public class D05_UnitsSetup {
             blocksAndFloors.checkToastMesageContainsText(msg);
 
         } catch (AssertionError e) {
-            if (e.getMessage().contains("Invalid action, had related data")) ;
+            if (e.getMessage().contains("Invalid action, had related data"))
             {
 
                 unitsSetupPage.discardDeleteButton().click();
@@ -332,7 +365,7 @@ public class D05_UnitsSetup {
     }
 
     /////////////  edit group of units //////////////////
-//FIXME
+//fixme
     @Given("open the edit group of units popup")
     public void openTheEditGroupOfUnitsPopup() {
         wait.until(ExpectedConditions.elementToBeClickable(unitsSetupPage.editGroupUnitsButton));
@@ -365,7 +398,7 @@ public class D05_UnitsSetup {
             groupOfUnitsPopUp.toNumber.sendKeys(Integer.toString(100));
         } else if (exclusivestate.equalsIgnoreCase("yes") && !type.equalsIgnoreCase("RANDOM")) {
             List<WebElement> types = groupOfUnitsPopUp.unitType();
-            WebElement selectedType = types.stream().filter(element -> element.getText().contains(type)).toList().get(0);
+            WebElement selectedType = types.stream().filter(element -> element.getText().contains(type)).findFirst().get();
             wait.until(ExpectedConditions.elementToBeClickable(selectedType));
             selectedType.click();
         }
@@ -472,19 +505,20 @@ public class D05_UnitsSetup {
         asrt.assertAll();
     }
 
-    @And("enter the unit number {int} and filter")
-    public void enterTheUnitNumberAndFilter(int untNumber) {
+    @And("enter the unit number {string} and filter")
+    public void enterTheUnitNumberAndFilter(String untNumber) {
         wait.until(ExpectedConditions.elementToBeClickable(unitsSetupPage.filterUnitNumber));
-        unitsSetupPage.filterUnitNumber.sendKeys(Integer.toString(untNumber));
+        unitsSetupPage.filterUnitNumber.clear();
+        unitsSetupPage.filterUnitNumber.sendKeys(untNumber);
         unitsSetupPage.filterSearchButton.click();
     }
-// FIXME :revise below Function      stale element reference: stale element not found
-    @Then("check all units visible contains  number {int}")
-    public void checkAllUnitsVisibleContainsNumber(int unitNumber) {
+
+    @Then("check all units visible contains  number {string}")
+    public void checkAllUnitsVisibleContainsNumber(String unitNumber) {
         new P00_multiPurposes(driver).waitLoading();
         List<WebElement> filteredUnits = unitsSetupPage.unitsCards;
         wait.until(ExpectedConditions.visibilityOfAllElements(filteredUnits));
-        asrt.assertTrue(filteredUnits.stream().allMatch(element -> unitsSetupPage.unitNum(element).getText().contains(Integer.toString(unitNumber))));
+        asrt.assertTrue(filteredUnits.stream().allMatch(element -> unitsSetupPage.unitNum(element).getText().contains(unitNumber)));
         asrt.assertAll();
 
     }
@@ -569,6 +603,255 @@ public class D05_UnitsSetup {
         int newTotalCount = unitsSetupPage.totalUnitNumber();
         asrt.assertTrue(totalUnitsCount > newTotalCount);
         asrt.assertAll();
+
+    }
+
+    @Given("successfully create {int} unit with room number {string} mergable {string} class {string}")
+    public void successfullyCreateAUnitWithRoomNumberMergableClass(int count, String unitNum, String mergable, String uClass) {
+        openTheNewUnitPage();
+        for (int i = 0; i < count; i++) {
+            enterUnitRequiredDataWithRoomNumber(unitNum, mergable, uClass);
+            newUnitPage.save_addMoreButton.click();
+            try {
+
+                D03_BlocksAndFloors blocksAndFloors = new D03_BlocksAndFloors();
+                blocksAndFloors.checkToastMesageContainsText("Saved Successfully");
+
+            } catch (AssertionError e) {
+                if (e.getMessage().contains("Name exist before")) {
+                    enterUnitRequiredDataWithRoomNumber(unitNum, mergable, uClass);
+                    newUnitPage.save_addMoreButton.click();
+                }
+            }
+            tobemergedUnits.add(randomUnitNum);
+
+            new P00_multiPurposes(driver).waitLoading();
+        }
+    }
+
+    @And("create new merge rule between the two created units with class {string} unitA {string} unitB {string}")
+    public void createNewMergeRuleBetweenTheTwoCreatedUnits(String uClass, String unitA, String unitB) {
+        gotoMergeSettingsPage();
+        mergeSettings.newMergeButton.click();
+        mergeSettings.blocksList().get(0).click();
+        mergeSettings.floorsList().get(0).click();
+        if (!uClass.isEmpty()) {
+            mergeSettings.classesList().stream().filter(uC -> uC.getText().equalsIgnoreCase(uClass)).findAny().get().click();
+        }
+        switch (unitA) {
+            case "generated" ->
+                mergeSettings.unitA().stream().filter(unit -> unit.getText().contains(tobemergedUnits.get(0))).findAny().get().click();
+
+            case "Random" ->
+                mergeSettings.unitA().getFirst().click();
+
+            case "" ->{
+                break;}
+
+            case null, default ->
+                mergeSettings.unitA().stream().filter(unit -> unit.getText().contains(unitA)).findAny().get().click();
+
+        }
+        switch (unitB) {
+            case "generated" ->
+                mergeSettings.unitB().stream().filter(unit -> unit.getText().contains(tobemergedUnits.get(1))).findAny().get().click();
+
+            case "Random" ->
+                mergeSettings.unitB().getFirst().click();
+
+            case "" -> {
+                break;
+            }
+
+            case null, default ->
+                mergeSettings.unitB().stream().filter(unit -> unit.getText().contains(unitB)).findAny().get().click();
+
+        }
+
+
+        mergeSettings.saveButton.click();
+    }
+
+    void gotoMergeSettingsPage() {
+        if (!setupPagec.mergeSettingsLink.isDisplayed()) {
+            setupPagec.unitsDroplist.click();
+        }
+        setupPagec.mergeSettingsLink.click();
+    }
+
+    @And("the merge setting bet the two numbers is visible on the grid with class {string}")
+    public void theMergeSettingBetTheTwoNumbersIsVisibleOnTheGrid(String uClass) {
+        WebElement createdMergeSetting = mergeSettings.unitsNumbers.stream().filter(m -> m.getText().contains(tobemergedUnits.get(0)) && m.getText().contains(tobemergedUnits.get(1))).findFirst().get();
+        asrt.assertTrue(createdMergeSetting.isDisplayed());
+        asrt.assertTrue(mergeSettings.mergeRecordUnitsClasses(createdMergeSetting).getText().contains(uClass));
+        goToUnitSetupPage();
+        clickingOntheFilterButtonToOpenFilterMenue();
+        for (String unitNum : tobemergedUnits) {
+            enterTheUnitNumberAndFilter(unitNum);
+            new P00_multiPurposes(driver).waitLoading();
+            WebElement unitCard = unitsSetupPage.unitsCards.stream().filter(card -> unitsSetupPage.unitNum(card).getText().equalsIgnoreCase(unitNum)).findFirst().get();
+            asrt.assertTrue(unitsSetupPage.unitMergeIcon(unitCard).get(0).isDisplayed(), "unit:" + unitNum + "is not merged");
+        }
+        asrt.assertAll();
+    }
+
+    List<String> retreavedMergeUnits = new ArrayList<>();
+
+    @Given("delete any merge setting and note the related units")
+    public void deleteAnyMergeSettingAndNoteTheRelatedUnits() {
+        gotoMergeSettingsPage();
+        WebElement mergRecord = mergeSettings.unitsNumbers.get(0);
+        String mergedUnits = mergRecord.getText();
+        retreavedMergeUnits.add(StringUtils.substringAfter(mergedUnits, "- "));
+        retreavedMergeUnits.add(StringUtils.substringBefore(mergedUnits, " -"));
+        mergeSettings.deleteButton(mergRecord).click();
+        mergeSettings.confirmDeleteButton.click();
+    }
+
+    @And("check the units no more merged")
+    public void checkTheUnitsNoMoreMerged() {
+        goToUnitSetupPage();
+        clickingOntheFilterButtonToOpenFilterMenue();
+        for (String unitNum : retreavedMergeUnits) {
+            enterTheUnitNumberAndFilter(unitNum);
+            new P00_multiPurposes(driver).waitLoading();
+            WebElement unitCard = unitsSetupPage.unitsCards.stream().filter(card -> unitsSetupPage.unitNum(card).getText().equalsIgnoreCase(unitNum)).findFirst().get();
+            asrt.assertTrue(unitsSetupPage.unitMergeIcon(unitCard).isEmpty(), "unit:" + unitNum + "is merged");
+        }
+        asrt.assertAll();
+    }
+
+    @Given("Filter the merge unit page with unit {string}")
+    public void filterTheMergeUnitPageWithUnit(String uNum) {
+
+        gotoMergeSettingsPage();
+
+        mergeSettings.filterButton.click();
+        mergeSettings.unitSearchField.clear();
+        if (!uNum.equalsIgnoreCase("Random")) {
+            mergeSettings.unitSearchField.sendKeys(uNum);
+        } else {
+            retreavedMergeUnits.add(StringUtils.substringAfter(mergeSettings.unitsNumbers.get(0).getText(), "- "));
+            mergeSettings.unitSearchField.sendKeys(retreavedMergeUnits.get(0));
+        }
+        mergeSettings.searchButton.click();
+    }
+
+    @Then("Check only one record is visible with the unit {string}")
+    public void checkOnlyOneRecordIsVisibleWithTheUnit(String uNum) {
+        new P00_multiPurposes(driver).waitLoading();
+        asrt.assertTrue(mergeSettings.unitsNumbers.size() == 1);
+        if (!uNum.equalsIgnoreCase("Random")) {
+            asrt.assertTrue(mergeSettings.unitsNumbers.get(0).getText().contains(uNum));
+        } else {
+            asrt.assertTrue(mergeSettings.unitsNumbers.get(0).getText().contains(retreavedMergeUnits.get(0)));
+        }
+        asrt.assertAll();
+
+    }
+
+    @Given("go to amenities Page")
+    public void goToAmenitiesPage() {
+        dashBoardPage.setupPageLink.click();
+        setupPagec.unitsDroplist.click();
+        setupPagec.amenitiesLink.click();
+    }
+
+    List<String> retreavedAmenities = new ArrayList<>();
+
+    @When("adding new amenity")
+    public void addingNewAmenity() {
+        amenities.newAmenityButton.click();
+        WebElement selecetd = amenities.amenitysList().getFirst();
+        retreavedAmenities.add(selecetd.getText());
+        selecetd.click();
+        amenities.descriptionField.sendKeys("added amenity");
+        amenities.submitButton.click();
+
+    }
+
+    @And("Check the newly added amenity is added")
+    public void checkTheNewlyAddedAmenityIsAdded() {
+        asrt.assertTrue(amenities.names.stream().anyMatch(am -> am.getText().contains(retreavedAmenities.get(0))));
+        goToUnitSetupPage();
+        openTheNewUnitPage();
+        asrt.assertTrue(newUnitPage.amenities().stream().anyMatch(am -> am.getText().contains(retreavedAmenities.get(0))));
+    }
+
+    @Given("edit unit amenity description {string} and state {string}")
+    public void editUnitAmenityDescriptionAndState(String description, String state) {
+        amenities.editButton(amenities.names.getFirst()).click();
+        new P00_multiPurposes(driver).waitLoading();
+        if (state.equalsIgnoreCase("inactive") && amenities.statusSwitch.getAttribute("class").contains("k-switch-on")) {
+            amenities.statusSwitch.click();
+        } else if (state.equalsIgnoreCase("active") && amenities.statusSwitch.getAttribute("class").contains("k-switch-of")) {
+            amenities.statusSwitch.click();
+        }
+        amenities.descriptionField.clear();
+        amenities.descriptionField.sendKeys(description);
+        amenities.submitButton.click();
+    }
+
+    @And("Check the edited amenity ddescriptioon {string} and state {string}")
+    public void checkTheEditedAmenityDdescriptioonAndState(String description, String state) {
+        amenities.viewButton(amenities.names.getFirst()).click();
+        if (state.equalsIgnoreCase("inactive")) {
+            asrt.assertTrue(amenities.statusSwitch.getAttribute("class").contains("k-switch-of"));
+        } else if (state.equalsIgnoreCase("active")) {
+            asrt.assertTrue(amenities.statusSwitch.getAttribute("class").contains("k-switch-on"));
+        }
+        asrt.assertEquals(amenities.descriptionField.getText(), description);
+        asrt.assertAll();
+    }
+
+    @Given("apply {string} amenity to all units")
+    public void applyAmenityToAllUnits(String amenity) {
+        WebElement seectedAmenity;
+        if (amenity.equalsIgnoreCase("Random")) {
+            seectedAmenity = amenities.names.getFirst();
+        } else {
+            seectedAmenity = amenities.names.stream().filter(am -> am.getText().equalsIgnoreCase(amenity)).findAny().get();
+        }
+        retreavedAmenities.add(0, seectedAmenity.getText());
+        amenities.applyButton(seectedAmenity).click();
+        amenities.submitButton.click();
+    }
+
+    @Then("Check the amenity is applied for any unit")
+    public void checkTheAmenityIsAppliedForAnyUnit() {
+        goToUnitSetupPage();
+        openTheViewModeForAUnit("Random");
+        asrt.assertTrue(newUnitPage.amenities().stream().anyMatch(am -> am.getText().contains(retreavedAmenities.get(0))));
+    }
+
+    @Given("delete amenity {string}")
+    public void deleteAmenity(String amenity) {
+        WebElement seectedAmenity;
+
+        if (amenity.equalsIgnoreCase("related")){
+            seectedAmenity=amenities.names.getFirst();
+        }else if(amenity.equalsIgnoreCase("nonrelated")) {
+            seectedAmenity = amenities.names.getLast();
+        }else{
+            seectedAmenity = amenities.names.stream().filter(am -> am.getText().equalsIgnoreCase(amenity)).findAny().get();
+        }
+        retreavedAmenities.add(0, seectedAmenity.getText());
+            amenities.deleteButton(seectedAmenity).click();
+            amenities.confirmDeleteButton.click();
+    }
+
+    @Then("Check toast mesage contains text {string} and the amenity is removed")
+    public void checkToastMesageContainsTextAndTheAmenityIsRemoved(String msg) {
+        D03_BlocksAndFloors blocksAndFloors = new D03_BlocksAndFloors();
+        blocksAndFloors.checkToastMesageContainsText(msg);
+        if (msg.contains("successfully"))
+        {
+            goToUnitSetupPage();
+            openTheNewUnitPage();
+            asrt.assertFalse(newUnitPage.amenities().stream().anyMatch(am -> am.getText().contains(retreavedAmenities.get(0))));
+            asrt.assertAll();
+        }
+
 
     }
 }

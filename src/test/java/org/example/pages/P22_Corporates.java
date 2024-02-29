@@ -19,12 +19,7 @@ public class P22_Corporates {
     final WebDriverWait wait;
     final Actions actions;
 
-    public P22_Corporates() {
-        PageFactory.initElements(Hooks.driver, this);
-        this.driver = Hooks.driver;
-        wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        actions = new Actions(driver);
-    }
+
 
     public P22_Corporates(WebDriver driver) {
         PageFactory.initElements(driver, this);
@@ -86,9 +81,11 @@ public class P22_Corporates {
     List<WebElement> discounts;
     @FindBy(xpath = "//td[@data-kendo-grid-column-index=\"8\"]")
     List<WebElement> actionsGrid;
+
     public WebElement corporateEditButton(WebElement corporate) {
         return corporate.findElement(By.xpath("./..//td[@data-kendo-grid-column-index=\"8\"]//button[2]"));
     }
+
     public WebElement deleteButton(WebElement corporate) {
         corporate.findElement(By.xpath("./..//td[@data-kendo-grid-column-index=\"8\"]//div/*[name()=\"svg\"]")).click();
         try {
@@ -106,8 +103,12 @@ public class P22_Corporates {
 
     @FindBy(xpath = "//label[contains(text(),\"Corporate Name \")]/following-sibling::div//input")
     public WebElement corpoateNameField;
-    @FindBy(xpath = "//label[contains(text(),\"Postal Code\")]/following-sibling::div//input")
+
+    @FindBy(id = "postalCode")
     public WebElement postalCodeField;
+    //   @FindBy(xpath = "//label[contains(text(),\"Postal Code\")]/following-sibling::div//input")
+
+
     @FindBy(xpath = "//label[contains(text(),\"VAT\")]/following-sibling::div//input")
     public WebElement vatField;
     @FindBy(xpath = "//label[contains(text(),\"Discount\")]/following-sibling::input")
@@ -161,7 +162,7 @@ public class P22_Corporates {
 
     @FindBy(xpath = "//button[contains(@class,\"n-button n-button--primary\")]")
     public WebElement saveButton;
-   //in reservation popup
+    //in reservation popup
     @FindBy(xpath = "//div[@role=\"dialog\"]//button[contains(@class,\"n-button n-button--primary\")]")
     public WebElement popupSaveButton;
 

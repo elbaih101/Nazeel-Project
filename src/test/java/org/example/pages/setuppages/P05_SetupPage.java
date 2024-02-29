@@ -38,17 +38,26 @@ public class P05_SetupPage {
     public WebElement typeCustomizationLink;
     @FindBy(xpath = "//a[@href=\"/units-management/unit-setup\"]")
     public WebElement unitSetupLink;
+    @FindBy(xpath = "//a[@href=\"/general-settings/unit-amenities\"]")
+    public WebElement amenitiesLink;
+    @FindBy(xpath = "//a[@href=\"/units-management/unit-merge-settings\"]")
+    public WebElement mergeSettingsLink;
+
     @FindBy(xpath = "//a[@href=\"/financial/base-rate/edit\"]")
     public WebElement baseRateLink;
     @FindBy(xpath = "//a[@href=\"/financial/seasonal-rates\"]")
     public WebElement seasonalRateLink;
- @FindBy(xpath = "//a[@href=\"/financial/special-rates\"]")
+    @FindBy(xpath = "//a[@href=\"/financial/special-rates\"]")
     public WebElement specialRateLink;
 
     @FindBy(xpath = "//span[contains(text(),\"Reporting\")]")
     public WebElement printingDropList;
+
     @FindBy(xpath = "//a[@href=\"/reporting/printing-options\"]")
     public WebElement printingOptionLink;
 
-
+    @FindBy(xpath = "//span[contains(text(),\"Financial\")]")
+    public WebElement financialDropList;
+    @FindBy(xpath = "//a[@href=\"/financial/taxesCustomization\"]")
+    public WebElement taxesAndFeesLink;
 }

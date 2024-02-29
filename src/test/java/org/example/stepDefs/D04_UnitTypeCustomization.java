@@ -152,7 +152,7 @@ JavascriptExecutor js=(JavascriptExecutor) driver;
         wait.until(ExpectedConditions.elementToBeClickable(masterData.unitsTypesLink));
         masterData.unitsTypesLink.click();
     }
-//FIXME : revise the below function
+
     @Given("click on filter button and enter name of type {string} and status {string} and click search")
     public void clickOnFilterButtonAndEnterNameOfTypeAndStatusAndClickSearch(String typeName, String status) {
         wait.until(ExpectedConditions.elementToBeClickable(masterUnitsTypes.filterButton));
@@ -202,6 +202,7 @@ JavascriptExecutor js=(JavascriptExecutor) driver;
     public void clickOnEditButtonForTypeAndChangeNameTo(String oldName, String newName) {
         clickOnFilterButtonAndEnterNameOfTypeAndStatusAndClickSearch(oldName, "");
         WebElement type = masterUnitsTypes.typesNames.stream().findAny().get();
+        new P00_multiPurposes(driver).waitLoading();
         js.executeScript("arguments[0].click();",masterUnitsTypes.editButton(type));
       //  masterUnitsTypes.editButton(type).click();
 wait.until(ExpectedConditions.visibilityOf(masterUnitsTypes.typeNameField()));
@@ -232,5 +233,25 @@ wait.until(ExpectedConditions.visibilityOf(masterUnitsTypes.typeNameField()));
     @And("delete the created unit type")
     public void deleteTheCreatedUnitType() {
         clickOnDeleteButtonForUnitTypeAssociatedWithUnits();
+    }
+
+    @Given("click on edit button for type {string} and change status to {string}")
+    public void clickOnEditButtonForTypeAndChangeStatusTo(String name, String status) {
+
+        clickOnFilterButtonAndEnterNameOfTypeAndStatusAndClickSearch(name, "");
+        WebElement type = masterUnitsTypes.typesNames.stream().findAny().get();
+        new P00_multiPurposes(driver).waitLoading();
+        js.executeScript("arguments[0].click();",masterUnitsTypes.editButton(type));
+        if (status.equalsIgnoreCase("inactive")) {
+            if (masterUnitsTypes.statusButton().getAttribute("aria-checked").contains("true")) {
+                masterUnitsTypes.statusButton().click();
+            }
+        }else if (status.equalsIgnoreCase("active")){
+            if (masterUnitsTypes.statusButton().getAttribute("aria-checked").contains("false")){
+                masterUnitsTypes.statusButton().click();
+            }
+        }
+        masterUnitsTypes.submitButton().click();
+        clickOnFilterButtonAndEnterNameOfTypeAndStatusAndClickSearch(name, "");
     }
 }
