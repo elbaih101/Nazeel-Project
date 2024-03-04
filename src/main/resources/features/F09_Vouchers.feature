@@ -15,7 +15,7 @@ Feature: Vouchers
       And select voucher "Draft" tab
       And enter maturity Date "01122024" and amount "20"
       Then submit the voucher and check success message prefix "Draft Voucher Number. " postfix " Generated successfully!"
-#todo : continue vouchers creation and cycles
+    #todo : continue vouchers creation and cycles
     Scenario Outline: Create  Vouchers
       Given click on the add voucher button
       And select voucher "<type>" tab
@@ -45,8 +45,8 @@ Feature: Vouchers
       And create a drop cash action to date "28112023"
       And go to "Receipt" Vouchers Page
       Then Check "receipt" Voucher with state "CashDrop" edit mode
-# TODO NO show Scenario
-# TODO  :: Create one scenario to check all vouchers with one reservation
+    # TODO NO show Scenario
+    # TODO  :: Create one scenario to check all vouchers with one reservation
   Rule:ended Reservations Vouchers
     Background:
       Given open reservations Page

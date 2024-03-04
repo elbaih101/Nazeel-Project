@@ -31,7 +31,7 @@ public class Depuging {
         JavascriptExecutor js = (JavascriptExecutor) driver;
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(3));
        //  driver.get(TestData.stageUrl);
-        new D01_MakingReservation(driver).chooseReservationStatusAs("out");
+        //new D01_MakingReservation().chooseReservationStatusAs("out");
 
     }
 

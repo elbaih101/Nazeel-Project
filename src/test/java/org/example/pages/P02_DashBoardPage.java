@@ -27,7 +27,8 @@ public class P02_DashBoardPage {
     public WebElement closeAnnouncementButton;
     @FindBy(xpath = "//a[@href=\"/setup\"]")
     public WebElement setupPageLink;
-
+    @FindBy(className = "n-topbar__logo")
+    public WebElement dashBoardLink;
     @FindBy(xpath = "//button[contains(text(),\" Agree on contract terms \")]")
     public WebElement contractAgreementButton;
 

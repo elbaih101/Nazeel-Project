@@ -19,12 +19,6 @@ public class P16_VouchersPopUp {
     final WebDriverWait wait;
     final Actions actions;
 
-    public P16_VouchersPopUp() {
-        PageFactory.initElements(Hooks.driver, this);
-        this.driver = Hooks.driver;
-        wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        actions = new Actions(driver);
-    }
 
     public P16_VouchersPopUp(WebDriver driver) {
         PageFactory.initElements(driver, this);
@@ -111,12 +105,29 @@ public class P16_VouchersPopUp {
 
     }
 
+    public List<WebElement>costCentersList(){
+        voucherPopUp.findElement(By.xpath(".//label[contains(text(),\"Cost Center\")]/following-sibling::kendo-combobox//span[@class=\"k-select\"]")).click();
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return genralListBox.findElements(By.xpath("//li[@role=\"option\"]"));
+    } public List<WebElement>vendorsList(){
+        voucherPopUp.findElement(By.xpath(".//label[contains(text(),\"Vendor\")]/following-sibling::kendo-combobox//span[@class=\"k-select\"]")).click();
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return genralListBox.findElements(By.xpath("//li[@role=\"option\"]"));
+    }
     public WebElement paymentMethodField() {
         return voucherPopUp.findElement(By.xpath(".//label[contains(text(),\"Payment\")]/following-sibling::kendo-combobox//input"));
     }
 
     public List<WebElement> paymentMethods() {
-        voucherPopUp.findElement(By.xpath(".//label[contains(text(),\"Payment\")]/following-sibling::kendo-combobox//span/span")).click();
+        voucherPopUp.findElement(By.xpath(".//label[contains(text(),\"Payment\")]/following-sibling::kendo-combobox//span[@class=\"k-select\"]")).click();
         try {
             Thread.sleep(100);
         } catch (InterruptedException e) {

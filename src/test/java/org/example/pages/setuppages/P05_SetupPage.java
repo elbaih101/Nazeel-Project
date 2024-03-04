@@ -13,9 +13,7 @@ public class P05_SetupPage {
         PageFactory.initElements(driver, this);
     }
 
-    public P05_SetupPage() {
-        PageFactory.initElements(Hooks.driver, this);
-    }
+
 
 
     @FindBy(xpath = "//span[contains(text(),\"Company\")]")
@@ -60,4 +58,6 @@ public class P05_SetupPage {
     public WebElement financialDropList;
     @FindBy(xpath = "//a[@href=\"/financial/taxesCustomization\"]")
     public WebElement taxesAndFeesLink;
+    @FindBy(xpath = "//a[@href=\"/financial/CostCenter\"]")
+    public WebElement costCentersLink;
 }

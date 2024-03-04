@@ -114,5 +114,9 @@ public class P03_1_ReservationMainDataPage {
     @FindBy(xpath = "//span[contains(text(),\"Select corporate\")]")
     public WebElement selectCorporateButton;
 
+    @FindBy(xpath = "//div[@class=\"financial-summary__title\" and contains(text(),\"Taxes\")]/span")
+    public WebElement veiwTaxesButton;
+
+
 
 }

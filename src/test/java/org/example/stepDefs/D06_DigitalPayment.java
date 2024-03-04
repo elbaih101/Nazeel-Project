@@ -51,6 +51,7 @@ public class D06_DigitalPayment {
         if (vType.equalsIgnoreCase("drft"))
         {
             wait.until(ExpectedConditions.elementToBeClickable(dashBoardPage.vouchersDropList));
+            dashBoardPage.dashBoardLink.click();
             dashBoardPage.vouchersDropList.click();
             wait.until(ExpectedConditions.elementToBeClickable(dashBoardPage.draftsLink));
             dashBoardPage.draftsLink.click();
@@ -58,12 +59,14 @@ public class D06_DigitalPayment {
 
         if (!dashBoardPage.receiptsLink.isDisplayed()) {
             multiPurposes.waitLoading();
+            dashBoardPage.dashBoardLink.click();
             wait.until(ExpectedConditions.elementToBeClickable(dashBoardPage.vouchersDropList));
             dashBoardPage.vouchersDropList.click();
         }
         wait.until(ExpectedConditions.elementToBeClickable(dashBoardPage.receiptsLink));
         dashBoardPage.receiptsLink.click();
         }else if(vType.equalsIgnoreCase("payment")){
+            dashBoardPage.dashBoardLink.click();
             wait.until(ExpectedConditions.elementToBeClickable(dashBoardPage.vouchersDropList));
             dashBoardPage.vouchersDropList.click();
             wait.until(ExpectedConditions.elementToBeClickable(dashBoardPage.paymentsLink));

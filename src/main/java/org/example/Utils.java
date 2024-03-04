@@ -1,5 +1,6 @@
 package org.example;
 
+import org.apache.commons.lang.StringUtils;
 import org.openqa.selenium.*;
 
 import java.io.File;
@@ -14,6 +15,7 @@ public class Utils {
      */
     public static void setDate(WebElement dateInput, String date) {
         dateInput.click();
+        date = StringUtils.remove(date,'/');
         dateInput.sendKeys(Keys.ARROW_LEFT);
         dateInput.sendKeys(Keys.ARROW_LEFT);
         dateInput.sendKeys(date);

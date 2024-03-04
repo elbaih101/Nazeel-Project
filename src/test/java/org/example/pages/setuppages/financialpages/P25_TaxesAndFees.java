@@ -19,7 +19,6 @@ public class P25_TaxesAndFees {
     final Actions actions;
 
 
-
     public P25_TaxesAndFees(WebDriver driver) {
         PageFactory.initElements(driver, this);
         this.driver = driver;
@@ -42,6 +41,10 @@ public class P25_TaxesAndFees {
     public WebElement taxSettingButton;
     @FindBy(xpath = "//kendo-switch[@name=\"inclusive\"]")
     public WebElement inclisuveSwitch;
+    @FindBy(xpath = "//div[contains(@class,\"u-m-end\")]//div[2]")
+    public WebElement calcstate;
+    @FindBy(xpath = "//div[@role=\"popover\"]//button[contains(@class,\"button--primary\")]")
+    public WebElement saveCalcButton;
 
 
     public List<WebElement> calculations() {
@@ -49,6 +52,7 @@ public class P25_TaxesAndFees {
         wait.until(ExpectedConditions.visibilityOfAllElements(listItems));
         return listItems;
     }
+
     /////end controls /////
     //// grid ////
     @FindBy(xpath = "//td[@data-kendo-grid-column-index=\"0\"]")
@@ -72,8 +76,61 @@ public class P25_TaxesAndFees {
     @FindBy(xpath = "//td[@data-kendo-grid-column-index=\"9\"]")
     List<WebElement> moreActions;
 
+    public WebElement editButton(WebElement tax) {
+        return tax.findElement(By.xpath("./..//td[@data-kendo-grid-column-index=\"9\"]//button[2]"));
+
+    }
+
+    public WebElement viewButton(WebElement tax) {
+        return tax.findElement(By.xpath("./..//td[@data-kendo-grid-column-index=\"9\"]//button[1]"));
+    }
+
+    public WebElement deleteButton(WebElement tax) {
+        return tax.findElement(By.xpath("./..//td[@data-kendo-grid-column-index=\"9\"]//button[3]"));
+    }
+
+    public WebElement taxType(WebElement tax) {
+        return tax.findElement(By.xpath("./..//td[@data-kendo-grid-column-index=\"1\"]"));
+    }
+
+    public WebElement taxStatus(WebElement tax) {
+        return tax.findElement(By.xpath("./..//td[@data-kendo-grid-column-index=\"2\"]"));
+    }
+
+    public WebElement taxAppliedOn(WebElement tax) {
+        return tax.findElement(By.xpath("./..//td[@data-kendo-grid-column-index=\"3\"]"));
+    }
+
+    public WebElement taxMethod(WebElement tax) {
+        return tax.findElement(By.xpath("./..//td[@data-kendo-grid-column-index=\"4\"]"));
+    }
+
+    public WebElement taxAmount(WebElement tax) {
+        return tax.findElement(By.xpath("./..//td[@data-kendo-grid-column-index=\"5\"]"));
+    }
+
+    public WebElement taxChargedOn(WebElement tax) {
+        return tax.findElement(By.xpath("./..//td[@data-kendo-grid-column-index=\"6\"]"));
+    }
+
+    public WebElement taxStartDate(WebElement tax) {
+        return tax.findElement(By.xpath("./..//td[@data-kendo-grid-column-index=\"7\"]"));
+    }
+
+    public WebElement taxEndDate(WebElement tax) {
+        return tax.findElement(By.xpath("./..//td[@data-kendo-grid-column-index=\"8\"]"));
+    }
+
 
     ///// new\edit tax page /////
+
+    @FindBy(xpath = "//kendo-switch[@name=\"status\"]")
+    public WebElement statusSwitch;
+    @FindBy(xpath = "//button[@tabindex=\"0\"]")
+    public WebElement taxesButton;
+    @FindBy(xpath = "//button[@tabindex=\"-1\"]")
+    public WebElement feesButton;
+
     public List<WebElement> taxes_FeesList() {
         driver.findElement(By.xpath("//kendo-combobox[@name=\"tax\"]//span[@class=\"k-select\"]")).click();
         wait.until(ExpectedConditions.visibilityOfAllElements(listItems));
@@ -85,6 +142,8 @@ public class P25_TaxesAndFees {
         wait.until(ExpectedConditions.visibilityOfAllElements(listItems));
         return listItems;
     }
+    @FindBy(xpath = "//input[@placeholder=\"Select the method\"]")
+    public WebElement methodField;
 
     public List<WebElement> appliedForList() {
         driver.findElement(By.xpath("//kendo-multiselect[@name=\"applied-for\"]")).click();
@@ -92,6 +151,8 @@ public class P25_TaxesAndFees {
         return listItems;
     }
 
+    @FindBy(xpath = "//kendo-multiselect[@name=\"applied-for\"]//li")
+    public List<WebElement> selectedAppliedFor;
 
     @FindBy(id = "amount")
     public WebElement amountField;
@@ -103,11 +164,27 @@ public class P25_TaxesAndFees {
     public WebElement useForExpensesSwitch;
 
     @FindBy(xpath = "//kendo-switch[@name=\"enable-chargedon\"]")
-    public WebElement ChargedOnSwitch;
+    public WebElement chargedOnSwitch;
+    @FindBy(xpath = "//div[@role=\"dialog\"]//button[contains(@class,\"n-button--primary\")]")
+    public List<WebElement> popUpConfirmButton;
 
     public List<WebElement> chargedOnList() {
         driver.findElement(By.xpath("//kendo-multiselect[@name=\"activeCustomizedFees\"]")).click();
         wait.until(ExpectedConditions.visibilityOfAllElements(listItems));
         return listItems;
     }
+
+    @FindBy(xpath = "//kendo-multiselect[@name=\"activeCustomizedFees\"]//li")
+    public List<WebElement> selectedChrgdOn;
+
+
+    public WebElement deleteselctedButtton(WebElement selected) {
+        return selected.findElement(By.xpath("./span[@aria-label=\"delete\"]"));
+    }
+
+    @FindBy(xpath = "//button[contains(@class,\"button--primary\")]")
+    public WebElement submitButon;
+
+    @FindBy(xpath = "//button[contains(@class,\"n-button--danger \")]")
+    public WebElement confirmDeleteButton;
 }

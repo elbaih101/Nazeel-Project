@@ -19,17 +19,12 @@ import org.testng.asserts.SoftAssert;
 
 import java.time.Duration;
 import java.util.List;
-import java.util.Random;
 
 public class D01_MakingReservation {
     WebDriver driver = Hooks.driver;
 
-    public D01_MakingReservation() {
-    }
 
-    public D01_MakingReservation(WebDriver debugDriver) {
-        this.driver = debugDriver;
-    }
+
 
     final P01_LoginPage loginPage = new P01_LoginPage();
     final P02_DashBoardPage homePage = new P02_DashBoardPage();
@@ -261,8 +256,8 @@ public class D01_MakingReservation {
 
 
     @And("elect start date {string} and end Date {string}")
-    public void electStartDateAndEndDate(String sDate, String eDate) {
-        new P00_multiPurposes(driver).waitLoading();
+    public void selectStartDateAndEndDate(String sDate, String eDate) {
+        //new P00_multiPurposes(driver).waitLoading();
         Utils.setDate(reservationMainDataPage.startDateField, sDate);
         Utils.setDate(reservationMainDataPage.endDateField, eDate);
     }
