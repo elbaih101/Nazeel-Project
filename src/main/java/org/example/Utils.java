@@ -20,6 +20,14 @@ public class Utils {
         dateInput.sendKeys(Keys.ARROW_LEFT);
         dateInput.sendKeys(date);
     }
+    public static void setTime(WebElement timeInput,String time){
+        timeInput.click();
+        time = StringUtils.remove(time,':');
+        timeInput.sendKeys(Keys.ARROW_LEFT);
+        timeInput.sendKeys(Keys.ARROW_LEFT);
+        timeInput.sendKeys(time);
+
+    }
    public static String getStyles = "var s = '';" +
             "var o = getComputedStyle(arguments[0]);" +
             "for(var i = 0; i < o.length; i++){" +

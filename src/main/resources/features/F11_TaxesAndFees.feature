@@ -39,7 +39,6 @@ Feature: Property Taxes and Fees setup
 
     Scenario Outline: deleting tax customization
       Given delete the customizatiin "<tax>"
-      Then  Check toast mesage contains text "<msg>"
       And  Check msg "<msg>" and the tax "<tax>" is not visible on grid
       Examples:
         | tax     | msg                                                      |

@@ -12,7 +12,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
 import java.util.List;
 
-@SuppressWarnings("unused")
+
 public class P06_2_LocationDataPage {
     WebDriverWait wait;
     public P06_2_LocationDataPage(WebDriver driver){

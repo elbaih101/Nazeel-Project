@@ -24,9 +24,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.asserts.SoftAssert;
 
 import java.time.Duration;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 public class D12_Financials {
     WebDriver driver = Hooks.driver;
@@ -38,7 +36,7 @@ public class D12_Financials {
     P05_SetupPage setupPage = new P05_SetupPage(driver);
     P25_TaxesAndFees taxesAndFees = new P25_TaxesAndFees(driver);
     P03_7_TaxesPopUp taxesPopUp = new P03_7_TaxesPopUp(driver);
-    P26_CostCenter costCenter=new P26_CostCenter(driver);
+    P26_CostCenter costCenter = new P26_CostCenter(driver);
 
     @Given("open Taxes and Fees Page")
     public void openTaxesAndFeesPage() {
@@ -104,7 +102,9 @@ public class D12_Financials {
                 }
             }
             taxMap.put("aplOn", aplOn);
-        }else {taxMap.put("aplOn","Rent");}
+        } else {
+            taxMap.put("aplOn", "Rent");
+        }
         if (!sDate.isEmpty()) {
             taxesAndFees.startDate.sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.BACK_SPACE));
             if (!sDate.equalsIgnoreCase("non")) {
@@ -151,7 +151,7 @@ public class D12_Financials {
             }
             taxMap.put("chrgOn", chrgOn);
         }
-        taxMap.put("stat","Active");
+        taxMap.put("stat", "Active");
 
     }
 
@@ -211,44 +211,45 @@ public class D12_Financials {
     @Given("delete the customizatiin {string}")
     public void deleteTheCustomizatiin(String tax) {
 
-        WebElement selectedTax= taxesAndFees.names.stream().filter(t->t.getText().contains(tax)).findFirst().get();
+        WebElement selectedTax = taxesAndFees.names.stream().filter(t -> t.getText().contains(tax)).findFirst().get();
         taxesAndFees.deleteButton(selectedTax).click();
         taxesAndFees.confirmDeleteButton.click();
     }
 
     @And("Check msg {string} and the tax {string} is not visible on grid")
-    public void checkTheTaxIsNotVisibleOnGrid(String msg,String tax) {
+    public void checkTheTaxIsNotVisibleOnGrid(String msg, String tax) {
         new D03_BlocksAndFloors().checkToastMesageContainsText(msg);
-       if (!msg.contains("can not be deleted")){
-           asrt.assertFalse(taxesAndFees.names.stream().anyMatch(t->t.getText().contains(tax)));
-           asrt.assertAll();
-       }
+        if (!msg.contains("can not be deleted")) {
+            asrt.assertFalse(taxesAndFees.names.stream().anyMatch(t -> t.getText().contains(tax)));
+            asrt.assertAll();
+        }
     }
 
     @And("Check the tax {string} is applied on the reservations")
     public void checkTheTaxIsAppliedOnTheReservations(String taxName) {
         if (taxMap.get("aplOn").equalsIgnoreCase("non") || taxMap.get("amount").equalsIgnoreCase("non") || taxMap.get("method").equalsIgnoreCase("non") || taxMap.get("sDate").equalsIgnoreCase("non") || dateFormater.parseDateTime(taxMap.get("eDate")).isBefore(dateFormater.parseDateTime(taxMap.get("sDate")))) {
-        } else { if (taxMap.get("stat").toLowerCase().contains("active")) {
-            openReservationTaxesPopUp(taxMap.get("sDate"),taxMap.get("eDate"));
-            WebElement selectedTax = taxesPopUp.taxesNames.stream().filter(t -> t.getText().toLowerCase().contains(taxName.toLowerCase())).findFirst().get();
-            asrt.assertTrue(taxesPopUp.taxMethod(selectedTax).getText().contains(taxMap.get("amount")));
-            if (taxMap.get("method").contains("Percentage")) {
-                asrt.assertTrue(taxesPopUp.taxMethod(selectedTax).getText().contains("%"));
-            }
-            asrt.assertEquals(taxesPopUp.taxStartDate(selectedTax).getText(), taxMap.get("sDate"));
-            asrt.assertEquals(taxesPopUp.taxEndDate(selectedTax).getText(), taxMap.get("eDate"));
-        }else {
+        } else {
+            if (taxMap.get("stat").toLowerCase().contains("active")) {
+                openReservationTaxesPopUp(taxMap.get("sDate"), taxMap.get("eDate"));
+                WebElement selectedTax = taxesPopUp.taxesNames.stream().filter(t -> t.getText().toLowerCase().contains(taxName.toLowerCase())).findFirst().get();
+                asrt.assertTrue(taxesPopUp.taxMethod(selectedTax).getText().contains(taxMap.get("amount")));
+                if (taxMap.get("method").contains("Percentage")) {
+                    asrt.assertTrue(taxesPopUp.taxMethod(selectedTax).getText().contains("%"));
+                }
+                asrt.assertEquals(taxesPopUp.taxStartDate(selectedTax).getText(), taxMap.get("sDate"));
+                asrt.assertEquals(taxesPopUp.taxEndDate(selectedTax).getText(), taxMap.get("eDate"));
+            } else {
 
-            asrt.assertFalse(taxesPopUp.taxesNames.stream().anyMatch(t->t.getText().contains(taxMap.get("name"))));
-        }
-        asrt.assertAll();
+                asrt.assertFalse(taxesPopUp.taxesNames.stream().anyMatch(t -> t.getText().contains(taxMap.get("name"))));
+            }
+            asrt.assertAll();
         }
     }
 
     private void openReservationTaxesPopUp(String startDate, String endDate) {
         new D01_MakingReservation().openReservationsPage();
         new D01_MakingReservation().clickOnAddNewReservation();
-        new D01_MakingReservation().selectStartDateAndEndDate(startDate,endDate);
+        new D01_MakingReservation().selectStartDateAndEndDate(startDate, endDate);
         new D01_MakingReservation().openUnitSelectionPopup();
         new D01_MakingReservation().selectAUnit("RANDOM");
         new P00_multiPurposes(driver).waitLoading();
@@ -257,25 +258,27 @@ public class D12_Financials {
 
     @Given("change the calculation to {string}")
     public void changeTheCalculationTo(String calcType) {
-    taxesAndFees.taxSettingButton.click();
-    if (calcType.equalsIgnoreCase("inclusive")&&taxesAndFees.inclisuveSwitch.getAttribute("class").contains("k-switch-off")){
-        taxesAndFees.inclisuveSwitch.click();
-    }else if (calcType.equalsIgnoreCase("exclusive")&&taxesAndFees.inclisuveSwitch.getAttribute("class").contains("k-switch-on")){
-        taxesAndFees.inclisuveSwitch.click();
-    }
-    taxesAndFees.saveCalcButton.click();
+        taxesAndFees.taxSettingButton.click();
+        if (calcType.equalsIgnoreCase("inclusive") && taxesAndFees.inclisuveSwitch.getAttribute("class").contains("k-switch-off")) {
+            taxesAndFees.inclisuveSwitch.click();
+        } else if (calcType.equalsIgnoreCase("exclusive") && taxesAndFees.inclisuveSwitch.getAttribute("class").contains("k-switch-on")) {
+            taxesAndFees.inclisuveSwitch.click();
+        }
+        taxesAndFees.saveCalcButton.click();
     }
 
     @Then("Check the taxes are with the {string} type")
     public void checkTheTaxesAreWithTheType(String calcType) {
         new P00_multiPurposes(driver).waitLoading();
-        asrt.assertTrue(taxesAndFees.calcstate.getText().contains(calcType),"Expected: "+calcType+"\nActual: "+taxesAndFees.calcstate.getText());
-        WebElement sDate =taxesAndFees.startDates.get(0);
+        asrt.assertTrue(taxesAndFees.calcstate.getText().contains(calcType), "Expected: " + calcType + "\nActual: " + taxesAndFees.calcstate.getText());
+        WebElement sDate = taxesAndFees.startDates.get(0);
         WebElement eDate = taxesAndFees.taxEndDate(sDate);
 
-        if (calcType.equalsIgnoreCase("inclusive")){
-        taxesPopUp.taxesInclusiveness.forEach(t->asrt.assertTrue(t.isSelected()));}
-        else { taxesPopUp.taxesInclusiveness.forEach(t->asrt.assertFalse(t.isSelected()));}
+        if (calcType.equalsIgnoreCase("inclusive")) {
+            taxesPopUp.taxesInclusiveness.forEach(t -> asrt.assertTrue(t.isSelected()));
+        } else {
+            taxesPopUp.taxesInclusiveness.forEach(t -> asrt.assertFalse(t.isSelected()));
+        }
         asrt.assertAll();
     }
 
@@ -288,33 +291,151 @@ public class D12_Financials {
         setupPage.costCentersLink.click();
     }
 
-   HashMap<String,String>costMap=new HashMap<>();
+    HashMap<String, String> costMap = new HashMap<>();
+
     @When("adding new Cost Center with name {string} category {string}")
-    public void addingNewCostCenter(String name,String categ) {
+    public void addingNewCostCenter(String name, String categ) {
         costCenter.newCostCenterButton.click();
-        WebElement selecetd;
-        if (!categ.isEmpty()){
-        if (categ.equalsIgnoreCase("random")){
-        selecetd = costCenter.categoriesList().getFirst();
-        }else {selecetd=costCenter.categoriesList().stream().filter(c->c.getText().contains(categ)).findAny().get();}
-            costMap.put("categ",selecetd.getText());
-            costMap.put("name",name);
-            selecetd.click();}
-        costCenter.costCenterNameField.clear();
-        costCenter.costCenterNameField.sendKeys(name);
-        costCenter.descriptionField.sendKeys("added cost Center");
+        fillCostCenterData(name, categ, "");
         costCenter.submitButton.click();
+    }
+
+    private void fillCostCenterData(String name, String categ, String stat) {
+        WebElement selecetd;
+        if (!categ.isEmpty()) {
+            new P00_multiPurposes(driver).waitLoading();
+            if (categ.equalsIgnoreCase("random")) {
+                selecetd = costCenter.categoriesList().getFirst();
+                costMap.put("categ", selecetd.getText());
+                selecetd.click();
+            } else if (categ.equalsIgnoreCase("non")) {
+                costCenter.categoreyField.sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.BACK_SPACE));
+                costMap.put("categ", "non");
+            } else {
+                selecetd = costCenter.categoriesList().stream().filter(c -> c.getText().contains(categ)).findAny().get();
+                costMap.put("categ", selecetd.getText());
+                selecetd.click();
+            }
+
+
+        }
+        if (!name.isEmpty()) {
+            costCenter.costCenterNameField.clear();
+            if (!name.equalsIgnoreCase("non"))
+                costCenter.costCenterNameField.sendKeys(name);
+
+            costMap.put("name", name);
+        }
+        costCenter.descriptionField.sendKeys("added cost Center");
+        if (!stat.isEmpty()) {
+            if ((stat.equalsIgnoreCase("active") && costCenter.statusSwitch.getAttribute("class").contains("k-switch-off")))
+                costCenter.statusSwitch.click();
+
+            else if ((stat.equalsIgnoreCase("inactive") && costCenter.statusSwitch.getAttribute("class").contains("k-switch-on")))
+                costCenter.statusSwitch.click();
+            costMap.put("stat", stat);
+        }
     }
 
     @And("Check the newly added costCenter is added")
     public void checkTheNewlyAddedCostCenterIsAdded() {
-       P10_VouchersPage vouchersPage= new P10_VouchersPage(driver);
-        asrt.assertTrue(costCenter.costNames.stream().anyMatch(am -> am.getText().contains(costMap.get("categ"))));
+        checkTheLastChangedCostCenter();
+    }
+
+    private void checkTheLastChangedCostCenter() {
+        new P00_multiPurposes(driver).waitLoading();
+        asrt.assertTrue(costCenter.costNames.stream().anyMatch(am -> am.getText().contains(costMap.get("name"))), "Expected: " + costMap.get("name") + " to be present in the grid");
+        P10_VouchersPage vouchersPage = new P10_VouchersPage(driver);
         new D06_DigitalPayment().goToDesiredVouchersPage("Payment");
         new P00_multiPurposes(driver).waitLoading();
         vouchersPage.newVoucherButton.click();
-        P16_VouchersPopUp vouchersPopUp =new P16_VouchersPopUp(driver);
-        asrt.assertTrue(vouchersPopUp.costCentersList().stream().anyMatch(c->c.getText().contains(costMap.get("name"))));
+        P16_VouchersPopUp vouchersPopUp = new P16_VouchersPopUp(driver);
+        if (!costMap.get("stat").equalsIgnoreCase("Inactive"))
+            asrt.assertTrue(vouchersPopUp.costCentersList().stream().anyMatch(c -> c.getText().contains(costMap.get("name"))), "Expected: " + costMap.get("name") + "to be Listed");
+        else
+            asrt.assertFalse(vouchersPopUp.costCentersList().stream().anyMatch(c -> c.getText().contains(costMap.get("name"))), "Expected: " + costMap.get("name") + "to not be Listed");
         asrt.assertAll();
     }
+
+    @Given("edit cost Center {string} name {string} categ {string} status {string}")
+    public void editCostCenterNameCategStatus(String oName, String nName, String categ, String stat) {
+        WebElement selectedCost = getCostCenterByName(oName);
+        costCenter.editButton(selectedCost).click();
+        fillCostCenterData(nName, categ, stat);
+        costCenter.submitButton.click();
+    }
+
+    private WebElement getCostCenterByName(String name) {
+        WebElement selectedCost = null;
+
+        switch (name.toLowerCase()) {
+            case "random" -> selectedCost = costCenter.costNames.stream().findAny().get();
+            case "" -> asrt.assertFalse(true, "enter the desired Cost center to be Edited");
+            case null -> asrt.assertFalse(true, "null old name value");
+            default ->
+                    selectedCost = costCenter.costNames.stream().filter(c -> c.getText().toLowerCase().contains(name.toLowerCase())).findAny().get();
+        }
+        asrt.assertAll();
+        costMap.put("name", selectedCost.getText());
+        costMap.put("categ", costCenter.costCenterCategory(selectedCost).getText());
+        if (costCenter.costCenterStatus(selectedCost).getAttribute("xlink:href").contains("icon-check"))
+            costMap.put("stat", "Acive");
+        else if (costCenter.costCenterStatus(selectedCost).getAttribute("xlink:href").contains("icon-minus"))
+            costMap.put("stat", "Inacive");
+        return selectedCost;
+    }
+
+    @And("Check the updated cost Center")
+    public void checkTheUpdatedCostCenter() {
+        if (!costMap.containsValue("non")) {
+            checkTheLastChangedCostCenter();
+        }
+    }
+
+    @Given("delete cost center {string}")
+    public void deleteCostCenter(String name) {
+        WebElement selectedCostCenter = getCostCenterByName(name);
+        costCenter.deleteButton(selectedCostCenter).click();
+        costCenter.confirmDeleteButton.click();
+    }
+
+    @Then("Check message {string} and the cost center after delete action")
+    public void checkMessageAndTheCostCenterAfterDeleteAction(String msg) {
+        new D03_BlocksAndFloors().checkToastMesageContainsText(msg);
+        if (!msg.contains("can not be deleted")) {
+            new P00_multiPurposes(driver).waitLoading();
+            asrt.assertFalse(costCenter.costNames.stream().anyMatch(t -> t.getText().contains(costMap.get("name"))));
+            asrt.assertAll();
+        }
+    }
+
+    @Given("filter by {string} {string}")
+    public void filterBy(String field, String data) {
+        costCenter.filterButton.click();
+        switch (field) {
+            case "name" ->costCenter.nameFilterField.sendKeys(data);
+            case "categ"->costCenter.categoriesFilterList().stream().filter(c->c.getText().contains(data)).findAny().get().click();
+            case "stat"->costCenter.statusFilterList().stream().filter(c->c.getText().contains(data)).findAny().get().click();
+        }
+        costCenter.searchButton.click();
+    }
+
+    @Then("Check the shown records {string} to contains {string}")
+    public void checkTheShownRecordsToContains(String field, String data) {
+        new P00_multiPurposes(driver).waitLoading();
+        switch (field){
+            case "name" ->asrt.assertFalse(costCenter.costNames.stream().anyMatch(n->!n.getText().contains(data)));
+            case "categ"->asrt.assertFalse( costCenter.categories.stream().anyMatch(c->!c.getText().contains(data)));
+            case "stat"->{switch (data.toLowerCase()){
+                case "active"->asrt.assertFalse(costCenter.costStatuses.stream().anyMatch(s->s.getAttribute("xlink:href").contains("icon-minus"))) ;
+                case "inactive"->asrt.assertFalse(costCenter.costStatuses.stream().anyMatch(s->s.getAttribute("xlink:href").contains("icon-check"))) ;
+
+            }
+
+            }
+        }
+        asrt.assertAll();
+    }
+
+    // icon-check  icon-minus  xlink:href
 }

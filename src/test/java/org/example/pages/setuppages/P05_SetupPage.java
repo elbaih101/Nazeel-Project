@@ -60,4 +60,8 @@ public class P05_SetupPage {
     public WebElement taxesAndFeesLink;
     @FindBy(xpath = "//a[@href=\"/financial/CostCenter\"]")
     public WebElement costCentersLink;
+    @FindBy(xpath = "//span[contains(text(),\"Rules\")]")
+    public WebElement rulesDropList;
+    @FindBy(xpath = "//a[@href=\"/general-settings/reservation\"]")
+    public WebElement reservationRulesLink;
 }

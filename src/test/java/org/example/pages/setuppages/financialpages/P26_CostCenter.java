@@ -58,6 +58,8 @@ public class P26_CostCenter {
         wait.until(ExpectedConditions.visibilityOfAllElements(listItems));
         return listItems;
     }
+    @FindBy(xpath = "//kendo-combobox[@name=\"categorySelection\"]//input")
+    public WebElement categoreyField;
 
     @FindBy(xpath = "//label[contains(text(),\"Name\")]/following-sibling::div//input")
     public WebElement costCenterNameField;
@@ -70,8 +72,8 @@ public class P26_CostCenter {
 
 
     //// grid ////
-    @FindBy(xpath = "//td[@data-kendo-grid-column-index=\"0\"]")
-    public List<WebElement> costStatus;
+    @FindBy(xpath = "td[@data-kendo-grid-column-index=\"0\"]//*[name()=\"use\"]")
+    public List<WebElement> costStatuses;
     @FindBy(xpath = "//td[@data-kendo-grid-column-index=\"1\"]")
     public List<WebElement> costNames;
     @FindBy(xpath = "//td[@data-kendo-grid-column-index=\"2\"]")
@@ -86,23 +88,23 @@ public class P26_CostCenter {
     }
 
 
-    public WebElement editButton(WebElement amenity) {
-        return amenity.findElement(By.xpath("./..//td[@data-kendo-grid-column-index=\"4\"]//button[1]"));
+    public WebElement editButton(WebElement costCenter) {
+        return costCenter.findElement(By.xpath("./..//td[@data-kendo-grid-column-index=\"4\"]//button[1]"));
     }
 
-    @FindBy(xpath = "//div[@role=\"dialog\"]//button[contains(@class,\"n-button--danger \")]")
+    @FindBy(xpath = "//div[@role=\"dialog\"]//button[contains(@class,\"button--danger\")]")
     public WebElement confirmDeleteButton;
 
-    public WebElement costCenterStatus(WebElement amenity) {
-        return amenity.findElement(By.xpath("./..//td[@data-kendo-grid-column-index=\"0\"]"));
+    public WebElement costCenterStatus(WebElement costCenter) {
+        return costCenter.findElement(By.xpath("./..//td[@data-kendo-grid-column-index=\"0\"]//*[name()=\"use\"]"));
     }
 
-    public WebElement costCenterCategory(WebElement amenity) {
-        return amenity.findElement(By.xpath("./..//td[@data-kendo-grid-column-index=\"2\"]"));
+    public WebElement costCenterCategory(WebElement costCenter) {
+        return costCenter.findElement(By.xpath("./..//td[@data-kendo-grid-column-index=\"2\"]"));
     }
 
-    public WebElement costCenterDescription(WebElement amenity) {
-        return amenity.findElement(By.xpath("./..//td[@data-kendo-grid-column-index=\"3\"]"));
+    public WebElement costCenterDescription(WebElement costCenter) {
+        return costCenter.findElement(By.xpath("./..//td[@data-kendo-grid-column-index=\"3\"]"));
     }
 
     //////end grid /////
