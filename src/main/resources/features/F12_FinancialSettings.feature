@@ -45,3 +45,12 @@ Feature: Property Financials settings
         | name  | Hos         |
         | stat  | Active      |
         | categ | Hospitality |
+
+
+
+  Rule:Discount Types
+  Background: go to discount Types page
+    Given go to discount Types page
+
+    Scenario: create new discount type
+

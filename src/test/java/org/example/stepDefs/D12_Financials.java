@@ -317,7 +317,6 @@ public class D12_Financials {
                 selecetd.click();
             }
 
-
         }
         if (!name.isEmpty()) {
             costCenter.costCenterNameField.clear();
@@ -435,6 +434,14 @@ public class D12_Financials {
             }
         }
         asrt.assertAll();
+    }
+
+    @Given("go to discount Types page")
+    public void goToDiscountTypesPage() {
+        new P00_multiPurposes(driver).waitLoading();
+        dashBoardPage.setupPageLink.click();
+        setupPage.financialDropList.click();
+        setupPage.discountTypesLink.click();
     }
 
     // icon-check  icon-minus  xlink:href

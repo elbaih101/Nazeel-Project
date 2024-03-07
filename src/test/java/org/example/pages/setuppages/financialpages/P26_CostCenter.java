@@ -52,7 +52,7 @@ public class P26_CostCenter {
     @FindBy(id = "name")
     public WebElement nameFilterField;
 
-    //// amenity Pop up ///
+    //// costCenter Pop up ///
     public List<WebElement> categoriesList() {
         driver.findElement(By.xpath("//div[@role=\"dialog\"]//label[contains(text(),\"Category\")]/following-sibling::kendo-combobox//span[@class=\"k-select\"]")).click();
         wait.until(ExpectedConditions.visibilityOfAllElements(listItems));
