@@ -39,7 +39,13 @@ public class P27_ReservationRules {
     public WebElement checkOutTimeField;
 
     public List<WebElement> gracePeriodsList() {
+
         driver.findElement(By.xpath("//label[contains(text(),\"Grace \")]/parent::div/following-sibling::kendo-dropdownlist")).click();
+        try {
+            Thread.sleep(300);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
         return listItems;
     }
 
@@ -59,8 +65,15 @@ public class P27_ReservationRules {
     @FindBy(xpath = "//span[contains(@class,\"switch-label--sm\") and contains(text(),\"Reason \")]/preceding-sibling::kendo-switch")
     public WebElement reasonsRequireSwitch;
 
+    @FindBy(xpath = "//label[contains(text(),\\\"Allowance\\\")]/parent::div/following-sibling::kendo-dropdownlist\"")
+    public WebElement unitAllowanceDropList;
     public List<WebElement> unitAllownces() {
         driver.findElement(By.xpath("//label[contains(text(),\"Allowance\")]/parent::div/following-sibling::kendo-dropdownlist")).click();
+        try {
+            Thread.sleep(300);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
         return listItems;
     }
 
@@ -72,9 +85,18 @@ public class P27_ReservationRules {
     public WebElement enableMonthlySwitch;
     @FindBy(xpath = "//span[contains(@class,\"switch-label--sm\") and contains(text(),\"'No Show\")]/preceding-sibling::kendo-switch")
     public WebElement autoNoShowSwitch;
+    @FindBy(xpath = "//label[contains(text(),\"Reason\")]/following-sibling::kendo-combobox//span[@class=\"k-select\"]")
+    public WebElement autoNoShowReasonsDropList;
 
+    @FindBy(xpath = "//label[contains(text(),\"Reason \")]/following-sibling::kendo-combobox//input[@placeholder=\"Select a reason\"]")
+    public WebElement noShowReasonFiled;
     public List<WebElement> autoNoShowReasons() {
         driver.findElement(By.xpath("//label[contains(text(),\"Reason\")]/following-sibling::kendo-combobox//span[@class=\"k-select\"]")).click();
+        try {
+            Thread.sleep(300);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
         return listItems;
 
     }
@@ -86,8 +108,17 @@ public class P27_ReservationRules {
     @FindBy(xpath = "//span[contains(@class,\"switch-label--sm\") and contains(text(),\"Rejected OTA\")]/preceding-sibling::kendo-switch")
     public WebElement autoRejectOTASwitch;
 
+    @FindBy(xpath = "//label[contains(text(),\"Cancel Reason\")]/parent::div/following-sibling::kendo-combobox//span[@class=\"k-select\"]")
+    public WebElement cancelReasonsDropListButton;
+    @FindBy(xpath = "//label[contains(text(),\"Auto Cancel\")]/../following-sibling::kendo-combobox//input[@placeholder=\"Select a reason\"]")
+    public WebElement cancelReasonFiled;
     public List<WebElement> cancelREasonsList() {
         driver.findElement(By.xpath("//label[contains(text(),\"Cancel Reason\")]/parent::div/following-sibling::kendo-combobox//span[@class=\"k-select\"]")).click();
+        try {
+            Thread.sleep(300);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
         return listItems;
     }
 
@@ -102,7 +133,7 @@ public class P27_ReservationRules {
     @FindBy(xpath = "//button[contains(@class,\"n-button--primary\")]")
     public WebElement submitButton;
     //// error msg ///
-    @FindBy(id="swal2-content")
+    @FindBy(id = "swal2-content")
     public WebElement msg;
     @FindBy(xpath = "//div[@class=\"swal2-actions\"]//button[contains(@class,\"swal2\")]")
     public WebElement msgConfirmButton;

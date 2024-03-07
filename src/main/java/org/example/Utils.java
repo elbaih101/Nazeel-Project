@@ -2,8 +2,10 @@ package org.example;
 
 import org.apache.commons.lang.StringUtils;
 import org.openqa.selenium.*;
+import org.openqa.selenium.interactions.Actions;
 
 import java.io.File;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,9 +22,22 @@ public class Utils {
         dateInput.sendKeys(Keys.ARROW_LEFT);
         dateInput.sendKeys(date);
     }
+    public static void  clickAndDrag(WebElement toMove,WebElement moveTo,WebDriver driver){
+        new Actions(driver)
+                .moveToElement(toMove)
+                .pause(Duration.ofSeconds(1))
+                .clickAndHold(toMove)
+                .pause(Duration.ofSeconds(1))
+                .moveByOffset(1, 0)
+                .moveToElement(moveTo)
+                .moveByOffset(1, 0)
+                .pause(Duration.ofSeconds(1))
+                .release().perform();
+    }
     public static void setTime(WebElement timeInput,String time){
         timeInput.click();
         time = StringUtils.remove(time,':');
+        time = StringUtils.remove(time,' ');
         timeInput.sendKeys(Keys.ARROW_LEFT);
         timeInput.sendKeys(Keys.ARROW_LEFT);
         timeInput.sendKeys(time);
