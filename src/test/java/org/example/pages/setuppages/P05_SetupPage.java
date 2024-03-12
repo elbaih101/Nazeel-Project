@@ -60,11 +60,19 @@ public class P05_SetupPage {
     public WebElement taxesAndFeesLink;
     @FindBy(xpath = "//a[@href=\"/financial/CostCenter\"]")
     public WebElement costCentersLink;
+    @FindBy(xpath = "//a[@href=\"/financial/currency-customization\"]")
+    public WebElement currenciesLink;
     @FindBy(xpath = "//span[contains(text(),\"Rules\")]")
     public WebElement rulesDropList;
     @FindBy(xpath = "//a[@href=\"/general-settings/reservation\"]")
     public WebElement reservationRulesLink;
     @FindBy(xpath = "//a[@href=\"/control-panel/discount-types\"]")
     public WebElement discountTypesLink;
+    @FindBy(xpath = "//a[contains(@class,\"n-drawer__item\")]//span[contains(text(),\"Outlets\")]")
+    public WebElement outletsDropList;
+    @FindBy(xpath = "//a[@href=\"/items-addons/outlet-setup\"]")
+    public WebElement outletSetupLink;
+    @FindBy(xpath = "//a[@href=\"/items-addons/outlets-categories\"]")
+    public WebElement categoriesLink;
 
 }

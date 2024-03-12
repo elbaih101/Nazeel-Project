@@ -22,7 +22,7 @@ public class Utils {
         dateInput.sendKeys(Keys.ARROW_LEFT);
         dateInput.sendKeys(date);
     }
-    public static void  clickAndDrag(WebElement toMove,WebElement moveTo,WebDriver driver){
+    public static void moveelement(WebElement toMove, WebElement moveTo, WebDriver driver){
         new Actions(driver)
                 .moveToElement(toMove)
                 .pause(Duration.ofSeconds(1))

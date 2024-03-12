@@ -103,7 +103,7 @@ Feature: Vouchers
         | Receipt | 200    | Cash   |       |       | Refund   | ended   | mada      | Checked-Out |
         | SD      | 200    | Cash   |       |       | SDRefund | ended   | cheque    | Canceled    |
 
-    # Todo : Switch some of the scenarios as no show
+
     Scenario: Check edit mode for payed digital vouchers on a reservation
       Given create PayTabs link for receipt Voucher with "ReceiptVoucher" and generate link with "PayTabs" amount 200 and purpose ""
       And open the link and pay it successfully

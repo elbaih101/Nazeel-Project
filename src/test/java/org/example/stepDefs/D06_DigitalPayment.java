@@ -60,7 +60,7 @@ public class D06_DigitalPayment {
         if (!dashBoardPage.receiptsLink.isDisplayed()) {
             multiPurposes.waitLoading();
             dashBoardPage.dashBoardLink.click();
-            wait.until(ExpectedConditions.elementToBeClickable(dashBoardPage.vouchersDropList));
+            multiPurposes.waitLoading();
             dashBoardPage.vouchersDropList.click();
         }
         wait.until(ExpectedConditions.elementToBeClickable(dashBoardPage.receiptsLink));

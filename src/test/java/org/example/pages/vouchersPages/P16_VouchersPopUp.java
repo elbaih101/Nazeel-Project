@@ -1,8 +1,6 @@
 package org.example.pages.vouchersPages;
 
 import org.example.enums.Vouchers;
-import org.example.pages.mutlipurposes.P00_multiPurposes;
-import org.example.stepDefs.Hooks;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -28,8 +26,8 @@ public class P16_VouchersPopUp {
     }
 
 
-    @FindBy(xpath = "//ul[@role=\"listbox\"]")
-    WebElement genralListBox;
+    @FindBy(xpath = "//ul[@role=\"listbox\"]//li[@role=\"option\"]")
+    List<WebElement> listItems;
 
     @FindBy(xpath = "//div[contains(@class,\"k-window-title k-dialog-title\")]")
     public WebElement popupTitle;
@@ -94,34 +92,36 @@ public class P16_VouchersPopUp {
     public WebElement guestField(String voucherType) {
         if (voucherType.equalsIgnoreCase(Vouchers.Receipt.toString())) {
             return voucherPopUp.findElement(By.xpath(".//label[contains(text(),\"Received From\")]/following-sibling::div//input"));
-        } else if (voucherType.equalsIgnoreCase(Vouchers.Refund.toString())||voucherType.equalsIgnoreCase(Vouchers.SDRefund.toString())||voucherType.equalsIgnoreCase(Vouchers.DropCash.toString())) {
+        } else if (voucherType.equalsIgnoreCase(Vouchers.Refund.toString()) || voucherType.equalsIgnoreCase(Vouchers.SDRefund.toString()) || voucherType.equalsIgnoreCase(Vouchers.DropCash.toString())) {
             return voucherPopUp.findElement(By.xpath(".//label[contains(text(),\"Paid to\")]/following-sibling::div//input"));
-        }else if (voucherType.equalsIgnoreCase(Vouchers.GenReceipt.toString())||voucherType.equalsIgnoreCase(Vouchers.SAReceipt.toString())){
+        } else if (voucherType.equalsIgnoreCase(Vouchers.GenReceipt.toString()) || voucherType.equalsIgnoreCase(Vouchers.SAReceipt.toString())) {
             return voucherPopUp.findElement(By.xpath(".//label[contains(text(),\"Guest Name\")]/following-sibling::div//input"));
-        }
-        else  { //TODO : Expenses Vouchers when the Cr is applied
+        } else { //TODO : Expenses Vouchers when the Cr is applied
             return voucherPopUp.findElement(By.xpath(".//label[contains(text(),\"Guest\")]/../following-sibling::input"));
         }
 
     }
 
-    public List<WebElement>costCentersList(){
+    public List<WebElement> costCentersList() {
         voucherPopUp.findElement(By.xpath(".//label[contains(text(),\"Cost Center\")]/following-sibling::kendo-combobox//span[@class=\"k-select\"]")).click();
         try {
             Thread.sleep(100);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        return genralListBox.findElements(By.xpath("//li[@role=\"option\"]"));
-    } public List<WebElement>vendorsList(){
+        return listItems;
+    }
+
+    public List<WebElement> vendorsList() {
         voucherPopUp.findElement(By.xpath(".//label[contains(text(),\"Vendor\")]/following-sibling::kendo-combobox//span[@class=\"k-select\"]")).click();
         try {
             Thread.sleep(100);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        return genralListBox.findElements(By.xpath("//li[@role=\"option\"]"));
+        return listItems;
     }
+
     public WebElement paymentMethodField() {
         return voucherPopUp.findElement(By.xpath(".//label[contains(text(),\"Payment\")]/following-sibling::kendo-combobox//input"));
     }
@@ -133,7 +133,7 @@ public class P16_VouchersPopUp {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        return genralListBox.findElements(By.xpath("//li[@role=\"option\"]"));
+        return listItems;
     }
 
     public WebElement amountField() {
@@ -143,7 +143,7 @@ public class P16_VouchersPopUp {
 
     public List<WebElement> banks() {
         voucherPopUp.findElement(By.xpath(".//label[contains(text(),\"Bank\")]/../following-sibling::kendo-combobox//span/span/span")).click();
-        return genralListBox.findElements(By.xpath("//li[@role=\"option\"]"));
+        return listItems;
     }
 
     public WebElement submitButton() {
@@ -153,9 +153,15 @@ public class P16_VouchersPopUp {
     public WebElement discardButton() {
         return voucherPopUp.findElement(By.xpath(".//button[contains(@class,\"n-button--danger-border\")]"));
     }
+
     public WebElement purposeField() {
 
-            return voucherPopUp.findElement(By.xpath(".//label[contains(text(),\"Purpose\")]/following-sibling::div//input"));
-        }
+        return voucherPopUp.findElement(By.xpath(".//label[contains(text(),\"Purpose\")]/following-sibling::div//input"));
+    }
+
+    public List<WebElement> currenciesList() {
+        voucherPopUp.findElement(By.xpath(".//kendo-dropdownlist[@textfield=\"symbol\"]")).click();
+        return listItems;
+    }
 
 }

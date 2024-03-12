@@ -4,6 +4,7 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.apache.commons.lang3.StringUtils;
 import org.example.Utils;
 import org.example.pages.P02_DashBoardPage;
 import org.example.pages.mutlipurposes.P00_multiPurposes;
@@ -12,6 +13,8 @@ import org.example.pages.reservations.P03_7_TaxesPopUp;
 import org.example.pages.setuppages.P05_SetupPage;
 import org.example.pages.setuppages.financialpages.P25_TaxesAndFees;
 import org.example.pages.setuppages.financialpages.P26_CostCenter;
+import org.example.pages.setuppages.financialpages.P28_DiscountTypes;
+import org.example.pages.setuppages.financialpages.P29_Currencies;
 import org.example.pages.vouchersPages.P10_VouchersPage;
 import org.example.pages.vouchersPages.P16_VouchersPopUp;
 import org.joda.time.format.DateTimeFormat;
@@ -20,11 +23,15 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.asserts.SoftAssert;
 
+import java.security.PrivateKey;
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class D12_Financials {
     WebDriver driver = Hooks.driver;
@@ -37,6 +44,8 @@ public class D12_Financials {
     P25_TaxesAndFees taxesAndFees = new P25_TaxesAndFees(driver);
     P03_7_TaxesPopUp taxesPopUp = new P03_7_TaxesPopUp(driver);
     P26_CostCenter costCenter = new P26_CostCenter(driver);
+    P28_DiscountTypes discountTypes = new P28_DiscountTypes(driver);
+    P29_Currencies currencies = new P29_Currencies(driver);
 
     @Given("open Taxes and Fees Page")
     public void openTaxesAndFeesPage() {
@@ -412,9 +421,11 @@ public class D12_Financials {
     public void filterBy(String field, String data) {
         costCenter.filterButton.click();
         switch (field) {
-            case "name" ->costCenter.nameFilterField.sendKeys(data);
-            case "categ"->costCenter.categoriesFilterList().stream().filter(c->c.getText().contains(data)).findAny().get().click();
-            case "stat"->costCenter.statusFilterList().stream().filter(c->c.getText().contains(data)).findAny().get().click();
+            case "name" -> costCenter.nameFilterField.sendKeys(data);
+            case "categ" ->
+                    costCenter.categoriesFilterList().stream().filter(c -> c.getText().contains(data)).findAny().get().click();
+            case "stat" ->
+                    costCenter.statusFilterList().stream().filter(c -> c.getText().contains(data)).findAny().get().click();
         }
         costCenter.searchButton.click();
     }
@@ -422,14 +433,17 @@ public class D12_Financials {
     @Then("Check the shown records {string} to contains {string}")
     public void checkTheShownRecordsToContains(String field, String data) {
         new P00_multiPurposes(driver).waitLoading();
-        switch (field){
-            case "name" ->asrt.assertFalse(costCenter.costNames.stream().anyMatch(n->!n.getText().contains(data)));
-            case "categ"->asrt.assertFalse( costCenter.categories.stream().anyMatch(c->!c.getText().contains(data)));
-            case "stat"->{switch (data.toLowerCase()){
-                case "active"->asrt.assertFalse(costCenter.costStatuses.stream().anyMatch(s->s.getAttribute("xlink:href").contains("icon-minus"))) ;
-                case "inactive"->asrt.assertFalse(costCenter.costStatuses.stream().anyMatch(s->s.getAttribute("xlink:href").contains("icon-check"))) ;
+        switch (field) {
+            case "name" -> asrt.assertFalse(costCenter.costNames.stream().anyMatch(n -> !n.getText().contains(data)));
+            case "categ" -> asrt.assertFalse(costCenter.categories.stream().anyMatch(c -> !c.getText().contains(data)));
+            case "stat" -> {
+                switch (data.toLowerCase()) {
+                    case "active" ->
+                            asrt.assertFalse(costCenter.costStatuses.stream().anyMatch(s -> s.getAttribute("xlink:href").contains("icon-minus")));
+                    case "inactive" ->
+                            asrt.assertFalse(costCenter.costStatuses.stream().anyMatch(s -> s.getAttribute("xlink:href").contains("icon-check")));
 
-            }
+                }
 
             }
         }
@@ -442,7 +456,233 @@ public class D12_Financials {
         dashBoardPage.setupPageLink.click();
         setupPage.financialDropList.click();
         setupPage.discountTypesLink.click();
+        new P00_multiPurposes(driver).waitLoading();
     }
 
-    // icon-check  icon-minus  xlink:href
+    String discountDescription;
+
+    @When("Create new Discount Type {string} description {string}")
+    public void createNewDiscountType(String type, String desc) {
+        discountTypes.newDiscountButton.click();
+        filldiscountData(type, desc);
+    }
+
+    private void filldiscountData(String type, String desc) {
+        discountTypes.discountsList().stream().filter(d -> d.getText().equalsIgnoreCase(type)).findAny().get().click();
+        wait.until(ExpectedConditions.textToBePresentInElementValue(discountTypes.reportNameField, type));
+        discountTypes.descriptionField.clear();
+        discountTypes.descriptionField.sendKeys(desc);
+        discountTypes.submitButton.click();
+        discountDescription = desc;
+    }
+
+    @And("Check the Discount {string} in the grid with state {string} is {string}")
+    public void checkTheDiscountInTheGrid(String type, String state, String recState) {
+        new P00_multiPurposes(driver).waitLoading();
+        WebElement tocheck = null;
+        switch (recState) {
+            case "present" -> {
+                if (!type.equalsIgnoreCase("random")) {
+                    final WebElement[] dType = {null};
+                    asrt.assertTrue(discountTypes.types.stream().anyMatch(d -> {
+                        boolean b = d.getText().equalsIgnoreCase(type);
+                        if (b)
+                            dType[0] = d;
+                        return b;
+                    }));
+                    asrt.assertTrue(discountTypes.discountDescription(dType[0]).getText().contains(discountDescription));
+                    tocheck = dType[0];
+                } else {
+                    tocheck = selectedDiscount;
+                }
+                asrt.assertTrue(discountTypes.discountState(tocheck).getText().contains(state));
+            }
+            case "deleted" ->
+                    asrt.assertFalse(discountTypes.types.stream().anyMatch(d -> d.getText().equalsIgnoreCase(type)));
+        }
+        asrt.assertAll();
+    }
+
+    @And("the type {string} is no more in the addition list")
+    public void TheTypeIsNoMoreInTheAdditionList(String type) {
+        discountTypes.newDiscountButton.click();
+        asrt.assertFalse(discountTypes.discountsList().stream().anyMatch(d -> d.getText().equalsIgnoreCase(type)));
+        asrt.assertAll();
+    }
+
+    WebElement selectedDiscount;
+
+    @When("dactivating discount {string}")
+    public void dactivatingDiscount(String type) {
+        if (!type.equalsIgnoreCase("random"))
+            discountTypes.deactivateButton(discountTypes.types.stream().filter(d -> d.getText().equalsIgnoreCase(type)).findAny().get()).click();
+        else {
+            selectedDiscount = discountTypes.statuses.stream().filter(d -> d.getText().equalsIgnoreCase("active")).findAny().get();
+            discountTypes.deactivateButton(selectedDiscount).click();
+        }
+    }
+
+    @When("reactivating discount type {string}")
+    public void reactivatingDiscountType(String type) {
+        if (!type.equalsIgnoreCase("random"))
+            discountTypes.activateButton(discountTypes.types.stream().filter(d -> d.getText().equalsIgnoreCase(type)).findAny().get()).click();
+        else {
+            discountTypes.activateButton(selectedDiscount).click();
+        }
+    }
+
+    @When("deleting discount {string} without related data")
+    public void deletingDiscountWithoutRelatedData(String type) {
+        if (!type.equalsIgnoreCase("random"))
+            discountTypes.deleteButton(discountTypes.types.stream().filter(d -> d.getText().equalsIgnoreCase(type)).findAny().get()).click();
+        else {
+            selectedDiscount = discountTypes.statuses.getLast();
+            discountTypes.deleteButton(selectedDiscount).click();
+        }
+        discountTypes.confirmDeleteButton.click();
+    }
+
+    List<String> discountsListNames = new ArrayList<>();
+
+    @When("replacing the order of the first record with the last")
+    public void replacingTheOrderOfTheFirstRecordWithTheLast() {
+        discountTypes.types.stream().forEach(d -> discountsListNames.add(d.getText()));
+        Utils.moveelement(discountTypes.discountMoveHandle(discountTypes.types.getFirst()), discountTypes.discountMoveHandle(discountTypes.types.getLast()), driver);
+
+    }
+
+    @And("check the order is changed")
+    public void checkTheOrderIsChanged() {
+        new P00_multiPurposes(driver).waitLoading();
+        asrt.assertFalse(discountsListNames.getFirst().equalsIgnoreCase(discountTypes.types.getFirst().getText()), "Expected: " + discountsListNames.getFirst() +
+                "\n Actual: " + discountTypes.types.getFirst().getText());
+        asrt.assertAll();
+    }
+
+
+    @Given("go to Currencies Page")
+    public void goToCurrenciesPage() {
+        dashBoardPage.setupPageLink.click();
+        setupPage.financialDropList.click();
+        setupPage.currenciesLink.click();
+    }
+
+    @When("adding new Currency {string} with exchange Rate {string} and default {string}")
+    public void addingNewCurrencyWithExchangeRateAndDefault(String curr, String exRate, String isDef) {
+        currencies.newCurrencyButton.click();
+        fillCurrencyData(curr, exRate, isDef, "new");
+        currencies.submit_EditButton.click();
+
+    }
+
+    HashMap<String, String> currencyMap = new HashMap<>();
+
+    private void setCurrency(String currName, String symbol, String exRate, String isDef, String state) {
+        currencyMap.put("currName", currName);
+        currencyMap.put("symbol", symbol);
+        currencyMap.put("exRate", exRate);
+        currencyMap.put("isDef", isDef);
+        currencyMap.put("state", state);
+    }
+
+    private void fillCurrencyData(String curr, String exRate, String isDef, String state) {
+        if (!curr.isEmpty()) {
+            WebElement selectedCurr = currencies.currenciesList().stream().filter(c -> c.getText().toLowerCase().contains(curr.toLowerCase())).findAny().get();
+            currencyMap.put("currName", StringUtils.substringBefore(selectedCurr.getText(), " - "));
+            currencyMap.put("symbol", StringUtils.substringAfter(selectedCurr.getText(), " - "));
+            selectedCurr.click();
+        }
+        if (!exRate.isEmpty()) {
+            currencies.exchangeRateField.clear();
+            if (!exRate.contains("non"))
+                currencies.exchangeRateField.sendKeys(exRate);
+            currencyMap.put("exRate", exRate);
+        }
+
+        if ((isDef.equalsIgnoreCase("true") && currencies.defaultWitch.getAttribute("class").contains("k-switch-off")) ||
+                (isDef.equalsIgnoreCase("false") && currencies.defaultWitch.getAttribute("class").contains("k-switch-on"))) {
+            currencies.defaultWitch.click();
+            currencies.dialogConfirmButton.click();
+        }
+        currencyMap.put("isDef", isDef);
+        if (!state.isEmpty()) {
+            if ((state.equalsIgnoreCase("active") && currencies.statusSwitch.getAttribute("class").contains("k-switch-off")) ||
+                    (state.equalsIgnoreCase("inactive") && currencies.statusSwitch.getAttribute("class").contains("k-switch-on"))) {
+                currencies.statusSwitch.click();
+                currencyMap.put("state", state);
+            }else if (state.equalsIgnoreCase("new"))
+                currencyMap.put("state", "Active");
+
+        }
+
+    }
+
+    @And("check msg {string} and the new currency is added in the grid")
+    public void checkTheNewCurrencyIsAddedInTheGrid(String msg) {
+        new D03_BlocksAndFloors().checkToastMesageContainsText(msg);
+        if (msg.contains("Successfully")) {
+            WebElement createdCurr = currencies.currenciesNames.stream().filter(c -> c.getText().contains(currencyMap.get("currName"))).findFirst().get();
+            asrt.assertTrue(currencies.currencySymbol(createdCurr).getText().equalsIgnoreCase(currencyMap.get("symbol")), "symbol is wrong");
+            asrt.assertTrue(currencies.currencyStatus(createdCurr).getText().equalsIgnoreCase(currencyMap.get("state")), "state not right");
+            if (currencyMap.get("isDef").equalsIgnoreCase("true")) {
+                asrt.assertTrue(currencies.currencySetting(createdCurr).getText().contains("Default"), "the currency was not default");
+                asrt.assertTrue(currencies.currencyExchangeRate(createdCurr).getText().equalsIgnoreCase("1"), "exRate not right");
+            } else
+                asrt.assertTrue(currencies.currencyExchangeRate(createdCurr).getText().equalsIgnoreCase(currencyMap.get("exRate")), "exRate not right");
+            new D06_DigitalPayment().goToDesiredVouchersPage("Receipt");
+            new P10_VouchersPage(driver).newVoucherButton.click();
+            List<WebElement> currencies = new P16_VouchersPopUp(driver).currenciesList();
+            asrt.assertTrue(currencies.stream().anyMatch(c -> c.getText().equalsIgnoreCase(currencyMap.get("symbol"))));
+            asrt.assertAll();
+        }
+
+    }
+
+    @When("editing Currency {string} to {string} and exchangeRate {string} and state {string} and default {string}")
+    public void editingCurrencyToAndExchangeRateAndStateAndDefault(String oCurr, String nCurr, String exRate, String state, String isDef) {
+        WebElement selectedCurr = currencies.symbols.stream().filter(c -> c.getText().equalsIgnoreCase(oCurr)).findAny().get();
+        setCurrency(currencies.currencyName(selectedCurr).getText(), currencies.currencySymbol(selectedCurr).getText(), currencies.currencyExchangeRate(selectedCurr).getText(), currencies.currencySetting(selectedCurr).getText(), currencies.currencyStatus(selectedCurr).getText());
+        currencies.currencyEditButton(selectedCurr).click();
+        new P00_multiPurposes(driver).waitLoading();
+        fillCurrencyData(nCurr, exRate, isDef, state);
+        currencies.submit_EditButton.click();
+    }
+
+    @When("deleting {string} currency")
+    public void deletingCurrency(String curr) {
+        WebElement selectedCurr;
+        if (curr.equalsIgnoreCase("default")) {
+            selectedCurr = currencies.settings.stream().filter(c -> c.getText().equalsIgnoreCase(curr)).findAny().get();
+        } else {
+            selectedCurr = currencies.symbols.stream().filter(c -> c.getText().equalsIgnoreCase(curr)).findAny().get();
+        }
+        setCurrency(currencies.currencyName(selectedCurr).getText(), currencies.currencySymbol(selectedCurr).getText(), currencies.currencyExchangeRate(selectedCurr).getText(), currencies.currencySetting(selectedCurr).getText(), currencies.currencyStatus(selectedCurr).getText());
+        currencies.deleteButton(selectedCurr).click();
+        if (!curr.equalsIgnoreCase("default"))
+            currencies.dialogConfirmButton.click();
+    }
+
+    @Then("Check {string} and the currency is deleted")
+    public void checkAndTheCurrencyIsDeleted(String msg) {
+        new D03_BlocksAndFloors().checkToastMesageContainsText(msg);
+        if (!msg.contains("Successfully")) {
+            WebElement createdCurr = currencies.currenciesNames.stream().filter(c -> c.getText().contains(currencyMap.get("currName"))).findFirst().get();
+            asrt.assertTrue(currencies.currencySymbol(createdCurr).getText().equalsIgnoreCase(currencyMap.get("symbol")), "symbol is wrong");
+            asrt.assertTrue(currencies.currencyStatus(createdCurr).getText().equalsIgnoreCase(currencyMap.get("state")), "state not right");
+            if (currencyMap.get("isDef").equalsIgnoreCase("true")) {
+                asrt.assertTrue(currencies.currencySetting(createdCurr).getText().contains("Default"), "the currency was not default");
+                asrt.assertTrue(currencies.currencyExchangeRate(createdCurr).getText().equalsIgnoreCase("1"), "exRate not right");
+            } else
+                asrt.assertTrue(currencies.currencyExchangeRate(createdCurr).getText().equalsIgnoreCase(currencyMap.get("exRate")), "exRate not right");
+
+        } else {
+            asrt.assertFalse(currencies.currenciesNames.stream().anyMatch(c -> c.getText().equalsIgnoreCase(currencyMap.get("currName"))));
+            new D06_DigitalPayment().goToDesiredVouchersPage("Receipt");
+            new P10_VouchersPage(driver).newVoucherButton.click();
+            List<WebElement> currencies = new P16_VouchersPopUp(driver).currenciesList();
+            asrt.assertFalse(currencies.stream().anyMatch(c -> c.getText().equalsIgnoreCase(currencyMap.get("symbol"))));
+
+        }
+        asrt.assertAll();
+    }
 }
