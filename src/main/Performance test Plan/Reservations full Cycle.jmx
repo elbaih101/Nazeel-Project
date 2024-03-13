@@ -214,7 +214,7 @@
           <boolProp name="LoopController.continue_forever">false</boolProp>
         </elementProp>
         <stringProp name="ThreadGroup.num_threads">6</stringProp>
-        <stringProp name="ThreadGroup.ramp_time">3</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">2</stringProp>
         <boolProp name="ThreadGroup.delayedStart">false</boolProp>
         <boolProp name="ThreadGroup.scheduler">false</boolProp>
         <stringProp name="ThreadGroup.duration"></stringProp>
@@ -2448,7 +2448,7 @@ vars.put(&quot;reservationTaxes&quot;,newJson)</stringProp>
               <stringProp name="HTTPSampler.port">${port}</stringProp>
               <stringProp name="HTTPSampler.protocol">${Protocol}</stringProp>
               <stringProp name="HTTPSampler.path">api/Reservation/create-receipt-voucher</stringProp>
-              <stringProp name="HTTPSampler.method">GET</stringProp>
+              <stringProp name="HTTPSampler.method">post</stringProp>
               <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
               <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
               <boolProp name="HTTPSampler.use_keepalive">true</boolProp>

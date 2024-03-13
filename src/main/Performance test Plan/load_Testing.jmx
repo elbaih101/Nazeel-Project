@@ -4330,7 +4330,7 @@ log.info(vars.get(&quot;reservation&quot;))
               <hashTree/>
             </hashTree>
           </hashTree>
-          <TransactionController guiclass="TransactionControllerGui" testclass="TransactionController" testname="check out reservation" enabled="true">
+          <TransactionController guiclass="TransactionControllerGui" testclass="TransactionController" testname="check out reservation iwthout paying" enabled="true">
             <boolProp name="TransactionController.includeTimers">false</boolProp>
             <boolProp name="TransactionController.parent">true</boolProp>
           </TransactionController>
@@ -4628,6 +4628,583 @@ def newJson = new groovy.json.JsonBuilder(json.data).toPrettyString()
 log.info(newJson)
 vars.put(&quot;reservationTaxes&quot;,newJson)</stringProp>
               </JSR223PostProcessor>
+              <hashTree/>
+            </hashTree>
+            <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="api/Reservation/check-out-wizard" enabled="true">
+              <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+              <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+                <collectionProp name="Arguments.arguments">
+                  <elementProp name="" elementType="HTTPArgument">
+                    <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                    <stringProp name="Argument.value">${changedReservation}</stringProp>
+                    <stringProp name="Argument.metadata">=</stringProp>
+                  </elementProp>
+                </collectionProp>
+              </elementProp>
+              <stringProp name="HTTPSampler.domain">${BASE_URL}</stringProp>
+              <stringProp name="HTTPSampler.port">${port}</stringProp>
+              <stringProp name="HTTPSampler.protocol">${Protocol}</stringProp>
+              <stringProp name="HTTPSampler.path">api/Reservation/check-out-wizard</stringProp>
+              <stringProp name="HTTPSampler.method">POST</stringProp>
+              <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+              <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+              <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+              <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+              <boolProp name="HTTPSampler.BROWSER_COMPATIBLE_MULTIPART">false</boolProp>
+              <boolProp name="HTTPSampler.image_parser">false</boolProp>
+              <boolProp name="HTTPSampler.concurrentDwn">false</boolProp>
+              <stringProp name="HTTPSampler.concurrentPool">6</stringProp>
+              <boolProp name="HTTPSampler.md5">false</boolProp>
+              <intProp name="HTTPSampler.ipSourceType">0</intProp>
+            </HTTPSamplerProxy>
+            <hashTree>
+              <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header manager" enabled="true">
+                <collectionProp name="HeaderManager.headers">
+                  <elementProp name="Content-Type" elementType="Header">
+                    <stringProp name="Header.name">Content-Type</stringProp>
+                    <stringProp name="Header.value">application/json</stringProp>
+                  </elementProp>
+                </collectionProp>
+              </HeaderManager>
+              <hashTree/>
+              <JSR223PreProcessor guiclass="TestBeanGUI" testclass="JSR223PreProcessor" testname="changedReservation" enabled="true">
+                <stringProp name="scriptLanguage">groovy</stringProp>
+                <stringProp name="parameters"></stringProp>
+                <stringProp name="filename"></stringProp>
+                <stringProp name="cacheKey">true</stringProp>
+                <stringProp name="script">def updatedReservation = new groovy.json.JsonSlurper().parseText(vars.get(&quot;reservation&quot;))
+
+double balance = -1* Double.parseDouble(vars.get(&quot;net&quot;))
+/// Action  9  -&gt; chckout (edit)
+updatedReservation.put(&quot;action&quot;,9)
+updatedReservation.put(&quot;reservationUnits&quot;,new groovy.json.JsonSlurper().parseText(vars.get(&quot;reservationUnits&quot;)))
+updatedReservation.put(&quot;reservationUnitsRates&quot;,new groovy.json.JsonSlurper().parseText(vars.get(&quot;reservationUnitsRates&quot;)))
+updatedReservation.put(&quot;reservationTaxes&quot;,new groovy.json.JsonSlurper().parseText(vars.get(&quot;reservationTaxes&quot;)))
+updatedReservation.put(&quot;unitsTotalInsurance&quot;,0)
+updatedReservation.put(&quot;totalReceived&quot;,0)
+updatedReservation.put(&quot;totalRefund&quot;,0)
+updatedReservation.put(&quot;totalInsuranceReceived&quot;,0)
+updatedReservation.put(&quot;totalInsuranceRefund&quot;,0)
+updatedReservation.put(&quot;totalDraft&quot;,0)
+updatedReservation.put(&quot;balance&quot;,balance)
+updatedReservation.put(&quot;totalExtras&quot;,0)
+updatedReservation.put(&quot;totalNet&quot;,vars.get(&quot;net&quot;))
+updatedReservation.put(&quot;totalRentBeforeDiscount&quot;,vars.get(&quot;rate&quot;))
+updatedReservation.put(&quot;totalRentAfterDiscount&quot;,vars.get(&quot;rate&quot;))
+updatedReservation.put(&quot;totalPenalties&quot;,0)
+updatedReservation.put(&quot;totalTaxes&quot;,vars.get(&quot;totalTaxes&quot;))
+updatedReservation.put(&quot;totalRentTaxes&quot;,vars.get(&quot;totalTaxes&quot;))
+updatedReservation.put(&quot;totalRestDiscount&quot;,0)
+updatedReservation.put(&quot;totalInclusiveTaxes&quot;,vars.get(&quot;inclusiveTaxes&quot;))
+updatedReservation.put(&quot;totalRestDiscount&quot;,0)
+updatedReservation.put(&quot;totalRentDiscount&quot;,0)
+updatedReservation.put(&quot;totalRentDiscountPercent&quot;,0)
+updatedReservation.put(&quot;totalAdjustment&quot;,0)
+
+
+def changedReservation =new groovy.json.JsonBuilder(updatedReservation).toPrettyString()
+//log.info(changedReservation)
+vars.put(&quot;changedReservation&quot;,changedReservation)</stringProp>
+              </JSR223PreProcessor>
+              <hashTree/>
+            </hashTree>
+            <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="api/Setting/Country/getActiveLiteCountries" enabled="true">
+              <boolProp name="HTTPSampler.postBodyRaw">false</boolProp>
+              <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
+                <collectionProp name="Arguments.arguments"/>
+              </elementProp>
+              <stringProp name="HTTPSampler.domain">${BASE_URL}</stringProp>
+              <stringProp name="HTTPSampler.port">${port}</stringProp>
+              <stringProp name="HTTPSampler.protocol">${Protocol}</stringProp>
+              <stringProp name="HTTPSampler.path">api/Setting/Country/getActiveLiteCountries</stringProp>
+              <stringProp name="HTTPSampler.method">GET</stringProp>
+              <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+              <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+              <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+              <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+              <boolProp name="HTTPSampler.BROWSER_COMPATIBLE_MULTIPART">false</boolProp>
+              <boolProp name="HTTPSampler.image_parser">false</boolProp>
+              <boolProp name="HTTPSampler.concurrentDwn">false</boolProp>
+              <stringProp name="HTTPSampler.concurrentPool">6</stringProp>
+              <boolProp name="HTTPSampler.md5">false</boolProp>
+              <intProp name="HTTPSampler.ipSourceType">0</intProp>
+            </HTTPSamplerProxy>
+            <hashTree>
+              <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header manager" enabled="true">
+                <collectionProp name="HeaderManager.headers"/>
+              </HeaderManager>
+              <hashTree/>
+            </hashTree>
+            <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="api/LookUps/ReservationStatus" enabled="true">
+              <boolProp name="HTTPSampler.postBodyRaw">false</boolProp>
+              <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
+                <collectionProp name="Arguments.arguments"/>
+              </elementProp>
+              <stringProp name="HTTPSampler.domain">${BASE_URL}</stringProp>
+              <stringProp name="HTTPSampler.port">${port}</stringProp>
+              <stringProp name="HTTPSampler.protocol">${Protocol}</stringProp>
+              <stringProp name="HTTPSampler.path">api/LookUps/ReservationStatus</stringProp>
+              <stringProp name="HTTPSampler.method">GET</stringProp>
+              <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+              <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+              <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+              <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+              <boolProp name="HTTPSampler.BROWSER_COMPATIBLE_MULTIPART">false</boolProp>
+              <boolProp name="HTTPSampler.image_parser">false</boolProp>
+              <boolProp name="HTTPSampler.concurrentDwn">false</boolProp>
+              <stringProp name="HTTPSampler.concurrentPool">6</stringProp>
+              <boolProp name="HTTPSampler.md5">false</boolProp>
+              <intProp name="HTTPSampler.ipSourceType">0</intProp>
+            </HTTPSamplerProxy>
+            <hashTree>
+              <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header manager" enabled="true">
+                <collectionProp name="HeaderManager.headers"/>
+              </HeaderManager>
+              <hashTree/>
+            </hashTree>
+            <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="api/Setting/ControlPanel/ReservationSourcesCustomizationsController/GetLiteByCompany" enabled="true">
+              <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+              <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+                <collectionProp name="Arguments.arguments">
+                  <elementProp name="" elementType="HTTPArgument">
+                    <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                    <stringProp name="Argument.value">5082</stringProp>
+                    <stringProp name="Argument.metadata">=</stringProp>
+                  </elementProp>
+                </collectionProp>
+              </elementProp>
+              <stringProp name="HTTPSampler.domain">${BASE_URL}</stringProp>
+              <stringProp name="HTTPSampler.port">${port}</stringProp>
+              <stringProp name="HTTPSampler.protocol">${Protocol}</stringProp>
+              <stringProp name="HTTPSampler.path">api/Setting/ControlPanel/ReservationSourcesCustomizationsController/GetLiteByCompany</stringProp>
+              <stringProp name="HTTPSampler.method">POST</stringProp>
+              <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+              <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+              <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+              <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+              <boolProp name="HTTPSampler.BROWSER_COMPATIBLE_MULTIPART">false</boolProp>
+              <boolProp name="HTTPSampler.image_parser">false</boolProp>
+              <boolProp name="HTTPSampler.concurrentDwn">false</boolProp>
+              <stringProp name="HTTPSampler.concurrentPool">6</stringProp>
+              <boolProp name="HTTPSampler.md5">false</boolProp>
+              <intProp name="HTTPSampler.ipSourceType">0</intProp>
+            </HTTPSamplerProxy>
+            <hashTree>
+              <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header manager" enabled="true">
+                <collectionProp name="HeaderManager.headers">
+                  <elementProp name="Content-Type" elementType="Header">
+                    <stringProp name="Header.name">Content-Type</stringProp>
+                    <stringProp name="Header.value">application/json</stringProp>
+                  </elementProp>
+                </collectionProp>
+              </HeaderManager>
+              <hashTree/>
+            </hashTree>
+            <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="/api/Reservation/Get/{created Reservation}" enabled="true">
+              <boolProp name="HTTPSampler.postBodyRaw">false</boolProp>
+              <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
+                <collectionProp name="Arguments.arguments"/>
+              </elementProp>
+              <stringProp name="HTTPSampler.domain">${BASE_URL}</stringProp>
+              <stringProp name="HTTPSampler.port">${port}</stringProp>
+              <stringProp name="HTTPSampler.protocol">${Protocol}</stringProp>
+              <stringProp name="HTTPSampler.path">api/Reservation/Get/${Created_Reservation}</stringProp>
+              <stringProp name="HTTPSampler.method">GET</stringProp>
+              <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+              <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+              <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+              <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+              <boolProp name="HTTPSampler.BROWSER_COMPATIBLE_MULTIPART">false</boolProp>
+              <boolProp name="HTTPSampler.image_parser">false</boolProp>
+              <boolProp name="HTTPSampler.concurrentDwn">false</boolProp>
+              <stringProp name="HTTPSampler.concurrentPool">6</stringProp>
+              <boolProp name="HTTPSampler.md5">false</boolProp>
+              <intProp name="HTTPSampler.ipSourceType">0</intProp>
+            </HTTPSamplerProxy>
+            <hashTree>
+              <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header manager" enabled="true">
+                <collectionProp name="HeaderManager.headers">
+                  <elementProp name="Content-Type" elementType="Header">
+                    <stringProp name="Header.name">Content-Type</stringProp>
+                    <stringProp name="Header.value">application/json</stringProp>
+                  </elementProp>
+                </collectionProp>
+              </HeaderManager>
+              <hashTree/>
+              <JSR223PostProcessor guiclass="TestBeanGUI" testclass="JSR223PostProcessor" testname="JSR223 PostProcessor" enabled="true">
+                <stringProp name="scriptLanguage">groovy</stringProp>
+                <stringProp name="parameters"></stringProp>
+                <stringProp name="filename"></stringProp>
+                <stringProp name="cacheKey">true</stringProp>
+                <stringProp name="script">def json = new groovy.json.JsonSlurper().parse(prev.getResponseData())
+def reservation = new groovy.json.JsonBuilder(json.data).toPrettyString()
+
+vars.put(&quot;reservation&quot;,reservation)
+log.info(vars.get(&quot;reservation&quot;))
+
+</stringProp>
+              </JSR223PostProcessor>
+              <hashTree/>
+            </hashTree>
+          </hashTree>
+          <TransactionController guiclass="TransactionControllerGui" testclass="TransactionController" testname="check out reservation with receipts" enabled="false">
+            <boolProp name="TransactionController.includeTimers">false</boolProp>
+            <boolProp name="TransactionController.parent">true</boolProp>
+          </TransactionController>
+          <hashTree>
+            <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="/api/Reservation/Get/{created Reservation}" enabled="true">
+              <boolProp name="HTTPSampler.postBodyRaw">false</boolProp>
+              <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
+                <collectionProp name="Arguments.arguments"/>
+              </elementProp>
+              <stringProp name="HTTPSampler.domain">${BASE_URL}</stringProp>
+              <stringProp name="HTTPSampler.port">${port}</stringProp>
+              <stringProp name="HTTPSampler.protocol">${Protocol}</stringProp>
+              <stringProp name="HTTPSampler.path">api/Reservation/Get/${Created_Reservation}</stringProp>
+              <stringProp name="HTTPSampler.method">GET</stringProp>
+              <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+              <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+              <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+              <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+              <boolProp name="HTTPSampler.BROWSER_COMPATIBLE_MULTIPART">false</boolProp>
+              <boolProp name="HTTPSampler.image_parser">false</boolProp>
+              <boolProp name="HTTPSampler.concurrentDwn">false</boolProp>
+              <stringProp name="HTTPSampler.concurrentPool">6</stringProp>
+              <boolProp name="HTTPSampler.md5">false</boolProp>
+              <intProp name="HTTPSampler.ipSourceType">0</intProp>
+            </HTTPSamplerProxy>
+            <hashTree>
+              <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header manager" enabled="true">
+                <collectionProp name="HeaderManager.headers"/>
+              </HeaderManager>
+              <hashTree/>
+              <JSR223PostProcessor guiclass="TestBeanGUI" testclass="JSR223PostProcessor" testname="reservationUnits ,units [setter]" enabled="true">
+                <stringProp name="scriptLanguage">groovy</stringProp>
+                <stringProp name="parameters"></stringProp>
+                <stringProp name="filename"></stringProp>
+                <stringProp name="cacheKey">true</stringProp>
+                <stringProp name="script">def json = new groovy.json.JsonSlurper().parse(prev.getResponseData())
+def reservation = new groovy.json.JsonBuilder(json.data).toPrettyString()
+
+
+// set reservation body
+vars.put(&quot;reservation&quot;,reservation)
+//log.info(vars.get(&quot;reservation&quot;))
+
+// set reservation units to be by number
+json.data.reservationUnits.each{unit-&gt;
+unit.put(&quot;isByUnitType&quot;,false)}
+def reservationUnits =new groovy.json.JsonBuilder(json.data.reservationUnits).toPrettyString()
+vars.put(&apos;reservationUnits&apos;,reservationUnits)
+
+
+json.data.reservationUnits.each{unit -&gt; 
+	unit.remove(&quot;canBeMerged&quot;)
+	unit.remove(&quot;reservationId&quot;)
+	unit.remove(&quot;floorId&quot;)
+	unit.remove(&quot;floorName&quot;)
+	unit.remove(&quot;fromDate&quot;)
+	unit.remove(&quot;toDate&quot;)
+	unit.remove(&quot;mergedUnitReservationUnitId&quot;)
+	unit.remove(&quot;doorLockCardsKeysCount&quot;)
+	unit.remove(&quot;mergedUnitId&quot;)
+	unit.remove(&quot;mergedUnitNumber&quot;)
+	unit.remove(&quot;unavailable&quot;)
+	unit.remove(&quot;changedUnitNumber&quot;)
+	unit.remove(&quot;changedUnitTypeName&quot;)
+	unit.remove(&quot;action&quot;)
+	unit.remove(&quot;allowChangeUnit&quot;)
+	unit.remove(&quot;changeUnitReason&quot;)
+	unit.remove(&quot;isLockMapped&quot;)
+	unit.remove(&quot;requireReload&quot;)
+	
+}
+def units =new groovy.json.JsonBuilder(json.data.reservationUnits).toPrettyString()
+//log.info(units)
+vars.put(&quot;units&quot;,units)
+vars.put(&quot;units&quot;,units)
+
+</stringProp>
+              </JSR223PostProcessor>
+              <hashTree/>
+            </hashTree>
+            <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="/api/financial/rate-calculator/get-reservation-units-rates" enabled="true">
+              <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+              <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+                <collectionProp name="Arguments.arguments">
+                  <elementProp name="" elementType="HTTPArgument">
+                    <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                    <stringProp name="Argument.value">{&#xd;
+	&quot;fromDate&quot;: ${From_Date},&#xd;
+	&quot;toDate&quot;: ${To_Date},&#xd;
+	&quot;propertyId&quot;: ${Property_ID},&#xd;
+	&quot;reservationRentalTypeId&quot;: 1,&#xd;
+	&quot;reservationCalenderTypeId&quot;: 1,&#xd;
+	&quot;reservationStatusId&quot;: 2,&#xd;
+	&quot;selectedRateMethodId&quot;: 2,&#xd;
+	&quot;selectedRateMethodChanged&quot;: false,&#xd;
+	&quot;units&quot;: ${units},&#xd;
+	&quot;rateCalculatorRequestCounter&quot;: 1&#xd;
+}</stringProp>
+                    <stringProp name="Argument.metadata">=</stringProp>
+                  </elementProp>
+                </collectionProp>
+              </elementProp>
+              <stringProp name="HTTPSampler.domain">${BASE_URL}</stringProp>
+              <stringProp name="HTTPSampler.port">${port}</stringProp>
+              <stringProp name="HTTPSampler.protocol">${Protocol}</stringProp>
+              <stringProp name="HTTPSampler.path">api/financial/rate-calculator/get-reservation-units-rates</stringProp>
+              <stringProp name="HTTPSampler.method">POST</stringProp>
+              <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+              <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+              <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+              <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+              <boolProp name="HTTPSampler.BROWSER_COMPATIBLE_MULTIPART">false</boolProp>
+              <boolProp name="HTTPSampler.image_parser">false</boolProp>
+              <boolProp name="HTTPSampler.concurrentDwn">false</boolProp>
+              <stringProp name="HTTPSampler.concurrentPool">6</stringProp>
+              <boolProp name="HTTPSampler.md5">false</boolProp>
+              <intProp name="HTTPSampler.ipSourceType">0</intProp>
+              <stringProp name="TestPlan.comments">consumes units Variable</stringProp>
+            </HTTPSamplerProxy>
+            <hashTree>
+              <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header manager" enabled="true">
+                <collectionProp name="HeaderManager.headers">
+                  <elementProp name="Content-Type" elementType="Header">
+                    <stringProp name="Header.name">Content-Type</stringProp>
+                    <stringProp name="Header.value">application/json</stringProp>
+                  </elementProp>
+                  <elementProp name="SelectedProperty" elementType="Header">
+                    <stringProp name="Header.name">SelectedProperty</stringProp>
+                    <stringProp name="Header.value">${Property_ID}</stringProp>
+                  </elementProp>
+                  <elementProp name="Accept" elementType="Header">
+                    <stringProp name="Header.name">Accept</stringProp>
+                    <stringProp name="Header.value">application/json, text/plain, */*</stringProp>
+                  </elementProp>
+                  <elementProp name="ClientId" elementType="Header">
+                    <stringProp name="Header.name">ClientId</stringProp>
+                    <stringProp name="Header.value">84fb02ec-f5a8-8bf0-7520-2da5de3904be</stringProp>
+                  </elementProp>
+                </collectionProp>
+              </HeaderManager>
+              <hashTree/>
+              <JSR223PostProcessor guiclass="TestBeanGUI" testclass="JSR223PostProcessor" testname="reservationUnitsRates , rate" enabled="true">
+                <stringProp name="cacheKey">true</stringProp>
+                <stringProp name="filename"></stringProp>
+                <stringProp name="parameters"></stringProp>
+                <stringProp name="script">def json = new groovy.json.JsonSlurper().parse(prev.getResponseData())
+
+json.data.each{unit -&gt;
+unit.put(&quot;isCalculatedAtFrontEnd&quot;,false)
+unit.put(&quot;rateCalculatorRequestCounter&quot;,1)
+unit.rates.each{rate -&gt;
+rate.put(&quot;nights&quot;,1)
+rate.put(&quot;isLastRate&quot;,true)
+}
+unit.put(&quot;checkOutDate&quot;,null)
+}
+
+def newJson = new groovy.json.JsonBuilder(json.data).toPrettyString()
+//log.info(newJson)
+vars.put(&apos;reservationUnitsRates&apos;, newJson)
+// the rate field in rreservation creation
+def json1 = new groovy.json.JsonSlurper().parse(prev.getResponseData())
+Double totalRate = 0.0
+json1.data.each{unit -&gt;
+Double unitRate = unit.rates[0].rate
+totalRate =unitRate+totalRate
+}
+log.info(&quot;the total rate is :&quot;,totalRate)
+vars.put(&quot;rate&quot;,totalRate.toString())
+</stringProp>
+                <stringProp name="scriptLanguage">groovy</stringProp>
+              </JSR223PostProcessor>
+              <hashTree/>
+            </hashTree>
+            <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="/api/financial/tax-calculator/get-reservation-taxes" enabled="true">
+              <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+              <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+                <collectionProp name="Arguments.arguments">
+                  <elementProp name="" elementType="HTTPArgument">
+                    <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                    <stringProp name="Argument.value">{&#xd;
+	&quot;startDate&quot;:${From_Date},&#xd;
+	&quot;endDate&quot;: ${To_Date},&#xd;
+	&quot;datesChanged&quot;: false,&#xd;
+	&quot;reservationId&quot;:${Created_Reservation},&#xd;
+	&quot;reload&quot;: false,&#xd;
+	&quot;propertyId&quot;: ${Property_ID}&#xd;
+}</stringProp>
+                    <stringProp name="Argument.metadata">=</stringProp>
+                  </elementProp>
+                </collectionProp>
+              </elementProp>
+              <stringProp name="HTTPSampler.domain">${BASE_URL}</stringProp>
+              <stringProp name="HTTPSampler.port">${port}</stringProp>
+              <stringProp name="HTTPSampler.protocol">${Protocol}</stringProp>
+              <stringProp name="HTTPSampler.path">api/financial/tax-calculator/get-reservation-taxes</stringProp>
+              <stringProp name="HTTPSampler.method">POST</stringProp>
+              <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+              <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+              <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+              <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+              <boolProp name="HTTPSampler.BROWSER_COMPATIBLE_MULTIPART">false</boolProp>
+              <boolProp name="HTTPSampler.image_parser">false</boolProp>
+              <boolProp name="HTTPSampler.concurrentDwn">false</boolProp>
+              <stringProp name="HTTPSampler.concurrentPool">6</stringProp>
+              <boolProp name="HTTPSampler.md5">false</boolProp>
+              <intProp name="HTTPSampler.ipSourceType">0</intProp>
+            </HTTPSamplerProxy>
+            <hashTree>
+              <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header manager" enabled="true">
+                <collectionProp name="HeaderManager.headers">
+                  <elementProp name="Content-Type" elementType="Header">
+                    <stringProp name="Header.name">Content-Type</stringProp>
+                    <stringProp name="Header.value">application/json</stringProp>
+                  </elementProp>
+                  <elementProp name="SelectedProperty" elementType="Header">
+                    <stringProp name="Header.name">SelectedProperty</stringProp>
+                    <stringProp name="Header.value">${Property_ID}</stringProp>
+                  </elementProp>
+                  <elementProp name="Accept" elementType="Header">
+                    <stringProp name="Header.name">Accept</stringProp>
+                    <stringProp name="Header.value">application/json, text/plain, */*</stringProp>
+                  </elementProp>
+                  <elementProp name="ClientId" elementType="Header">
+                    <stringProp name="Header.name">ClientId</stringProp>
+                    <stringProp name="Header.value">84fb02ec-f5a8-8bf0-7520-2da5de3904be</stringProp>
+                  </elementProp>
+                </collectionProp>
+              </HeaderManager>
+              <hashTree/>
+              <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="reservationTaxes" enabled="true">
+                <stringProp name="JSONPostProcessor.referenceNames">reservationTaxes</stringProp>
+                <stringProp name="JSONPostProcessor.jsonPathExprs">$.data</stringProp>
+                <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
+              </JSONPostProcessor>
+              <hashTree/>
+              <JSR223PostProcessor guiclass="TestBeanGUI" testclass="JSR223PostProcessor" testname="totalTaxes, reservationTaxes" enabled="true">
+                <stringProp name="scriptLanguage">groovy</stringProp>
+                <stringProp name="parameters"></stringProp>
+                <stringProp name="filename"></stringProp>
+                <stringProp name="cacheKey">true</stringProp>
+                <stringProp name="script">def json = new groovy.json.JsonSlurper().parse(prev.getResponseData())
+Double totalTaxes = 0.0
+Double rate =Double.parseDouble(vars.get(&quot;rate&quot;))
+boolean inclusive = false
+Double	rent =0.0
+Double inclusiveTaxes=0.0
+if(json.data.any{tax-&gt;(tax.isActive&amp;&amp;tax.appliedForName==&quot;Lodging Fees(Fee)&quot;&amp;&amp;tax.taxAppliedForSource==1)}){
+		rent = (Double.parseDouble(vars.get(&quot;rate&quot;))/((0.15*0.025)+1+0.15+0.025))
+}else if (json.data.any{tax-&gt;(!tax.isActive&amp;&amp;tax.appliedForName==&quot;Lodging Fees(Fee)&quot;&amp;&amp;tax.taxAppliedForSource==1)}&amp;&amp;json.data.any{tax-&gt;(tax.isActive&amp;&amp;tax.taxName==&quot;Lodging Fees&quot;)}){
+rent = (Double.parseDouble(vars.get(&quot;rate&quot;))/(1+0.15+0.025))
+}
+json.data.each{tax -&gt; 
+Double gotTaxes =tax.totalAmount
+//method Id --&gt; amount= 2 or percentage = 1
+if(tax.isActive){
+	//Rent Taxes
+if(tax.appliedForName==&quot;Rent&quot;||(tax.appliedForName==&quot;Lodging Fees(Fee)&quot; &amp;&amp; tax.taxAppliedForSource==1)){
+	if(tax.methodId==1){
+		if(tax.inclusive==false){
+				if(tax.appliedForName==&quot;Lodging Fees(Fee)&quot;){
+					i++
+					tax.put(&quot;totalAmount&quot;,Double.parseDouble(vars.get(&quot;rate&quot;))*(tax.amount*0.01*0.025))				
+				}else if (tax.appliedForName==&quot;Rent&quot;){
+				tax.put(&quot;totalAmount&quot;,Double.parseDouble(vars.get(&quot;rate&quot;))*(tax.amount*0.01))				
+				}
+		
+
+		}else if(tax.inclusive){
+			
+					if(tax.appliedForName==&quot;Lodging Fees(Fee)&quot;){
+					tax.put(&quot;totalAmount&quot;,(rent)*(tax.amount*0.01*0.025))
+					}else if(tax.appliedForName==&quot;Rent&quot;){
+					tax.put(&quot;totalAmount&quot;,(rent)*(tax.amount*0.01))
+							
+					}
+			}
+	}else{tax.put(&quot;totalAmount&quot;,tax.amount)}
+	
+	gotTaxes = tax.totalAmount
+	//log.info( &quot;tax is&quot;,gotTaxes.toString())
+	totalTaxes =gotTaxes+ totalTaxes
+	if(tax.inclusive==false){
+	rate += gotTaxes	
+	}else{inclusiveTaxes = totalTaxes}
+	
+}
+}
+}
+//log.info(&quot;total taxes is&quot;,totalTaxes.toString())
+vars.put(&quot;totalTaxes&quot;,totalTaxes.toString())
+vars.put(&quot;inclusiveTaxes&quot;,inclusiveTaxes.toString())
+vars.put(&quot;net&quot;,rate.toString())
+def newJson = new groovy.json.JsonBuilder(json.data).toPrettyString()
+log.info(newJson)
+vars.put(&quot;reservationTaxes&quot;,newJson)</stringProp>
+              </JSR223PostProcessor>
+              <hashTree/>
+            </hashTree>
+            <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="api/Reservation/create-receipt-voucher" enabled="true">
+              <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+              <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+                <collectionProp name="Arguments.arguments">
+                  <elementProp name="" elementType="HTTPArgument">
+                    <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                    <stringProp name="Argument.value">{&#xd;
+	&quot;propertyId&quot;: ${Property_ID},&#xd;
+	&quot;typeId&quot;: 1,// 1- Receipt Voucher&#xd;
+	&quot;amount&quot;: ${net},&#xd;
+	&quot;currencyId&quot;: 1476,&#xd;
+	&quot;paymentMethodId&quot;: 1,&#xd;
+	&quot;paymentMethodName&quot;: &quot;Cash&quot;,&#xd;
+	&quot;bankName&quot;: null,&#xd;
+	&quot;chequeNumber&quot;: null,&#xd;
+	&quot;depositorName&quot;: null,&#xd;
+	&quot;transactionNumber&quot;: null,&#xd;
+	&quot;bankId&quot;: null,&#xd;
+	&quot;reservationId&quot;: ${Created_Reservation},&#xd;
+	&quot;purposeAr&quot;: &quot;قيمة الإيجار للوحدات: 12&quot;,&#xd;
+	&quot;purposeEn&quot;: &quot;Rent fees for units:&quot;,&#xd;
+	&quot;defaultCurrencyId&quot;: 1476,&#xd;
+	&quot;exchangeRate&quot;: 1,&#xd;
+	&quot;issueDateTime&quot;: &quot;${__time(yyyy-MM-dd hh:mm)}&quot;&#xd;
+}</stringProp>
+                    <stringProp name="Argument.metadata">=</stringProp>
+                  </elementProp>
+                </collectionProp>
+              </elementProp>
+              <stringProp name="HTTPSampler.domain">${BASE_URL}</stringProp>
+              <stringProp name="HTTPSampler.port">${port}</stringProp>
+              <stringProp name="HTTPSampler.protocol">${Protocol}</stringProp>
+              <stringProp name="HTTPSampler.path">api/Reservation/create-receipt-voucher</stringProp>
+              <stringProp name="HTTPSampler.method">post</stringProp>
+              <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+              <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+              <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+              <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+              <boolProp name="HTTPSampler.BROWSER_COMPATIBLE_MULTIPART">false</boolProp>
+              <boolProp name="HTTPSampler.image_parser">false</boolProp>
+              <boolProp name="HTTPSampler.concurrentDwn">false</boolProp>
+              <stringProp name="HTTPSampler.concurrentPool">6</stringProp>
+              <boolProp name="HTTPSampler.md5">false</boolProp>
+              <intProp name="HTTPSampler.ipSourceType">0</intProp>
+            </HTTPSamplerProxy>
+            <hashTree>
+              <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header manager" enabled="true">
+                <collectionProp name="HeaderManager.headers">
+                  <elementProp name="Content-Type" elementType="Header">
+                    <stringProp name="Header.name">Content-Type</stringProp>
+                    <stringProp name="Header.value">application/json</stringProp>
+                  </elementProp>
+                  <elementProp name="" elementType="Header">
+                    <stringProp name="Header.name">Selectedproperty</stringProp>
+                    <stringProp name="Header.value">${Property_ID}</stringProp>
+                  </elementProp>
+                </collectionProp>
+              </HeaderManager>
               <hashTree/>
             </hashTree>
             <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="api/Reservation/check-out-wizard" enabled="true">
