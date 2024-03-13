@@ -113,7 +113,10 @@ public class D14_Outlets {
     @When("editing Outlet {string} opState {string} and code {string} and name {string} description {string} state {string}")
     public void editingOutletOpStateAndCodeAndNameDescription(String oName, String opState, String code, String nName, String desc, String state) {
         WebElement selectedOutlet = outletsSetup.names.stream().filter(n -> n.getText().equalsIgnoreCase(oName)).findAny().get();
-        setOutletMap(outletsSetup.outletOPStatus(selectedOutlet).getText(), outletsSetup.outletCode(selectedOutlet).getText(), outletsSetup.outletName(selectedOutlet).getText(), outletsSetup.outletDescription(selectedOutlet).getText(), outletsSetup.outletStatus(selectedOutlet).getText());
+       String outletStat="Active";
+        if (outletsSetup.outletStatus(selectedOutlet).getAttribute("xlink:href").contains("icon-minus"))
+            outletStat="Inactive";
+        setOutletMap(outletsSetup.outletOPStatus(selectedOutlet).getText(), outletsSetup.outletCode(selectedOutlet).getText(), outletsSetup.outletName(selectedOutlet).getText(), outletsSetup.outletDescription(selectedOutlet).getText(),outletStat);
         outletsSetup.outletEditButton(selectedOutlet).click();
         new P00_multiPurposes(driver).waitLoading();
         fillOutletData(opState, code, nName, desc, state);
@@ -189,7 +192,7 @@ public class D14_Outlets {
 
     HashMap<String, String> categMap = new HashMap<>();
 
-    private void setCategMapMap(String outlet, String ntmp, String name, String desc, String state) {
+    private void setCategMap(String outlet, String ntmp, String name, String desc, String state) {
         if (!outlet.isEmpty())
             categMap.put("outlet", outlet);
         if (!ntmp.isEmpty())
@@ -211,26 +214,26 @@ public class D14_Outlets {
                 categories.outletsList().stream().filter(o -> o.getText().equalsIgnoreCase(outlet)).findFirst().get().click();
         if (!ntmp.isEmpty()) {
             if (ntmp.equalsIgnoreCase("non"))
-                js.executeScript("arguments[0].click();", categories.clearOutletSelectionButton);
+                js.executeScript("arguments[0].click();", categories.clearNTMPSelectionButton);
             else
-                categories.nTMPCategoriesList().stream().filter(o -> o.getText().equalsIgnoreCase(outlet)).findFirst().get().click();
+                categories.nTMPCategoriesList().stream().filter(o -> o.getText().equalsIgnoreCase(ntmp)).findFirst().get().click();
         }
         if (!name.isEmpty()) {
-            outletsSetup.outletNameField.clear();
+            categories.categoryNameField.clear();
             if (!name.equalsIgnoreCase("non"))
-                outletsSetup.outletNameField.sendKeys(name);
+                categories.categoryNameField.sendKeys(name);
         }
         if (!desc.isEmpty()) {
-            outletsSetup.descriptionField.clear();
+            categories.descriptionField.clear();
             if (!desc.equalsIgnoreCase("non"))
-                outletsSetup.descriptionField.sendKeys(desc);
+                categories.descriptionField.sendKeys(desc);
         }
 
-        setOutletMap(outlet, ntmp, name, desc, state);
+        setCategMap(outlet, ntmp, name, desc, state);
         if (state.equalsIgnoreCase("new"))
-            outletMap.put("state", "Active");
-        else if ((outletsSetup.statusSwitch.getAttribute("class").contains("k-switch-off") && state.equalsIgnoreCase("active")) || (outletsSetup.statusSwitch.getAttribute("class").contains("k-switch-on") && state.equalsIgnoreCase("inactive")))
-            outletsSetup.statusSwitch.click();
+            categMap.put("state", "Active");
+        else if ((categories.statusSwitch.getAttribute("class").contains("k-switch-off") && state.equalsIgnoreCase("active")) || (categories.statusSwitch.getAttribute("class").contains("k-switch-on") && state.equalsIgnoreCase("inactive")))
+            categories.statusSwitch.click();
     }
 
     @Then("Check msg {string} and Categorey")
@@ -239,15 +242,15 @@ public class D14_Outlets {
         new P00_multiPurposes(driver).waitLoading();
         if (msg.contains("Successfully")) {
             WebElement selectedCategory = categories.names.stream().filter(c -> c.getText().equalsIgnoreCase(categMap.get("name"))).findAny().get();
-            asrt.assertTrue(categories.categoryOutlet(selectedCategory).getText().equalsIgnoreCase(outletMap.get("outlet")));
-            asrt.assertTrue(categories.categoryName(selectedCategory).getText().equalsIgnoreCase(outletMap.get("name")));
-            asrt.assertTrue(categories.categoryNTMP(selectedCategory).getText().equalsIgnoreCase(outletMap.get("ntmp")));
-            if (outletMap.get("state").equalsIgnoreCase("active"))
+            asrt.assertTrue(categories.categoryOutlet(selectedCategory).getText().equalsIgnoreCase(categMap.get("outlet")));
+            asrt.assertTrue(categories.categoryName(selectedCategory).getText().equalsIgnoreCase(categMap.get("name")));
+            asrt.assertTrue(categories.categoryNTMP(selectedCategory).getText().equalsIgnoreCase(categMap.get("ntmp")));
+            if (categMap.get("state").equalsIgnoreCase("active"))
                 asrt.assertTrue(categories.categoryStatus(selectedCategory).getAttribute("xlink:href").contains("icon-check"));
-            else if (outletMap.get("state").equalsIgnoreCase("inactive"))
+            else if (categMap.get("state").equalsIgnoreCase("inactive"))
                 asrt.assertTrue(categories.categoryStatus(selectedCategory).getAttribute("xlink:href").contains("icon-minus"));
+            asrt.assertAll();
         }
-        asrt.assertAll();
     }
 
     @When("Filtering categs With {string} as {string}")
@@ -289,7 +292,36 @@ public class D14_Outlets {
 
     @When("editing Category {string} outlet {string} and ntmp {string} and name {string} description {string} state {string}")
     public void editingCategoryOutletAndNtmpAndNameDescriptionState(String oName, String outlet, String ntmp, String name, String desc, String state) {
+        WebElement selectedCategory = categories.names.stream().filter(c -> c.getText().equalsIgnoreCase(oName)).findAny().get();
+        String catStat= "Active";
+        if (categories.categoryStatus(selectedCategory).getAttribute("xlink:href").contains("icon-minus"))
+            catStat="Inactive";
+        setCategMap(categories.categoryOutlet(selectedCategory).getText(),categories.categoryNTMP(selectedCategory).getText(),categories.categoryName(selectedCategory).getText(),"",catStat);
+        categories.categoryEditButton(selectedCategory).click();
+        new P00_multiPurposes(driver).waitLoading();
+        fillCategData(outlet,ntmp,name,desc,state);
+        categories.submitButton.click();
+
 
     }
 
+    @When("deleting category {string}")
+    public void deletingCategory(String name) {
+        WebElement selectedCategory = categories.names.stream().filter(c -> c.getText().equalsIgnoreCase(name)).findAny().get();
+        String catStat= "Active";
+        if (categories.categoryStatus(selectedCategory).getAttribute("xlink:href").contains("icon-minus"))
+            catStat="Inactive";
+        setCategMap(categories.categoryOutlet(selectedCategory).getText(),categories.categoryNTMP(selectedCategory).getText(),categories.categoryName(selectedCategory).getText(),"",catStat);
+        categories.categoryDeleteButton(selectedCategory).click();
+        categories.popUpCOnfirmButton.click();
+    }
+
+    @Then("Check msg {string} and category {string}")
+    public void checkMsgAndCategory(String msg, String name) {
+        new D03_BlocksAndFloors().checkToastMesageContainsText(msg);
+        if (msg.contains("Successfully"))
+            new P00_multiPurposes(driver).waitLoading();
+            asrt.assertFalse(categories.names.stream().anyMatch(o -> o.getText().equalsIgnoreCase(name)));
+        asrt.assertAll();
+    }
 }

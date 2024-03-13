@@ -72,7 +72,6 @@ public class P28_DiscountTypes {
     public WebElement statusSwitch;
 
     /// end pop up ///
-    //FIXME the below delete isnt complete
     public WebElement deleteButton(WebElement discount) {
         discount.findElement(By.xpath("./..//td[@data-kendo-grid-column-index=\"5\"]//div/div/*[name()=\"svg\"]")).click();
         try {

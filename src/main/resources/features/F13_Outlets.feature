@@ -59,7 +59,7 @@ Feature: Outlets Feature
         | categ 2 |        | Other   | added categ on outlet 2     | Outlet is required        |
         | categ 2 | 2      |         | added categ on outlet 2     | NTMP Category is required |
         | categ 2 | 2      | Other   | added categ on outlet 2     | Added Successfully        |
-        | categ 2 |        | Laundry | dublicate categ on outlet 2 | Name exist before         |
+        | categ 2 | 2      | Laundry | dublicate categ on outlet 2 | Name exist before         |
         | categ 3 | 2      | Laundry |                             | Added Successfully        |
 
     Scenario Outline: Filter Categories
@@ -74,16 +74,19 @@ Feature: Outlets Feature
 
     Scenario Outline:editing Categories
       When editing Category "<oName>" outlet "<outlet>" and ntmp "<ntmp>" and name "<nName>" description "<desc>" state "<state>"
-      Then Check msg "<msg>" and the outlet in the grid
+      Then Check msg "<msg>" and Categorey
       Examples:
-        | oName   | outlet | ntmp                             | desc           | nName | state    | msg                       |
-        | categ 2 |        |                                  |                | non   |          | English Name Is required  |
-        | categ 2 | non    |                                  |                |       |          | Outlet is required        |
-        | categ 2 |        | non                              |                |       |          | NTMP Category is required |
-        | categ 3 |        |                                  |                |       | categ 2  | Name exist before         |
-        | categ 3 | 2      | Pick & Drop (Transport Services) | Edited Categ 3 |       | inactive | Updated Successfully      |
+        | oName   | outlet | ntmp                             | desc           | nName   | state    | msg                       |
+        | categ 2 |        |                                  |                | non     |          | English Name Is required  |
+        | categ 2 | non    |                                  |                |         |          | Outlet is required        |
+        | categ 2 |        | non                              |                |         |          | NTMP Category is required |
+        | categ 3 |        |                                  |                | categ 2 |          | Name exist before         |
+        | categ 3 | 2      | Pick & Drop (Transport Services) | Edited Categ 3 |         | inactive | Updated Successfully      |
 
-      Scenario: delete non related data category
-        When deleting category "categ3"
-        Then Check msg "Deleted Successfully" and category "categ3" is deleted
+    Scenario: delete non related data category
+      When deleting category "categ 3"
+      Then Check msg "Deleted Successfully" and category "categ 3"
         #Can not delete this category, it has related items
+
+  Rule: Outlet Items
+    ##TODO : CReate and edit and delete actions
