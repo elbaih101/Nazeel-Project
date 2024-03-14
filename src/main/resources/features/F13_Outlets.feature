@@ -90,3 +90,15 @@ Feature: Outlets Feature
 
   Rule: Outlet Items
     ##TODO : CReate and edit and delete actions
+    Scenario Outline: creating outlet Item
+      When creating item with name "<name>" and type "<type>" and outlet "<outlet>" and category "<categ>" description "<desc>" price "<price>" taxstate "<tax>"
+      Then Check msg "<msg>" and the item
+      Examples:
+        | name   | type | outlet | categ | desc | price | tax | msg                                                                 |
+        | Open   | 1    |        |       | 1    |       |   | Name is required                                                    |
+        |        | 1    | 1      |       | 1    |       |   | Operating status is required                                        |
+        | Closed |      | 1      |       | 1    |       |   | Outlet code is required                                             |
+        | Open   | 2    | 2      |       | 2    |       |   | Added Successfully                                                  |
+        | Open   | 2    | 3      |       | 3    |       |   | Repeated outlet code detected, each outlet must has it unique code. |
+        | Open   | 3    | 2      |       | 3    |       |   | Name exist before                                                   |
+        | Closed | 3    | 3      |       | 3    |       |   | Added Successfully                                                  |

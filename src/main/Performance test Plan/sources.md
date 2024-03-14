@@ -1,4 +1,7 @@
-Now I just need to add this code as the very first sampler in a test plan and pass environment specific filepath as the sampler parameter args[0] it will load variables from the file and put them as JMeter variables.
+
+//TODO add assertions to the jmeter script
+
+N ow I just need to add this code as the very first sampler in a test plan and pass environment specific filepath as the sampler parameter args[0] it will load variables from the file and put them as JMeter variables.
 //TODO fix tax in inclusive state for reservation making in Jmeter
 
 var file = new java.io.File(args[0]);

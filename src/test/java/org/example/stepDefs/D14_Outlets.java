@@ -8,6 +8,7 @@ import org.example.pages.mutlipurposes.P00_multiPurposes;
 import org.example.pages.setuppages.P05_SetupPage;
 import org.example.pages.setuppages.outlets.P30_OutletsSetup;
 import org.example.pages.setuppages.outlets.P31_OutletCategories;
+import org.example.pages.setuppages.outlets.P32_OutletItems;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -29,7 +30,7 @@ public class D14_Outlets {
     P05_SetupPage setupPage = new P05_SetupPage(driver);
     P30_OutletsSetup outletsSetup = new P30_OutletsSetup(driver);
     P31_OutletCategories categories = new P31_OutletCategories(driver);
-
+    P32_OutletItems items = new P32_OutletItems(driver);
 
     @Given("go to outlets Setup Page")
     public void goToOutletsSetupPage() {
@@ -113,10 +114,10 @@ public class D14_Outlets {
     @When("editing Outlet {string} opState {string} and code {string} and name {string} description {string} state {string}")
     public void editingOutletOpStateAndCodeAndNameDescription(String oName, String opState, String code, String nName, String desc, String state) {
         WebElement selectedOutlet = outletsSetup.names.stream().filter(n -> n.getText().equalsIgnoreCase(oName)).findAny().get();
-       String outletStat="Active";
+        String outletStat = "Active";
         if (outletsSetup.outletStatus(selectedOutlet).getAttribute("xlink:href").contains("icon-minus"))
-            outletStat="Inactive";
-        setOutletMap(outletsSetup.outletOPStatus(selectedOutlet).getText(), outletsSetup.outletCode(selectedOutlet).getText(), outletsSetup.outletName(selectedOutlet).getText(), outletsSetup.outletDescription(selectedOutlet).getText(),outletStat);
+            outletStat = "Inactive";
+        setOutletMap(outletsSetup.outletOPStatus(selectedOutlet).getText(), outletsSetup.outletCode(selectedOutlet).getText(), outletsSetup.outletName(selectedOutlet).getText(), outletsSetup.outletDescription(selectedOutlet).getText(), outletStat);
         outletsSetup.outletEditButton(selectedOutlet).click();
         new P00_multiPurposes(driver).waitLoading();
         fillOutletData(opState, code, nName, desc, state);
@@ -293,13 +294,13 @@ public class D14_Outlets {
     @When("editing Category {string} outlet {string} and ntmp {string} and name {string} description {string} state {string}")
     public void editingCategoryOutletAndNtmpAndNameDescriptionState(String oName, String outlet, String ntmp, String name, String desc, String state) {
         WebElement selectedCategory = categories.names.stream().filter(c -> c.getText().equalsIgnoreCase(oName)).findAny().get();
-        String catStat= "Active";
+        String catStat = "Active";
         if (categories.categoryStatus(selectedCategory).getAttribute("xlink:href").contains("icon-minus"))
-            catStat="Inactive";
-        setCategMap(categories.categoryOutlet(selectedCategory).getText(),categories.categoryNTMP(selectedCategory).getText(),categories.categoryName(selectedCategory).getText(),"",catStat);
+            catStat = "Inactive";
+        setCategMap(categories.categoryOutlet(selectedCategory).getText(), categories.categoryNTMP(selectedCategory).getText(), categories.categoryName(selectedCategory).getText(), "", catStat);
         categories.categoryEditButton(selectedCategory).click();
         new P00_multiPurposes(driver).waitLoading();
-        fillCategData(outlet,ntmp,name,desc,state);
+        fillCategData(outlet, ntmp, name, desc, state);
         categories.submitButton.click();
 
 
@@ -308,10 +309,10 @@ public class D14_Outlets {
     @When("deleting category {string}")
     public void deletingCategory(String name) {
         WebElement selectedCategory = categories.names.stream().filter(c -> c.getText().equalsIgnoreCase(name)).findAny().get();
-        String catStat= "Active";
+        String catStat = "Active";
         if (categories.categoryStatus(selectedCategory).getAttribute("xlink:href").contains("icon-minus"))
-            catStat="Inactive";
-        setCategMap(categories.categoryOutlet(selectedCategory).getText(),categories.categoryNTMP(selectedCategory).getText(),categories.categoryName(selectedCategory).getText(),"",catStat);
+            catStat = "Inactive";
+        setCategMap(categories.categoryOutlet(selectedCategory).getText(), categories.categoryNTMP(selectedCategory).getText(), categories.categoryName(selectedCategory).getText(), "", catStat);
         categories.categoryDeleteButton(selectedCategory).click();
         categories.popUpCOnfirmButton.click();
     }
@@ -319,9 +320,135 @@ public class D14_Outlets {
     @Then("Check msg {string} and category {string}")
     public void checkMsgAndCategory(String msg, String name) {
         new D03_BlocksAndFloors().checkToastMesageContainsText(msg);
-        if (msg.contains("Successfully"))
+        if (msg.contains("Successfully")) {
             new P00_multiPurposes(driver).waitLoading();
             asrt.assertFalse(categories.names.stream().anyMatch(o -> o.getText().equalsIgnoreCase(name)));
+        }
         asrt.assertAll();
+    }
+
+    HashMap<String, String> itemMap = new HashMap<>();
+
+    private void setItemMap(String name, String type, String outlet, String categ, String desc, String price, String tax, String state) {
+        if (!outlet.isEmpty())
+            itemMap.put("outlet", outlet);
+        if (!type.isEmpty())
+            itemMap.put("type", type);
+        if (!categ.isEmpty())
+            itemMap.put("categ", categ);
+        if (!name.isEmpty())
+            itemMap.put("name", name);
+        if (!desc.isEmpty())
+            itemMap.put("desc", desc);
+        if (!state.isEmpty())
+            itemMap.put("state", state);
+        if (!price.isEmpty())
+            itemMap.put("price", price);
+        if (!tax.isEmpty())
+            itemMap.put("tax", tax);
+        //outletMap.putAll(Map.of("outlet", outlet, "ntmp", ntmp, "name", name, "desc", desc, "state", state));
+    }
+
+    private void fillItemData(String name, String type, String outlet, String categ, String desc, String price, String tax, String state) {
+        if (!outlet.isEmpty())
+            if (outlet.equalsIgnoreCase("non"))
+                js.executeScript("arguments[0].click();", items.clearOutletSelectionButton);
+            else
+                items.outletsList().stream().filter(o -> o.getText().equalsIgnoreCase(outlet)).findFirst().get().click();
+        if (!categ.isEmpty()) {
+            if (categ.equalsIgnoreCase("non"))
+                js.executeScript("arguments[0].click();", items.clearCategorySelectionButton);
+            else
+                items.categoriesList().stream().filter(o -> o.getText().equalsIgnoreCase(categ)).findFirst().get().click();
+        }
+        if (!type.isEmpty()) {
+            if (type.equalsIgnoreCase("non"))
+                js.executeScript("arguments[0].click();", items.clearTypeSelectionButton);
+            else
+                items.itemTypesList().stream().filter(o -> o.getText().equalsIgnoreCase(categ)).findFirst().get().click();
+        }
+        if (!name.isEmpty()) {
+            categories.categoryNameField.clear();
+            if (!name.equalsIgnoreCase("non"))
+                categories.categoryNameField.sendKeys(name);
+        }
+        switch (price.toLowerCase()) {
+            case "free" -> {
+                if (items.freeItemSwitch.getAttribute("class").contains("k-switch-off"))
+                    items.freeItemSwitch.click();
+            }
+            case "userdefined" -> {
+                if (items.userDefinedPriceSwitch.getAttribute("class").contains("k-switch-off"))
+                    items.userDefinedPriceSwitch.click();
+            }
+            case "non" -> {
+                if (items.freeItemSwitch.getAttribute("class").contains("k-switch-on"))
+                    items.freeItemSwitch.click();
+                if (items.userDefinedPriceSwitch.getAttribute("class").contains("k-switch-on"))
+                    items.userDefinedPriceSwitch.click();
+                items.priceInput_FilterField.clear();
+            }
+            case null -> {
+                break;
+            }
+            default -> {
+                items.priceInput_FilterField.clear();
+                items.priceInput_FilterField.sendKeys(price);
+            }
+
+        }
+        switch (tax.toLowerCase()) {
+            case "applied" -> {
+                if (items.taxExemptedSwitch.getAttribute("class").contains("k-switch-off"))
+                    items.taxExemptedSwitch.click();
+            }
+            case "notapplied" -> {
+                if (items.taxExemptedSwitch.getAttribute("class").contains("k-switch-on"))
+                    items.taxExemptedSwitch.click();
+            }
+        }
+        if (!desc.isEmpty()) {
+            categories.descriptionField.clear();
+            if (!desc.equalsIgnoreCase("non"))
+                categories.descriptionField.sendKeys(desc);
+        }
+
+        setItemMap(name, type, outlet, categ, desc, price, tax, state);
+        if (state.equalsIgnoreCase("new"))
+            categMap.put("state", "Active");
+        else if ((categories.statusSwitch.getAttribute("class").contains("k-switch-off") && state.equalsIgnoreCase("active")) || (categories.statusSwitch.getAttribute("class").contains("k-switch-on") && state.equalsIgnoreCase("inactive")))
+            categories.statusSwitch.click();
+    }
+
+    @When("creating item with name {string} and type {string} and outlet {string} and category {string} description {string} price {string} taxstate {string}")
+    public void creatingItemWithNameAndTypeAndOutletAndCategoryDescription(String name, String type, String outlet, String categ, String desc, String price, String tax) {
+        items.newItemButton.click();
+        fillItemData(name, type, outlet, categ, desc, price, tax, "new");
+        items.submitButton.click();
+    }
+
+    @Then("Check msg {string} and the item")
+    public void checkMsgAndTheItem(String msg) {
+        new D03_BlocksAndFloors().checkToastMesageContainsText(msg);
+        new P00_multiPurposes(driver).waitLoading();
+        if (msg.contains("Successfully")) {
+            WebElement selectedItem = items.names.stream().filter(c -> c.getText().equalsIgnoreCase(itemMap.get("name"))).findAny().get();
+            asrt.assertTrue(items.itemOutlet(selectedItem).getText().equalsIgnoreCase(itemMap.get("outlet")));
+            asrt.assertTrue(items.itemName(selectedItem).getText().equalsIgnoreCase(itemMap.get("name")));
+            asrt.assertTrue(items.itemCategory(selectedItem).getText().equalsIgnoreCase(itemMap.get("categ")));
+            switch (itemMap.get("price")) {
+                case "free", "userdefined" ->
+                        asrt.assertTrue(items.itemPrice(selectedItem).getText().equalsIgnoreCase(itemMap.get("0")));
+                default ->
+                        asrt.assertTrue(items.itemPrice(selectedItem).getText().equalsIgnoreCase(itemMap.get("price")));
+            }
+
+            if (itemMap.get("state").equalsIgnoreCase("active"))
+                asrt.assertTrue(categories.categoryStatus(selectedItem).getAttribute("xlink:href").contains("icon-check"));
+            else if (itemMap.get("state").equalsIgnoreCase("inactive"))
+                asrt.assertTrue(categories.categoryStatus(selectedItem).getAttribute("xlink:href").contains("icon-minus"));
+            asrt.assertAll();
+        }
+
     }
 }

@@ -28,7 +28,7 @@ public class P32_OutletItems {
     @FindBy(xpath = "//ul[@role=\"listbox\"]//li[@role=\"option\"]")
     List<WebElement> listItems;
     @FindBy(xpath = "//button[contains(@class,\"n-button--green\")]")
-    public WebElement newCategoryButton;
+    public WebElement newItemButton;
 
     //grid//
     @FindBy(xpath = "//td[@data-kendo-grid-column-index=\"0\"]//*[name()=\"use\"]")
