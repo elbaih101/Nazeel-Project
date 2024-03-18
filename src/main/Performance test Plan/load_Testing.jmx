@@ -33,10 +33,6 @@
             <stringProp name="Header.name">User-Agent</stringProp>
             <stringProp name="Header.value">Mozilla/5.0 (iPad; CPU OS 6_0 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/6.0 Mobile/10A5355d Safari/8536.25</stringProp>
           </elementProp>
-          <elementProp name="ClientId" elementType="Header">
-            <stringProp name="Header.name">ClientId</stringProp>
-            <stringProp name="Header.value">8beea859-134a-1702-f312-32da1cc98df7</stringProp>
-          </elementProp>
           <elementProp name="Authorization" elementType="Header">
             <stringProp name="Header.name">Authorization</stringProp>
             <stringProp name="Header.value">Bearer ${TOKEN}</stringProp>

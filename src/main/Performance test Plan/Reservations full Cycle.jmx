@@ -13,10 +13,6 @@
     <hashTree>
       <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header manager" enabled="true">
         <collectionProp name="HeaderManager.headers">
-          <elementProp name="sec-ch-ua" elementType="Header">
-            <stringProp name="Header.name">sec-ch-ua</stringProp>
-            <stringProp name="Header.value">&quot;Not A(Brand&quot;;v=&quot;99&quot;, &quot;Google Chrome&quot;;v=&quot;121&quot;, &quot;Chromium&quot;;v=&quot;121&quot;</stringProp>
-          </elementProp>
           <elementProp name="sec-ch-ua-mobile" elementType="Header">
             <stringProp name="Header.name">sec-ch-ua-mobile</stringProp>
             <stringProp name="Header.value">?0</stringProp>
@@ -32,10 +28,6 @@
           <elementProp name="User-Agent" elementType="Header">
             <stringProp name="Header.name">User-Agent</stringProp>
             <stringProp name="Header.value">Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36</stringProp>
-          </elementProp>
-          <elementProp name="ClientId" elementType="Header">
-            <stringProp name="Header.name">ClientId</stringProp>
-            <stringProp name="Header.value">8beea859-134a-1702-f312-32da1cc98df7</stringProp>
           </elementProp>
           <elementProp name="SelectedProperty" elementType="Header">
             <stringProp name="Header.name">SelectedProperty</stringProp>
@@ -2750,43 +2742,6 @@ log.info(vars.get(&quot;reservation&quot;))
       </ResultCollector>
       <hashTree/>
       <ResultCollector guiclass="TableVisualizer" testclass="ResultCollector" testname="View Results in Table" enabled="true">
-        <boolProp name="ResultCollector.error_logging">false</boolProp>
-        <objProp>
-          <name>saveConfig</name>
-          <value class="SampleSaveConfiguration">
-            <time>true</time>
-            <latency>true</latency>
-            <timestamp>true</timestamp>
-            <success>true</success>
-            <label>true</label>
-            <code>true</code>
-            <message>true</message>
-            <threadName>true</threadName>
-            <dataType>true</dataType>
-            <encoding>false</encoding>
-            <assertions>true</assertions>
-            <subresults>true</subresults>
-            <responseData>false</responseData>
-            <samplerData>false</samplerData>
-            <xml>false</xml>
-            <fieldNames>true</fieldNames>
-            <responseHeaders>false</responseHeaders>
-            <requestHeaders>false</requestHeaders>
-            <responseDataOnError>false</responseDataOnError>
-            <saveAssertionResultsFailureMessage>true</saveAssertionResultsFailureMessage>
-            <assertionsResultsToSave>0</assertionsResultsToSave>
-            <bytes>true</bytes>
-            <sentBytes>true</sentBytes>
-            <url>true</url>
-            <threadCounts>true</threadCounts>
-            <idleTime>true</idleTime>
-            <connectTime>true</connectTime>
-          </value>
-        </objProp>
-        <stringProp name="filename"></stringProp>
-      </ResultCollector>
-      <hashTree/>
-      <ResultCollector guiclass="AssertionVisualizer" testclass="ResultCollector" testname="Assertion Results" enabled="true">
         <boolProp name="ResultCollector.error_logging">false</boolProp>
         <objProp>
           <name>saveConfig</name>

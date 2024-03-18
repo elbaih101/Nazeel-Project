@@ -49,3 +49,47 @@ A screenshot of thread properties in JMeter.
 2. When running the test through command line, add the flag -Jthreads1=15 which sets the property with the value defined:
 
 jmeter … -Jthreads1=15
+
+
+
+Problem:
+--------
+
+*   How to resolve the “Server failed to start: java.rmi.server.ExportException” issue in JMeter?  
+    Or
+*   Server (Host) error while running the JMeter test in the distributed (remote) mode.
+
+Explanation:
+------------
+
+To run the test in distributed mode, it is mandatory to start ‘jmeter-server’ service on all the slaves. You may get the below exception while starting ‘jmeter-server’ service:
+
+    Server failed to start: java.rmi.server.ExportException: Listen failed on port: 0; nested exception is:
+            java.io.FileNotFoundException: rmi_keystore.jks (No such file or directory)
+    An error occurred: Listen failed on port: 0; nested exception is:
+            java.io.FileNotFoundException: rmi_keystore.jks (No such file or directory)
+
+Error Screenshot:
+-----------------
+
+![Server failed to start: java.rmi.server.ExportException](https://www.perfmatrix.com/wp-content/uploads/2019/06/Distributed-Testing-in-JMeter-02-1024x102.jpg)
+
+_Figure 01: Error Screenshot_
+
+Solution:
+---------
+
+Follow the below steps to resolve this issue:
+
+1.  Open jmeter.properties file in the /bin folder of Apache JMeter
+2.  Search for the keyword ‘server.rmi.ssl.disable’
+3.  Uncomment the statement and change the value to ‘true’
+4.  Save the file and launch JMeter once again
+
+![Server failed to start: java.rmi.server.ExportException](https://www.perfmatrix.com/wp-content/uploads/2019/06/Distributed-Testing-in-JMeter-03.jpg)
+
+_Figure 02: Changes in jmeter.properties File_
+
+* * *
+
+https://cwiki.apache.org/confluence/display/JMETER/JMeterAutomatedRemoteTesting
