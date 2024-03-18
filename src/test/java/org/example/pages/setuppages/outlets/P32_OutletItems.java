@@ -45,7 +45,7 @@ public class P32_OutletItems {
     List<WebElement> moreActions;
 
     public WebElement itemEditButton(WebElement outlet) {
-        return outlet.findElement(By.xpath("./..//td[@data-kendo-grid-column-index=\"\"]//button[1]"));
+        return outlet.findElement(By.xpath("./..//td[@data-kendo-grid-column-index=\"5\"]//button[1]"));
     }
 
     public WebElement itemDeleteButton(WebElement outlet) {
@@ -75,10 +75,10 @@ public class P32_OutletItems {
 
     /// data entery///
     @FindBy(xpath = "//input[contains(@class,\"dropdown-toggle form-control\")]")
-    public WebElement categoryNameField;
+    public WebElement itemNameField;
     @FindBy(name = "text-area")
     public WebElement descriptionField;
-    @FindBy(xpath = "//button[@type=\"submit\"][2]")
+    @FindBy(xpath = "//button[@type=\"submit\" and text()=\" Save \"]")
     public WebElement submitButton;
     @FindBy(xpath = "//kendo-switch[@name=\"status\"]")
     public WebElement statusSwitch;

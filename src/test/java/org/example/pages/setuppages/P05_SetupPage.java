@@ -74,5 +74,7 @@ public class P05_SetupPage {
     public WebElement outletSetupLink;
     @FindBy(xpath = "//a[@href=\"/items-addons/outlets-categories\"]")
     public WebElement categoriesLink;
+    @FindBy(xpath = "//a[@href=\"/items-addons/items-setup\"]")
+    public WebElement itemsLink;
 
 }

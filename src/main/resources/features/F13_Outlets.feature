@@ -89,16 +89,62 @@ Feature: Outlets Feature
         #Can not delete this category, it has related items
 
   Rule: Outlet Items
-    ##TODO : CReate and edit and delete actions
+    Background: go to items setup
+      Given  go to items setup
+
     Scenario Outline: creating outlet Item
       When creating item with name "<name>" and type "<type>" and outlet "<outlet>" and category "<categ>" description "<desc>" price "<price>" taxstate "<tax>"
       Then Check msg "<msg>" and the item
       Examples:
-        | name   | type | outlet | categ | desc | price | tax | msg                                                                 |
-        | Open   | 1    |        |       | 1    |       |   | Name is required                                                    |
-        |        | 1    | 1      |       | 1    |       |   | Operating status is required                                        |
-        | Closed |      | 1      |       | 1    |       |   | Outlet code is required                                             |
-        | Open   | 2    | 2      |       | 2    |       |   | Added Successfully                                                  |
-        | Open   | 2    | 3      |       | 3    |       |   | Repeated outlet code detected, each outlet must has it unique code. |
-        | Open   | 3    | 2      |       | 3    |       |   | Name exist before                                                   |
-        | Closed | 3    | 3      |       | 3    |       |   | Added Successfully                                                  |
+        | name   | type    | outlet | categ   | desc                    | price       | tax      | msg                    |
+        |        | Product | 2      | categ 2 | item 1 categ 2 outlet 2 | 15          | applied  | Name is required       |
+        | item 1 |         | 2      | categ 2 | item 1 categ 2 outlet 2 | userdefined |          | Item Type is required  |
+        | item 1 | Service |        | categ 2 | item 1 categ 2 outlet 2 | free        |          | Outlet is required     |
+        | item 1 | Service | 2      |         | item 1 categ 2 outlet 2 | free        |          | Category is required   |
+        | item 1 | Product | 2      | categ 2 | item 1 categ 2 outlet 2 |             | exempted | Item Price is required |
+        | item 1 | Service | 2      | categ 2 | item 1 categ 2 outlet 2 | 15          | applied  | Added Successfully     |
+        | item 1 | Product | 2      | categ 2 | item 1 categ 2 outlet 2 | 20          |          | Name exist before      |
+        | item 2 | Service | 2      | categ 2 | item 2 categ 2 outlet 2 | userdefined | exempted | Added Successfully     |
+
+    Scenario Outline: edit Item
+      When editing item "<oName>" name "<nName>" and type "<type>" and outlet "<outlet>" and category "<categ>" description "<desc>" price "<price>" taxstate "<tax>" state "<state>"
+      Then Check msg "<msg>" and the item
+      Examples:
+        | oName  | nName  | type    | outlet | categ | desc              | price | tax     | state    | msg                    |
+        | item 2 | non    |         |        |       |                   |       |         |          | Name is required       |
+        | item 2 |        | non     |        |       |                   |       |         |          | Item Type is required  |
+        | item 2 |        |         | non    |       |                   |       |         |          | Outlet is required     |
+        | item 2 |        |         |        | non   |                   |       |         |          | Category is required   |
+        | item 2 |        |         |        |       | non               |       |         |          | Item Price is required |
+        | item 2 | item 1 |         |        |       |                   |       |         |          | Name exist before      |
+        | item 2 | item 3 | product |        |       | item3 from item 2 | 50    | applied | Inactive | Updated Successfully   |
+
+    Scenario Outline: Filter Items
+      When Filter Items With "<filter>" as "<value>"
+      Then Check all items records "<filter>" as "<value>"
+      Examples:
+        | filter   | value       |
+        | status   | inactive    |
+        | Outlet   | 2           |
+        | name     | 3           |
+        | price    | 0           |
+        | Category | 2 - Categ 2 |
+
+    Scenario: delete item
+      When deleting item "item 3"
+      Then Check msg "Deleted Successfully" and item "item 3"
+
+
+  Rule:Outlet Categories2
+    Background:goto Outlets Categories Page
+      Given go to categories Page
+    Scenario: cant delete  related data category
+      When deleting category "categ 2"
+      Then Check msg "Deleted Successfully" and category "categ 2"
+
+  Rule: Outlets Setup2
+    Background: go to outlets Setup Page
+      Given go to outlets Setup Page
+    Scenario: can't delete  related Data outlet
+      When deleting outlet "2"
+      Then Check msg "Deleted Successfully" and outlet "2" is deleted

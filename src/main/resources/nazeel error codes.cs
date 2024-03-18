@@ -354,7 +354,7 @@ namespace Nazeel.Common.Enums
 
         OTAInventoryInvalidProductChannels = 168,
 
-        Access_Code_Not_Present,
+        Access_Code_Not_Present,//169
 
         AddressMaxLenghtExceed,
 
@@ -400,7 +400,7 @@ namespace Nazeel.Common.Enums
 
         BlockUnitReason_Name_Lenght,
 
-        CancelledReceiptAmountExceededCashDrawerBalance,
+        CancelledReceiptAmountExceededCashDrawerBalance=393,
 
         CancelReason_Description_Lenght,
 
