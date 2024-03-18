@@ -9,21 +9,25 @@ import org.example.pages.P02_DashBoardPage;
 import org.example.pages.mutlipurposes.P00_multiPurposes;
 import org.example.pages.setuppages.P05_SetupPage;
 import org.example.pages.setuppages.rules_pages.P27_ReservationRules;
+import org.example.pages.setuppages.rules_pages.P33_Penalties;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.testng.asserts.SoftAssert;
+
+import java.util.HashMap;
 
 public class D13_ProppertyRules {
 
 
     WebDriver driver = Hooks.driver;
 
-//    JavascriptExecutor js = (JavascriptExecutor) driver;
+    //    JavascriptExecutor js = (JavascriptExecutor) driver;
     final SoftAssert asrt = new SoftAssert();
-//    final WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+    //    final WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
     P02_DashBoardPage dashBoardPage = new P02_DashBoardPage(driver);
     P05_SetupPage setupPage = new P05_SetupPage(driver);
     P27_ReservationRules reservationRules = new P27_ReservationRules(driver);
+    P33_Penalties penalties = new P33_Penalties(driver);
     String sucMsg = "Saved Successfully";
 
     @Given("go to Reservation Rules Page")
@@ -73,7 +77,7 @@ public class D13_ProppertyRules {
     }
 
     private WebElement getSwitch(String name) {
-        WebElement swit ;
+        WebElement swit;
         switch (name.toLowerCase()) {
             case "previousdayclac" -> swit = reservationRules.previousDayClacSwitch;
             case "autoextenddaily" -> swit = reservationRules.autoExtendDailySwitch;
@@ -106,8 +110,8 @@ public class D13_ProppertyRules {
     public void saveAndCheckTheMsgAndFieldsAfterEdit(String msg) {
         reservationRules.submitButton.click();
         if (!msg.contains(sucMsg)) {
-         asrt.assertTrue( reservationRules.msg.getText().contains(msg));
-         asrt.assertAll();
+            asrt.assertTrue(reservationRules.msg.getText().contains(msg));
+            asrt.assertAll();
         } else {
             new D03_BlocksAndFloors().checkToastMesageContainsText(msg);
         }
@@ -180,7 +184,7 @@ public class D13_ProppertyRules {
     @Then("Check the msg {string} the time to be  {string} and reasons {string}")
     public void checkTheMsgTheTimeToBeAndReasons(String msg, String noShTime, String reas) {
         if (!msg.contains(sucMsg)) {
-           asrt.assertTrue( reservationRules.msg.getText().contains(msg));
+            asrt.assertTrue(reservationRules.msg.getText().contains(msg));
         } else {
             new D03_BlocksAndFloors().checkToastMesageContainsText(msg);
         }
@@ -201,5 +205,132 @@ public class D13_ProppertyRules {
     public void cancelReasonsAre(String reas) {
         asrt.assertTrue(reservationRules.cancelReasonFiled.getAttribute("value").equals(reas));
         asrt.assertAll();
+    }
+
+    @Given("go to penalties Page")
+    public void goToPenaltiesPage() {
+        dashBoardPage.setupPageLink.click();
+        setupPage.rulesDropList.click();
+        setupPage.penaltiesLink.click();
+    }
+
+
+    HashMap<String, String> penaltyMap = new HashMap<>();
+
+    private void setPenaltyMap(String name, String categ, String type, String amount, String calcOf, String desc, String state) {
+        if (!name.isEmpty())
+            penaltyMap.put("name", name);
+
+        if (!categ.isEmpty())
+            penaltyMap.put("categ", categ);
+
+        if (!type.isEmpty()) {
+            if (type.equalsIgnoreCase("amount"))
+                penaltyMap.put("type", "$");
+            else if (type.equalsIgnoreCase("percentage"))
+                penaltyMap.put("type", "%");
+        }
+
+        if (!amount.isEmpty())
+            penaltyMap.put("amount", amount);
+
+        if (!calcOf.isEmpty())
+            penaltyMap.put("calcOf", calcOf);
+
+        if (!desc.isEmpty())
+            penaltyMap.put("desc", desc);
+
+        if (!state.isEmpty()) {
+            if (state.equalsIgnoreCase("new"))
+                penaltyMap.put("state", "Active");
+            else
+                penaltyMap.put("state", state);
+        }
+    }
+
+    private void fillPenaltyData(String name, String categ, String type, String amount, String calcOf, String desc, String state) {
+        if (!name.isEmpty()) {
+            penalties.penaltyNameField.clear();
+            if (!name.equalsIgnoreCase("non"))
+                penalties.penaltyNameField.sendKeys(name);
+        }
+        if (!categ.isEmpty()) {
+            if (categ.equalsIgnoreCase("non"))
+                penalties.categorySelectionClearButton.click();
+            else
+                penalties.categorysList_Filter().stream().filter(c -> c.getText().equalsIgnoreCase(categ)).findAny().orElseThrow().click();
+        }
+        if (!type.isEmpty()) {
+            penalties.penaltytypesList().stream().filter(c -> c.getText().equalsIgnoreCase(type)).findAny().orElseThrow().click();
+            if (type.equalsIgnoreCase("amount")) {
+                asrt.assertFalse(Utils.isEnabled(penalties.calculatedofField));
+                asrt.assertAll();
+            }
+        }
+
+
+        if (!calcOf.isEmpty()) {
+            if (calcOf.equalsIgnoreCase("non"))
+                penalties.calcOfClearButton.click();
+            else
+                penalties.calculatedOfList_Filter().stream().filter(c -> c.getText().equalsIgnoreCase(calcOf)).findAny().orElseThrow().click();
+        }
+        if (!desc.isEmpty())
+            penalties.descriptionField.clear();
+        if (!desc.equalsIgnoreCase("non"))
+            penalties.descriptionField.sendKeys(desc);
+
+
+        if (!amount.isEmpty()) {
+            if (amount.equalsIgnoreCase("undefined")) {
+                if (!penalties.undefinedCheckBox.isSelected())
+                    penalties.undefinedCheckBox.click();
+                asrt.assertFalse(penalties.amountFiled.isEnabled());
+                asrt.assertFalse(Utils.isEnabled(penalties.calculatedofField));
+                asrt.assertAll();
+            } else {
+                if (penalties.undefinedCheckBox.isSelected())
+                    penalties.undefinedCheckBox.click();
+                penalties.amountFiled.clear();
+                if (!amount.equalsIgnoreCase("non"))
+                    penalties.amountFiled.sendKeys(amount);
+            }
+
+        }
+
+        if (!state.isEmpty()) {
+            if (state.equalsIgnoreCase("new"))
+                System.out.println("");
+            else if ((penalties.statusSwitch.getAttribute("class").contains("k-switch-off") && state.equalsIgnoreCase("active")) || (penalties.statusSwitch.getAttribute("class").contains("k-switch-on") && state.equalsIgnoreCase("inactive")))
+                penalties.statusSwitch.click();
+        }
+        setPenaltyMap(name, categ, type, amount, calcOf, desc, state);
+    }
+
+    @When("creating penalty with name {string} ctegory {string} type {string} amount {string} calculatedOF {string} Description {string}")
+    public void creatingPenaltyWithNameCtegoryTypeAmountCalculatedOFDescription(String name, String categ, String type, String amount, String calcOF, String desc) {
+        penalties.newpenaltyButton.click();
+        fillPenaltyData(name, categ, type, amount, calcOF, desc, "new");
+        penalties.submitButton.click();
+    }
+
+    @Then("Check msg {string} and the penalty")
+    public void checkMsgAndThePenalty(String msg) {
+        new D03_BlocksAndFloors().checkToastMesageContainsText(msg);
+        if (msg.contains("Successfully")) {
+            new P00_multiPurposes(driver).waitLoading();
+            WebElement createdPenalty = penalties.names.stream().filter(n -> n.getText().equalsIgnoreCase(penaltyMap.get("name"))).findAny().orElseThrow();
+            asrt.assertTrue(penalties.penaltyAmount(createdPenalty).getText().equalsIgnoreCase(penaltyMap.get("amount")));
+            asrt.assertTrue(penalties.penaltyCategory(createdPenalty).getText().equalsIgnoreCase(penaltyMap.get("categ")));
+            asrt.assertTrue(penalties.penaltyType(createdPenalty).getText().equalsIgnoreCase(penaltyMap.get("type")));
+            asrt.assertTrue(penalties.penaltyCOf(createdPenalty).getText().equalsIgnoreCase(penaltyMap.get("calcOf")));
+
+            if (penaltyMap.get("status").equalsIgnoreCase("active"))
+                asrt.assertTrue(penalties.penaltyStatus(createdPenalty).getAttribute("xlink:href").contains("icon-check"));
+            else if (penaltyMap.get("status").equalsIgnoreCase("inactive"))
+                asrt.assertTrue(penalties.penaltyStatus(createdPenalty).getAttribute("xlink:href").contains("icon-minus"));
+        }
+
+
     }
 }

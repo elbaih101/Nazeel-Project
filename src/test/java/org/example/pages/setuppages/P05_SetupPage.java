@@ -66,6 +66,8 @@ public class P05_SetupPage {
     public WebElement rulesDropList;
     @FindBy(xpath = "//a[@href=\"/general-settings/reservation\"]")
     public WebElement reservationRulesLink;
+    @FindBy(xpath = "//a[@href=\"/policies/penalities\"]")
+    public WebElement penaltiesLink;
     @FindBy(xpath = "//a[@href=\"/control-panel/discount-types\"]")
     public WebElement discountTypesLink;
     @FindBy(xpath = "//a[contains(@class,\"n-drawer__item\")]//span[contains(text(),\"Outlets\")]")

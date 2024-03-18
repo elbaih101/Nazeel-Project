@@ -63,7 +63,16 @@ Feature: Property Rules
         | 12:00 AM | 12:01 AM | Customer changed the dates | Saved Successfully                                               |
 
 
-      Scenario: Change auto cancel Reasons
-        When  changing the auto cancel reason to "Customer changed the dates"
-        Then Check toast mesage contains text "Saved Successfully"
-        And cancel reasons are "Customer changed the dates"
+    Scenario: Change auto cancel Reasons
+      When  changing the auto cancel reason to "Customer changed the dates"
+      Then Check toast mesage contains text "Saved Successfully"
+      And cancel reasons are "Customer changed the dates"
+
+
+  Rule:Penalties
+    Background:go to penalties page
+      Given go to penalties Page
+
+      Scenario Outline: adding new penalty
+        When creating penalty with name "" ctegory "" type "" amount "" calculatedOF "" Description ""
+        Then Check msg "" and the penalty

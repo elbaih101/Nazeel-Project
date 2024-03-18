@@ -458,7 +458,7 @@ public class D14_Outlets {
 
         if (msg.contains("Successfully")) {
             new P00_multiPurposes(driver).waitLoading();
-            WebElement selectedItem = items.names.stream().filter(c -> c.getText().equalsIgnoreCase(itemMap.get("name"))).findAny().get();
+            WebElement selectedItem = items.names.stream().filter(c -> c.getText().equalsIgnoreCase(itemMap.get("name"))).findAny().orElseThrow();
             asrt.assertTrue(items.itemOutlet(selectedItem).getText().equalsIgnoreCase(itemMap.get("outlet")));
             asrt.assertTrue(items.itemName(selectedItem).getText().equalsIgnoreCase(itemMap.get("name")));
             asrt.assertTrue(items.itemCategory(selectedItem).getText().equalsIgnoreCase(itemMap.get("categ")));

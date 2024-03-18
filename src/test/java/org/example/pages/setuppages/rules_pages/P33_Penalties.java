@@ -27,7 +27,7 @@ public class P33_Penalties {
     @FindBy(xpath = "//ul[@role=\"listbox\"]//li[@role=\"option\"]")
     List<WebElement> listItems;
     @FindBy(xpath = "//button[contains(@class,\"n-button--green\")]")
-    public WebElement newpenaityButton;
+    public WebElement newpenaltyButton;
     ////   Filter
     @FindBy(xpath = "//button[contains(text(),\"Filter\")]")
     public WebElement filterButton;
@@ -64,36 +64,36 @@ public class P33_Penalties {
     List<WebElement> moreActions;
 
 
-    public WebElement penaityEditButton(WebElement penaity) {
-        return penaity.findElement(By.xpath("./..//td[@data-kendo-grid-column-index=\"6\"]//button[1]"));
+    public WebElement penaltyEditButton(WebElement penalty) {
+        return penalty.findElement(By.xpath("./..//td[@data-kendo-grid-column-index=\"6\"]//button[1]"));
     }
 
-    public WebElement penaityDeleteButton(WebElement penaity) {
-        return penaity.findElement(By.xpath("./..//td[@data-kendo-grid-column-index=\"6\"]//button[2]"));
+    public WebElement penaltyDeleteButton(WebElement penalty) {
+        return penalty.findElement(By.xpath("./..//td[@data-kendo-grid-column-index=\"6\"]//button[2]"));
     }
 
-    public WebElement penaityName(WebElement penaity) {
-        return penaity.findElement(By.xpath("./..//td[@data-kendo-grid-column-index=\"0\"]"));
+    public WebElement penaltyName(WebElement penalty) {
+        return penalty.findElement(By.xpath("./..//td[@data-kendo-grid-column-index=\"0\"]"));
     }
 
-    public WebElement penaityAmount(WebElement penaity) {
-        return penaity.findElement(By.xpath("./..//td[@data-kendo-grid-column-index=\"1\"]"));
+    public WebElement penaltyAmount(WebElement penalty) {
+        return penalty.findElement(By.xpath("./..//td[@data-kendo-grid-column-index=\"1\"]"));
     }
 
-    public WebElement penaityType(WebElement penaity) {
-        return penaity.findElement(By.xpath("./..//td[@data-kendo-grid-column-index=\"2\"]"));
+    public WebElement penaltyType(WebElement penalty) {
+        return penalty.findElement(By.xpath("./..//td[@data-kendo-grid-column-index=\"2\"]"));
     }
 
-    public WebElement penaityCOf(WebElement penaity) {
-        return penaity.findElement(By.xpath("./..//td[@data-kendo-grid-column-index=\"3\"]"));
+    public WebElement penaltyCOf(WebElement penalty) {
+        return penalty.findElement(By.xpath("./..//td[@data-kendo-grid-column-index=\"3\"]"));
     }
 
-    public WebElement penaityCategory(WebElement penaity) {
-        return penaity.findElement(By.xpath("./..//td[@data-kendo-grid-column-index=\"4\"]"));
+    public WebElement penaltyCategory(WebElement penalty) {
+        return penalty.findElement(By.xpath("./..//td[@data-kendo-grid-column-index=\"4\"]"));
     }
 
-    public WebElement penaityStatus(WebElement penaity) {
-        return penaity.findElement(By.xpath("./..//td[@data-kendo-grid-column-index=\"5\"]//*[name()=\"use\"]"));
+    public WebElement penaltyStatus(WebElement penalty) {
+        return penalty.findElement(By.xpath("./..//td[@data-kendo-grid-column-index=\"5\"]//*[name()=\"use\"]"));
     }
 
     //end grid
@@ -118,6 +118,9 @@ public class P33_Penalties {
         }
         return listItems;
     }
+
+    @FindBy(xpath = "//kendo-combobox[@name=\"calculatedOf\"]")
+    public WebElement calculatedofField;
 
     public List<WebElement> calculatedOfList_Filter() {
         driver.findElement(By.xpath("//kendo-combobox[@name=\"calculatedOf\"]//span[@class=\"k-select\"]")).click();
@@ -147,7 +150,9 @@ public class P33_Penalties {
             e.printStackTrace();
         }
         return listItems;
-    } public List<WebElement> penaltytypesList() {
+    }
+
+    public List<WebElement> penaltytypesList() {
         driver.findElement(By.xpath("//kendo-dropdownlist[@name=\"penaltyType\"]")).click();
         try {
             Thread.sleep(300);
@@ -157,8 +162,15 @@ public class P33_Penalties {
         return listItems;
     }
 
+    @FindBy(xpath = "//label[contains(text(),\"Category\")]/following-sibling::kendo-combobox//span[@class=\"k-select\"]//span[@title=\"clear\"]")
+    public WebElement categorySelectionClearButton;
+
+    @FindBy(xpath = "//kendo-combobox[@name=\"calculatedOf\"]//span[@class=\"k-select\"]//span[@title=\"clear\"]")
+    public WebElement calcOfClearButton;
     @FindBy(id = "name")
     public WebElement nameFilterField;
+    @FindBy(id = "undefined")
+    public WebElement undefinedCheckBox;
     @FindBy(xpath = "//input[@placeholder=\"Enter Amount\"]")
     public WebElement amountFilterField;
     // end filter ///
@@ -174,7 +186,7 @@ public class P33_Penalties {
     public WebElement statusSwitch;
     @FindBy(xpath = "//kendo-switch[@name=\"includeTax\"]")
     public WebElement taxExcludedSwitch;
-    @FindBy(id="amount")
+    @FindBy(id = "amount")
     public WebElement amountFiled;
     @FindBy(xpath = "//div[@class=\"swal2-actions\"]//button[contains(@class,\"confirm\")]")
     public WebElement popUpCOnfirmButton;
