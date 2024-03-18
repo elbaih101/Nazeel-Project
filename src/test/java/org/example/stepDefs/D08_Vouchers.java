@@ -83,6 +83,7 @@ public class D08_Vouchers {
         }
         multiPurposes.waitLoading();
         wait.until(ExpectedConditions.elementToBeClickable(selectedTab));
+        assert selectedTab != null;
         selectedTab.click();
     }
 
@@ -303,7 +304,7 @@ public class D08_Vouchers {
     public void clickOnDraftMoreMenuAndChooseCollectByPayment(String paymentMethod) {
 
         if (paymentMethod.equalsIgnoreCase(PaymentMethods.Digital.toString())) {
-            List<WebElement> amountsOfDraftNotFullyPaid = vouchersPage.draftsRemainigAmounts().stream().filter(element -> Character.compare(element.getText().trim().charAt(0), '0') != 0).toList();
+            List<WebElement> amountsOfDraftNotFullyPaid = vouchersPage.draftsRemainigAmounts().stream().filter(element -> element.getText().trim().charAt(0) != '0').toList();
             WebElement selectedDraftAmount = amountsOfDraftNotFullyPaid.get(new Random().nextInt(amountsOfDraftNotFullyPaid.size()));
             vouchersPage.moreActions(selectedDraftAmount, "draft").stream().filter(element -> element.getText().trim().contains("Collect Via Digital Payment")).toList().get(0).click();
             D06_DigitalPayment.draftNo = digitalPaymentPage.draftNumber().getText();
@@ -373,8 +374,8 @@ public class D08_Vouchers {
         multiPurposes.waitLoading();
         openEditModeForVoucher(voucherType, voucherState, voucherNums);
         wait.withTimeout(Duration.ofSeconds(1));
-        PaymentMethods p= Arrays.stream(PaymentMethods.values()).filter(pM->pM.toString().toLowerCase().contains(newMethod.toLowerCase())).findFirst().get();
-        vouchersPopUp.paymentMethods().stream().filter(pM->pM.getText().equals(p.toString())).findFirst().get().click();
+        PaymentMethods p= Arrays.stream(PaymentMethods.values()).filter(pM->pM.toString().toLowerCase().contains(newMethod.toLowerCase())).findFirst().orElseThrow();
+        vouchersPopUp.paymentMethods().stream().filter(pM->pM.getText().equals(p.toString())).findFirst().orElseThrow().click();
         if (!p.equals(PaymentMethods.Cash))
         {
             vouchersPopUp.banks().get(0).click();

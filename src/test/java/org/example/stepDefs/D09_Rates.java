@@ -9,7 +9,7 @@ import org.example.pages.P02_DashBoardPage;
 import org.example.pages.mutlipurposes.P00_multiPurposes;
 import org.example.pages.setuppages.P05_SetupPage;
 import org.example.pages.setuppages.unit_setup_pages.P09_RatesPages;
-import org.openqa.selenium.JavascriptExecutor;
+
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -17,13 +17,13 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.asserts.SoftAssert;
 
 import java.time.Duration;
-import java.util.HashMap;
+
 import java.util.Map;
 
 public class D09_Rates {
     WebDriver driver = Hooks.driver;
 
-    JavascriptExecutor js = (JavascriptExecutor) driver;
+
     final SoftAssert asrt = new SoftAssert();
     final WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
     P02_DashBoardPage dashBoardPage = new P02_DashBoardPage(driver);

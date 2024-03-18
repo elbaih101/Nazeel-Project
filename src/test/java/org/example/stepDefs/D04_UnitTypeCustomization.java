@@ -201,7 +201,7 @@ JavascriptExecutor js=(JavascriptExecutor) driver;
     @Given("click on edit button for type {string} and change name to {string}")
     public void clickOnEditButtonForTypeAndChangeNameTo(String oldName, String newName) {
         clickOnFilterButtonAndEnterNameOfTypeAndStatusAndClickSearch(oldName, "");
-        WebElement type = masterUnitsTypes.typesNames.stream().findAny().get();
+        WebElement type = masterUnitsTypes.typesNames.stream().findAny().orElseThrow();
         new P00_multiPurposes(driver).waitLoading();
         js.executeScript("arguments[0].click();",masterUnitsTypes.editButton(type));
       //  masterUnitsTypes.editButton(type).click();
@@ -239,7 +239,7 @@ wait.until(ExpectedConditions.visibilityOf(masterUnitsTypes.typeNameField()));
     public void clickOnEditButtonForTypeAndChangeStatusTo(String name, String status) {
 
         clickOnFilterButtonAndEnterNameOfTypeAndStatusAndClickSearch(name, "");
-        WebElement type = masterUnitsTypes.typesNames.stream().findAny().get();
+        WebElement type = masterUnitsTypes.typesNames.stream().findAny().orElseThrow();
         new P00_multiPurposes(driver).waitLoading();
         js.executeScript("arguments[0].click();",masterUnitsTypes.editButton(type));
         if (status.equalsIgnoreCase("inactive")) {

@@ -19,15 +19,13 @@ import org.example.pages.vouchersPages.P10_VouchersPage;
 import org.example.pages.vouchersPages.P16_VouchersPopUp;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
-import org.openqa.selenium.JavascriptExecutor;
+
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.asserts.SoftAssert;
-
-import java.security.PrivateKey;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -36,7 +34,7 @@ import java.util.List;
 public class D12_Financials {
     WebDriver driver = Hooks.driver;
 
-    JavascriptExecutor js = (JavascriptExecutor) driver;
+   // JavascriptExecutor js = (JavascriptExecutor) driver;
     final SoftAssert asrt = new SoftAssert();
     final WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
     P02_DashBoardPage dashBoardPage = new P02_DashBoardPage(driver);
@@ -71,18 +69,17 @@ public class D12_Financials {
             case "Fee" -> taxesAndFees.feesButton.click();
             case "Tax" -> taxesAndFees.taxesButton.click();
             case null, default -> {
-                break;
             }
         }
         if (!name.isEmpty()) {
-            taxesAndFees.taxes_FeesList().stream().filter(li -> li.getText().contains(name)).findFirst().get().click();
+            taxesAndFees.taxes_FeesList().stream().filter(li -> li.getText().contains(name)).findFirst().orElseThrow().click();
             taxMap.put("name", name);
         }
         if (!method.isEmpty()) {
 
             taxesAndFees.methodField.sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.BACK_SPACE));
             if (!method.equalsIgnoreCase("non")) {
-                taxesAndFees.methodsList().stream().filter(me -> me.getText().contains(method)).findAny().get().click();
+                taxesAndFees.methodsList().stream().filter(me -> me.getText().contains(method)).findAny().orElseThrow().click();
 
             }
             taxMap.put("method", method);
@@ -104,10 +101,8 @@ public class D12_Financials {
                     }
                 }
             } else {
-                if (aplOn.equalsIgnoreCase("non")) {
-                } else {
-                    taxesAndFees.appliedForList().stream().filter(ap -> ap.getText().contains(aplOn)).findAny().get().click();
-
+                if (!aplOn.equalsIgnoreCase("non")) {
+                    taxesAndFees.appliedForList().stream().filter(ap -> ap.getText().contains(aplOn)).findAny().orElseThrow().click();
                 }
             }
             taxMap.put("aplOn", aplOn);
@@ -144,16 +139,15 @@ public class D12_Financials {
                     for (WebElement item : taxesAndFees.selectedAppliedFor) {
                         taxesAndFees.deleteselctedButtton(item).click();
                     }
-                    taxesAndFees.chargedOnList().stream().filter(co -> co.getText().contains(chrgOn)).findAny().get().click();
+                    taxesAndFees.chargedOnList().stream().filter(co -> co.getText().contains(chrgOn)).findAny().orElseThrow().click();
 
                 }
             } else {
-                if (chrgOn.equalsIgnoreCase("non")) {
-                } else {
+                if (!chrgOn.equalsIgnoreCase("non")) {
                     if (!taxesAndFees.useForExpensesSwitch.getAttribute("class").contains("k-switch-on")) {
                         taxesAndFees.chargedOnSwitch.click();
                     }
-                    taxesAndFees.chargedOnList().stream().filter(co -> co.getText().contains(chrgOn)).findAny().get().click();
+                    taxesAndFees.chargedOnList().stream().filter(co -> co.getText().contains(chrgOn)).findAny().orElseThrow().click();
                 }
 
 
@@ -169,9 +163,8 @@ public class D12_Financials {
     @And("Check the type {string}  with name {string} and method {string} and amount {string} applied on {string} and start date {string} end date {string} Charged on {string} status {string}")
     public void checkTheTypeWithNameAndMethodAndAmountAppliedOnAndStartDateEndDateChargedOn(String type, String name, String method, String amount, String aplOn, String sDate, String eDate, String chrgOn, String stat) {
 
-        if (aplOn.equalsIgnoreCase("non") || amount.equalsIgnoreCase("non") || method.equalsIgnoreCase("non") || sDate.equalsIgnoreCase("non") || dateFormater.parseDateTime(eDate).isBefore(dateFormater.parseDateTime(sDate))) {
-        } else {
-            WebElement cust = taxesAndFees.names.stream().filter(n -> n.getText().contains(name)).findAny().get();
+        if(!(aplOn.equalsIgnoreCase("non") || amount.equalsIgnoreCase("non") || method.equalsIgnoreCase("non") || sDate.equalsIgnoreCase("non") || dateFormater.parseDateTime(eDate).isBefore(dateFormater.parseDateTime(sDate)))) {
+            WebElement cust = taxesAndFees.names.stream().filter(n -> n.getText().contains(name)).findAny().orElseThrow();
             if (!type.isEmpty()) {
                 asrt.assertTrue(taxesAndFees.taxType(cust).getText().equalsIgnoreCase(type), "Expected :" + type + "\n Actual :" + taxesAndFees.taxType(cust).getText());
             }
@@ -204,7 +197,7 @@ public class D12_Financials {
 
     @Given("edit customization {string} method {string} amount {string} applied on {string} startDate {string} endDate {string} Charged on {string} status {string}")
     public void editCustomizationMethodAmountAppliedOnStartDateEndDateChargedOn(String name, String method, String amount, String aplOn, String sDate, String eDate, String chrgOn, String stat) {
-        WebElement cust = taxesAndFees.names.stream().filter(n -> n.getText().toLowerCase().contains(name.toLowerCase())).findAny().get();
+        WebElement cust = taxesAndFees.names.stream().filter(n -> n.getText().toLowerCase().contains(name.toLowerCase())).findAny().orElseThrow();
         taxesAndFees.editButton(cust).click();
         fillTaxData("", "", method, amount, aplOn, sDate, eDate, chrgOn);
         if (stat.equalsIgnoreCase("inactive") && taxesAndFees.statusSwitch.getAttribute("class").contains("k-switch-on")) {
@@ -220,7 +213,7 @@ public class D12_Financials {
     @Given("delete the customizatiin {string}")
     public void deleteTheCustomizatiin(String tax) {
 
-        WebElement selectedTax = taxesAndFees.names.stream().filter(t -> t.getText().contains(tax)).findFirst().get();
+        WebElement selectedTax = taxesAndFees.names.stream().filter(t -> t.getText().contains(tax)).findFirst().orElseThrow();
         taxesAndFees.deleteButton(selectedTax).click();
         taxesAndFees.confirmDeleteButton.click();
     }
@@ -236,11 +229,10 @@ public class D12_Financials {
 
     @And("Check the tax {string} is applied on the reservations")
     public void checkTheTaxIsAppliedOnTheReservations(String taxName) {
-        if (taxMap.get("aplOn").equalsIgnoreCase("non") || taxMap.get("amount").equalsIgnoreCase("non") || taxMap.get("method").equalsIgnoreCase("non") || taxMap.get("sDate").equalsIgnoreCase("non") || dateFormater.parseDateTime(taxMap.get("eDate")).isBefore(dateFormater.parseDateTime(taxMap.get("sDate")))) {
-        } else {
+        if (!(taxMap.get("aplOn").equalsIgnoreCase("non") || taxMap.get("amount").equalsIgnoreCase("non") || taxMap.get("method").equalsIgnoreCase("non") || taxMap.get("sDate").equalsIgnoreCase("non") || dateFormater.parseDateTime(taxMap.get("eDate")).isBefore(dateFormater.parseDateTime(taxMap.get("sDate"))))) {
             if (taxMap.get("stat").toLowerCase().contains("active")) {
                 openReservationTaxesPopUp(taxMap.get("sDate"), taxMap.get("eDate"));
-                WebElement selectedTax = taxesPopUp.taxesNames.stream().filter(t -> t.getText().toLowerCase().contains(taxName.toLowerCase())).findFirst().get();
+                WebElement selectedTax = taxesPopUp.taxesNames.stream().filter(t -> t.getText().toLowerCase().contains(taxName.toLowerCase())).findFirst().orElseThrow();
                 asrt.assertTrue(taxesPopUp.taxMethod(selectedTax).getText().contains(taxMap.get("amount")));
                 if (taxMap.get("method").contains("Percentage")) {
                     asrt.assertTrue(taxesPopUp.taxMethod(selectedTax).getText().contains("%"));
@@ -280,8 +272,8 @@ public class D12_Financials {
     public void checkTheTaxesAreWithTheType(String calcType) {
         new P00_multiPurposes(driver).waitLoading();
         asrt.assertTrue(taxesAndFees.calcstate.getText().contains(calcType), "Expected: " + calcType + "\nActual: " + taxesAndFees.calcstate.getText());
-        WebElement sDate = taxesAndFees.startDates.get(0);
-        WebElement eDate = taxesAndFees.taxEndDate(sDate);
+//        WebElement sDate = taxesAndFees.startDates.get(0);
+//        WebElement eDate = taxesAndFees.taxEndDate(sDate);
 
         if (calcType.equalsIgnoreCase("inclusive")) {
             taxesPopUp.taxesInclusiveness.forEach(t -> asrt.assertTrue(t.isSelected()));
@@ -321,7 +313,7 @@ public class D12_Financials {
                 costCenter.categoreyField.sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.BACK_SPACE));
                 costMap.put("categ", "non");
             } else {
-                selecetd = costCenter.categoriesList().stream().filter(c -> c.getText().contains(categ)).findAny().get();
+                selecetd = costCenter.categoriesList().stream().filter(c -> c.getText().contains(categ)).findAny().orElseThrow();
                 costMap.put("categ", selecetd.getText());
                 selecetd.click();
             }
@@ -377,11 +369,11 @@ public class D12_Financials {
         WebElement selectedCost = null;
 
         switch (name.toLowerCase()) {
-            case "random" -> selectedCost = costCenter.costNames.stream().findAny().get();
+            case "random" -> selectedCost = costCenter.costNames.stream().findAny().orElseThrow();
             case "" -> asrt.assertFalse(true, "enter the desired Cost center to be Edited");
-            case null -> asrt.assertFalse(true, "null old name value");
+          //  case null -> asrt.assertFalse(true, "null old name value");
             default ->
-                    selectedCost = costCenter.costNames.stream().filter(c -> c.getText().toLowerCase().contains(name.toLowerCase())).findAny().get();
+                    selectedCost = costCenter.costNames.stream().filter(c -> c.getText().toLowerCase().contains(name.toLowerCase())).findAny().orElseThrow();
         }
         asrt.assertAll();
         costMap.put("name", selectedCost.getText());
@@ -423,9 +415,9 @@ public class D12_Financials {
         switch (field) {
             case "name" -> costCenter.nameFilterField.sendKeys(data);
             case "categ" ->
-                    costCenter.categoriesFilterList().stream().filter(c -> c.getText().contains(data)).findAny().get().click();
+                    costCenter.categoriesFilterList().stream().filter(c -> c.getText().contains(data)).findAny().orElseThrow().click();
             case "stat" ->
-                    costCenter.statusFilterList().stream().filter(c -> c.getText().contains(data)).findAny().get().click();
+                    costCenter.statusFilterList().stream().filter(c -> c.getText().contains(data)).findAny().orElseThrow().click();
         }
         costCenter.searchButton.click();
     }
@@ -468,7 +460,7 @@ public class D12_Financials {
     }
 
     private void filldiscountData(String type, String desc) {
-        discountTypes.discountsList().stream().filter(d -> d.getText().equalsIgnoreCase(type)).findAny().get().click();
+        discountTypes.discountsList().stream().filter(d -> d.getText().equalsIgnoreCase(type)).findAny().orElseThrow().click();
         wait.until(ExpectedConditions.textToBePresentInElementValue(discountTypes.reportNameField, type));
         discountTypes.descriptionField.clear();
         discountTypes.descriptionField.sendKeys(desc);
@@ -479,7 +471,7 @@ public class D12_Financials {
     @And("Check the Discount {string} in the grid with state {string} is {string}")
     public void checkTheDiscountInTheGrid(String type, String state, String recState) {
         new P00_multiPurposes(driver).waitLoading();
-        WebElement tocheck = null;
+        WebElement tocheck ;
         switch (recState) {
             case "present" -> {
                 if (!type.equalsIgnoreCase("random")) {
@@ -515,9 +507,9 @@ public class D12_Financials {
     @When("dactivating discount {string}")
     public void dactivatingDiscount(String type) {
         if (!type.equalsIgnoreCase("random"))
-            discountTypes.deactivateButton(discountTypes.types.stream().filter(d -> d.getText().equalsIgnoreCase(type)).findAny().get()).click();
+            discountTypes.deactivateButton(discountTypes.types.stream().filter(d -> d.getText().equalsIgnoreCase(type)).findAny().orElseThrow()).click();
         else {
-            selectedDiscount = discountTypes.statuses.stream().filter(d -> d.getText().equalsIgnoreCase("active")).findAny().get();
+            selectedDiscount = discountTypes.statuses.stream().filter(d -> d.getText().equalsIgnoreCase("active")).findAny().orElseThrow();
             discountTypes.deactivateButton(selectedDiscount).click();
         }
     }
@@ -525,7 +517,7 @@ public class D12_Financials {
     @When("reactivating discount type {string}")
     public void reactivatingDiscountType(String type) {
         if (!type.equalsIgnoreCase("random"))
-            discountTypes.activateButton(discountTypes.types.stream().filter(d -> d.getText().equalsIgnoreCase(type)).findAny().get()).click();
+            discountTypes.activateButton(discountTypes.types.stream().filter(d -> d.getText().equalsIgnoreCase(type)).findAny().orElseThrow()).click();
         else {
             discountTypes.activateButton(selectedDiscount).click();
         }
@@ -534,7 +526,7 @@ public class D12_Financials {
     @When("deleting discount {string} without related data")
     public void deletingDiscountWithoutRelatedData(String type) {
         if (!type.equalsIgnoreCase("random"))
-            discountTypes.deleteButton(discountTypes.types.stream().filter(d -> d.getText().equalsIgnoreCase(type)).findAny().get()).click();
+            discountTypes.deleteButton(discountTypes.types.stream().filter(d -> d.getText().equalsIgnoreCase(type)).findAny().orElseThrow()).click();
         else {
             selectedDiscount = discountTypes.statuses.getLast();
             discountTypes.deleteButton(selectedDiscount).click();
@@ -546,7 +538,7 @@ public class D12_Financials {
 
     @When("replacing the order of the first record with the last")
     public void replacingTheOrderOfTheFirstRecordWithTheLast() {
-        discountTypes.types.stream().forEach(d -> discountsListNames.add(d.getText()));
+        discountTypes.types.forEach(d -> discountsListNames.add(d.getText()));
         Utils.moveelement(discountTypes.discountMoveHandle(discountTypes.types.getFirst()), discountTypes.discountMoveHandle(discountTypes.types.getLast()), driver);
 
     }
@@ -587,7 +579,7 @@ public class D12_Financials {
 
     private void fillCurrencyData(String curr, String exRate, String isDef, String state) {
         if (!curr.isEmpty()) {
-            WebElement selectedCurr = currencies.currenciesList().stream().filter(c -> c.getText().toLowerCase().contains(curr.toLowerCase())).findAny().get();
+            WebElement selectedCurr = currencies.currenciesList().stream().filter(c -> c.getText().toLowerCase().contains(curr.toLowerCase())).findAny().orElseThrow();
             currencyMap.put("currName", StringUtils.substringBefore(selectedCurr.getText(), " - "));
             currencyMap.put("symbol", StringUtils.substringAfter(selectedCurr.getText(), " - "));
             selectedCurr.click();
@@ -621,7 +613,7 @@ public class D12_Financials {
     public void checkTheNewCurrencyIsAddedInTheGrid(String msg) {
         new D03_BlocksAndFloors().checkToastMesageContainsText(msg);
         if (msg.contains("Successfully")) {
-            WebElement createdCurr = currencies.currenciesNames.stream().filter(c -> c.getText().contains(currencyMap.get("currName"))).findFirst().get();
+            WebElement createdCurr = currencies.currenciesNames.stream().filter(c -> c.getText().contains(currencyMap.get("currName"))).findFirst().orElseThrow();
             asrt.assertTrue(currencies.currencySymbol(createdCurr).getText().equalsIgnoreCase(currencyMap.get("symbol")), "symbol is wrong");
             asrt.assertTrue(currencies.currencyStatus(createdCurr).getText().equalsIgnoreCase(currencyMap.get("state")), "state not right");
             if (currencyMap.get("isDef").equalsIgnoreCase("true")) {
@@ -640,7 +632,7 @@ public class D12_Financials {
 
     @When("editing Currency {string} to {string} and exchangeRate {string} and state {string} and default {string}")
     public void editingCurrencyToAndExchangeRateAndStateAndDefault(String oCurr, String nCurr, String exRate, String state, String isDef) {
-        WebElement selectedCurr = currencies.symbols.stream().filter(c -> c.getText().equalsIgnoreCase(oCurr)).findAny().get();
+        WebElement selectedCurr = currencies.symbols.stream().filter(c -> c.getText().equalsIgnoreCase(oCurr)).findAny().orElseThrow();
         setCurrency(currencies.currencyName(selectedCurr).getText(), currencies.currencySymbol(selectedCurr).getText(), currencies.currencyExchangeRate(selectedCurr).getText(), currencies.currencySetting(selectedCurr).getText(), currencies.currencyStatus(selectedCurr).getText());
         currencies.currencyEditButton(selectedCurr).click();
         new P00_multiPurposes(driver).waitLoading();
@@ -652,9 +644,9 @@ public class D12_Financials {
     public void deletingCurrency(String curr) {
         WebElement selectedCurr;
         if (curr.equalsIgnoreCase("default")) {
-            selectedCurr = currencies.settings.stream().filter(c -> c.getText().equalsIgnoreCase(curr)).findAny().get();
+            selectedCurr = currencies.settings.stream().filter(c -> c.getText().equalsIgnoreCase(curr)).findAny().orElseThrow();
         } else {
-            selectedCurr = currencies.symbols.stream().filter(c -> c.getText().equalsIgnoreCase(curr)).findAny().get();
+            selectedCurr = currencies.symbols.stream().filter(c -> c.getText().equalsIgnoreCase(curr)).findAny().orElseThrow();
         }
         setCurrency(currencies.currencyName(selectedCurr).getText(), currencies.currencySymbol(selectedCurr).getText(), currencies.currencyExchangeRate(selectedCurr).getText(), currencies.currencySetting(selectedCurr).getText(), currencies.currencyStatus(selectedCurr).getText());
         currencies.deleteButton(selectedCurr).click();
@@ -666,7 +658,7 @@ public class D12_Financials {
     public void checkAndTheCurrencyIsDeleted(String msg) {
         new D03_BlocksAndFloors().checkToastMesageContainsText(msg);
         if (!msg.contains("Successfully")) {
-            WebElement createdCurr = currencies.currenciesNames.stream().filter(c -> c.getText().contains(currencyMap.get("currName"))).findFirst().get();
+            WebElement createdCurr = currencies.currenciesNames.stream().filter(c -> c.getText().contains(currencyMap.get("currName"))).findFirst().orElseThrow();
             asrt.assertTrue(currencies.currencySymbol(createdCurr).getText().equalsIgnoreCase(currencyMap.get("symbol")), "symbol is wrong");
             asrt.assertTrue(currencies.currencyStatus(createdCurr).getText().equalsIgnoreCase(currencyMap.get("state")), "state not right");
             if (currencyMap.get("isDef").equalsIgnoreCase("true")) {

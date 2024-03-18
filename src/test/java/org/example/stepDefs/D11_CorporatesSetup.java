@@ -18,7 +18,7 @@ import java.time.Duration;
 public class D11_CorporatesSetup {
     WebDriver driver = Hooks.driver;
 
-    JavascriptExecutor js = (JavascriptExecutor) driver;
+
     final SoftAssert asrt = new SoftAssert();
     final WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
     P02_DashBoardPage dashBoardPage = new P02_DashBoardPage(driver);
@@ -55,7 +55,7 @@ public class D11_CorporatesSetup {
         {corporates.corpoateNameField.clear();
         corporates.corpoateNameField.sendKeys(name);}
         if (!country.isEmpty()) {
-            corporates.countries().stream().filter(c -> c.getText().toLowerCase().contains(country.toLowerCase())).findFirst().get().click();
+            corporates.countries().stream().filter(c -> c.getText().toLowerCase().contains(country.toLowerCase())).findFirst().orElseThrow().click();
         }
         if (!vat.isEmpty()) {
             corporates.vatField.clear();
@@ -136,7 +136,7 @@ public class D11_CorporatesSetup {
     @And("open edit mode for corporate {string}")
     public void openEditModeForCorporate(String name) {
         new P00_multiPurposes(driver).waitLoading();
-        corporates.corporateEditButton(corporates.corporates.stream().filter(cor -> cor.getText().contains(name)).findFirst().get()).click();
+        corporates.corporateEditButton(corporates.corporates.stream().filter(cor -> cor.getText().contains(name)).findFirst().orElseThrow()).click();
 
 
     }
@@ -152,7 +152,7 @@ public class D11_CorporatesSetup {
     @Given("delete corporate {string}")
     public void deleteCorporate(String name) {
         new P00_multiPurposes(driver).waitLoading();
-        corporates.deleteButton(corporates.corporates.stream().filter(cor -> cor.getText().contains(name)).findFirst().get()).click();
+        corporates.deleteButton(corporates.corporates.stream().filter(cor -> cor.getText().contains(name)).findFirst().orElseThrow()).click();
         driver.findElement(By.xpath("//div[@role=\"dialog\"]//button[contains(@class,\"n-button--danger\")][2]")).click();
     }
 

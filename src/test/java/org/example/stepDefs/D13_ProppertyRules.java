@@ -9,22 +9,18 @@ import org.example.pages.P02_DashBoardPage;
 import org.example.pages.mutlipurposes.P00_multiPurposes;
 import org.example.pages.setuppages.P05_SetupPage;
 import org.example.pages.setuppages.rules_pages.P27_ReservationRules;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.asserts.SoftAssert;
-
-import java.time.Duration;
 
 public class D13_ProppertyRules {
 
 
     WebDriver driver = Hooks.driver;
 
-    JavascriptExecutor js = (JavascriptExecutor) driver;
+//    JavascriptExecutor js = (JavascriptExecutor) driver;
     final SoftAssert asrt = new SoftAssert();
-    final WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+//    final WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
     P02_DashBoardPage dashBoardPage = new P02_DashBoardPage(driver);
     P05_SetupPage setupPage = new P05_SetupPage(driver);
     P27_ReservationRules reservationRules = new P27_ReservationRules(driver);
@@ -57,6 +53,7 @@ public class D13_ProppertyRules {
             case "units" -> button = reservationRules.unitsViewButton;
             case "calender" -> button = reservationRules.calenderViewButton;
         }
+        assert button != null;
         asrt.assertTrue(button.getAttribute("class").contains("k-state-active"));
         asrt.assertAll();
     }
@@ -65,7 +62,7 @@ public class D13_ProppertyRules {
     public void setCheckinTimeAndCheckOutTimeGracePeriod(String in, String out, String grace) {
         Utils.setTime(reservationRules.checkInTimeField, in);
         Utils.setTime(reservationRules.checkOutTimeField, out);
-        reservationRules.gracePeriodsList().stream().filter(g -> g.getText().equals(grace)).findAny().get().click();
+        reservationRules.gracePeriodsList().stream().filter(g -> g.getText().equals(grace)).findAny().orElseThrow().click();
     }
 
     @And("switch {string} SWitch {string}")
@@ -76,7 +73,7 @@ public class D13_ProppertyRules {
     }
 
     private WebElement getSwitch(String name) {
-        WebElement swit = null;
+        WebElement swit ;
         switch (name.toLowerCase()) {
             case "previousdayclac" -> swit = reservationRules.previousDayClacSwitch;
             case "autoextenddaily" -> swit = reservationRules.autoExtendDailySwitch;
@@ -91,6 +88,7 @@ public class D13_ProppertyRules {
             case "skipbalancepay" -> swit = reservationRules.skipBalancePaySwitch;
             case "resetsequence" -> swit = reservationRules.resetSequenceSwitch;
 
+            default -> throw new IllegalStateException("Unexpected value: " + name.toLowerCase());
         }
         return swit;
     }
@@ -108,7 +106,8 @@ public class D13_ProppertyRules {
     public void saveAndCheckTheMsgAndFieldsAfterEdit(String msg) {
         reservationRules.submitButton.click();
         if (!msg.contains(sucMsg)) {
-            reservationRules.msg.getText().contains(msg);
+         asrt.assertTrue( reservationRules.msg.getText().contains(msg));
+         asrt.assertAll();
         } else {
             new D03_BlocksAndFloors().checkToastMesageContainsText(msg);
         }
@@ -156,7 +155,7 @@ public class D13_ProppertyRules {
     @When("changing the unit allowance period {string}")
     public void changingTheUnitAllowancePeriod(String allowance) {
         switchSWitch("restrictchangeunit", "on");
-        reservationRules.unitAllownces().stream().filter(al -> al.getText().equals(allowance)).findAny().get().click();
+        reservationRules.unitAllownces().stream().filter(al -> al.getText().equals(allowance)).findAny().orElseThrow().click();
         reservationRules.submitButton.click();
     }
 
@@ -174,14 +173,14 @@ public class D13_ProppertyRules {
         switchSWitch("autonoshow", "on");
         Utils.setTime(reservationRules.autoNoShowTimeField, noShow);
         if (!reas.isEmpty())
-            reservationRules.autoNoShowReasons().stream().filter(al -> al.getText().equals(reas)).findAny().get().click();
+            reservationRules.autoNoShowReasons().stream().filter(al -> al.getText().equals(reas)).findAny().orElseThrow().click();
         reservationRules.submitButton.click();
     }
 
     @Then("Check the msg {string} the time to be  {string} and reasons {string}")
     public void checkTheMsgTheTimeToBeAndReasons(String msg, String noShTime, String reas) {
         if (!msg.contains(sucMsg)) {
-            reservationRules.msg.getText().contains(msg);
+           asrt.assertTrue( reservationRules.msg.getText().contains(msg));
         } else {
             new D03_BlocksAndFloors().checkToastMesageContainsText(msg);
         }
@@ -194,7 +193,7 @@ public class D13_ProppertyRules {
     @When("changing the auto cancel reason to {string}")
     public void changingTheAutoCancelReasonTo(String reas) {
         switchSWitch("autorejectota", "on");
-        reservationRules.cancelREasonsList().stream().filter(re -> re.getText().equals(reas)).findAny().get().click();
+        reservationRules.cancelREasonsList().stream().filter(re -> re.getText().equals(reas)).findAny().orElseThrow().click();
         reservationRules.submitButton.click();
     }
 

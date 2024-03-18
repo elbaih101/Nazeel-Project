@@ -9,7 +9,7 @@ import org.example.pages.P02_DashBoardPage;
 import org.example.pages.masterdata_pages.P14_MasterData;
 import org.example.pages.masterdata_pages.P21_SubscriptionPrices;
 import org.example.pages.mutlipurposes.P00_multiPurposes;
-import org.openqa.selenium.JavascriptExecutor;
+
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -22,7 +22,7 @@ import java.util.List;
 public class D10_Supscriptions {
     WebDriver driver = Hooks.driver;
 
-    JavascriptExecutor js = (JavascriptExecutor) driver;
+
     final SoftAssert asrt = new SoftAssert();
     final WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
     P02_DashBoardPage dashBoardPage = new P02_DashBoardPage(driver);
@@ -59,9 +59,10 @@ public class D10_Supscriptions {
         subscriptionPrices.subscriptionPeriodField().sendKeys(period);
         subscriptionPrices.priceField().clear();
         subscriptionPrices.priceField().sendKeys(price);
-        asrt.assertEquals(subscriptionPrices.infos().getText(), "- System will not apply taxes for subscription orders of properties belonging to countries other than Saudi Arabia.\n" +
-                "- System will apply this price for all countries.\n" +
-                "- System will apply this price for all plans.");
+        asrt.assertEquals(subscriptionPrices.infos().getText(), """
+                - System will not apply taxes for subscription orders of properties belonging to countries other than Saudi Arabia.
+                - System will apply this price for all countries.
+                - System will apply this price for all plans.""");
         subscriptionPrices.saveButton().click();
 
         asrt.assertAll();
