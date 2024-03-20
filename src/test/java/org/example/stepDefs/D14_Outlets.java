@@ -12,22 +12,23 @@ import org.example.pages.setuppages.outlets.P30_OutletsSetup;
 import org.example.pages.setuppages.outlets.P31_OutletCategories;
 import org.example.pages.setuppages.outlets.P32_OutletItems;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.support.ui.WebDriverWait;
+//import org.openqa.selenium.interactions.Actions;
+//import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.asserts.SoftAssert;
 
-import java.time.Duration;
+//import java.time.Duration;
 import java.util.HashMap;
 
 public class D14_Outlets {
     WebDriver driver = Hooks.driver;
 
     JavascriptExecutor js = (JavascriptExecutor) driver;
-    Actions actions = new Actions(driver);
+    //Actions actions = new Actions(driver);
     final SoftAssert asrt = new SoftAssert();
-    final WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+  //  final WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
     P02_DashBoardPage dashBoardPage = new P02_DashBoardPage(driver);
     P05_SetupPage setupPage = new P05_SetupPage(driver);
     P30_OutletsSetup outletsSetup = new P30_OutletsSetup(driver);
@@ -69,14 +70,14 @@ public class D14_Outlets {
             if (opState.equalsIgnoreCase("non"))
                 js.executeScript("arguments[0].click();", outletsSetup.clearOpStateSelection);
             else
-                outletsSetup.opStatusesList().stream().filter(o -> o.getText().equalsIgnoreCase(opState)).findFirst().get().click();
+                outletsSetup.opStatusesList().stream().filter(o -> o.getText().equalsIgnoreCase(opState)).findFirst().orElseThrow().click();
         if (!code.isEmpty()) {
-            outletsSetup.outletCodeField.clear();
+            outletsSetup.outletCodeField.sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.BACK_SPACE));
             if (!code.equalsIgnoreCase("non"))
                 outletsSetup.outletCodeField.sendKeys(code);
         }
         if (!name.isEmpty()) {
-            outletsSetup.outletNameField.clear();
+            outletsSetup.outletNameField.sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.BACK_SPACE));
             if (!name.equalsIgnoreCase("non"))
                 outletsSetup.outletNameField.sendKeys(name);
         }
@@ -100,7 +101,7 @@ public class D14_Outlets {
 
         if (msg.contains("Successfully")) {
             new P00_multiPurposes(driver).waitLoading();
-            WebElement selectedOutlet = outletsSetup.codes.stream().filter(c -> c.getText().equalsIgnoreCase(outletMap.get("code"))).findAny().get();
+            WebElement selectedOutlet = outletsSetup.codes.stream().filter(c -> c.getText().equalsIgnoreCase(outletMap.get("code"))).findAny().orElseThrow();
             asrt.assertTrue(outletsSetup.outletOPStatus(selectedOutlet).getText().equalsIgnoreCase(outletMap.get("opState")));
             asrt.assertTrue(outletsSetup.outletName(selectedOutlet).getText().equalsIgnoreCase(outletMap.get("name")));
             asrt.assertTrue(outletsSetup.outletCode(selectedOutlet).getText().equalsIgnoreCase(outletMap.get("code")));
@@ -125,7 +126,7 @@ public class D14_Outlets {
     }
 
     private WebElement extractOutlet(String outletName) {
-        WebElement selectedOutlet = outletsSetup.names.stream().filter(n -> n.getText().equalsIgnoreCase(outletName)).findAny().get();
+        WebElement selectedOutlet = outletsSetup.names.stream().filter(n -> n.getText().equalsIgnoreCase(outletName)).findAny().orElseThrow();
         String outletStat = "Active";
         if (outletsSetup.outletStatus(selectedOutlet).getAttribute("xlink:href").contains("icon-minus"))
             outletStat = "Inactive";
@@ -138,11 +139,14 @@ public class D14_Outlets {
         outletsSetup.filterButton.click();
         switch (filter.toLowerCase()) {
             case "status" ->
-                    outletsSetup.statusesFilterList().stream().filter(s -> s.getText().equalsIgnoreCase(value)).findAny().get().click();
-            case "name" -> outletsSetup.nameFilterField.sendKeys(value);
+                    outletsSetup.statusesFilterList().stream().filter(s -> s.getText().equalsIgnoreCase(value)).findAny().orElseThrow().click();
+            case "name" -> {
+                outletsSetup.nameFilterField.click();
+                outletsSetup.nameFilterField.sendKeys(value);
+            }
             case "code" -> outletsSetup.outletFilterCodeField.sendKeys(value);
             case "opstatus" ->
-                    outletsSetup.opstatusesFilterList().stream().filter(s -> s.getText().equalsIgnoreCase(value)).findAny().get().click();
+                    outletsSetup.opstatusesFilterList().stream().filter(s -> s.getText().equalsIgnoreCase(value)).findAny().orElseThrow().click();
         }
         outletsSetup.searchFilterButton.click();
     }
@@ -171,7 +175,7 @@ public class D14_Outlets {
 
     @When("deleting outlet {string}")
     public void deletingOutlet(String name) {
-        WebElement selectedOutlet =extractOutlet(name);
+        WebElement selectedOutlet = extractOutlet(name);
         outletsSetup.outletDeleteButton(selectedOutlet).click();
         outletsSetup.popUpCOnfirmButton.click();
     }
@@ -221,15 +225,15 @@ public class D14_Outlets {
             if (outlet.equalsIgnoreCase("non"))
                 js.executeScript("arguments[0].click();", categories.clearOutletSelectionButton);
             else
-                categories.outletsList().stream().filter(o -> o.getText().equalsIgnoreCase(outlet)).findFirst().get().click();
+                categories.outletsList().stream().filter(o -> o.getText().equalsIgnoreCase(outlet)).findFirst().orElseThrow().click();
         if (!ntmp.isEmpty()) {
             if (ntmp.equalsIgnoreCase("non"))
                 js.executeScript("arguments[0].click();", categories.clearNTMPSelectionButton);
             else
-                categories.nTMPCategoriesList().stream().filter(o -> o.getText().equalsIgnoreCase(ntmp)).findFirst().get().click();
+                categories.nTMPCategoriesList().stream().filter(o -> o.getText().equalsIgnoreCase(ntmp)).findFirst().orElseThrow().click();
         }
         if (!name.isEmpty()) {
-            categories.categoryNameField.clear();
+            categories.categoryNameField.sendKeys(Keys.chord(Keys.CONTROL,"a",Keys.BACK_SPACE));
             if (!name.equalsIgnoreCase("non"))
                 categories.categoryNameField.sendKeys(name);
         }
@@ -252,7 +256,7 @@ public class D14_Outlets {
 
         if (msg.contains("Successfully")) {
             new P00_multiPurposes(driver).waitLoading();
-            WebElement selectedCategory = categories.names.stream().filter(c -> c.getText().equalsIgnoreCase(categMap.get("name"))).findAny().get();
+            WebElement selectedCategory = categories.names.stream().filter(c -> c.getText().equalsIgnoreCase(categMap.get("name"))).findAny().orElseThrow();
             asrt.assertTrue(categories.categoryOutlet(selectedCategory).getText().equalsIgnoreCase(categMap.get("outlet")));
             asrt.assertTrue(categories.categoryName(selectedCategory).getText().equalsIgnoreCase(categMap.get("name")));
             asrt.assertTrue(categories.categoryNTMP(selectedCategory).getText().equalsIgnoreCase(categMap.get("ntmp")));
@@ -269,12 +273,12 @@ public class D14_Outlets {
         categories.filterButton.click();
         switch (filter.toLowerCase()) {
             case "status" ->
-                    categories.statusesFilterList().stream().filter(s -> s.getText().equalsIgnoreCase(value)).findAny().get().click();
+                    categories.statusesFilterList().stream().filter(s -> s.getText().equalsIgnoreCase(value)).findAny().orElseThrow().click();
             case "name" -> categories.nameFilterField.sendKeys(value);
             case "ntmp" ->
-                    categories.nTMPFilterList().stream().filter(s -> s.getText().equalsIgnoreCase(value)).findAny().get().click();
+                    categories.nTMPFilterList().stream().filter(s -> s.getText().equalsIgnoreCase(value)).findAny().orElseThrow().click();
             case "outlet" ->
-                    categories.filterOutletsList().stream().filter(s -> s.getText().equalsIgnoreCase(value)).findAny().get().click();
+                    categories.filterOutletsList().stream().filter(s -> s.getText().equalsIgnoreCase(value)).findAny().orElseThrow().click();
         }
         categories.searchFilterButton.click();
     }
@@ -313,7 +317,7 @@ public class D14_Outlets {
     }
 
     private WebElement extractCateg(String categName) {
-        WebElement selectedCategory = categories.names.stream().filter(c -> c.getText().equalsIgnoreCase(categName)).findAny().get();
+        WebElement selectedCategory = categories.names.stream().filter(c -> c.getText().equalsIgnoreCase(categName)).findAny().orElseThrow();
         String catStat = "Active";
         if (categories.categoryStatus(selectedCategory).getAttribute("xlink:href").contains("icon-minus"))
             catStat = "Inactive";
@@ -372,18 +376,18 @@ public class D14_Outlets {
             if (outlet.equalsIgnoreCase("non"))
                 js.executeScript("arguments[0].click();", items.clearOutletSelectionButton);
             else
-                items.outletsList().stream().filter(o -> o.getText().equalsIgnoreCase(outlet)).findFirst().get().click();
+                items.outletsList().stream().filter(o -> o.getText().equalsIgnoreCase(outlet)).findFirst().orElseThrow().click();
         if (!categ.isEmpty()) {
             if (categ.equalsIgnoreCase("non"))
                 js.executeScript("arguments[0].click();", items.clearCategorySelectionButton);
             else
-                items.categoriesList().stream().filter(o -> o.getText().equalsIgnoreCase(categ)).findFirst().get().click();
+                items.categoriesList().stream().filter(o -> o.getText().equalsIgnoreCase(categ)).findFirst().orElseThrow().click();
         }
         if (!type.isEmpty()) {
             if (type.equalsIgnoreCase("non"))
                 js.executeScript("arguments[0].click();", items.clearTypeSelectionButton);
             else
-                items.itemTypesList().stream().filter(o -> o.getText().equalsIgnoreCase(type)).findFirst().get().click();
+                items.itemTypesList().stream().filter(o -> o.getText().equalsIgnoreCase(type)).findFirst().orElseThrow().click();
         }
         if (!name.isEmpty()) {
             items.itemNameField.clear();
@@ -405,9 +409,6 @@ public class D14_Outlets {
                 if (items.userDefinedPriceSwitch.getAttribute("class").contains("k-switch-on"))
                     items.userDefinedPriceSwitch.click();
                 items.priceInput_FilterField.clear();
-            }
-            case null -> {
-                break;
             }
             default -> {
                 if (items.freeItemSwitch.getAttribute("class").contains("k-switch-on"))
@@ -489,7 +490,7 @@ public class D14_Outlets {
     }
 
     private WebElement extractItem(String itemName) {
-        WebElement selectedItem = items.names.stream().filter(i -> i.getText().equalsIgnoreCase(itemName)).findAny().get();
+        WebElement selectedItem = items.names.stream().filter(i -> i.getText().equalsIgnoreCase(itemName)).findAny().orElseThrow();
         String itemStat = "Active";
         if (items.itemStatus(selectedItem).getAttribute("xlink:href").contains("icon-minus"))
             itemStat = "Inactive";
@@ -502,14 +503,14 @@ public class D14_Outlets {
         items.filterButton.click();
         switch (filter.toLowerCase()) {
             case "status" ->
-                    items.statusesFilterList().stream().filter(s -> s.getText().equalsIgnoreCase(value)).findAny().get().click();
+                    items.statusesFilterList().stream().filter(s -> s.getText().equalsIgnoreCase(value)).findAny().orElseThrow().click();
             case "name" -> items.nameFilterField.sendKeys(value);
             case "price" -> items.priceInput_FilterField.sendKeys(value);
             case "outlet" ->
-                    items.filterOutletsList().stream().filter(s -> s.getText().equalsIgnoreCase(value)).findAny().get().click();
+                    items.filterOutletsList().stream().filter(s -> s.getText().equalsIgnoreCase(value)).findAny().orElseThrow().click();
             case "category" -> {
-                items.filterOutletsList().stream().filter(s -> s.getText().equalsIgnoreCase(StringUtils.substringBefore(value, " -"))).findAny().get().click();
-                items.categoryFilterList().stream().filter(c -> c.getText().equalsIgnoreCase(StringUtils.substringAfter(value, "- "))).findAny().get().click();
+                items.filterOutletsList().stream().filter(s -> s.getText().equalsIgnoreCase(StringUtils.substringBefore(value, " -"))).findAny().orElseThrow().click();
+                items.categoryFilterList().stream().filter(c -> c.getText().equalsIgnoreCase(StringUtils.substringAfter(value, "- "))).findAny().orElseThrow().click();
 
             }
         }
@@ -518,13 +519,14 @@ public class D14_Outlets {
 
     @Then("Check all items records {string} as {string}")
     public void checkAllItemsRecordsAs(String filter, String value) {
+        new P00_multiPurposes(driver).waitLoading();
         switch (filter) {
             case "status" -> {
                 switch (value.toLowerCase()) {
                     case "active" ->
-                            asrt.assertFalse(items.statuses.stream().anyMatch(s -> s.getAttribute("xlink:href").contains("icon-minus")));
+                            asrt.assertFalse(items.statuses.stream().anyMatch(s -> !s.getAttribute("xlink:href").contains("icon-minus")));
                     case "inactive" ->
-                            asrt.assertFalse(items.statuses.stream().anyMatch(s -> s.getAttribute("xlink:href").contains("icon-check")));
+                            asrt.assertFalse(items.statuses.stream().anyMatch(s -> !s.getAttribute("xlink:href").contains("icon-check")));
                 }
             }
             case "name" -> asrt.assertFalse(items.names.stream().anyMatch(n -> !n.getText().contains(value)));

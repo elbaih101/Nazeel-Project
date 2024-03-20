@@ -58,7 +58,7 @@ public class P33_Penalties {
     public List<WebElement> calculatedOfs;
     @FindBy(xpath = "//td[@data-kendo-grid-column-index=\"4\"]")
     public List<WebElement> categories;
-    @FindBy(xpath = "//td[@data-kendo-grid-column-index=\"5\"]")
+    @FindBy(xpath = "//td[@data-kendo-grid-column-index=\"5\"]//*[name()=\"use\"]")
     public List<WebElement> statuses;
     @FindBy(xpath = "//td[@data-kendo-grid-column-index=\"6\"]")
     List<WebElement> moreActions;
@@ -119,7 +119,7 @@ public class P33_Penalties {
         return listItems;
     }
 
-    @FindBy(xpath = "//kendo-combobox[@name=\"calculatedOf\"]")
+    @FindBy(xpath = "//kendo-combobox[@name=\"calculatedOf\"]//input")
     public WebElement calculatedofField;
 
     public List<WebElement> calculatedOfList_Filter() {
@@ -162,10 +162,10 @@ public class P33_Penalties {
         return listItems;
     }
 
-    @FindBy(xpath = "//label[contains(text(),\"Category\")]/following-sibling::kendo-combobox//span[@class=\"k-select\"]//span[@title=\"clear\"]")
+    @FindBy(xpath = "//label[contains(text(),\"Category\")]/following-sibling::kendo-combobox//span[@title=\"clear\"]")
     public WebElement categorySelectionClearButton;
 
-    @FindBy(xpath = "//kendo-combobox[@name=\"calculatedOf\"]//span[@class=\"k-select\"]//span[@title=\"clear\"]")
+    @FindBy(xpath = "//kendo-combobox[@name=\"calculatedOf\"]//span[@title=\"clear\"]")
     public WebElement calcOfClearButton;
     @FindBy(id = "name")
     public WebElement nameFilterField;
@@ -176,8 +176,12 @@ public class P33_Penalties {
     // end filter ///
 
     /// data entery ///
-    @FindBy(xpath = "//input[contains(@class,\"dropdown-toggle form-control\")]")
+    @FindBy(xpath = "//input[@type=\"text\"][1]")
     public WebElement penaltyNameField;
+    @FindBy(xpath = "//input[@type=\"text\"]/following-sibling::button[contains(@class,\"en_button\")]")
+    public WebElement arabicButton;
+    @FindBy(xpath = "//input[@type=\"text\"][2]")
+    public WebElement penaltyArNameField;
     @FindBy(name = "text-area")
     public WebElement descriptionField;
     @FindBy(xpath = "//button[@type=\"submit\" and text()=\" Save \"]")

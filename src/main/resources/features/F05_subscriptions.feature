@@ -2,7 +2,7 @@ Feature: subscriptions
 
   Background: go to subscription price page
     Given Logging in with superuser
-    And Select Property "P00020"
+    And Select Property "P01384"
     And go to subscriptions prices page
 
   Scenario Outline: Creating new Price

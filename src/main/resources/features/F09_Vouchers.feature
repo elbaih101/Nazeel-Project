@@ -1,9 +1,9 @@
-@Regression @Sprint38
+@Regression @Sprint38 @Vouchers
 Feature: Vouchers
 
   Background:  login and choose property
     Given Logging in with superuser
-    And Select Property "P00020"
+    And Select Property "P01384"
   Rule:Reservations Related Receipt Vouchers
     Background:
       Given open reservations Page

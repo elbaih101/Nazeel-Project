@@ -1,8 +1,9 @@
+@FinancialSettings
 Feature: Property Financials settings
 
   Background:  login and choose property
     Given Logging in with superuser
-    And Select Property "P00020"
+    And Select Property "P01384"
   Rule: cost Centers
     Background:go to cost Centers Page
       Given open cost Centers Page

@@ -544,11 +544,7 @@ public class D05_UnitsSetup {
 
     @Then("check all visible units have type {string}")
     public void checkAllVisibleUnitsHaveType(String unitType) {
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException e) {
-            System.out.println("waiting to refresh the cards failed");
-        }
+        new P00_multiPurposes(driver).waitLoading();
         List<WebElement> filteredUnits = unitsSetupPage.unitsCards;
         if (unitType.equals("RANDOM")) {
             asrt.assertTrue(filteredUnits.stream().allMatch(card -> unitsSetupPage.unitType(card).getText().trim().contains(selectedUnitTypeName.trim())));
@@ -791,6 +787,7 @@ public class D05_UnitsSetup {
 
     @And("Check the edited amenity ddescriptioon {string} and state {string}")
     public void checkTheEditedAmenityDdescriptioonAndState(String description, String state) {
+      new P00_multiPurposes(driver).waitLoading();
         amenities.viewButton(amenities.names.getFirst()).click();
         if (state.equalsIgnoreCase("inactive")) {
             asrt.assertTrue(amenities.statusSwitch.getAttribute("class").contains("k-switch-of"));

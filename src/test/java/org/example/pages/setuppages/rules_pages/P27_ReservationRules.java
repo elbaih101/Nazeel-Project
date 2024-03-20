@@ -65,7 +65,7 @@ public class P27_ReservationRules {
     @FindBy(xpath = "//span[contains(@class,\"switch-label--sm\") and contains(text(),\"Reason \")]/preceding-sibling::kendo-switch")
     public WebElement reasonsRequireSwitch;
 
-    @FindBy(xpath = "//label[contains(text(),\\\"Allowance\\\")]/parent::div/following-sibling::kendo-dropdownlist\"")
+    @FindBy(xpath = "//label[contains(text(),\"Allowance\")]/parent::div/following-sibling::kendo-dropdownlist\"")
     public WebElement unitAllowanceDropList;
     public List<WebElement> unitAllownces() {
         driver.findElement(By.xpath("//label[contains(text(),\"Allowance\")]/parent::div/following-sibling::kendo-dropdownlist")).click();

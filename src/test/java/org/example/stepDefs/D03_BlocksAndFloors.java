@@ -155,7 +155,7 @@ final JavascriptExecutor js =(JavascriptExecutor) driver;
     @Then("check filtered blocks cotains name {string}")
     public void checkFilteredBlocksCotainsName(String name) {
         new P00_multiPurposes(driver).waitLoading();
-        asrt.assertTrue(blocksPage.blocksNames.stream().anyMatch(element -> !element.getText().contains(name)));
+        asrt.assertFalse(blocksPage.blocksNames.stream().anyMatch(element -> !element.getText().contains(name)));
         asrt.assertAll();
     }
 

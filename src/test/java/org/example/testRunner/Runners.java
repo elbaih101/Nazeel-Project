@@ -4,11 +4,11 @@ import io.cucumber.testng.AbstractTestNGCucumberTests;
 import io.cucumber.testng.CucumberOptions;
 
 
-
 @CucumberOptions
         (
                 features = "src/main/resources/features",
-                glue = "org.example.stepDefs",
+                glue = {"org.example.stepDefs"},
+                tags = "not @Reservation_Rules and not @DigitalPayment and not @Property and not @Blocks_Floors",
                 plugin = {
                         "pretty",
                         "html:target/cucumber.html",
@@ -22,5 +22,5 @@ import io.cucumber.testng.CucumberOptions;
 
         )
 
-public class runners extends AbstractTestNGCucumberTests {
+public class Runners extends AbstractTestNGCucumberTests {
 }

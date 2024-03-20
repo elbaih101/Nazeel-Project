@@ -10,6 +10,8 @@ import org.example.pages.mutlipurposes.P00_multiPurposes;
 import org.example.pages.setuppages.P05_SetupPage;
 import org.example.pages.setuppages.rules_pages.P27_ReservationRules;
 import org.example.pages.setuppages.rules_pages.P33_Penalties;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.testng.asserts.SoftAssert;
@@ -20,8 +22,7 @@ public class D13_ProppertyRules {
 
 
     WebDriver driver = Hooks.driver;
-
-    //    JavascriptExecutor js = (JavascriptExecutor) driver;
+    JavascriptExecutor js = (JavascriptExecutor) driver;
     final SoftAssert asrt = new SoftAssert();
     //    final WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
     P02_DashBoardPage dashBoardPage = new P02_DashBoardPage(driver);
@@ -235,7 +236,10 @@ public class D13_ProppertyRules {
             penaltyMap.put("amount", amount);
 
         if (!calcOf.isEmpty())
-            penaltyMap.put("calcOf", calcOf);
+            if (calcOf.equalsIgnoreCase("first night"))
+                penaltyMap.put("calcOf", "1st Night");
+            else
+                penaltyMap.put("calcOf", calcOf);
 
         if (!desc.isEmpty())
             penaltyMap.put("desc", desc);
@@ -250,13 +254,18 @@ public class D13_ProppertyRules {
 
     private void fillPenaltyData(String name, String categ, String type, String amount, String calcOf, String desc, String state) {
         if (!name.isEmpty()) {
-            penalties.penaltyNameField.clear();
+            penalties.penaltyNameField.sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.BACK_SPACE));
+            if (!state.equalsIgnoreCase("new")) {
+                penalties.arabicButton.click();
+                penalties.penaltyArNameField.sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.BACK_SPACE));
+            }
+            //Utils.setAttribute(js,penalties.penaltyArNameField,"value","");
             if (!name.equalsIgnoreCase("non"))
                 penalties.penaltyNameField.sendKeys(name);
         }
         if (!categ.isEmpty()) {
             if (categ.equalsIgnoreCase("non"))
-                penalties.categorySelectionClearButton.click();
+                js.executeScript("arguments[0].click();", penalties.categorySelectionClearButton);
             else
                 penalties.categorysList_Filter().stream().filter(c -> c.getText().equalsIgnoreCase(categ)).findAny().orElseThrow().click();
         }
@@ -271,7 +280,8 @@ public class D13_ProppertyRules {
 
         if (!calcOf.isEmpty()) {
             if (calcOf.equalsIgnoreCase("non"))
-                penalties.calcOfClearButton.click();
+
+                js.executeScript("arguments[0].click();", penalties.calcOfClearButton);
             else
                 penalties.calculatedOfList_Filter().stream().filter(c -> c.getText().equalsIgnoreCase(calcOf)).findAny().orElseThrow().click();
         }
@@ -291,7 +301,7 @@ public class D13_ProppertyRules {
             } else {
                 if (penalties.undefinedCheckBox.isSelected())
                     penalties.undefinedCheckBox.click();
-                penalties.amountFiled.clear();
+                penalties.amountFiled.sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.BACK_SPACE));
                 if (!amount.equalsIgnoreCase("non"))
                     penalties.amountFiled.sendKeys(amount);
             }
@@ -308,7 +318,8 @@ public class D13_ProppertyRules {
     }
 
     @When("creating penalty with name {string} ctegory {string} type {string} amount {string} calculatedOF {string} Description {string}")
-    public void creatingPenaltyWithNameCtegoryTypeAmountCalculatedOFDescription(String name, String categ, String type, String amount, String calcOF, String desc) {
+    public void creatingPenaltyWithNameCtegoryTypeAmountCalculatedOFDescription(String name, String categ, String
+            type, String amount, String calcOF, String desc) {
         penalties.newpenaltyButton.click();
         fillPenaltyData(name, categ, type, amount, calcOF, desc, "new");
         penalties.submitButton.click();
@@ -325,12 +336,100 @@ public class D13_ProppertyRules {
             asrt.assertTrue(penalties.penaltyType(createdPenalty).getText().equalsIgnoreCase(penaltyMap.get("type")));
             asrt.assertTrue(penalties.penaltyCOf(createdPenalty).getText().equalsIgnoreCase(penaltyMap.get("calcOf")));
 
-            if (penaltyMap.get("status").equalsIgnoreCase("active"))
+            if (penaltyMap.get("state").equalsIgnoreCase("active"))
                 asrt.assertTrue(penalties.penaltyStatus(createdPenalty).getAttribute("xlink:href").contains("icon-check"));
-            else if (penaltyMap.get("status").equalsIgnoreCase("inactive"))
+            else if (penaltyMap.get("state").equalsIgnoreCase("inactive"))
                 asrt.assertTrue(penalties.penaltyStatus(createdPenalty).getAttribute("xlink:href").contains("icon-minus"));
+            asrt.assertAll();
         }
 
+    }
 
+    @When("Filtering penalties With {string} as {string}")
+    public void filteringPenaltiesWithAs(String filter, String value) {
+        penalties.filterButton.click();
+        switch (filter) {
+            case "name" -> penalties.nameFilterField.sendKeys(value);
+            case "amount" -> penalties.amountFilterField.sendKeys(value);
+            case "type" ->
+                    penalties.filterPenaltyTypeList().stream().filter(t -> t.getText().equalsIgnoreCase(value)).findAny().orElseThrow().click();
+            case "calcOf" ->
+                    penalties.calculatedOfList_Filter().stream().filter(t -> t.getText().equalsIgnoreCase(value)).findAny().orElseThrow().click();
+            case "categ" ->
+                    penalties.categorysList_Filter().stream().filter(t -> t.getText().equalsIgnoreCase(value)).findAny().orElseThrow().click();
+            case "state" ->
+                    penalties.statusesFilterList().stream().filter(t -> t.getText().equalsIgnoreCase(value)).findAny().orElseThrow().click();
+        }
+        penalties.searchButton.click();
+
+    }
+
+    @Then("Check all visible records {string} as {string}")
+    public void checkAllVisibleRecordsAs(String filter, String value) {
+        new P00_multiPurposes(driver).waitLoading();
+        switch (filter.toLowerCase()) {
+            case "name" -> asrt.assertFalse(penalties.names.stream().anyMatch(n -> !n.getText().contains(value)));
+            case "amount" -> asrt.assertFalse(penalties.amounts.stream().anyMatch(n -> !n.getText().contains(value)));
+            case "type" -> {
+                switch (value.toLowerCase()) {
+                    case "absolute" ->
+                            asrt.assertFalse(penalties.types.stream().anyMatch(n -> !n.getText().contains("$")));
+                    case "percentage" ->
+                            asrt.assertFalse(penalties.types.stream().anyMatch(n -> !n.getText().contains("%")));
+                }
+            }
+
+            case "calcof" -> {
+                if (value.equalsIgnoreCase("First Night"))
+                    asrt.assertFalse(penalties.calculatedOfs.stream().anyMatch(n -> !n.getText().contains("1st Night")));
+                else
+                    asrt.assertFalse(penalties.calculatedOfs.stream().anyMatch(n -> !n.getText().contains(value)));
+            }
+
+            case "categ" -> asrt.assertFalse(penalties.categories.stream().anyMatch(n -> !n.getText().contains(value)));
+            case "state" -> {
+                switch (value.toLowerCase()) {
+                    case "active" ->
+                            asrt.assertTrue(penalties.statuses.stream().anyMatch(n -> !n.getAttribute("xlink:href").contains("icon-check")));
+                    case "inactive" ->
+                            asrt.assertTrue(penalties.statuses.stream().anyMatch(n -> !n.getAttribute("xlink:href").contains("icon-minus")));
+                }
+            }
+        }
+        asrt.assertAll();
+    }
+
+    private WebElement extractPenalty(String penaltyName) {
+        WebElement seectedPenalty = penalties.names.stream().filter(i -> i.getText().equalsIgnoreCase(penaltyName)).findAny().orElseThrow();
+        String penaltyStat = "Active";
+        if (penalties.penaltyStatus(seectedPenalty).getAttribute("xlink:href").contains("icon-minus"))
+            penaltyStat = "Inactive";
+        setPenaltyMap(penalties.penaltyName(seectedPenalty).getText(), penalties.penaltyCategory(seectedPenalty).getText(), penalties.penaltyType(seectedPenalty).getText(), penalties.penaltyAmount(seectedPenalty).getText(), penalties.penaltyCOf(seectedPenalty).getText(), "", penaltyStat);
+        return seectedPenalty;
+    }
+
+    @When("editing penalty {string} name {string} ctegory {string} type {string} amount {string} calculatedOF {string} Description {string} and state {string}")
+    public void editingPenaltyNameCtegoryTypeAmountCalculatedOFDescriptionAndState(String oName, String
+            nName, String categ, String type, String amount, String calcOF, String desc, String state) {
+        WebElement selectedPenalty = extractPenalty(oName);
+        penalties.penaltyEditButton(selectedPenalty).click();
+        new P00_multiPurposes(driver).waitLoading();
+        fillPenaltyData(nName, categ, type, amount, calcOF, desc, state);
+        penalties.submitButton.click();
+    }
+
+    @When("deleting penalty {string}")
+    public void deletingPenalty(String penName) {
+        WebElement selectedPenalty = extractPenalty(penName);
+        penalties.penaltyDeleteButton(selectedPenalty).click();
+        penalties.popUpCOnfirmButton.click();
+    }
+
+    @Then("Check msg {string} and penalty deletion")
+    public void checkMsgAndPenaltyDeletion(String msg) {
+        new D03_BlocksAndFloors().checkToastMesageContainsText(msg);
+        if (msg.contains("Successfully")){
+            new P00_multiPurposes(driver).waitLoading();
+            asrt.assertFalse(penalties.names.stream().anyMatch(n -> n.getText().equalsIgnoreCase(penaltyMap.get("name"))));}
     }
 }

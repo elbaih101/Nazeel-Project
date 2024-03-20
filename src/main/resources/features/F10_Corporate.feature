@@ -1,3 +1,4 @@
+@CorporateSetup
 Feature: corporates Feature
 
   Background:
@@ -6,7 +7,7 @@ Feature: corporates Feature
 
   Rule:Non Zatca Subscribed
     Background:
-      Given Select Property "P00958"
+      Given Select Property "P01384"
       And go to corporates page
 # FIXME the AZTCA LOGO
 #    Scenario: Check Zatca Logo on Requiered Fields
@@ -20,14 +21,14 @@ Feature: corporates Feature
         | name   | country | ignored | vat             | bNum | secBNum | msg                                                                  |
         |        | Saudi   | all     |                 |      |         | Name Is Requird                                                      |
         | zeko   |         | all     |                 |      |         | Country is required                                                  |
-        | shenga | Saudi   | all     |                 |      |         | Corporate Added Successfully                                         |
-        | shenga | Saudi   | all     |                 |      |         | Name exist before                                                    |
+        | shenga | Saudi   |         | 332166498745613 | 6541 | 5236    | Corporate Added Successfully                                         |
+        | shenga | Saudi   |         | 332166498745613 | 6541 | 5236    | Name exist before                                                    |
         | ghaly  | Saudi   | all     | 564             |      |         | VAT Number Should be 15 Digits\nVAT Number Should Begin And End By 3 |
         | ghaly  | Saudi   | all     | 987654123654987 |      |         | VAT Number Should Begin And End By 3                                 |
 
   Rule:Non Zatca Subscribed Reservation Popup
     Background:
-      Given Select Property "P00958"
+      Given Select Property "P01384"
       And open reservations Page
       And Click on Add new Reservation
       And click on select corporate
@@ -40,8 +41,8 @@ Feature: corporates Feature
         | name  | country | ignored | vat             | bNum | secBNum | msg                                                                  |
         |       | Saudi   | all     |                 |      |         | Name Is Requird                                                      |
         | zeko  |         | all     |                 |      |         | Country is required                                                  |
-        | manga | Saudi   | all     |                 |      |         | Corporate Added Successfully                                         |
-        | manga | Saudi   | all     |                 |      |         | Name exist before                                                    |
+        | manga | Saudi   |         | 332166498745613 | 6541 | 5236    | Corporate Added Successfully                                         |
+        | manga | Saudi   |         | 332166498745613 | 6541 | 5236    | Name exist before                                                    |
         | ghaly | Saudi   | all     | 564             |      |         | VAT Number Should be 15 Digits\nVAT Number Should Begin And End By 3 |
         | ghaly | Saudi   | all     | 987654123654987 |      |         | VAT Number Should Begin And End By 3                                 |
 
@@ -120,4 +121,4 @@ Feature: corporates Feature
         | manga  | Saudi   | district   |     | 6548 | 6548    | District Is Required                                                                                                                                       |
         | manga  | Saudi   | street     |     | 6548 | 6549    | Street Is Required                                                                                                                                         |
 
-#TODO Corporates setup  Both in stand alone and reservations
+

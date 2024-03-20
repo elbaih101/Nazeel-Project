@@ -57,6 +57,7 @@ public class D09_Rates {
 
     @When("fill rates {string} with low {string} high {string} min {string} mon {string} monmin {string}")
     public void fillRatesWithLowHighMinMonMonmin(String typeName, String low, String high, String min, String mon, String monMin) {
+       new P00_multiPurposes(driver).waitLoading();
         if (typeName.equalsIgnoreCase("all")) {
             ratesPages.lowWeekDaysRates.forEach(WebElement::clear);
             ratesPages.lowWeekDaysRates.forEach(rate -> rate.sendKeys(low));

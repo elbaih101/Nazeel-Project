@@ -166,6 +166,7 @@ JavascriptExecutor js=(JavascriptExecutor) driver;
             masterUnitsTypes.statuses().stream().filter(element -> element.getText().equalsIgnoreCase(status)).toList().get(0).click();
         }
         masterUnitsTypes.searchButton.click();
+        new P00_multiPurposes().waitLoading();
         wait.until(ExpectedConditions.refreshed(ExpectedConditions.visibilityOfAllElements(masterUnitsTypes.typesNames)));
     }
 

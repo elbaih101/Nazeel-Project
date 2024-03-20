@@ -26,6 +26,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.asserts.SoftAssert;
+
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -34,7 +35,7 @@ import java.util.List;
 public class D12_Financials {
     WebDriver driver = Hooks.driver;
 
-   // JavascriptExecutor js = (JavascriptExecutor) driver;
+    // JavascriptExecutor js = (JavascriptExecutor) driver;
     final SoftAssert asrt = new SoftAssert();
     final WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
     P02_DashBoardPage dashBoardPage = new P02_DashBoardPage(driver);
@@ -163,7 +164,7 @@ public class D12_Financials {
     @And("Check the type {string}  with name {string} and method {string} and amount {string} applied on {string} and start date {string} end date {string} Charged on {string} status {string}")
     public void checkTheTypeWithNameAndMethodAndAmountAppliedOnAndStartDateEndDateChargedOn(String type, String name, String method, String amount, String aplOn, String sDate, String eDate, String chrgOn, String stat) {
 
-        if(!(aplOn.equalsIgnoreCase("non") || amount.equalsIgnoreCase("non") || method.equalsIgnoreCase("non") || sDate.equalsIgnoreCase("non") || dateFormater.parseDateTime(eDate).isBefore(dateFormater.parseDateTime(sDate)))) {
+        if (!(aplOn.equalsIgnoreCase("non") || amount.equalsIgnoreCase("non") || method.equalsIgnoreCase("non") || sDate.equalsIgnoreCase("non") || dateFormater.parseDateTime(eDate).isBefore(dateFormater.parseDateTime(sDate)))) {
             WebElement cust = taxesAndFees.names.stream().filter(n -> n.getText().contains(name)).findAny().orElseThrow();
             if (!type.isEmpty()) {
                 asrt.assertTrue(taxesAndFees.taxType(cust).getText().equalsIgnoreCase(type), "Expected :" + type + "\n Actual :" + taxesAndFees.taxType(cust).getText());
@@ -207,7 +208,8 @@ public class D12_Financials {
         }
         taxMap.put("stat", stat);
         taxesAndFees.submitButon.click();
-        taxesAndFees.popUpConfirmButton.get(0).click();
+        if (!taxesAndFees.popUpConfirmButton.isEmpty())
+            taxesAndFees.popUpConfirmButton.get(0).click();
     }
 
     @Given("delete the customizatiin {string}")
@@ -320,7 +322,7 @@ public class D12_Financials {
 
         }
         if (!name.isEmpty()) {
-            costCenter.costCenterNameField.clear();
+            costCenter.costCenterNameField.sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.BACK_SPACE));
             if (!name.equalsIgnoreCase("non"))
                 costCenter.costCenterNameField.sendKeys(name);
 
@@ -371,7 +373,7 @@ public class D12_Financials {
         switch (name.toLowerCase()) {
             case "random" -> selectedCost = costCenter.costNames.stream().findAny().orElseThrow();
             case "" -> asrt.assertFalse(true, "enter the desired Cost center to be Edited");
-          //  case null -> asrt.assertFalse(true, "null old name value");
+            //  case null -> asrt.assertFalse(true, "null old name value");
             default ->
                     selectedCost = costCenter.costNames.stream().filter(c -> c.getText().toLowerCase().contains(name.toLowerCase())).findAny().orElseThrow();
         }
@@ -471,7 +473,7 @@ public class D12_Financials {
     @And("Check the Discount {string} in the grid with state {string} is {string}")
     public void checkTheDiscountInTheGrid(String type, String state, String recState) {
         new P00_multiPurposes(driver).waitLoading();
-        WebElement tocheck ;
+        WebElement tocheck;
         switch (recState) {
             case "present" -> {
                 if (!type.equalsIgnoreCase("random")) {
@@ -602,7 +604,7 @@ public class D12_Financials {
                     (state.equalsIgnoreCase("inactive") && currencies.statusSwitch.getAttribute("class").contains("k-switch-on"))) {
                 currencies.statusSwitch.click();
                 currencyMap.put("state", state);
-            }else if (state.equalsIgnoreCase("new"))
+            } else if (state.equalsIgnoreCase("new"))
                 currencyMap.put("state", "Active");
 
         }

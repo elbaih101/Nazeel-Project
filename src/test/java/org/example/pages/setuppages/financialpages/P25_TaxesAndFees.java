@@ -170,7 +170,11 @@ public class P25_TaxesAndFees {
 
     public List<WebElement> chargedOnList() {
         driver.findElement(By.xpath("//kendo-multiselect[@name=\"activeCustomizedFees\"]")).click();
-        wait.until(ExpectedConditions.visibilityOfAllElements(listItems));
+        try {
+            Thread.sleep(300);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         return listItems;
     }
 

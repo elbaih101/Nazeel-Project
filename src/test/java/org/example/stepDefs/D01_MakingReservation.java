@@ -24,8 +24,6 @@ public class D01_MakingReservation {
     WebDriver driver = Hooks.driver;
 
 
-
-
     final P01_LoginPage loginPage = new P01_LoginPage();
     final P02_DashBoardPage homePage = new P02_DashBoardPage();
     final JavascriptExecutor js = (JavascriptExecutor) driver;
@@ -40,18 +38,17 @@ public class D01_MakingReservation {
     @And("open reservations Page")
     public void openReservationsPage() {
 
-       // homePage.homePageLink.click();
-       // new P00_multiPurposes(driver).waitLoading();
-       // wait.until(ExpectedConditions.refreshed(ExpectedConditions.elementToBeClickable(homePage.ReservationsLink)));
-           //     homePage.ReservationsLink.click();
-        js.executeScript("arguments[0].click();",  homePage.ReservationsLink);
+        // homePage.homePageLink.click();
+        // new P00_multiPurposes(driver).waitLoading();
+        // wait.until(ExpectedConditions.refreshed(ExpectedConditions.elementToBeClickable(homePage.ReservationsLink)));
+        //     homePage.ReservationsLink.click();
+        js.executeScript("arguments[0].click();", homePage.ReservationsLink);
         new P00_multiPurposes(driver).waitLoading();
     }
 
     @When("Click on Add new Reservation")
     public void clickOnAddNewReservation() {
-        //wait.until(ExpectedConditions.urlContains("/reservations"));
-        wait.until(ExpectedConditions.elementToBeClickable(reservationMainDataPage.newReservationButton));
+      new P00_multiPurposes(driver).waitLoading();
 //        reservationPage.newReservationButton.click();
         js.executeScript("arguments[0].click();", reservationMainDataPage.newReservationButton);
     }
@@ -84,11 +81,11 @@ public class D01_MakingReservation {
 
         wait.until(ExpectedConditions.visibilityOf(reservationMainDataPage.panelBar));
 
-       WebElement unitCard;
+        WebElement unitCard;
         if (unit.equalsIgnoreCase("RANDOM")) {
             unitCard = unitSelectionPopup.availableUnits();
         } else {
-            unitCard =unitSelectionPopup.availableUnits();
+            unitCard = unitSelectionPopup.availableUnits();
         }
         action.moveToElement(unitCard).perform();
         unitCard.click();
@@ -128,7 +125,7 @@ public class D01_MakingReservation {
     @And("verify toast message appears with text {string} and the reservation status to be {string}")
     public void verifyToastMessageAppearsWithTextAndTheReservationStatusToBe(String successText, String reservationState) {
         WebElement succesMessage = reservationMainDataPage.toastMessage;
-        asrt.assertTrue(succesMessage.getText().contains(successText), "Expected toast: "+successText+"\n actual: "+succesMessage.getText()+"\n");
+        asrt.assertTrue(succesMessage.getText().contains(successText), "Expected toast: " + successText + "\n actual: " + succesMessage.getText() + "\n");
         new P00_multiPurposes(driver).waitLoading();
         WebElement resStatus = reservationMainDataPage.reservationStatus;
         asrt.assertEquals(resStatus.getText(), reservationState);
@@ -196,45 +193,45 @@ public class D01_MakingReservation {
             endReservationPopUp.confirmCheckOutButton.click();
 
             while (!endReservationPopUp.header().isEmpty())
-                try {
-                    if (endReservationPopUp.skipButton().isDisplayed()) {
-                        wait.until(ExpectedConditions.refreshed(ExpectedConditions.elementToBeClickable(endReservationPopUp.skipButton())));
-                        new P00_multiPurposes(driver).waitLoading();
-                        endReservationPopUp.skipButton().click();
-                    }
-                } catch (NoSuchElementException e) {
+
+                if (!endReservationPopUp.skipButton().isEmpty()) {
+                    wait.until(ExpectedConditions.refreshed(ExpectedConditions.elementToBeClickable(endReservationPopUp.skipButton().getFirst())));
+                    new P00_multiPurposes(driver).waitLoading();
+                    endReservationPopUp.skipButton().get(0).click();
+                } else {
 
                     List<WebElement> methods = endReservationPopUp.paymentMethods();
                     wait.until(ExpectedConditions.visibilityOfAllElements(methods));
                     methods.stream().filter(method -> method.getText().contains("Cash")).toList().get(0).click();
                     new P00_multiPurposes(driver).waitLoading();
                     endReservationPopUp.confirmationButton().click();
-                    wait.until(ExpectedConditions.refreshed(ExpectedConditions.visibilityOf(endReservationPopUp.amountField())));
+                    new P00_multiPurposes(driver).waitLoading();
                 }
         } else if (status.toLowerCase().contains("Canceled".toLowerCase())) {
             endReservationPopUp.confirmCancelButton().click();
             while (!endReservationPopUp.header().isEmpty())
-                try {
-                    if (endReservationPopUp.skipButton().isDisplayed()) {
-                        wait.until(ExpectedConditions.refreshed(ExpectedConditions.elementToBeClickable(endReservationPopUp.skipButton())));
+
+                    if (!endReservationPopUp.skipButton().isEmpty()) {
+                        wait.until(ExpectedConditions.refreshed(ExpectedConditions.elementToBeClickable(endReservationPopUp.skipButton().getFirst())));
                         new P00_multiPurposes(driver).waitLoading();
-                        endReservationPopUp.skipButton().click();
+                        endReservationPopUp.skipButton().getFirst().click();
                     }
-                } catch (NoSuchElementException e) {
+                 else  {
                     endReservationPopUp.reasons().get(0).click();
                     endReservationPopUp.confirmationButton().click();
-                    if (endReservationPopUp.skipButton().isDisplayed()) {
-                        wait.until(ExpectedConditions.refreshed(ExpectedConditions.elementToBeClickable(endReservationPopUp.skipButton())));
+                    if (!endReservationPopUp.skipButton().isEmpty()) {
+                        wait.until(ExpectedConditions.refreshed(ExpectedConditions.elementToBeClickable(endReservationPopUp.skipButton().getFirst())));
                         new P00_multiPurposes(driver).waitLoading();
-                        endReservationPopUp.skipButton().click();
-                    }else{
-                    List<WebElement> methods = endReservationPopUp.paymentMethods();
-                    wait.until(ExpectedConditions.visibilityOfAllElements(methods));
-                    methods.stream().filter(method -> method.getText().contains("Cash")).toList().get(0).click();
-                    new P00_multiPurposes(driver).waitLoading();
-                    endReservationPopUp.confirmationButton().click();
-                    wait.until(ExpectedConditions.refreshed(ExpectedConditions.visibilityOf(endReservationPopUp.amountField())));
-                }}
+                        endReservationPopUp.skipButton().getFirst().click();
+                    } else {
+                        List<WebElement> methods = endReservationPopUp.paymentMethods();
+                        wait.until(ExpectedConditions.visibilityOfAllElements(methods));
+                        methods.stream().filter(method -> method.getText().contains("Cash")).toList().get(0).click();
+                        new P00_multiPurposes(driver).waitLoading();
+                        endReservationPopUp.confirmationButton().click();
+                        wait.until(ExpectedConditions.refreshed(ExpectedConditions.visibilityOf(endReservationPopUp.amountField())));
+                    }
+                }
         }
 
     }
@@ -257,7 +254,7 @@ public class D01_MakingReservation {
 
     @And("elect start date {string} and end Date {string}")
     public void selectStartDateAndEndDate(String sDate, String eDate) {
-        //new P00_multiPurposes(driver).waitLoading();
+        new P00_multiPurposes(driver).waitLoading();
         Utils.setDate(reservationMainDataPage.startDateField, sDate);
         Utils.setDate(reservationMainDataPage.endDateField, eDate);
     }

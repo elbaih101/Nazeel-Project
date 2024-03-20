@@ -1,8 +1,9 @@
+@Outlets
 Feature: Outlets Feature
 
   Background:  login and choose property
     Given Logging in with superuser
-    And Select Property "P00020"
+    And Select Property "P01384"
 
   Rule: Outlets Setup
     Background: go to outlets Setup Page
@@ -140,11 +141,11 @@ Feature: Outlets Feature
       Given go to categories Page
     Scenario: cant delete  related data category
       When deleting category "categ 2"
-      Then Check msg "Deleted Successfully" and category "categ 2"
+      Then Check msg "Can not delete this category, it has related items" and category "categ 2"
 
   Rule: Outlets Setup2
     Background: go to outlets Setup Page
       Given go to outlets Setup Page
     Scenario: can't delete  related Data outlet
       When deleting outlet "2"
-      Then Check msg "Deleted Successfully" and outlet "2" is deleted
+      Then Check msg "Outlet Related To Catogries Could not be Deleted" and outlet "2" is deleted

@@ -3,7 +3,7 @@ Feature: Unit Setup
 
   Background: selecting property
     Given Logging in with superuser
-    And Select Property "P00020"
+    And Select Property "P01384"
 ## masterdata unit Type Customization ##
   Rule:masterdata unit Type Customization
     Background: going to units master data
@@ -78,7 +78,7 @@ Feature: Unit Setup
       Then check the room type "Two Rooms" is added
       And Check toast mesage contains text "Saved Successed"
 
-    Scenario: can't add duplicated uni types
+    Scenario: can't add duplicated unit types
       When click on new type button
       And select type "duplicate" and enter description "duplicate type"
       And click on the submit button
@@ -103,7 +103,7 @@ Feature: Unit Setup
 ## units setup settings ##
     Scenario: add a unit for newly added unit type
       Given open the new unit page
-      And  enter unit required data with room number "RANDOM" mergable "false" class "Random"
+      And  enter unit required data with room number "RANDOM" mergable "true" class "Random"
       When  click on the add unit button
 #    Then Check toast mesage contains text "Saved Successfully"
       Then check unit card in the card grid with number "RANDOM"

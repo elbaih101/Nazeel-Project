@@ -1,9 +1,9 @@
-@Sprint38 @Regression
+@Sprint38 @Regression @DigitalPayment
 Feature: PayTabs integration
 
   Background:
     Given Logging in with superuser
-    And Select Property "P00020"
+    And Select Property "P01384"
 
 
   Rule: Receipt Vouchers
@@ -35,6 +35,7 @@ Feature: PayTabs integration
 
   Rule:Reservations
     Background:
+      Given open reservations Page
       Given create a successfull reservation Source "RANDOM" purpose "RANDOM" Unit "RANDOM" Guest "RANDOM"
       And go to Reservation Financial Page
       And open the digital payment popup
@@ -68,7 +69,7 @@ Feature: PayTabs integration
       When open the log tab and select "paytabs"
       Then check the generated link is present in the grid with state "pending" and Voucher type "Security Deposit Receipt Voucher"
 
-    Scenario: Check paid  paytabs Receipt state is  Paid
+    Scenario: Check pendingd  paytabs Receipt state is  Paid
       Given create PayTabs link for receipt Voucher with "ReceiptVoucher" and generate link with "PayTabs" amount 200 and purpose ""
       When oppen the link and pay it successfully
       When open the log tab and select "paytabs"

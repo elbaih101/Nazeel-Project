@@ -72,7 +72,7 @@ public class D10_Supscriptions {
     public void thePriceForWithSubscriptionPeriodAndPriceIsVisibleInGrid(String type, String service, String period, String price, String status) {
         WebElement createdPrice = createdPrice(type, service, period);
         asrt.assertTrue(subscriptionPrices.pricePrice(createdPrice).getText().toLowerCase().contains(price.toLowerCase()), "Expected :" + price + "\n Actual" + subscriptionPrices.pricePrice(createdPrice).getText());
-        asrt.assertTrue(subscriptionPrices.priceStatus(createdPrice).getText().contains(status.toLowerCase()), "Expected :" + status + "\n Actual :" + subscriptionPrices.priceStatus(createdPrice).getText());
+        asrt.assertTrue(subscriptionPrices.priceStatus(createdPrice).getText().toLowerCase().contains(status.toLowerCase()), "Expected :" + status + "\n Actual :" + subscriptionPrices.priceStatus(createdPrice).getText());
         asrt.assertAll();
     }
 

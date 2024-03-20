@@ -58,8 +58,8 @@ public class P03_6_EndReservationPopUp {
         return endReservationPopup.findElement(By.xpath(".//button[contains(@class,\"button--primary ng-star-inserted\")]"));
     }
 
-    public WebElement skipButton() {
-        return endReservationPopup.findElement(By.xpath(".//div[contains(@class,\"skip\")]"));
+    public List<WebElement> skipButton() {
+        return endReservationPopup.findElements(By.xpath(".//div[contains(@class,\"skip\")]"));
     }
 
     public WebElement confirmCancelButton(){
