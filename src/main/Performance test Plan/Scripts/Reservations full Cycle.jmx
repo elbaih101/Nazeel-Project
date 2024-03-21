@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jmeterTestPlan version="1.2" properties="5.0" jmeter="5.6.2">
   <hashTree>
-    <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="full plan" enabled="true">
+    <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="full reservation Cycle over multi properties" enabled="true">
       <stringProp name="TestPlan.comments">the full aspects of the plan</stringProp>
       <boolProp name="TestPlan.functional_mode">false</boolProp>
       <boolProp name="TestPlan.serialize_threadgroups">false</boolProp>
@@ -205,8 +205,8 @@
           <stringProp name="LoopController.loops">1</stringProp>
           <boolProp name="LoopController.continue_forever">false</boolProp>
         </elementProp>
-        <stringProp name="ThreadGroup.num_threads">4</stringProp>
-        <stringProp name="ThreadGroup.ramp_time"></stringProp>
+        <stringProp name="ThreadGroup.num_threads">6</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">3</stringProp>
         <boolProp name="ThreadGroup.delayedStart">false</boolProp>
         <boolProp name="ThreadGroup.scheduler">false</boolProp>
         <stringProp name="ThreadGroup.duration"></stringProp>
@@ -242,30 +242,21 @@
             </elementProp>
           </kg.apc.jmeter.control.ParameterizedController>
           <hashTree>
-            <ModuleController guiclass="ModuleControllerGui" testclass="ModuleController" testname="loggingIn" enabled="true">
+            <ModuleController guiclass="ModuleControllerGui" testclass="ModuleController" testname="authenticating" enabled="true">
               <collectionProp name="ModuleController.node_path">
                 <stringProp name="764597751">Test Plan</stringProp>
-                <stringProp name="-1735288294">full plan</stringProp>
+                <stringProp name="-528312953">full reservation Cycle over multi properties</stringProp>
                 <stringProp name="-233982402">logging in and choosing property</stringProp>
                 <stringProp name="-1554765990">logging in </stringProp>
               </collectionProp>
             </ModuleController>
             <hashTree/>
-            <ModuleController guiclass="ModuleControllerGui" testclass="ModuleController" testname="Reservations" enabled="true">
+            <ModuleController guiclass="ModuleControllerGui" testclass="ModuleController" testname="Reservations cycle" enabled="true">
               <collectionProp name="ModuleController.node_path">
                 <stringProp name="764597751">Test Plan</stringProp>
-                <stringProp name="-1735288294">full plan</stringProp>
+                <stringProp name="-528312953">full reservation Cycle over multi properties</stringProp>
                 <stringProp name="-233982402">logging in and choosing property</stringProp>
                 <stringProp name="1828117855">Reservations ${Company_ID} ${Property_ID}</stringProp>
-              </collectionProp>
-            </ModuleController>
-            <hashTree/>
-            <ModuleController guiclass="ModuleControllerGui" testclass="ModuleController" testname="Vouchers" enabled="false">
-              <collectionProp name="ModuleController.node_path">
-                <stringProp name="764597751">Test Plan</stringProp>
-                <stringProp name="-1735288294">full plan</stringProp>
-                <stringProp name="-233982402">logging in and choosing property</stringProp>
-                <stringProp name="-1564234843">Vouchers</stringProp>
               </collectionProp>
             </ModuleController>
             <hashTree/>
@@ -300,19 +291,19 @@
             </elementProp>
           </kg.apc.jmeter.control.ParameterizedController>
           <hashTree>
-            <ModuleController guiclass="ModuleControllerGui" testclass="ModuleController" testname="Module Controller" enabled="true">
+            <ModuleController guiclass="ModuleControllerGui" testclass="ModuleController" testname="login lve" enabled="true">
               <collectionProp name="ModuleController.node_path">
                 <stringProp name="764597751">Test Plan</stringProp>
-                <stringProp name="-1735288294">full plan</stringProp>
+                <stringProp name="-528312953">full reservation Cycle over multi properties</stringProp>
                 <stringProp name="-233982402">logging in and choosing property</stringProp>
                 <stringProp name="-1554765990">logging in </stringProp>
               </collectionProp>
             </ModuleController>
             <hashTree/>
-            <ModuleController guiclass="ModuleControllerGui" testclass="ModuleController" testname="Module Controller" enabled="true">
+            <ModuleController guiclass="ModuleControllerGui" testclass="ModuleController" testname="reservations live" enabled="true">
               <collectionProp name="ModuleController.node_path">
                 <stringProp name="764597751">Test Plan</stringProp>
-                <stringProp name="-1735288294">full plan</stringProp>
+                <stringProp name="-528312953">full reservation Cycle over multi properties</stringProp>
                 <stringProp name="-233982402">logging in and choosing property</stringProp>
                 <stringProp name="1828117855">Reservations ${Company_ID} ${Property_ID}</stringProp>
               </collectionProp>
@@ -349,10 +340,10 @@
             </elementProp>
           </kg.apc.jmeter.control.ParameterizedController>
           <hashTree>
-            <ModuleController guiclass="ModuleControllerGui" testclass="ModuleController" testname="Module Controller" enabled="true">
+            <ModuleController guiclass="ModuleControllerGui" testclass="ModuleController" testname="login demo" enabled="true">
               <collectionProp name="ModuleController.node_path">
                 <stringProp name="764597751">Test Plan</stringProp>
-                <stringProp name="-1735288294">full plan</stringProp>
+                <stringProp name="-528312953">full reservation Cycle over multi properties</stringProp>
                 <stringProp name="-233982402">logging in and choosing property</stringProp>
                 <stringProp name="-1554765990">logging in </stringProp>
               </collectionProp>
