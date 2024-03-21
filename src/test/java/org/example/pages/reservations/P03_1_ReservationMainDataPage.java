@@ -101,7 +101,7 @@ public class P03_1_ReservationMainDataPage {
     public WebElement guestFormDialogContainer;
     @FindBy(xpath = "//button[contains(text(),\"Save reservation\")]")
     public WebElement saveReservationButton;
-    @FindBy(xpath = "//button[contains(text(),\"Check-In\")]")
+    @FindBy(xpath = "//button[contains(@class,\"button--green-border\")]")
     public WebElement checkInButton;
 
     @FindBy(xpath = "//kendo-dialog-actions//button")

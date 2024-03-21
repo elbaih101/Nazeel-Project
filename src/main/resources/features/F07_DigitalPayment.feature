@@ -28,6 +28,13 @@ Feature: PayTabs integration
       When  clicking the send via SMS and check toast msg "Messages have been added successfully to sending queue"
       Then go to sms log page and check the msg body guest name", Please follow the link below to pay " the amount " SAR required by"hotelname Link
 
+    Scenario: Check edit mode for auto Generated Vucher after successfull Paytabs operation
+      Given succesfully create a stand alone voucher with "PayTabs" amount 200 purpose "Checking auto generated receipts" Guest "RANDOM"
+      And open the link and pay it successfully
+      And Close the open popup
+      When go to "Receipt" Vouchers Page
+      Then Check "GenReceipt" Voucher with state "Generated" edit mode
+
 #    Scenario: check the copy button
 #      Given succesfully create a stand alone voucher
 #      When clicking the copy button and pasting the copied link

@@ -48,7 +48,7 @@ public class D01_MakingReservation {
 
     @When("Click on Add new Reservation")
     public void clickOnAddNewReservation() {
-      new P00_multiPurposes(driver).waitLoading();
+        new P00_multiPurposes(driver).waitLoading();
 //        reservationPage.newReservationButton.click();
         js.executeScript("arguments[0].click();", reservationMainDataPage.newReservationButton);
     }
@@ -141,8 +141,8 @@ public class D01_MakingReservation {
     }
 
 
-    @Given("create a successfull reservation Source {string} purpose {string} Unit {string} Guest {string}")
-    public void createASuccessfullReservation(String source, String purpose, String unit, String guest) {
+    @Given("create a successfull reservation Source {string} purpose {string} Unit {string} Guest {string} state {string}")
+    public void createASuccessfullReservation(String source, String purpose, String unit, String guest, String state) {
         D06_DigitalPayment d06DigitalPayment = new D06_DigitalPayment();
         clickOnAddNewReservation();
         selectReservationSourceAndPurpose(source, purpose);
@@ -155,7 +155,10 @@ public class D01_MakingReservation {
             e.printStackTrace();
         }
         d06DigitalPayment.selectGuest(guest, "", "");
-        clickOnSaveReservationButton();
+        if (state.equalsIgnoreCase("confirmed"))
+            clickOnSaveReservationButton();
+        else if (state.toLowerCase().contains("in"))
+            reservationMainDataPage.checkInButton.click();
         whenReservationSummaryDialougeAppearsClickOnSaveReservatuonButton();
     }
 
@@ -186,6 +189,10 @@ public class D01_MakingReservation {
             actionButton.click();
             endReservation(status);
         }
+        for (D08_Vouchers.VouchersMap v:D08_Vouchers.vouchersMaps) {
+            v.setvState("Ended");
+        }
+
     }
 
     void endReservation(String status) {
@@ -211,12 +218,11 @@ public class D01_MakingReservation {
             endReservationPopUp.confirmCancelButton().click();
             while (!endReservationPopUp.header().isEmpty())
 
-                    if (!endReservationPopUp.skipButton().isEmpty()) {
-                        wait.until(ExpectedConditions.refreshed(ExpectedConditions.elementToBeClickable(endReservationPopUp.skipButton().getFirst())));
-                        new P00_multiPurposes(driver).waitLoading();
-                        endReservationPopUp.skipButton().getFirst().click();
-                    }
-                 else  {
+                if (!endReservationPopUp.skipButton().isEmpty()) {
+                    wait.until(ExpectedConditions.refreshed(ExpectedConditions.elementToBeClickable(endReservationPopUp.skipButton().getFirst())));
+                    new P00_multiPurposes(driver).waitLoading();
+                    endReservationPopUp.skipButton().getFirst().click();
+                } else {
                     endReservationPopUp.reasons().get(0).click();
                     endReservationPopUp.confirmationButton().click();
                     if (!endReservationPopUp.skipButton().isEmpty()) {
@@ -238,8 +244,7 @@ public class D01_MakingReservation {
 
     @Given("Create {string} Reservation withSource {string} purpose {string} Unit {string} Guest {string}")
     public void createReservationWithSourcePurposeUnitGuest(String reservationState, String source, String purpose, String unit, String guest) {
-        createASuccessfullReservation(source, purpose, unit, guest);
-        chooseReservationStatusAs(reservationState);
+        createASuccessfullReservation(source, purpose, unit, guest, reservationState);
         String reservationStatus = "";
         if (reservationState.contains("In")) {
             reservationStatus = "Checked In";

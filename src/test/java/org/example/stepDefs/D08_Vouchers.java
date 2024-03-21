@@ -26,16 +26,12 @@ import org.testng.Reporter;
 import org.testng.asserts.SoftAssert;
 
 import java.time.Duration;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class D08_Vouchers {
     WebDriver driver = Hooks.driver;
 
     JavascriptExecutor js = (JavascriptExecutor) driver;
-
 
 
     final SoftAssert asrt = new SoftAssert();
@@ -49,6 +45,49 @@ public class D08_Vouchers {
     final P17_CashDrawerPage cashDrawerPage = new P17_CashDrawerPage(driver);
     String createdVoucherType;
     String createdVoucherState;
+    VouchersMap vMap;
+
+
+    public class VouchersMap {
+        String vType;
+        String vState;
+        String vNumber;
+
+        public VouchersMap() {
+        }
+
+        public VouchersMap(String vType, String vState, String vNumber) {
+            setvState(vState);
+            setvType(vType);
+            setvNumber(vNumber);
+        }
+
+        public String getvState() {
+            return vState;
+        }
+
+        public void setvState(String vState) {
+            this.vState = vState;
+        }
+
+        public String getvNumber() {
+            return vNumber;
+        }
+
+        public void setvNumber(String vNumber) {
+            this.vNumber = vNumber;
+        }
+
+        public String getvType() {
+            return vType;
+        }
+
+        public void setvType(String vType) {
+            this.vType = vType;
+        }
+    }
+
+    static List<VouchersMap> vouchersMaps = new ArrayList<>();
 
     @When("go to Payment Vouchers Page")
     public void goToPaymentVouchersPage() {
@@ -97,17 +136,17 @@ public class D08_Vouchers {
     }
 
     // gets added to it  "autogeerated" from successfull payments via digital payment
-    public static List<String> voucherNums = new ArrayList<>();
+    public String voucherNums;
     int i = 0;
 
     @Then("submit the voucher and check success message prefix {string} postfix {string}")
     public void submitTheVoucherAndCheckSuccessMessage(String prefix, String postfix) {
         wait.until(ExpectedConditions.elementToBeClickable(vouchersPopUp.submitButton()));
         vouchersPopUp.submitButton().click();
-        voucherNums.add(0,StringUtils.substringBetween(multiPurposes.toastMsg.getText().toLowerCase(), prefix.toLowerCase(), postfix.toLowerCase()));
+        voucherNums = StringUtils.substringBetween(multiPurposes.toastMsg.getText().toLowerCase(), prefix.toLowerCase(), postfix.toLowerCase());
         try {
 
-            new D03_BlocksAndFloors().checkToastMesageContainsText(prefix + voucherNums.get(i) + postfix);
+            new D03_BlocksAndFloors().checkToastMesageContainsText(prefix + voucherNums + postfix);
             i++;
         } catch (AssertionError e) {
             if (multiPurposes.toastMsg.getText().contains("Invalid voucher issue date/ time value")) {
@@ -115,8 +154,8 @@ public class D08_Vouchers {
                 asrt.assertTrue(true);
                 asrt.assertAll();
             } else {
-                System.out.println(e.getMessage() + "\nActual : " + multiPurposes.toastMsg.getText() + "\nExpected : " + prefix + voucherNums.get(i) + postfix);
-                Reporter.log(e.getMessage() + "\nActual : " + multiPurposes.toastMsg.getText() + "\nExpected : " + prefix + voucherNums.get(i) + postfix);
+                System.out.println(e.getMessage() + "\nActual : " + multiPurposes.toastMsg.getText() + "\nExpected : " + prefix + voucherNums + postfix);
+                Reporter.log(e.getMessage() + "\nActual : " + multiPurposes.toastMsg.getText() + "\nExpected : " + prefix + voucherNums + postfix);
             }
         }
     }
@@ -217,35 +256,113 @@ public class D08_Vouchers {
         submitTheVoucherAndCheckSuccessMessage(prefix, Postfix);
         createdVoucherType = voucherType;
         createdVoucherState = "Created";
+        vMap = new VouchersMap(voucherType, "Created", voucherNums);
+        vouchersMaps.add(vMap);
     }
 
-    void openEditModeForVoucher(String voucherType, String voucherState, List<String> vouchersNums) {
-        for (String s : vouchersNums) {
-            try {
-//todo : pay tabs Generated Voucher button and number from the digital paytsabs report
-                multiPurposes.waitLoading();
-                if (voucherState.equalsIgnoreCase("Ended") || voucherState.equalsIgnoreCase("CashDrop") || voucherState.equalsIgnoreCase("Created")) {
-                    vouchersPage.editButton(vouchersPage.vouchersNums.stream().filter(num -> num.getText().equalsIgnoreCase(s)).toList().get(0), voucherType).click();
-                    break;
-                } else if (voucherState.equalsIgnoreCase("Collected")) {
-                    vouchersPage.editButton(vouchersPage.receitRelatedDrafts.stream().filter(num -> num.getText().equalsIgnoreCase(s)).toList().get(0), voucherType).click();
-                    break;
-                } else if (voucherState.equalsIgnoreCase("Generated")) {
-                    //TODO : Check the Voucher number from the paytabs Report and use it
-                    vouchersPage.editButton(vouchersPage.paymentMethods.stream().filter(method -> method.getText().equalsIgnoreCase("PayTabs")).toList().get(0), voucherType).click();
-                }
-            } catch (ArrayIndexOutOfBoundsException e) {
-                System.out.println(e.getMessage() + "\n" + s);
-            }
+    void openEditModeForVoucher(String voucherType, String voucherState, String vNumber) {
+
+        multiPurposes.waitLoading();
+        if (voucherState.equalsIgnoreCase("Ended") || voucherState.equalsIgnoreCase("CashDrop") || voucherState.equalsIgnoreCase("Created")) {
+            vouchersPage.editButton(vouchersPage.vouchersNums.stream().filter(num -> num.getText().equalsIgnoreCase(vNumber)).toList().get(0), voucherType).click();
+
+        } else if (voucherState.equalsIgnoreCase("Collected")) {
+            vouchersPage.editButton(vouchersPage.receitRelatedDrafts.stream().filter(num -> num.getText().equalsIgnoreCase(vNumber)).toList().get(0), voucherType).click();
+
+        } else if (voucherState.equalsIgnoreCase("Generated")) {
+            //TODO : Check the Voucher number from the paytabs Report and use it
+            vouchersPage.editButton(vouchersPage.paymentMethods.stream().filter(method -> method.getText().equalsIgnoreCase("PayTabs")).toList().get(0), voucherType).click();
         }
+
+    }
+
+    @Given("create all vouchers Types")
+    public void createVouchers() {
+        successfullyCreateAVoucherOfTypeAmountPaymentMethodMaturityDate("Draft", "200", "Cash", "15/12/2025", "");
+        successfullyCreateAVoucherOfTypeAmountPaymentMethodMaturityDate("Receipt", "200", "Cash", "", "");
+        successfullyCreateAVoucherOfTypeAmountPaymentMethodMaturityDate("SD", "200", "Cash", "", "");
+        openRefundVouchersTab();
+        successfullyCreateAVoucherOfTypeAmountPaymentMethodMaturityDate("Refund", "200", "Cash", "", "");
+        successfullyCreateAVoucherOfTypeAmountPaymentMethodMaturityDate("SDRefund", "200", "Cash", "", "");
+
+    }
+
+    @Then("Check all Created Vouchers edit mode and edit payment method to {string} and check msg {string}")
+    public void checkVouchersAndEditPaymentMethods(String method, String msg) {
+        for (VouchersMap v : vouchersMaps) {
+            checkVoucher(v);
+            if (!(v.getvType().equalsIgnoreCase(Vouchers.Draft.toString()) || v.getvType().equalsIgnoreCase(Vouchers.GenReceipt.toString())))
+                editVoucherPaymentMethod(method, msg);
+            else
+                vouchersPopUp.discardButton().click();
+        }
+    }
+
+    public void checkVoucher(VouchersMap vMap) {
+        new D06_DigitalPayment().goToDesiredVouchersPage(vMap.vType);
+        checkEditMode(vMap.vType, vMap.vState, vMap.vNumber);
+    }
+
+    public void checkEditMode(String voucherType, String voucherState, String voucherNumber) {
+        multiPurposes.waitLoading();
+        openEditModeForVoucher(voucherType, voucherState, voucherNumber);
+        String expectedColor = "#fafafa";
+        wait.withTimeout(Duration.ofSeconds(1));
+        String actualColor;
+
+
+        if (voucherType.equalsIgnoreCase(Vouchers.Draft.toString())) {
+            actualColor = (vouchersPopUp.amountField().findElement(By.xpath("..")).getCssValue("background-color"));
+            actualColor = Color.fromString(actualColor).asHex();
+            asrt.assertEquals(actualColor, expectedColor);
+            asrt.assertFalse(Utils.isEnabled(vouchersPopUp.amountField()), "amount field is enabled ");
+
+
+        } else {
+            actualColor = (vouchersPopUp.dateField().findElement(By.xpath("..")).getCssValue("background-color"));
+            actualColor = Color.fromString(actualColor).asHex();
+            asrt.assertEquals(actualColor, expectedColor);
+            asrt.assertFalse(Utils.isEnabled(vouchersPopUp.dateField()));
+            if (voucherState.equalsIgnoreCase("ended")) {
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                actualColor = (vouchersPopUp.paymentMethodField().findElement(By.xpath("..")).getCssValue("background-color"));
+                actualColor = Color.fromString(actualColor).asHex();
+                asrt.assertNotEquals(actualColor, expectedColor);
+                asrt.assertTrue(Utils.isEnabled(vouchersPopUp.paymentMethodField()), "payment method is disabled despite state is ended");
+            } else {
+                actualColor = (vouchersPopUp.dateField().findElement(By.xpath("..")).getCssValue("background-color"));
+                actualColor = Color.fromString(actualColor).asHex();
+                asrt.assertEquals(actualColor, expectedColor);
+                asrt.assertFalse(Utils.isEnabled(vouchersPopUp.paymentMethodField()), "payment method is enabled despite state not ended");
+            }
+            actualColor = (vouchersPopUp.timeField().findElement(By.xpath("..")).getCssValue("background-color"));
+            actualColor = Color.fromString(actualColor).asHex();
+            asrt.assertEquals(actualColor, expectedColor);
+            asrt.assertFalse(Utils.isEnabled(vouchersPopUp.timeField()), "time field is enabled");
+
+            actualColor = (vouchersPopUp.guestField(voucherType).getCssValue("background-color"));
+            actualColor = Color.fromString(actualColor).asHex();
+            asrt.assertEquals(actualColor, expectedColor);
+            asrt.assertTrue(!vouchersPopUp.guestField(voucherType).isEnabled(), "Guest field is enabled");
+
+            actualColor = (vouchersPopUp.amountField().findElement(By.xpath("..")).getCssValue("background-color"));
+            actualColor = Color.fromString(actualColor).asHex();
+            asrt.assertEquals(actualColor, expectedColor);
+            asrt.assertFalse(Utils.isEnabled(vouchersPopUp.amountField()), "amount field is enabled ");
+        }
+        asrt.assertAll();
+        wait.withTimeout(Duration.ofSeconds(10));
     }
 
     @Then("Check {string} Voucher with state {string} edit mode")
     public void checkVoucherEditMode(String voucherType, String voucherState) {
         multiPurposes.waitLoading();
 
-
-        openEditModeForVoucher(voucherType, voucherState, voucherNums);
+        openEditModeForVoucher(voucherType, voucherState, vMap.getvNumber());
         String expectedColor = "#fafafa";
         wait.withTimeout(Duration.ofSeconds(1));
         String actualColor;
@@ -309,7 +426,7 @@ public class D08_Vouchers {
             vouchersPage.moreActions(selectedDraftAmount, "draft").stream().filter(element -> element.getText().trim().contains("Collect Via Digital Payment")).toList().get(0).click();
             D06_DigitalPayment.draftNo = digitalPaymentPage.draftNumber().getText();
         } else {
-            vouchersPage.moreActions(vouchersPage.vouchersNums.stream().filter(num -> num.getText().equalsIgnoreCase(voucherNums.get(0))).toList().get(0), Vouchers.Draft.toString()).stream().filter(action -> action.getText().equalsIgnoreCase("Collect")).toList().get(0).click();
+            vouchersPage.moreActions(vouchersPage.vouchersNums.stream().filter(num -> num.getText().equalsIgnoreCase(vMap.getvNumber())).toList().get(0), Vouchers.Draft.toString()).stream().filter(action -> action.getText().equalsIgnoreCase("Collect")).toList().get(0).click();
         }
 
     }
@@ -369,18 +486,32 @@ public class D08_Vouchers {
         vouchersPopUp.submitButton().click();
     }
 
-    @And("edit {string} Voucher with state {string} Payment method to {string}")
-    public void editVoucherPaymentMethodTo(String voucherType,String voucherState ,String newMethod) {
-        multiPurposes.waitLoading();
-        openEditModeForVoucher(voucherType, voucherState, voucherNums);
+    public void editVoucherPaymentMethod(String newMethod, String msg) {
         wait.withTimeout(Duration.ofSeconds(1));
-        PaymentMethods p= Arrays.stream(PaymentMethods.values()).filter(pM->pM.toString().toLowerCase().contains(newMethod.toLowerCase())).findFirst().orElseThrow();
-        vouchersPopUp.paymentMethods().stream().filter(pM->pM.getText().equals(p.toString())).findFirst().orElseThrow().click();
-        if (!p.equals(PaymentMethods.Cash))
-        {
+        PaymentMethods p = Arrays.stream(PaymentMethods.values()).filter(pM -> pM.toString().toLowerCase().contains(newMethod.toLowerCase())).findFirst().orElseThrow();
+        vouchersPopUp.paymentMethods().stream().filter(pM -> pM.getText().equals(p.toString())).findFirst().orElseThrow().click();
+        if (!p.equals(PaymentMethods.Cash)) {
             vouchersPopUp.banks().get(0).click();
         }
-    vouchersPopUp.submitButton().click();
+        vouchersPopUp.submitButton().click();
+        new D03_BlocksAndFloors().checkToastMesageContainsText(msg);
+    }
+
+
+    @And("edit {string} Voucher with state {string} Payment method to {string} and check msg {string}")
+    public void editVoucherPaymentMethodTo(String voucherType, String voucherState, String newMethod, String msg) {
+        if (!voucherType.equalsIgnoreCase(Vouchers.Draft.toString())) {
+            multiPurposes.waitLoading();
+            openEditModeForVoucher(voucherType, voucherState, voucherNums);
+            wait.withTimeout(Duration.ofSeconds(1));
+            PaymentMethods p = Arrays.stream(PaymentMethods.values()).filter(pM -> pM.toString().toLowerCase().contains(newMethod.toLowerCase())).findFirst().orElseThrow();
+            vouchersPopUp.paymentMethods().stream().filter(pM -> pM.getText().equals(p.toString())).findFirst().orElseThrow().click();
+            if (!p.equals(PaymentMethods.Cash)) {
+                vouchersPopUp.banks().get(0).click();
+            }
+            vouchersPopUp.submitButton().click();
+            new D03_BlocksAndFloors().checkToastMesageContainsText(msg);
+        }
 
     }
 }

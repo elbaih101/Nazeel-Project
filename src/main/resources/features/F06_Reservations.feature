@@ -22,7 +22,7 @@ Feature: Making Reservation with Nazeel PMS (web application)
     And verify toast message appears with text "Saved Successfully" and the reservation status to be "Confirmed"
 
   Scenario: Create Checked in Reservation
-    Given create a successfull reservation Source "RANDOM" purpose "RANDOM" Unit "RANDOM" Guest "RANDOM"
+    Given create a successfull reservation Source "RANDOM" purpose "RANDOM" Unit "RANDOM" Guest "RANDOM" state "confirmed"
 #    Then click on save Reservation button
 #    And when reservation Summary dialouge appears click on save reservatuon Button
     And Choose Reservation Status as "Checked-In"
