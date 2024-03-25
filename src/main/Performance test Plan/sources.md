@@ -93,3 +93,26 @@ _Figure 02: Changes in jmeter.properties File_
 * * *
 
 https://cwiki.apache.org/confluence/display/JMETER/JMeterAutomatedRemoteTesting
+
+"""{\"report\": \"Transactions/MoneyInTransactions_En.trdp\",
+\"parameterValues\": {\"PropertyId\":${Property_ID},
+\"SearchId\":${searchId},
+\"PrintedBy\":\"Load Test\",
+\"ShowHeaderFooter\":true,
+\"PrintingDate\":\"${printingDate}\",
+\"DateFromSearchCriteria\":\"${searchFrom}\",
+\"DateToSearchCriteria\":\"${searchTo}\",
+\"SelectedSearchCriteriaPropertiesIds\":\"${Property_ID}\",
+\"DateTimeFrom\":\"2024-03-24 12:00 AM\",
+\"DateTimeTo\":\"2024-03-24 11:59 PM\",
+\"ReceiptVoucherTypeId\":1,
+\"SecurityDepositReceiptVoucherTypeId\":3,\
+\"DraftVoucherTypeId\":2,
+\"ExpensesVoucherTypeId\":8,
+\"SecurityDepositRefundVoucherTypeId\":5,
+\"DepositCashVoucherTypeId\":9,
+\"RefundVoucherTypeId\":4,
+\"IsSearchCriteriaIncludesMultipleProperties\":false,
+\"selectedSearchCriteriaPropertiesEn\":\"${pName}\",
+\"selectedSearchCriteriaPropertiesAr\":\"${pArName}\",
+\"HeaderImgUrl\":\"http://staging.nazeel.net:9000/api/anonymous/get-property-logo/\"}}"""

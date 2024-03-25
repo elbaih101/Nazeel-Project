@@ -105,6 +105,40 @@
         </collectionProp>
       </Arguments>
       <hashTree/>
+      <Arguments guiclass="ArgumentsPanel" testclass="Arguments" testname="reports Variables" enabled="true">
+        <collectionProp name="Arguments.arguments">
+          <elementProp name="printingDate" elementType="Argument">
+            <stringProp name="Argument.name">printingDate</stringProp>
+            <stringProp name="Argument.value">${__time(yyyy-MM-dd hh:mm)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="searchFrom" elementType="Argument">
+            <stringProp name="Argument.name">searchFrom</stringProp>
+            <stringProp name="Argument.value">${__timeShift(yyyy-MM-dd,,-P30d,,)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="searchTo" elementType="Argument">
+            <stringProp name="Argument.name">searchTo</stringProp>
+            <stringProp name="Argument.value">${__time(yyyy-MM-dd)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="reportsPort" elementType="Argument">
+            <stringProp name="Argument.value">9400</stringProp>
+            <stringProp name="Argument.name">reportsPort</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="docReady" elementType="Argument">
+            <stringProp name="Argument.name">docReady</stringProp>
+            <stringProp name="Argument.value">false</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+          <elementProp name="searchId" elementType="Argument">
+            <stringProp name="Argument.name">searchId</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+        </collectionProp>
+      </Arguments>
+      <hashTree/>
       <Arguments guiclass="ArgumentsPanel" testclass="Arguments" testname="reservation variables and setup" enabled="true">
         <collectionProp name="Arguments.arguments">
           <elementProp name="Unit_Type_ID" elementType="Argument">
@@ -205,7 +239,7 @@
           <stringProp name="LoopController.loops">1</stringProp>
           <boolProp name="LoopController.continue_forever">false</boolProp>
         </elementProp>
-        <stringProp name="ThreadGroup.num_threads">4</stringProp>
+        <stringProp name="ThreadGroup.num_threads">1</stringProp>
         <stringProp name="ThreadGroup.ramp_time"></stringProp>
         <boolProp name="ThreadGroup.delayedStart">false</boolProp>
         <boolProp name="ThreadGroup.scheduler">false</boolProp>
@@ -242,7 +276,7 @@
             </elementProp>
           </kg.apc.jmeter.control.ParameterizedController>
           <hashTree>
-            <ModuleController guiclass="ModuleControllerGui" testclass="ModuleController" testname="loggingIn" enabled="true">
+            <ModuleController guiclass="ModuleControllerGui" testclass="ModuleController" testname="first" enabled="true">
               <collectionProp name="ModuleController.node_path">
                 <stringProp name="764597751">Test Plan</stringProp>
                 <stringProp name="-1735288294">full plan</stringProp>
@@ -260,12 +294,13 @@
               </collectionProp>
             </ModuleController>
             <hashTree/>
-            <ModuleController guiclass="ModuleControllerGui" testclass="ModuleController" testname="Vouchers" enabled="true">
+            <ModuleController guiclass="ModuleControllerGui" testclass="ModuleController" testname="second" enabled="true">
               <collectionProp name="ModuleController.node_path">
                 <stringProp name="764597751">Test Plan</stringProp>
                 <stringProp name="-1735288294">full plan</stringProp>
                 <stringProp name="-233982402">logging in and choosing property</stringProp>
-                <stringProp name="-1564234843">Vouchers</stringProp>
+                <stringProp name="-1535710817">Reports</stringProp>
+                <stringProp name="-387615326">Trial Balance Report</stringProp>
               </collectionProp>
             </ModuleController>
             <hashTree/>
@@ -383,7 +418,7 @@
         <hashTree>
           <TransactionController guiclass="TransactionControllerGui" testclass="TransactionController" testname="admin login" enabled="true">
             <boolProp name="TransactionController.includeTimers">false</boolProp>
-            <boolProp name="TransactionController.parent">false</boolProp>
+            <boolProp name="TransactionController.parent">true</boolProp>
           </TransactionController>
           <hashTree>
             <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="https://app.nazeel.net:4443/api/Account/LogIn" enabled="true">
@@ -550,6 +585,13 @@
               <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header manager" enabled="true">
                 <collectionProp name="HeaderManager.headers"/>
               </HeaderManager>
+              <hashTree/>
+              <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="pName; pArName; pTypeId; pDateForm; timeZone; timeOffset Extractor" enabled="true">
+                <stringProp name="JSONPostProcessor.referenceNames">pName; pArName; pTypeId; pDateForm; timeZone; timeOffset</stringProp>
+                <stringProp name="JSONPostProcessor.jsonPathExprs">$.data.name; $.data.nameAr; $.data.propertyTypeId; $.data.dateFormat; $.data.timeZoneName; $.data.timeZoneOffset</stringProp>
+                <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
+                <stringProp name="JSONPostProcessor.defaultValues">NoDefualt;NoDefualt;NoDefualt;NoDefualt;NoDefualt;NoDefualt</stringProp>
+              </JSONPostProcessor>
               <hashTree/>
             </hashTree>
           </hashTree>
@@ -780,6 +822,13 @@
               <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header manager" enabled="true">
                 <collectionProp name="HeaderManager.headers"/>
               </HeaderManager>
+              <hashTree/>
+              <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="pName; pArName; pTypeId; pDateForm; timeZone Extractor" enabled="true">
+                <stringProp name="JSONPostProcessor.referenceNames">pName; pArName; pTypeId; pDateForm; timeZone</stringProp>
+                <stringProp name="JSONPostProcessor.jsonPathExprs">$.data.name; $.data.nameAr; $.data.propertyTypeId; $.data.dateFormat; $.data.timeZoneName</stringProp>
+                <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
+                <stringProp name="JSONPostProcessor.defaultValues">NoDefualt;NoDefualt;NoDefualt;NoDefualt</stringProp>
+              </JSONPostProcessor>
               <hashTree/>
             </hashTree>
           </hashTree>
@@ -5935,6 +5984,2006 @@ if(currency.isDefault){
                     <stringProp name="Header.value">application/json</stringProp>
                   </elementProp>
                 </collectionProp>
+              </HeaderManager>
+              <hashTree/>
+            </hashTree>
+          </hashTree>
+          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="api/Setting/Financial/PaymentMethodCustomization/get-payment-method-customized-lite/{PropertyID}" enabled="true">
+            <boolProp name="HTTPSampler.postBodyRaw">false</boolProp>
+            <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
+              <collectionProp name="Arguments.arguments"/>
+            </elementProp>
+            <stringProp name="HTTPSampler.domain">${BASE_URL}</stringProp>
+            <stringProp name="HTTPSampler.port">${port}</stringProp>
+            <stringProp name="HTTPSampler.protocol">${Protocol}</stringProp>
+            <stringProp name="HTTPSampler.path">api/Setting/Financial/PaymentMethodCustomization/get-payment-method-customized-lite/${Property_ID}</stringProp>
+            <stringProp name="HTTPSampler.method">GET</stringProp>
+            <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+            <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+            <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+            <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+            <boolProp name="HTTPSampler.BROWSER_COMPATIBLE_MULTIPART">false</boolProp>
+            <boolProp name="HTTPSampler.image_parser">false</boolProp>
+            <boolProp name="HTTPSampler.concurrentDwn">false</boolProp>
+            <stringProp name="HTTPSampler.concurrentPool">6</stringProp>
+            <boolProp name="HTTPSampler.md5">false</boolProp>
+            <intProp name="HTTPSampler.ipSourceType">0</intProp>
+          </HTTPSamplerProxy>
+          <hashTree>
+            <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header manager" enabled="true">
+              <collectionProp name="HeaderManager.headers"/>
+            </HeaderManager>
+            <hashTree/>
+          </hashTree>
+          <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="api/Setting/Currency/GetByPropertyId?propertyId={PropertyID}" enabled="true">
+            <boolProp name="HTTPSampler.postBodyRaw">false</boolProp>
+            <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
+              <collectionProp name="Arguments.arguments">
+                <elementProp name="propertyId" elementType="HTTPArgument">
+                  <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                  <stringProp name="Argument.name">propertyId</stringProp>
+                  <stringProp name="Argument.value">${Property_ID}</stringProp>
+                  <stringProp name="Argument.metadata">=</stringProp>
+                  <boolProp name="HTTPArgument.use_equals">true</boolProp>
+                </elementProp>
+              </collectionProp>
+            </elementProp>
+            <stringProp name="HTTPSampler.domain">${BASE_URL}</stringProp>
+            <stringProp name="HTTPSampler.port">${port}</stringProp>
+            <stringProp name="HTTPSampler.protocol">${Protocol}</stringProp>
+            <stringProp name="HTTPSampler.path">api/Setting/Currency/GetByPropertyId</stringProp>
+            <stringProp name="HTTPSampler.method">GET</stringProp>
+            <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+            <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+            <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+            <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+            <boolProp name="HTTPSampler.BROWSER_COMPATIBLE_MULTIPART">false</boolProp>
+            <boolProp name="HTTPSampler.image_parser">false</boolProp>
+            <boolProp name="HTTPSampler.concurrentDwn">false</boolProp>
+            <stringProp name="HTTPSampler.concurrentPool">6</stringProp>
+            <boolProp name="HTTPSampler.md5">false</boolProp>
+            <intProp name="HTTPSampler.ipSourceType">0</intProp>
+          </HTTPSamplerProxy>
+          <hashTree>
+            <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header manager" enabled="true">
+              <collectionProp name="HeaderManager.headers"/>
+            </HeaderManager>
+            <hashTree/>
+            <JSR223PostProcessor guiclass="TestBeanGUI" testclass="JSR223PostProcessor" testname="currency_ID ,, defaultCurr_ID ,, exchangeRate" enabled="true">
+              <stringProp name="scriptLanguage">groovy</stringProp>
+              <stringProp name="parameters"></stringProp>
+              <stringProp name="filename"></stringProp>
+              <stringProp name="cacheKey">true</stringProp>
+              <stringProp name="script">def json = new groovy.json.JsonSlurper().parse(prev.getResponseData())
+
+json.data.each{currency -&gt;
+if(currency.isDefault){
+	vars.put(&quot;currency_ID&quot;,currency.id.toString())
+	vars.put(&quot;defaultCurr_ID&quot;,currency.id.toString())
+	vars.put(&quot;exchangeRate&quot;,currency.exchangeRate.toString())
+	}
+}
+
+</stringProp>
+            </JSR223PostProcessor>
+            <hashTree/>
+          </hashTree>
+        </hashTree>
+        <TransactionController guiclass="TransactionControllerGui" testclass="TransactionController" testname="Reports" enabled="true">
+          <boolProp name="TransactionController.includeTimers">false</boolProp>
+          <boolProp name="TransactionController.parent">true</boolProp>
+        </TransactionController>
+        <hashTree>
+          <TransactionController guiclass="TransactionControllerGui" testclass="TransactionController" testname="Taxes &amp; Fees Report" enabled="true">
+            <boolProp name="TransactionController.includeTimers">false</boolProp>
+            <boolProp name="TransactionController.parent">true</boolProp>
+          </TransactionController>
+          <hashTree>
+            <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="api/Setting/Financial/TaxCustomization/Search" enabled="true">
+              <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+              <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+                <collectionProp name="Arguments.arguments">
+                  <elementProp name="" elementType="HTTPArgument">
+                    <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                    <stringProp name="Argument.value">{&#xd;
+	&quot;paging&quot;:&#xd;
+	{&#xd;
+		&quot;skip&quot;:0&#xd;
+	},&#xd;
+	&quot;isActive&quot;:true,&#xd;
+	&quot;propertyId&quot;:${Property_ID}&#xd;
+}</stringProp>
+                    <stringProp name="Argument.metadata">=</stringProp>
+                  </elementProp>
+                </collectionProp>
+              </elementProp>
+              <stringProp name="HTTPSampler.domain">${BASE_URL}</stringProp>
+              <stringProp name="HTTPSampler.port">${port}</stringProp>
+              <stringProp name="HTTPSampler.protocol">${Protocol}</stringProp>
+              <stringProp name="HTTPSampler.path">api/Setting/Financial/TaxCustomization/Search</stringProp>
+              <stringProp name="HTTPSampler.method">POST</stringProp>
+              <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+              <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+              <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+              <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+              <boolProp name="HTTPSampler.BROWSER_COMPATIBLE_MULTIPART">false</boolProp>
+              <boolProp name="HTTPSampler.image_parser">false</boolProp>
+              <boolProp name="HTTPSampler.concurrentDwn">false</boolProp>
+              <stringProp name="HTTPSampler.concurrentPool">6</stringProp>
+              <boolProp name="HTTPSampler.md5">false</boolProp>
+              <intProp name="HTTPSampler.ipSourceType">0</intProp>
+            </HTTPSamplerProxy>
+            <hashTree>
+              <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header manager" enabled="true">
+                <collectionProp name="HeaderManager.headers">
+                  <elementProp name="Content-Type" elementType="Header">
+                    <stringProp name="Header.name">Content-Type</stringProp>
+                    <stringProp name="Header.value">application/json</stringProp>
+                  </elementProp>
+                </collectionProp>
+              </HeaderManager>
+              <hashTree/>
+              <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="searchData" enabled="true">
+                <stringProp name="JSONPostProcessor.referenceNames">searchData</stringProp>
+                <stringProp name="JSONPostProcessor.jsonPathExprs">$.data</stringProp>
+                <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
+              </JSONPostProcessor>
+              <hashTree/>
+            </hashTree>
+            <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="api/report/taxes-and-fees-report/search" enabled="true">
+              <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+              <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+                <collectionProp name="Arguments.arguments">
+                  <elementProp name="" elementType="HTTPArgument">
+                    <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                    <stringProp name="Argument.value">{&#xd;
+	&quot;validateUpOnSearchDates&quot;: true,&#xd;
+	&quot;propertyId&quot;: ${Property_ID},&#xd;
+	&quot;taxFeeDirectionId&quot;: 1,&#xd;
+	&quot;isInDetail&quot;: true,&#xd;
+	&quot;taxId&quot;: 1,//1=VAT ,2=Lodging&#xd;
+	&quot;searchInInvoiceDate&quot;: true,&#xd;
+	&quot;invoicedDateFrom&quot;: &quot;${searchFrom}&quot;,&#xd;
+	&quot;invoicedDateTo&quot;: &quot;${searchTo}&quot;&#xd;
+}</stringProp>
+                    <stringProp name="Argument.metadata">=</stringProp>
+                  </elementProp>
+                </collectionProp>
+              </elementProp>
+              <stringProp name="HTTPSampler.domain">${BASE_URL}</stringProp>
+              <stringProp name="HTTPSampler.port">${reportsPort}</stringProp>
+              <stringProp name="HTTPSampler.protocol">${Protocol}</stringProp>
+              <stringProp name="HTTPSampler.path">api/report/taxes-and-fees-report/search</stringProp>
+              <stringProp name="HTTPSampler.method">POST</stringProp>
+              <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+              <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+              <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+              <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+              <boolProp name="HTTPSampler.BROWSER_COMPATIBLE_MULTIPART">false</boolProp>
+              <boolProp name="HTTPSampler.image_parser">false</boolProp>
+              <boolProp name="HTTPSampler.concurrentDwn">false</boolProp>
+              <stringProp name="HTTPSampler.concurrentPool">6</stringProp>
+              <boolProp name="HTTPSampler.md5">false</boolProp>
+              <intProp name="HTTPSampler.ipSourceType">0</intProp>
+            </HTTPSamplerProxy>
+            <hashTree>
+              <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header manager" enabled="true">
+                <collectionProp name="HeaderManager.headers"/>
+              </HeaderManager>
+              <hashTree/>
+              <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="searchId estractor" enabled="true">
+                <stringProp name="JSONPostProcessor.referenceNames">searchId</stringProp>
+                <stringProp name="JSONPostProcessor.jsonPathExprs">$.data</stringProp>
+                <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
+              </JSONPostProcessor>
+              <hashTree/>
+            </hashTree>
+            <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="api/report/taxes-and-fees-report/navigate" enabled="true">
+              <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+              <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+                <collectionProp name="Arguments.arguments">
+                  <elementProp name="" elementType="HTTPArgument">
+                    <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                    <stringProp name="Argument.value">{&#xd;
+	&quot;paging&quot;:&#xd;
+	{&#xd;
+	 &quot;skip&quot;:0,&#xd;
+	 &quot;pageSize&quot;:20&#xd;
+	},&#xd;
+    &quot;searchId&quot;:${searchId}&#xd;
+}</stringProp>
+                    <stringProp name="Argument.metadata">=</stringProp>
+                  </elementProp>
+                </collectionProp>
+              </elementProp>
+              <stringProp name="HTTPSampler.domain">${BASE_URL}</stringProp>
+              <stringProp name="HTTPSampler.port">${reportsPort}</stringProp>
+              <stringProp name="HTTPSampler.protocol">${Protocol}</stringProp>
+              <stringProp name="HTTPSampler.path">api/report/taxes-and-fees-report/navigate</stringProp>
+              <stringProp name="HTTPSampler.method">POST</stringProp>
+              <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+              <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+              <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+              <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+              <boolProp name="HTTPSampler.BROWSER_COMPATIBLE_MULTIPART">false</boolProp>
+              <boolProp name="HTTPSampler.image_parser">false</boolProp>
+              <boolProp name="HTTPSampler.concurrentDwn">false</boolProp>
+              <stringProp name="HTTPSampler.concurrentPool">6</stringProp>
+              <boolProp name="HTTPSampler.md5">false</boolProp>
+              <intProp name="HTTPSampler.ipSourceType">0</intProp>
+            </HTTPSamplerProxy>
+            <hashTree>
+              <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header manager" enabled="true">
+                <collectionProp name="HeaderManager.headers"/>
+              </HeaderManager>
+              <hashTree/>
+            </hashTree>
+            <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="api/Invoice/get-non-invoiced-valid-reservations" enabled="true">
+              <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+              <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+                <collectionProp name="Arguments.arguments">
+                  <elementProp name="" elementType="HTTPArgument">
+                    <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                    <stringProp name="Argument.value">{&#xd;
+	&quot;validateUpOnSearchDates&quot;: true,&#xd;
+	&quot;propertyId&quot;: ${Property_ID},&#xd;
+	&quot;dateFrom&quot;: &quot;${searchFrom}&quot;,&#xd;
+	&quot;dateTo&quot;: &quot;${searchTo}&quot;&#xd;
+}</stringProp>
+                    <stringProp name="Argument.metadata">=</stringProp>
+                  </elementProp>
+                </collectionProp>
+              </elementProp>
+              <stringProp name="HTTPSampler.domain">${BASE_URL}</stringProp>
+              <stringProp name="HTTPSampler.port">${port}</stringProp>
+              <stringProp name="HTTPSampler.protocol">${Protocol}</stringProp>
+              <stringProp name="HTTPSampler.path">api/Invoice/get-non-invoiced-valid-reservations</stringProp>
+              <stringProp name="HTTPSampler.method">POST</stringProp>
+              <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+              <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+              <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+              <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+              <boolProp name="HTTPSampler.BROWSER_COMPATIBLE_MULTIPART">false</boolProp>
+              <boolProp name="HTTPSampler.image_parser">false</boolProp>
+              <boolProp name="HTTPSampler.concurrentDwn">false</boolProp>
+              <stringProp name="HTTPSampler.concurrentPool">6</stringProp>
+              <boolProp name="HTTPSampler.md5">false</boolProp>
+              <intProp name="HTTPSampler.ipSourceType">0</intProp>
+            </HTTPSamplerProxy>
+            <hashTree>
+              <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header manager" enabled="true">
+                <collectionProp name="HeaderManager.headers"/>
+              </HeaderManager>
+              <hashTree/>
+            </hashTree>
+            <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="ReportViewer" enabled="true">
+              <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+              <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+                <collectionProp name="Arguments.arguments">
+                  <elementProp name="" elementType="HTTPArgument">
+                    <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                    <stringProp name="Argument.value">{&#xd;
+	&quot;token&quot;: 	&quot;${TOKEN}&quot;,&#xd;
+	&quot;reportName&quot;: &quot;TaxesAndFees/TaxesAndFeesReport_En.trdp&quot;,&#xd;
+	&quot;reportTitle&quot;: &quot;Taxes And Fees Report&quot;,&#xd;
+	&quot;parameters&quot;:      &quot;{\&quot;PropertyId\&quot;:${Property_ID},\&quot;ShowHeaderFooter\&quot;:true,\&quot;PrintedBy\&quot;:\&quot;Load Test\&quot;,\&quot;PrintingDate\&quot;:\&quot;${printingDate}\&quot;,\&quot;PropertyTimeZone\&quot;:\&quot;${timeZone}\&quot;,\&quot;SelectedTaxesEn\&quot;:\&quot;VAT\&quot;,\&quot;SelectedTaxesAr\&quot;:\&quot;ضريبة القيمة المضافة\&quot;,\&quot;SelectedFromDate\&quot;:\&quot;${searchFrom}\&quot;,\&quot;SelectedToDate\&quot;:\&quot;${searchTo}\&quot;,\&quot;SelectedDirectionEn\&quot;:\&quot;\&quot;,\&quot;SelectedDirectionAr\&quot;:\&quot;All \&quot;,\&quot;SearchId\&quot;:${searchId},\&quot;TaxIdSearchParameter\&quot;:1,\&quot;TaxFeeDirectionSearchParameter\&quot;:1,\&quot;DateFormat\&quot;:\&quot;${pDateForm}\&quot;,\&quot;IsInDetail\&quot;:true,\&quot;IsVATTax\&quot;:true,\&quot;ValidZatcaIntegration\&quot;:true}&quot;,&#xd;
+	&quot;initDateTime&quot;: null&#xd;
+}</stringProp>
+                    <stringProp name="Argument.metadata">=</stringProp>
+                  </elementProp>
+                </collectionProp>
+              </elementProp>
+              <stringProp name="HTTPSampler.domain">${BASE_URL}</stringProp>
+              <stringProp name="HTTPSampler.port">${reportsPort}</stringProp>
+              <stringProp name="HTTPSampler.protocol">${Protocol}</stringProp>
+              <stringProp name="HTTPSampler.path">ReportViewer</stringProp>
+              <stringProp name="HTTPSampler.method">POST</stringProp>
+              <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+              <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+              <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+              <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+              <boolProp name="HTTPSampler.BROWSER_COMPATIBLE_MULTIPART">false</boolProp>
+              <boolProp name="HTTPSampler.image_parser">false</boolProp>
+              <boolProp name="HTTPSampler.concurrentDwn">false</boolProp>
+              <stringProp name="HTTPSampler.concurrentPool">6</stringProp>
+              <boolProp name="HTTPSampler.md5">false</boolProp>
+              <intProp name="HTTPSampler.ipSourceType">0</intProp>
+            </HTTPSamplerProxy>
+            <hashTree>
+              <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header manager" enabled="true">
+                <collectionProp name="HeaderManager.headers"/>
+              </HeaderManager>
+              <hashTree/>
+              <JSR223PreProcessor guiclass="TestBeanGUI" testclass="JSR223PreProcessor" testname="JSR223 PreProcessor" enabled="true">
+                <stringProp name="scriptLanguage">groovy</stringProp>
+                <stringProp name="parameters"></stringProp>
+                <stringProp name="filename"></stringProp>
+                <stringProp name="cacheKey">true</stringProp>
+                <stringProp name="script">String jsonRequest =  &quot;{\&quot;report\&quot;: \&quot;TaxesAndFees/TaxesAndFeesReport_En.trdp\&quot;,&quot; +
+&quot;\&quot;parameterValues\&quot;:&quot;+
+&quot;{\&quot;PropertyId\&quot;:&quot;+vars.get(&quot;Property_ID&quot;)+&quot;,&quot;+
+&quot;\&quot;ShowHeaderFooter\&quot;:true,&quot;+
+&quot;\&quot;PrintedBy\&quot;:\&quot;Load Test\&quot;,&quot;+
+&quot;\&quot;PrintingDate\&quot;:\&quot;&quot;+vars.get(&quot;printingDate&quot;)+&quot;\&quot;,&quot;+&quot;\&quot;PropertyTimeZone\&quot;:\&quot;&quot;+vars.get(&quot;timeZone&quot;)+&quot;\&quot;,&quot;+
+&quot;\&quot;SelectedTaxesEn\&quot;:\&quot;VAT\&quot;,&quot;+
+&quot;\&quot;SelectedTaxesAr\&quot;:\&quot;ضريبة القيمة المضافة\&quot;,&quot;+
+&quot;\&quot;SelectedFromDate\&quot;:\&quot;&quot;+vars.get(&quot;searchFrom&quot;)+
+&quot;\&quot;,&quot;+&quot;\&quot;SelectedToDate\&quot;:\&quot;&quot;+vars.get(&quot;searchTo&quot;)+&quot;\&quot;,&quot;+
+&quot;\&quot;SelectedDirectionEn\&quot;:\&quot;\&quot;,&quot;+
+&quot;\&quot;SelectedDirectionAr\&quot;:\&quot;All \&quot;,&quot;+
+&quot;\&quot;SearchId\&quot;:&quot;+vars.get(&quot;searchId&quot;)+&quot;,&quot;+
+&quot;\&quot;TaxIdSearchParameter\&quot;:1,&quot;+
+&quot;\&quot;TaxFeeDirectionSearchParameter\&quot;:1,&quot;+
+&quot;\&quot;DateFormat\&quot;:\&quot;&quot;+vars.get(&quot;pDateForm&quot;)+&quot;\&quot;,&quot;+
+&quot;\&quot;IsInDetail\&quot;:true,&quot;+
+&quot;\&quot;IsVATTax\&quot;:true,&quot;+
+&quot;\&quot;ValidZatcaIntegration\&quot;:true}}&quot;
+//String jsonparam = jsonRequest.replaceAll(&quot;\\&quot;,&quot;&quot;)
+def json = new groovy.json.JsonSlurper().parseText(jsonRequest)
+def newJson = new groovy.json.JsonBuilder(json).toPrettyString()
+vars.put(&quot;reportRequest&quot;,newJson)
+	                    </stringProp>
+              </JSR223PreProcessor>
+              <hashTree/>
+              <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="JSON Extractor" enabled="true">
+                <stringProp name="JSONPostProcessor.referenceNames">key</stringProp>
+                <stringProp name="JSONPostProcessor.jsonPathExprs">$.data</stringProp>
+                <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
+              </JSONPostProcessor>
+              <hashTree/>
+            </hashTree>
+            <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="api/reports/formats" enabled="true">
+              <boolProp name="HTTPSampler.postBodyRaw">false</boolProp>
+              <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
+                <collectionProp name="Arguments.arguments"/>
+              </elementProp>
+              <stringProp name="HTTPSampler.domain">${BASE_URL}</stringProp>
+              <stringProp name="HTTPSampler.port">${reportsPort}</stringProp>
+              <stringProp name="HTTPSampler.protocol">${Protocol}</stringProp>
+              <stringProp name="HTTPSampler.path">api/reports/formats</stringProp>
+              <stringProp name="HTTPSampler.method">GET</stringProp>
+              <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+              <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+              <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+              <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+              <boolProp name="HTTPSampler.BROWSER_COMPATIBLE_MULTIPART">false</boolProp>
+              <boolProp name="HTTPSampler.image_parser">false</boolProp>
+              <boolProp name="HTTPSampler.concurrentDwn">false</boolProp>
+              <stringProp name="HTTPSampler.concurrentPool">6</stringProp>
+              <boolProp name="HTTPSampler.md5">false</boolProp>
+              <intProp name="HTTPSampler.ipSourceType">0</intProp>
+            </HTTPSamplerProxy>
+            <hashTree>
+              <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header manager" enabled="true">
+                <collectionProp name="HeaderManager.headers"/>
+              </HeaderManager>
+              <hashTree/>
+            </hashTree>
+            <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="api/reports/clients" enabled="true">
+              <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+              <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+                <collectionProp name="Arguments.arguments">
+                  <elementProp name="" elementType="HTTPArgument">
+                    <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                    <stringProp name="Argument.value">{&quot;timeStamp&quot;:${__time(/1000,)}}</stringProp>
+                    <stringProp name="Argument.metadata">=</stringProp>
+                  </elementProp>
+                </collectionProp>
+              </elementProp>
+              <stringProp name="HTTPSampler.domain">${BASE_URL}</stringProp>
+              <stringProp name="HTTPSampler.port">${reportsPort}</stringProp>
+              <stringProp name="HTTPSampler.protocol">${Protocol}</stringProp>
+              <stringProp name="HTTPSampler.path">api/reports/clients</stringProp>
+              <stringProp name="HTTPSampler.method">POST</stringProp>
+              <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+              <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+              <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+              <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+              <boolProp name="HTTPSampler.BROWSER_COMPATIBLE_MULTIPART">false</boolProp>
+              <boolProp name="HTTPSampler.image_parser">false</boolProp>
+              <boolProp name="HTTPSampler.concurrentDwn">false</boolProp>
+              <stringProp name="HTTPSampler.concurrentPool">6</stringProp>
+              <boolProp name="HTTPSampler.md5">false</boolProp>
+              <intProp name="HTTPSampler.ipSourceType">0</intProp>
+            </HTTPSamplerProxy>
+            <hashTree>
+              <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header manager" enabled="true">
+                <collectionProp name="HeaderManager.headers"/>
+              </HeaderManager>
+              <hashTree/>
+              <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="clientId Extractor" enabled="true">
+                <stringProp name="JSONPostProcessor.referenceNames">clientId</stringProp>
+                <stringProp name="JSONPostProcessor.jsonPathExprs">$.clientId</stringProp>
+                <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
+              </JSONPostProcessor>
+              <hashTree/>
+              <JSR223PostProcessor guiclass="TestBeanGUI" testclass="JSR223PostProcessor" testname="JSR223 PostProcessor" enabled="true">
+                <stringProp name="scriptLanguage">groovy</stringProp>
+                <stringProp name="parameters"></stringProp>
+                <stringProp name="filename"></stringProp>
+                <stringProp name="cacheKey">true</stringProp>
+                <stringProp name="script">def json = new groovy.json.JsonSlurper().parse(prev.getResponseData())
+
+def repRequest = new groovy.json.JsonSlurper().parseText(vars.get(&quot;reportRequest&quot;))
+//repRequest.put(&quot;clientID&quot;,json.clientId)
+repRequest.parameterValues.put(&quot;Language&quot;,&quot;&quot;)
+
+def updated =new groovy.json.JsonBuilder(repRequest).toPrettyString()
+vars.put(&quot;reportRequest&quot;,updated)</stringProp>
+              </JSR223PostProcessor>
+              <hashTree/>
+            </hashTree>
+            <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="api/reports/clients/{clientId}/parameters" enabled="true">
+              <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+              <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+                <collectionProp name="Arguments.arguments">
+                  <elementProp name="" elementType="HTTPArgument">
+                    <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                    <stringProp name="Argument.value">&#xd;
+&#xd;
+	${reportRequest}&#xd;
+//	&quot;report&quot;: &quot;TaxesAndFees/TaxesAndFeesReport_En.trdp&quot;,&#xd;
+//	&quot;parameterValues&quot;: {&#xd;
+//		&quot;PropertyId&quot;: 2,&#xd;
+//		&quot;ShowHeaderFooter&quot;: true,&#xd;
+//		&quot;PrintedBy&quot;: &quot;Mostafa Hamed&quot;,&#xd;
+//		&quot;PrintingDate&quot;: &quot;2024-03-24 09:34 AM&quot;,&#xd;
+//		&quot;PropertyTimeZone&quot;: &quot;Arab Standard Time&quot;,&#xd;
+//		&quot;SelectedTaxesEn&quot;: &quot;Lodging Fees&quot;,&#xd;
+//		&quot;SelectedTaxesAr&quot;: &quot;رسوم اشغال مرافق الايواء&quot;,&#xd;
+//		&quot;SelectedFromDate&quot;: &quot;2024-03-23&quot;,&#xd;
+//		&quot;SelectedToDate&quot;: &quot;2024-03-24&quot;,&#xd;
+//		&quot;SelectedDirectionEn&quot;: &quot;&quot;,&#xd;
+//		&quot;SelectedDirectionAr&quot;: &quot;All &quot;,&#xd;
+//		&quot;SearchId&quot;: 5295,&#xd;
+//		&quot;TaxIdSearchParameter&quot;: 2,&#xd;
+//		&quot;TaxFeeDirectionSearchParameter&quot;: 1,&#xd;
+//		&quot;DateFormat&quot;: &quot;yyyy-MM-dd&quot;,&#xd;
+//		&quot;IsInDetail&quot;: false,&#xd;
+//		&quot;IsVATTax&quot;: false,&#xd;
+//		&quot;ValidZatcaIntegration&quot;: true&#xd;
+//	}&#xd;
+</stringProp>
+                    <stringProp name="Argument.metadata">=</stringProp>
+                  </elementProp>
+                </collectionProp>
+              </elementProp>
+              <stringProp name="HTTPSampler.domain">${BASE_URL}</stringProp>
+              <stringProp name="HTTPSampler.port">${reportsPort}</stringProp>
+              <stringProp name="HTTPSampler.protocol">${Protocol}</stringProp>
+              <stringProp name="HTTPSampler.path">api/reports/clients/${clientId}/parameters</stringProp>
+              <stringProp name="HTTPSampler.method">POST</stringProp>
+              <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+              <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+              <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+              <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+              <boolProp name="HTTPSampler.BROWSER_COMPATIBLE_MULTIPART">false</boolProp>
+              <boolProp name="HTTPSampler.image_parser">false</boolProp>
+              <boolProp name="HTTPSampler.concurrentDwn">false</boolProp>
+              <stringProp name="HTTPSampler.concurrentPool">6</stringProp>
+              <boolProp name="HTTPSampler.md5">false</boolProp>
+              <intProp name="HTTPSampler.ipSourceType">0</intProp>
+            </HTTPSamplerProxy>
+            <hashTree>
+              <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header manager" enabled="true">
+                <collectionProp name="HeaderManager.headers">
+                  <elementProp name="Referer" elementType="Header">
+                    <stringProp name="Header.name">Referer</stringProp>
+                    <stringProp name="Header.value">http://staging.nazeel.net:9400/ReportViewer?Key=${key}</stringProp>
+                  </elementProp>
+                </collectionProp>
+              </HeaderManager>
+              <hashTree/>
+            </hashTree>
+            <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="api/reports/clients/{clientId}/instances" enabled="true">
+              <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+              <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+                <collectionProp name="Arguments.arguments">
+                  <elementProp name="" elementType="HTTPArgument">
+                    <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                    <stringProp name="Argument.value">&#xd;
+&#xd;
+	${reportRequest}&#xd;
+//	&quot;report&quot;: &quot;TaxesAndFees/TaxesAndFeesReport_En.trdp&quot;,&#xd;
+//	&quot;parameterValues&quot;: {&#xd;
+//		&quot;PropertyId&quot;: 2,&#xd;
+//		&quot;ShowHeaderFooter&quot;: true,&#xd;
+//		&quot;PrintedBy&quot;: &quot;Mostafa Hamed&quot;,&#xd;
+//		&quot;PrintingDate&quot;: &quot;2024-03-24 09:34 AM&quot;,&#xd;
+//		&quot;PropertyTimeZone&quot;: &quot;Arab Standard Time&quot;,&#xd;
+//		&quot;SelectedTaxesEn&quot;: &quot;Lodging Fees&quot;,&#xd;
+//		&quot;SelectedTaxesAr&quot;: &quot;رسوم اشغال مرافق الايواء&quot;,&#xd;
+//		&quot;SelectedFromDate&quot;: &quot;2024-03-23&quot;,&#xd;
+//		&quot;SelectedToDate&quot;: &quot;2024-03-24&quot;,&#xd;
+//		&quot;SelectedDirectionEn&quot;: &quot;&quot;,&#xd;
+//		&quot;SelectedDirectionAr&quot;: &quot;All &quot;,&#xd;
+//		&quot;SearchId&quot;: 5295,&#xd;
+//		&quot;TaxIdSearchParameter&quot;: 2,&#xd;
+//		&quot;TaxFeeDirectionSearchParameter&quot;: 1,&#xd;
+//		&quot;DateFormat&quot;: &quot;yyyy-MM-dd&quot;,&#xd;
+//		&quot;IsInDetail&quot;: false,&#xd;
+//		&quot;IsVATTax&quot;: false,&#xd;
+//		&quot;ValidZatcaIntegration&quot;: true&#xd;
+//	}&#xd;
+</stringProp>
+                    <stringProp name="Argument.metadata">=</stringProp>
+                  </elementProp>
+                </collectionProp>
+              </elementProp>
+              <stringProp name="HTTPSampler.domain">${BASE_URL}</stringProp>
+              <stringProp name="HTTPSampler.port">${reportsPort}</stringProp>
+              <stringProp name="HTTPSampler.protocol">${Protocol}</stringProp>
+              <stringProp name="HTTPSampler.path">api/reports/clients/${clientId}/instances</stringProp>
+              <stringProp name="HTTPSampler.method">POST</stringProp>
+              <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+              <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+              <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+              <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+              <boolProp name="HTTPSampler.BROWSER_COMPATIBLE_MULTIPART">false</boolProp>
+              <boolProp name="HTTPSampler.image_parser">false</boolProp>
+              <boolProp name="HTTPSampler.concurrentDwn">false</boolProp>
+              <stringProp name="HTTPSampler.concurrentPool">6</stringProp>
+              <boolProp name="HTTPSampler.md5">false</boolProp>
+              <intProp name="HTTPSampler.ipSourceType">0</intProp>
+            </HTTPSamplerProxy>
+            <hashTree>
+              <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header manager" enabled="true">
+                <collectionProp name="HeaderManager.headers">
+                  <elementProp name="Accept" elementType="Header">
+                    <stringProp name="Header.name">Accept</stringProp>
+                    <stringProp name="Header.value">application/json, text/javascript, */*; q=0.01</stringProp>
+                  </elementProp>
+                  <elementProp name="Content-Type" elementType="Header">
+                    <stringProp name="Header.name">Content-Type</stringProp>
+                    <stringProp name="Header.value">application/json; charset=UTF-8</stringProp>
+                  </elementProp>
+                  <elementProp name="Referer" elementType="Header">
+                    <stringProp name="Header.name">Referer</stringProp>
+                    <stringProp name="Header.value">http://staging.nazeel.net:9400/ReportViewer?Key=${key}</stringProp>
+                  </elementProp>
+                </collectionProp>
+              </HeaderManager>
+              <hashTree/>
+              <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="instanceId Extractor" enabled="true">
+                <stringProp name="JSONPostProcessor.referenceNames">instanceId</stringProp>
+                <stringProp name="JSONPostProcessor.jsonPathExprs">$.instanceId</stringProp>
+                <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
+              </JSONPostProcessor>
+              <hashTree/>
+            </hashTree>
+            <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="api/reports/clients/{clientId}/instances/{instanceId}/documents" enabled="true">
+              <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+              <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+                <collectionProp name="Arguments.arguments">
+                  <elementProp name="" elementType="HTTPArgument">
+                    <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                    <stringProp name="Argument.value">{&#xd;
+	&quot;format&quot;: &quot;HTML5&quot;,&#xd;
+	&quot;deviceInfo&quot;: {&#xd;
+		&quot;enableSearch&quot;: true,&#xd;
+		&quot;ContentOnly&quot;: true,&#xd;
+		&quot;UseSVG&quot;: true,&#xd;
+		&quot;BasePath&quot;: &quot;/api/reports&quot;&#xd;
+	},&#xd;
+	&quot;useCache&quot;: true&#xd;
+}</stringProp>
+                    <stringProp name="Argument.metadata">=</stringProp>
+                  </elementProp>
+                </collectionProp>
+              </elementProp>
+              <stringProp name="HTTPSampler.domain">${BASE_URL}</stringProp>
+              <stringProp name="HTTPSampler.port">${reportsPort}</stringProp>
+              <stringProp name="HTTPSampler.protocol">${Protocol}</stringProp>
+              <stringProp name="HTTPSampler.path">api/reports/clients/${clientId}/instances/${instanceId}/documents</stringProp>
+              <stringProp name="HTTPSampler.method">POST</stringProp>
+              <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+              <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+              <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+              <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+              <boolProp name="HTTPSampler.BROWSER_COMPATIBLE_MULTIPART">false</boolProp>
+              <boolProp name="HTTPSampler.image_parser">false</boolProp>
+              <boolProp name="HTTPSampler.concurrentDwn">false</boolProp>
+              <stringProp name="HTTPSampler.concurrentPool">6</stringProp>
+              <boolProp name="HTTPSampler.md5">false</boolProp>
+              <intProp name="HTTPSampler.ipSourceType">0</intProp>
+            </HTTPSamplerProxy>
+            <hashTree>
+              <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header manager" enabled="true">
+                <collectionProp name="HeaderManager.headers"/>
+              </HeaderManager>
+              <hashTree/>
+              <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="documentId Extractor" enabled="true">
+                <stringProp name="JSONPostProcessor.referenceNames">documentId</stringProp>
+                <stringProp name="JSONPostProcessor.jsonPathExprs">$.documentId</stringProp>
+                <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
+              </JSONPostProcessor>
+              <hashTree/>
+            </hashTree>
+            <WhileController guiclass="WhileControllerGui" testclass="WhileController" testname="While Controller" enabled="true">
+              <stringProp name="WhileController.condition">${__javaScript(&quot;${docReady}&quot; != &quot;true&quot;,)}</stringProp>
+            </WhileController>
+            <hashTree>
+              <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="api/reports/clients/{clientId}/instances/{instanceId}/documents/{documentId}/info" enabled="true">
+                <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+                <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+                  <collectionProp name="Arguments.arguments">
+                    <elementProp name="" elementType="HTTPArgument">
+                      <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                      <stringProp name="Argument.value">{&#xd;
+	&quot;format&quot;: &quot;HTML5&quot;,&#xd;
+	&quot;deviceInfo&quot;: {&#xd;
+		&quot;enableSearch&quot;: true,&#xd;
+		&quot;ContentOnly&quot;: true,&#xd;
+		&quot;UseSVG&quot;: true,&#xd;
+		&quot;BasePath&quot;: &quot;/api/reports&quot;&#xd;
+	},&#xd;
+	&quot;useCache&quot;: true&#xd;
+}</stringProp>
+                      <stringProp name="Argument.metadata">=</stringProp>
+                    </elementProp>
+                  </collectionProp>
+                </elementProp>
+                <stringProp name="HTTPSampler.domain">${BASE_URL}</stringProp>
+                <stringProp name="HTTPSampler.port">${reportsPort}</stringProp>
+                <stringProp name="HTTPSampler.protocol">${Protocol}</stringProp>
+                <stringProp name="HTTPSampler.path">api/reports/clients/${clientId}/instances/${instanceId}/documents/${documentId}/info</stringProp>
+                <stringProp name="HTTPSampler.method">GET</stringProp>
+                <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+                <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+                <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+                <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+                <boolProp name="HTTPSampler.BROWSER_COMPATIBLE_MULTIPART">false</boolProp>
+                <boolProp name="HTTPSampler.image_parser">false</boolProp>
+                <boolProp name="HTTPSampler.concurrentDwn">false</boolProp>
+                <stringProp name="HTTPSampler.concurrentPool">6</stringProp>
+                <boolProp name="HTTPSampler.md5">false</boolProp>
+                <intProp name="HTTPSampler.ipSourceType">0</intProp>
+              </HTTPSamplerProxy>
+              <hashTree>
+                <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header manager" enabled="true">
+                  <collectionProp name="HeaderManager.headers"/>
+                </HeaderManager>
+                <hashTree/>
+                <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="docReady Extractor" enabled="true">
+                  <stringProp name="JSONPostProcessor.referenceNames">docReady</stringProp>
+                  <stringProp name="JSONPostProcessor.jsonPathExprs">$.documentReady</stringProp>
+                  <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
+                </JSONPostProcessor>
+                <hashTree/>
+                <ConstantTimer guiclass="ConstantTimerGui" testclass="ConstantTimer" testname="Constant Timer" enabled="true">
+                  <stringProp name="ConstantTimer.delay">1000</stringProp>
+                </ConstantTimer>
+                <hashTree/>
+              </hashTree>
+            </hashTree>
+            <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="api/reports/clients/{clientId}/instances/{instanceId}/documents/{documentId}/pages/1" enabled="true">
+              <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+              <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+                <collectionProp name="Arguments.arguments">
+                  <elementProp name="" elementType="HTTPArgument">
+                    <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                    <stringProp name="Argument.value">{&#xd;
+	&quot;format&quot;: &quot;HTML5&quot;,&#xd;
+	&quot;deviceInfo&quot;: {&#xd;
+		&quot;enableSearch&quot;: true,&#xd;
+		&quot;ContentOnly&quot;: true,&#xd;
+		&quot;UseSVG&quot;: true,&#xd;
+		&quot;BasePath&quot;: &quot;/api/reports&quot;&#xd;
+	},&#xd;
+	&quot;useCache&quot;: true&#xd;
+}</stringProp>
+                    <stringProp name="Argument.metadata">=</stringProp>
+                  </elementProp>
+                </collectionProp>
+              </elementProp>
+              <stringProp name="HTTPSampler.domain">${BASE_URL}</stringProp>
+              <stringProp name="HTTPSampler.port">${reportsPort}</stringProp>
+              <stringProp name="HTTPSampler.protocol">${Protocol}</stringProp>
+              <stringProp name="HTTPSampler.path">api/reports/clients/${clientId}/instances/${instanceId}/documents/${documentId}/pages/1</stringProp>
+              <stringProp name="HTTPSampler.method">GET</stringProp>
+              <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+              <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+              <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+              <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+              <boolProp name="HTTPSampler.BROWSER_COMPATIBLE_MULTIPART">false</boolProp>
+              <boolProp name="HTTPSampler.image_parser">false</boolProp>
+              <boolProp name="HTTPSampler.concurrentDwn">false</boolProp>
+              <stringProp name="HTTPSampler.concurrentPool">6</stringProp>
+              <boolProp name="HTTPSampler.md5">false</boolProp>
+              <intProp name="HTTPSampler.ipSourceType">0</intProp>
+            </HTTPSamplerProxy>
+            <hashTree>
+              <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header manager" enabled="true">
+                <collectionProp name="HeaderManager.headers"/>
+              </HeaderManager>
+              <hashTree/>
+            </hashTree>
+          </hashTree>
+          <TransactionController guiclass="TransactionControllerGui" testclass="TransactionController" testname="Financial Transactions Report" enabled="true">
+            <boolProp name="TransactionController.includeTimers">false</boolProp>
+            <boolProp name="TransactionController.parent">true</boolProp>
+          </TransactionController>
+          <hashTree>
+            <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header manager" enabled="true">
+              <collectionProp name="HeaderManager.headers">
+                <elementProp name="Content-Type" elementType="Header">
+                  <stringProp name="Header.name">Content-Type</stringProp>
+                  <stringProp name="Header.value">application/json</stringProp>
+                </elementProp>
+              </collectionProp>
+            </HeaderManager>
+            <hashTree/>
+            <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="api/report/transactions-report/search" enabled="true">
+              <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+              <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+                <collectionProp name="Arguments.arguments">
+                  <elementProp name="" elementType="HTTPArgument">
+                    <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                    <stringProp name="Argument.value">{&#xd;
+	&quot;propertyId&quot;: ${Property_ID},&#xd;
+	&quot;dateTimeFormat&quot;: &quot;yyyy-MM-dd hh:mm tt&quot;,&#xd;
+	&quot;propertyTimeZone&quot;: &quot;Arab Standard Time&quot;,&#xd;
+	&quot;transactionDirection&quot;: 1,//1= money in, 2= money out&#xd;
+	&quot;includeDropCashVouchers&quot;: true,&#xd;
+	&quot;createdDateTimeFrom&quot;: &quot;${searchFrom}&quot;,&#xd;
+	&quot;createdDateTimeTo&quot;: &quot;${searchTo}&quot;,&#xd;
+	&quot;voucherTypeIds&quot;: &quot;1,3,9&quot;, //1=Receipts ,2=refund ,3=SD receipt,4=SD Refund, 9=Deposite vouchers&#xd;
+	&quot;paymentMethodIds&quot;: &quot;&quot;,&#xd;
+	&quot;userIds&quot;: &quot;&quot;&#xd;
+}</stringProp>
+                    <stringProp name="Argument.metadata">=</stringProp>
+                  </elementProp>
+                </collectionProp>
+              </elementProp>
+              <stringProp name="HTTPSampler.domain">${BASE_URL}</stringProp>
+              <stringProp name="HTTPSampler.port">${reportsPort}</stringProp>
+              <stringProp name="HTTPSampler.protocol">${Protocol}</stringProp>
+              <stringProp name="HTTPSampler.path">api/report/transactions-report/search</stringProp>
+              <stringProp name="HTTPSampler.method">POST</stringProp>
+              <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+              <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+              <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+              <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+              <boolProp name="HTTPSampler.BROWSER_COMPATIBLE_MULTIPART">false</boolProp>
+              <boolProp name="HTTPSampler.image_parser">false</boolProp>
+              <boolProp name="HTTPSampler.concurrentDwn">false</boolProp>
+              <stringProp name="HTTPSampler.concurrentPool">6</stringProp>
+              <boolProp name="HTTPSampler.md5">false</boolProp>
+              <intProp name="HTTPSampler.ipSourceType">0</intProp>
+            </HTTPSamplerProxy>
+            <hashTree>
+              <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header manager" enabled="true">
+                <collectionProp name="HeaderManager.headers"/>
+              </HeaderManager>
+              <hashTree/>
+              <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="searchId estractor" enabled="true">
+                <stringProp name="JSONPostProcessor.referenceNames">searchId</stringProp>
+                <stringProp name="JSONPostProcessor.jsonPathExprs">$.data</stringProp>
+                <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
+              </JSONPostProcessor>
+              <hashTree/>
+            </hashTree>
+            <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="api/report/transactions-report/get-statistical-data" enabled="true">
+              <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+              <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+                <collectionProp name="Arguments.arguments">
+                  <elementProp name="" elementType="HTTPArgument">
+                    <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                    <stringProp name="Argument.value">{&#xd;
+	&quot;propertyId&quot;: ${Property_ID},&#xd;
+	&quot;dateTimeFormat&quot;: &quot;yyyy-MM-dd hh:mm tt&quot;,&#xd;
+	&quot;propertyTimeZone&quot;: &quot;Arab Standard Time&quot;,&#xd;
+	&quot;transactionDirection&quot;: 1,&#xd;
+	&quot;includeDropCashVouchers&quot;: true,&#xd;
+	&quot;createdDateTimeFrom&quot;: &quot;${searchFrom}&quot;,&#xd;
+	&quot;createdDateTimeTo&quot;: &quot;${searchTo}&quot;,&#xd;
+	&quot;voucherTypeIds&quot;: &quot;1,3,9&quot;,&#xd;
+	&quot;paymentMethodIds&quot;: &quot;&quot;,&#xd;
+	&quot;userIds&quot;: &quot;&quot;,&#xd;
+	&quot;searchId&quot;: ${searchId}&#xd;
+}</stringProp>
+                    <stringProp name="Argument.metadata">=</stringProp>
+                  </elementProp>
+                </collectionProp>
+              </elementProp>
+              <stringProp name="HTTPSampler.domain">${BASE_URL}</stringProp>
+              <stringProp name="HTTPSampler.port">${reportsPort}</stringProp>
+              <stringProp name="HTTPSampler.protocol">${Protocol}</stringProp>
+              <stringProp name="HTTPSampler.path">api/report/transactions-report/get-statistical-data</stringProp>
+              <stringProp name="HTTPSampler.method">POST</stringProp>
+              <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+              <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+              <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+              <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+              <boolProp name="HTTPSampler.BROWSER_COMPATIBLE_MULTIPART">false</boolProp>
+              <boolProp name="HTTPSampler.image_parser">false</boolProp>
+              <boolProp name="HTTPSampler.concurrentDwn">false</boolProp>
+              <stringProp name="HTTPSampler.concurrentPool">6</stringProp>
+              <boolProp name="HTTPSampler.md5">false</boolProp>
+              <intProp name="HTTPSampler.ipSourceType">0</intProp>
+            </HTTPSamplerProxy>
+            <hashTree>
+              <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header manager" enabled="true">
+                <collectionProp name="HeaderManager.headers"/>
+              </HeaderManager>
+              <hashTree/>
+            </hashTree>
+            <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="ReportViewer" enabled="true">
+              <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+              <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+                <collectionProp name="Arguments.arguments">
+                  <elementProp name="" elementType="HTTPArgument">
+                    <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                    <stringProp name="Argument.value">{&#xd;
+	&quot;token&quot;: 	&quot;${TOKEN}&quot;,&#xd;
+	&quot;reportName&quot;: &quot;Transactions/MoneyInTransactions_En.trdp&quot;,&#xd;
+	&quot;reportTitle&quot;: &quot;reportPages.transactions&quot;,&#xd;
+		&quot;parameters&quot;: &quot;{\&quot;PropertyId\&quot;:${Property_ID},\&quot;SearchId\&quot;:${searchId},\&quot;PrintedBy\&quot;:\&quot;Load Test\&quot;,\&quot;ShowHeaderFooter\&quot;:true,\&quot;PrintingDate\&quot;:\&quot;${printingDate}\&quot;,\&quot;DateFromSearchCriteria\&quot;:\&quot;${searchFrom}\&quot;,\&quot;DateToSearchCriteria\&quot;:\&quot;${searchTo}\&quot;,\&quot;TotalReceipMoneyInVoucherTypesIds\&quot;:\&quot;1,9\&quot;,\&quot;TotalInsuranceMoneyInVoucherTypesIds\&quot;:\&quot;3\&quot;,\&quot;TotalPaymentsMoneyOutVoucherTypesIds\&quot;:\&quot;4,8\&quot;,\&quot;TotalInsuranceMoneyOutVoucherTypesIds\&quot;:\&quot;5\&quot;,\&quot;TotalMoneyInVoucherTypesIds\&quot;:\&quot;1,3,9\&quot;,\&quot;TotalMoneyOutVoucherTypesIds\&quot;:\&quot;4,8,5\&quot;,\&quot;TotalInAndOutVoucherTypes\&quot;:\&quot;1,3,9,4,8,5\&quot;,\&quot;TransactionDirectionMoneyBoth\&quot;:false,\&quot;TransactionDirectionMoneyIn\&quot;:true,\&quot;TransactionDirectionMoneyOut\&quot;:false,\&quot;TransactionDirection\&quot;:\&quot;Money In\&quot;,\&quot;IncludeDropCash\&quot;:true,\&quot;VoucherTypes\&quot;:\&quot;1,3,9\&quot;,\&quot;PaymentMethods\&quot;:\&quot;\&quot;,\&quot;Users\&quot;:\&quot;\&quot;,\&quot;TimeZoneHours\&quot;:${timeOffset},\&quot;DateTimeFormat\&quot;:\&quot;yyyy-MM-dd hh:mm tt\&quot;}&quot;,&#xd;
+&#xd;
+	&quot;initDateTime&quot;: null&#xd;
+}</stringProp>
+                    <stringProp name="Argument.metadata">=</stringProp>
+                  </elementProp>
+                </collectionProp>
+              </elementProp>
+              <stringProp name="HTTPSampler.domain">${BASE_URL}</stringProp>
+              <stringProp name="HTTPSampler.port">${reportsPort}</stringProp>
+              <stringProp name="HTTPSampler.protocol">${Protocol}</stringProp>
+              <stringProp name="HTTPSampler.path">ReportViewer</stringProp>
+              <stringProp name="HTTPSampler.method">POST</stringProp>
+              <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+              <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+              <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+              <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+              <boolProp name="HTTPSampler.BROWSER_COMPATIBLE_MULTIPART">false</boolProp>
+              <boolProp name="HTTPSampler.image_parser">false</boolProp>
+              <boolProp name="HTTPSampler.concurrentDwn">false</boolProp>
+              <stringProp name="HTTPSampler.concurrentPool">6</stringProp>
+              <boolProp name="HTTPSampler.md5">false</boolProp>
+              <intProp name="HTTPSampler.ipSourceType">0</intProp>
+            </HTTPSamplerProxy>
+            <hashTree>
+              <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header manager" enabled="true">
+                <collectionProp name="HeaderManager.headers"/>
+              </HeaderManager>
+              <hashTree/>
+              <JSR223PreProcessor guiclass="TestBeanGUI" testclass="JSR223PreProcessor" testname="JSR223 PreProcessor" enabled="true">
+                <stringProp name="scriptLanguage">groovy</stringProp>
+                <stringProp name="parameters"></stringProp>
+                <stringProp name="filename"></stringProp>
+                <stringProp name="cacheKey">true</stringProp>
+                <stringProp name="script">
+
+String params =&quot;{\&quot;PropertyId\&quot;:&quot;+vars.get(&quot;Property_ID&quot;)+&quot;,&quot;+
+			&quot;\&quot;SearchId\&quot;:&quot;+vars.get(&quot;searchId&quot;)+&quot;,&quot;+
+			&quot;\&quot;PrintedBy\&quot;:\&quot;Load Test\&quot;,&quot;+
+			&quot;\&quot;ShowHeaderFooter\&quot;:true,&quot;+
+			&quot;\&quot;PrintingDate\&quot;:\&quot;&quot;+vars.get(&quot;printingDate&quot;)+&quot;\&quot;,&quot;+
+			&quot;\&quot;DateFromSearchCriteria\&quot;:\&quot;&quot;+vars.get(&quot;searchFrom&quot;)+&quot;\&quot;,&quot;+
+			&quot;\&quot;DateToSearchCriteria\&quot;:\&quot;&quot;+vars.get(&quot;searchTo&quot;)+	
+			&quot;\&quot;,\&quot;TotalReceipMoneyInVoucherTypesIds\&quot;:\&quot;1,9\&quot;,&quot;+
+			&quot;\&quot;TotalInsuranceMoneyInVoucherTypesIds\&quot;:\&quot;3\&quot;,&quot;+
+			&quot;\&quot;TotalPaymentsMoneyOutVoucherTypesIds\&quot;:\&quot;4,8\&quot;,&quot;+
+			&quot;\&quot;TotalInsuranceMoneyOutVoucherTypesIds\&quot;:\&quot;5\&quot;,&quot;+
+			&quot;\&quot;TotalMoneyInVoucherTypesIds\&quot;:\&quot;1,3,9\&quot;,&quot;+
+			&quot;\&quot;TotalMoneyOutVoucherTypesIds\&quot;:\&quot;4,8,5\&quot;,&quot;+
+			&quot;\&quot;TotalInAndOutVoucherTypes\&quot;:\&quot;1,3,9,4,8,5\&quot;,&quot;+
+			&quot;\&quot;TransactionDirectionMoneyBoth\&quot;:false,&quot;+
+			&quot;\&quot;TransactionDirectionMoneyIn\&quot;:true,&quot;+
+			&quot;\&quot;TransactionDirectionMoneyOut\&quot;:false,&quot;+
+			&quot;\&quot;TransactionDirection\&quot;:\&quot;Money In\&quot;,&quot;+
+			&quot;\&quot;IncludeDropCash\&quot;:true,&quot;+
+			&quot;\&quot;VoucherTypes\&quot;:\&quot;1,3,9\&quot;,&quot;+
+			&quot;\&quot;PaymentMethods\&quot;:\&quot;\&quot;,&quot;+
+			&quot;\&quot;Users\&quot;:\&quot;\&quot;,&quot;+
+			&quot;\&quot;VoucherNo\&quot;: \&quot;\&quot;,&quot;+
+		&quot;\&quot;TimeZoneHours\&quot;:&quot;+vars.get(&quot;timeOffset&quot;)+
+		&quot;,\&quot;DateTimeFormat\&quot;:\&quot;yyyy-MM-dd hh:mm tt\&quot;}}&quot;
+		
+String jsonRequest =  &quot;{\&quot;report\&quot;: \&quot;Transactions/MoneyInTransactions_En.trdp\&quot;,&quot;+
+			&quot;\&quot;parameterValues\&quot;:&quot;+params
+//String jsonparam = jsonRequest.replaceAll(&quot;\\&quot;,&quot;&quot;)
+def json = new groovy.json.JsonSlurper().parseText(jsonRequest)
+json.parameterValues.put(&quot;Language&quot;,&quot;&quot;)
+def newJson = new groovy.json.JsonBuilder(json).toPrettyString()
+log.info(newJson)
+vars.put(&quot;reportRequest&quot;,newJson)
+	                    </stringProp>
+              </JSR223PreProcessor>
+              <hashTree/>
+              <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="JSON Extractor" enabled="true">
+                <stringProp name="JSONPostProcessor.referenceNames">key</stringProp>
+                <stringProp name="JSONPostProcessor.jsonPathExprs">$.data</stringProp>
+                <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
+              </JSONPostProcessor>
+              <hashTree/>
+            </hashTree>
+            <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="api/reports/formats" enabled="true">
+              <boolProp name="HTTPSampler.postBodyRaw">false</boolProp>
+              <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
+                <collectionProp name="Arguments.arguments"/>
+              </elementProp>
+              <stringProp name="HTTPSampler.domain">${BASE_URL}</stringProp>
+              <stringProp name="HTTPSampler.port">${reportsPort}</stringProp>
+              <stringProp name="HTTPSampler.protocol">${Protocol}</stringProp>
+              <stringProp name="HTTPSampler.path">api/reports/formats</stringProp>
+              <stringProp name="HTTPSampler.method">GET</stringProp>
+              <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+              <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+              <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+              <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+              <boolProp name="HTTPSampler.BROWSER_COMPATIBLE_MULTIPART">false</boolProp>
+              <boolProp name="HTTPSampler.image_parser">false</boolProp>
+              <boolProp name="HTTPSampler.concurrentDwn">false</boolProp>
+              <stringProp name="HTTPSampler.concurrentPool">6</stringProp>
+              <boolProp name="HTTPSampler.md5">false</boolProp>
+              <intProp name="HTTPSampler.ipSourceType">0</intProp>
+            </HTTPSamplerProxy>
+            <hashTree>
+              <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header manager" enabled="true">
+                <collectionProp name="HeaderManager.headers"/>
+              </HeaderManager>
+              <hashTree/>
+            </hashTree>
+            <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="api/reports/clients" enabled="true">
+              <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+              <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+                <collectionProp name="Arguments.arguments">
+                  <elementProp name="" elementType="HTTPArgument">
+                    <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                    <stringProp name="Argument.value">{&quot;timeStamp&quot;:${__time(/1000,)}}</stringProp>
+                    <stringProp name="Argument.metadata">=</stringProp>
+                  </elementProp>
+                </collectionProp>
+              </elementProp>
+              <stringProp name="HTTPSampler.domain">${BASE_URL}</stringProp>
+              <stringProp name="HTTPSampler.port">${reportsPort}</stringProp>
+              <stringProp name="HTTPSampler.protocol">${Protocol}</stringProp>
+              <stringProp name="HTTPSampler.path">api/reports/clients</stringProp>
+              <stringProp name="HTTPSampler.method">POST</stringProp>
+              <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+              <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+              <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+              <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+              <boolProp name="HTTPSampler.BROWSER_COMPATIBLE_MULTIPART">false</boolProp>
+              <boolProp name="HTTPSampler.image_parser">false</boolProp>
+              <boolProp name="HTTPSampler.concurrentDwn">false</boolProp>
+              <stringProp name="HTTPSampler.concurrentPool">6</stringProp>
+              <boolProp name="HTTPSampler.md5">false</boolProp>
+              <intProp name="HTTPSampler.ipSourceType">0</intProp>
+            </HTTPSamplerProxy>
+            <hashTree>
+              <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header manager" enabled="true">
+                <collectionProp name="HeaderManager.headers"/>
+              </HeaderManager>
+              <hashTree/>
+              <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="clientId Extractor" enabled="true">
+                <stringProp name="JSONPostProcessor.referenceNames">clientId</stringProp>
+                <stringProp name="JSONPostProcessor.jsonPathExprs">$.clientId</stringProp>
+                <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
+              </JSONPostProcessor>
+              <hashTree/>
+              <JSR223PostProcessor guiclass="TestBeanGUI" testclass="JSR223PostProcessor" testname="JSR223 PostProcessor" enabled="true">
+                <stringProp name="scriptLanguage">groovy</stringProp>
+                <stringProp name="parameters"></stringProp>
+                <stringProp name="filename"></stringProp>
+                <stringProp name="cacheKey">true</stringProp>
+                <stringProp name="script">def json = new groovy.json.JsonSlurper().parse(prev.getResponseData())
+
+def repRequest = new groovy.json.JsonSlurper().parseText(vars.get(&quot;reportRequest&quot;))
+//repRequest.put(&quot;clientID&quot;,json.clientId)
+repRequest.parameterValues.put(&quot;Language&quot;,&quot;&quot;)
+
+def updated =new groovy.json.JsonBuilder(repRequest).toPrettyString()
+vars.put(&quot;reportRequest&quot;,updated)</stringProp>
+              </JSR223PostProcessor>
+              <hashTree/>
+            </hashTree>
+            <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="api/reports/clients/{clientId}/parameters" enabled="true">
+              <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+              <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+                <collectionProp name="Arguments.arguments">
+                  <elementProp name="" elementType="HTTPArgument">
+                    <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                    <stringProp name="Argument.value">&#xd;
+&#xd;
+	${reportRequest}&#xd;
+//	&quot;report&quot;: &quot;TaxesAndFees/TaxesAndFeesReport_En.trdp&quot;,&#xd;
+//	&quot;parameterValues&quot;: {&#xd;
+//		&quot;PropertyId&quot;: 2,&#xd;
+//		&quot;ShowHeaderFooter&quot;: true,&#xd;
+//		&quot;PrintedBy&quot;: &quot;Mostafa Hamed&quot;,&#xd;
+//		&quot;PrintingDate&quot;: &quot;2024-03-24 09:34 AM&quot;,&#xd;
+//		&quot;PropertyTimeZone&quot;: &quot;Arab Standard Time&quot;,&#xd;
+//		&quot;SelectedTaxesEn&quot;: &quot;Lodging Fees&quot;,&#xd;
+//		&quot;SelectedTaxesAr&quot;: &quot;رسوم اشغال مرافق الايواء&quot;,&#xd;
+//		&quot;SelectedFromDate&quot;: &quot;2024-03-23&quot;,&#xd;
+//		&quot;SelectedToDate&quot;: &quot;2024-03-24&quot;,&#xd;
+//		&quot;SelectedDirectionEn&quot;: &quot;&quot;,&#xd;
+//		&quot;SelectedDirectionAr&quot;: &quot;All &quot;,&#xd;
+//		&quot;SearchId&quot;: 5295,&#xd;
+//		&quot;TaxIdSearchParameter&quot;: 2,&#xd;
+//		&quot;TaxFeeDirectionSearchParameter&quot;: 1,&#xd;
+//		&quot;DateFormat&quot;: &quot;yyyy-MM-dd&quot;,&#xd;
+//		&quot;IsInDetail&quot;: false,&#xd;
+//		&quot;IsVATTax&quot;: false,&#xd;
+//		&quot;ValidZatcaIntegration&quot;: true&#xd;
+//	}&#xd;
+</stringProp>
+                    <stringProp name="Argument.metadata">=</stringProp>
+                  </elementProp>
+                </collectionProp>
+              </elementProp>
+              <stringProp name="HTTPSampler.domain">${BASE_URL}</stringProp>
+              <stringProp name="HTTPSampler.port">${reportsPort}</stringProp>
+              <stringProp name="HTTPSampler.protocol">${Protocol}</stringProp>
+              <stringProp name="HTTPSampler.path">api/reports/clients/${clientId}/parameters</stringProp>
+              <stringProp name="HTTPSampler.method">POST</stringProp>
+              <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+              <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+              <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+              <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+              <boolProp name="HTTPSampler.BROWSER_COMPATIBLE_MULTIPART">false</boolProp>
+              <boolProp name="HTTPSampler.image_parser">false</boolProp>
+              <boolProp name="HTTPSampler.concurrentDwn">false</boolProp>
+              <stringProp name="HTTPSampler.concurrentPool">6</stringProp>
+              <boolProp name="HTTPSampler.md5">false</boolProp>
+              <intProp name="HTTPSampler.ipSourceType">0</intProp>
+            </HTTPSamplerProxy>
+            <hashTree>
+              <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header manager" enabled="true">
+                <collectionProp name="HeaderManager.headers">
+                  <elementProp name="Referer" elementType="Header">
+                    <stringProp name="Header.name">Referer</stringProp>
+                    <stringProp name="Header.value">http://staging.nazeel.net:9400/ReportViewer?Key=${key}</stringProp>
+                  </elementProp>
+                </collectionProp>
+              </HeaderManager>
+              <hashTree/>
+            </hashTree>
+            <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="api/reports/clients/{clientId}/instances" enabled="true">
+              <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+              <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+                <collectionProp name="Arguments.arguments">
+                  <elementProp name="" elementType="HTTPArgument">
+                    <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                    <stringProp name="Argument.value">&#xd;
+&#xd;
+	${reportRequest}&#xd;
+//	&quot;report&quot;: &quot;TaxesAndFees/TaxesAndFeesReport_En.trdp&quot;,&#xd;
+//	&quot;parameterValues&quot;: {&#xd;
+//		&quot;PropertyId&quot;: 2,&#xd;
+//		&quot;ShowHeaderFooter&quot;: true,&#xd;
+//		&quot;PrintedBy&quot;: &quot;Mostafa Hamed&quot;,&#xd;
+//		&quot;PrintingDate&quot;: &quot;2024-03-24 09:34 AM&quot;,&#xd;
+//		&quot;PropertyTimeZone&quot;: &quot;Arab Standard Time&quot;,&#xd;
+//		&quot;SelectedTaxesEn&quot;: &quot;Lodging Fees&quot;,&#xd;
+//		&quot;SelectedTaxesAr&quot;: &quot;رسوم اشغال مرافق الايواء&quot;,&#xd;
+//		&quot;SelectedFromDate&quot;: &quot;2024-03-23&quot;,&#xd;
+//		&quot;SelectedToDate&quot;: &quot;2024-03-24&quot;,&#xd;
+//		&quot;SelectedDirectionEn&quot;: &quot;&quot;,&#xd;
+//		&quot;SelectedDirectionAr&quot;: &quot;All &quot;,&#xd;
+//		&quot;SearchId&quot;: 5295,&#xd;
+//		&quot;TaxIdSearchParameter&quot;: 2,&#xd;
+//		&quot;TaxFeeDirectionSearchParameter&quot;: 1,&#xd;
+//		&quot;DateFormat&quot;: &quot;yyyy-MM-dd&quot;,&#xd;
+//		&quot;IsInDetail&quot;: false,&#xd;
+//		&quot;IsVATTax&quot;: false,&#xd;
+//		&quot;ValidZatcaIntegration&quot;: true&#xd;
+//	}&#xd;
+</stringProp>
+                    <stringProp name="Argument.metadata">=</stringProp>
+                  </elementProp>
+                </collectionProp>
+              </elementProp>
+              <stringProp name="HTTPSampler.domain">${BASE_URL}</stringProp>
+              <stringProp name="HTTPSampler.port">${reportsPort}</stringProp>
+              <stringProp name="HTTPSampler.protocol">${Protocol}</stringProp>
+              <stringProp name="HTTPSampler.path">api/reports/clients/${clientId}/instances</stringProp>
+              <stringProp name="HTTPSampler.method">POST</stringProp>
+              <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+              <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+              <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+              <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+              <boolProp name="HTTPSampler.BROWSER_COMPATIBLE_MULTIPART">false</boolProp>
+              <boolProp name="HTTPSampler.image_parser">false</boolProp>
+              <boolProp name="HTTPSampler.concurrentDwn">false</boolProp>
+              <stringProp name="HTTPSampler.concurrentPool">6</stringProp>
+              <boolProp name="HTTPSampler.md5">false</boolProp>
+              <intProp name="HTTPSampler.ipSourceType">0</intProp>
+            </HTTPSamplerProxy>
+            <hashTree>
+              <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header manager" enabled="true">
+                <collectionProp name="HeaderManager.headers">
+                  <elementProp name="Accept" elementType="Header">
+                    <stringProp name="Header.name">Accept</stringProp>
+                    <stringProp name="Header.value">application/json, text/javascript, */*; q=0.01</stringProp>
+                  </elementProp>
+                  <elementProp name="Content-Type" elementType="Header">
+                    <stringProp name="Header.name">Content-Type</stringProp>
+                    <stringProp name="Header.value">application/json; charset=UTF-8</stringProp>
+                  </elementProp>
+                  <elementProp name="Referer" elementType="Header">
+                    <stringProp name="Header.name">Referer</stringProp>
+                    <stringProp name="Header.value">http://staging.nazeel.net:9400/ReportViewer?Key=${key}</stringProp>
+                  </elementProp>
+                </collectionProp>
+              </HeaderManager>
+              <hashTree/>
+              <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="instanceId Extractor" enabled="true">
+                <stringProp name="JSONPostProcessor.referenceNames">instanceId</stringProp>
+                <stringProp name="JSONPostProcessor.jsonPathExprs">$.instanceId</stringProp>
+                <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
+              </JSONPostProcessor>
+              <hashTree/>
+            </hashTree>
+            <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="api/reports/clients/{clientId}/instances/{instanceId}/documents" enabled="true">
+              <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+              <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+                <collectionProp name="Arguments.arguments">
+                  <elementProp name="" elementType="HTTPArgument">
+                    <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                    <stringProp name="Argument.value">{&#xd;
+	&quot;format&quot;: &quot;HTML5&quot;,&#xd;
+	&quot;deviceInfo&quot;: {&#xd;
+		&quot;enableSearch&quot;: true,&#xd;
+		&quot;ContentOnly&quot;: true,&#xd;
+		&quot;UseSVG&quot;: true,&#xd;
+		&quot;BasePath&quot;: &quot;/api/reports&quot;&#xd;
+	},&#xd;
+	&quot;useCache&quot;: true&#xd;
+}</stringProp>
+                    <stringProp name="Argument.metadata">=</stringProp>
+                  </elementProp>
+                </collectionProp>
+              </elementProp>
+              <stringProp name="HTTPSampler.domain">${BASE_URL}</stringProp>
+              <stringProp name="HTTPSampler.port">${reportsPort}</stringProp>
+              <stringProp name="HTTPSampler.protocol">${Protocol}</stringProp>
+              <stringProp name="HTTPSampler.path">api/reports/clients/${clientId}/instances/${instanceId}/documents</stringProp>
+              <stringProp name="HTTPSampler.method">POST</stringProp>
+              <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+              <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+              <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+              <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+              <boolProp name="HTTPSampler.BROWSER_COMPATIBLE_MULTIPART">false</boolProp>
+              <boolProp name="HTTPSampler.image_parser">false</boolProp>
+              <boolProp name="HTTPSampler.concurrentDwn">false</boolProp>
+              <stringProp name="HTTPSampler.concurrentPool">6</stringProp>
+              <boolProp name="HTTPSampler.md5">false</boolProp>
+              <intProp name="HTTPSampler.ipSourceType">0</intProp>
+            </HTTPSamplerProxy>
+            <hashTree>
+              <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header manager" enabled="true">
+                <collectionProp name="HeaderManager.headers"/>
+              </HeaderManager>
+              <hashTree/>
+              <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="documentId Extractor" enabled="true">
+                <stringProp name="JSONPostProcessor.referenceNames">documentId</stringProp>
+                <stringProp name="JSONPostProcessor.jsonPathExprs">$.documentId</stringProp>
+                <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
+              </JSONPostProcessor>
+              <hashTree/>
+            </hashTree>
+            <WhileController guiclass="WhileControllerGui" testclass="WhileController" testname="While Controller" enabled="true">
+              <stringProp name="WhileController.condition">${__javaScript(&quot;${docReady}&quot; != &quot;true&quot;,)}</stringProp>
+            </WhileController>
+            <hashTree>
+              <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="api/reports/clients/{clientId}/instances/{instanceId}/documents/{documentId}/info" enabled="true">
+                <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+                <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+                  <collectionProp name="Arguments.arguments">
+                    <elementProp name="" elementType="HTTPArgument">
+                      <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                      <stringProp name="Argument.value">{&#xd;
+	&quot;format&quot;: &quot;HTML5&quot;,&#xd;
+	&quot;deviceInfo&quot;: {&#xd;
+		&quot;enableSearch&quot;: true,&#xd;
+		&quot;ContentOnly&quot;: true,&#xd;
+		&quot;UseSVG&quot;: true,&#xd;
+		&quot;BasePath&quot;: &quot;/api/reports&quot;&#xd;
+	},&#xd;
+	&quot;useCache&quot;: true&#xd;
+}</stringProp>
+                      <stringProp name="Argument.metadata">=</stringProp>
+                    </elementProp>
+                  </collectionProp>
+                </elementProp>
+                <stringProp name="HTTPSampler.domain">${BASE_URL}</stringProp>
+                <stringProp name="HTTPSampler.port">${reportsPort}</stringProp>
+                <stringProp name="HTTPSampler.protocol">${Protocol}</stringProp>
+                <stringProp name="HTTPSampler.path">api/reports/clients/${clientId}/instances/${instanceId}/documents/${documentId}/info</stringProp>
+                <stringProp name="HTTPSampler.method">GET</stringProp>
+                <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+                <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+                <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+                <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+                <boolProp name="HTTPSampler.BROWSER_COMPATIBLE_MULTIPART">false</boolProp>
+                <boolProp name="HTTPSampler.image_parser">false</boolProp>
+                <boolProp name="HTTPSampler.concurrentDwn">false</boolProp>
+                <stringProp name="HTTPSampler.concurrentPool">6</stringProp>
+                <boolProp name="HTTPSampler.md5">false</boolProp>
+                <intProp name="HTTPSampler.ipSourceType">0</intProp>
+              </HTTPSamplerProxy>
+              <hashTree>
+                <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header manager" enabled="true">
+                  <collectionProp name="HeaderManager.headers"/>
+                </HeaderManager>
+                <hashTree/>
+                <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="docReady Extractor" enabled="true">
+                  <stringProp name="JSONPostProcessor.referenceNames">docReady</stringProp>
+                  <stringProp name="JSONPostProcessor.jsonPathExprs">$.documentReady</stringProp>
+                  <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
+                </JSONPostProcessor>
+                <hashTree/>
+                <ConstantTimer guiclass="ConstantTimerGui" testclass="ConstantTimer" testname="Constant Timer" enabled="true">
+                  <stringProp name="ConstantTimer.delay">1000</stringProp>
+                </ConstantTimer>
+                <hashTree/>
+              </hashTree>
+            </hashTree>
+            <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="api/reports/clients/{clientId}/instances/{instanceId}/documents/{documentId}/pages/1" enabled="true">
+              <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+              <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+                <collectionProp name="Arguments.arguments">
+                  <elementProp name="" elementType="HTTPArgument">
+                    <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                    <stringProp name="Argument.value">{&#xd;
+	&quot;format&quot;: &quot;HTML5&quot;,&#xd;
+	&quot;deviceInfo&quot;: {&#xd;
+		&quot;enableSearch&quot;: true,&#xd;
+		&quot;ContentOnly&quot;: true,&#xd;
+		&quot;UseSVG&quot;: true,&#xd;
+		&quot;BasePath&quot;: &quot;/api/reports&quot;&#xd;
+	},&#xd;
+	&quot;useCache&quot;: true&#xd;
+}</stringProp>
+                    <stringProp name="Argument.metadata">=</stringProp>
+                  </elementProp>
+                </collectionProp>
+              </elementProp>
+              <stringProp name="HTTPSampler.domain">${BASE_URL}</stringProp>
+              <stringProp name="HTTPSampler.port">${reportsPort}</stringProp>
+              <stringProp name="HTTPSampler.protocol">${Protocol}</stringProp>
+              <stringProp name="HTTPSampler.path">api/reports/clients/${clientId}/instances/${instanceId}/documents/${documentId}/pages/1</stringProp>
+              <stringProp name="HTTPSampler.method">GET</stringProp>
+              <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+              <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+              <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+              <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+              <boolProp name="HTTPSampler.BROWSER_COMPATIBLE_MULTIPART">false</boolProp>
+              <boolProp name="HTTPSampler.image_parser">false</boolProp>
+              <boolProp name="HTTPSampler.concurrentDwn">false</boolProp>
+              <stringProp name="HTTPSampler.concurrentPool">6</stringProp>
+              <boolProp name="HTTPSampler.md5">false</boolProp>
+              <intProp name="HTTPSampler.ipSourceType">0</intProp>
+            </HTTPSamplerProxy>
+            <hashTree>
+              <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header manager" enabled="true">
+                <collectionProp name="HeaderManager.headers"/>
+              </HeaderManager>
+              <hashTree/>
+            </hashTree>
+          </hashTree>
+          <TransactionController guiclass="TransactionControllerGui" testclass="TransactionController" testname="Trial Balance Report" enabled="true">
+            <boolProp name="TransactionController.includeTimers">false</boolProp>
+            <boolProp name="TransactionController.parent">true</boolProp>
+          </TransactionController>
+          <hashTree>
+            <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header manager" enabled="true">
+              <collectionProp name="HeaderManager.headers">
+                <elementProp name="Content-Type" elementType="Header">
+                  <stringProp name="Header.name">Content-Type</stringProp>
+                  <stringProp name="Header.value">application/json</stringProp>
+                </elementProp>
+              </collectionProp>
+            </HeaderManager>
+            <hashTree/>
+            <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="api/report/trial-balance-report/search" enabled="true">
+              <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+              <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+                <collectionProp name="Arguments.arguments">
+                  <elementProp name="" elementType="HTTPArgument">
+                    <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                    <stringProp name="Argument.value">{&#xd;
+	&quot;propertyIds&quot;: &quot;${Property_ID}&quot;,&#xd;
+	&quot;gregDateFrom&quot;: &quot;${searchFrom}&quot;,&#xd;
+	&quot;gregDateTo&quot;: &quot;${searchTo}&quot;,&#xd;
+	&quot;dateFrom&quot;: &quot;${searchFrom}&quot;,&#xd;
+	&quot;dateTo&quot;: &quot;${searchTo}&quot;,&#xd;
+	&quot;hijriDateFrom&quot;: {&#xd;
+		&quot;day&quot;: 15,&#xd;
+		&quot;month&quot;: 8,&#xd;
+		&quot;year&quot;: 1445&#xd;
+	},&#xd;
+	&quot;hijriDateTo&quot;: {&#xd;
+		&quot;day&quot;: 16,&#xd;
+		&quot;month&quot;: 9,&#xd;
+		&quot;year&quot;: 1445&#xd;
+	},&#xd;
+	&quot;isAllPropertiesSelectedWithAdmin&quot;: false,&#xd;
+	&quot;propertyTimeZone&quot;: &quot;Arab Standard Time&quot;,&#xd;
+	&quot;companyId&quot;: ${Company_ID},&#xd;
+	&quot;dateFromStr&quot;: &quot;${searchFrom}&quot;,&#xd;
+	&quot;dateToStr&quot;: &quot;${searchTo}&quot;&#xd;
+}</stringProp>
+                    <stringProp name="Argument.metadata">=</stringProp>
+                  </elementProp>
+                </collectionProp>
+              </elementProp>
+              <stringProp name="HTTPSampler.domain">${BASE_URL}</stringProp>
+              <stringProp name="HTTPSampler.port">${reportsPort}</stringProp>
+              <stringProp name="HTTPSampler.protocol">${Protocol}</stringProp>
+              <stringProp name="HTTPSampler.path">api/report/trial-balance-report/search</stringProp>
+              <stringProp name="HTTPSampler.method">POST</stringProp>
+              <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+              <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+              <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+              <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+              <boolProp name="HTTPSampler.BROWSER_COMPATIBLE_MULTIPART">false</boolProp>
+              <boolProp name="HTTPSampler.image_parser">false</boolProp>
+              <boolProp name="HTTPSampler.concurrentDwn">false</boolProp>
+              <stringProp name="HTTPSampler.concurrentPool">6</stringProp>
+              <boolProp name="HTTPSampler.md5">false</boolProp>
+              <intProp name="HTTPSampler.ipSourceType">0</intProp>
+            </HTTPSamplerProxy>
+            <hashTree>
+              <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header manager" enabled="true">
+                <collectionProp name="HeaderManager.headers"/>
+              </HeaderManager>
+              <hashTree/>
+              <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="searchId estractor" enabled="true">
+                <stringProp name="JSONPostProcessor.referenceNames">searchId</stringProp>
+                <stringProp name="JSONPostProcessor.jsonPathExprs">$.data</stringProp>
+                <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
+              </JSONPostProcessor>
+              <hashTree/>
+            </hashTree>
+            <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="api/report/trial-balance-report/get-summary" enabled="true">
+              <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+              <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+                <collectionProp name="Arguments.arguments">
+                  <elementProp name="" elementType="HTTPArgument">
+                    <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                    <stringProp name="Argument.value">{&quot;paging&quot;:{&quot;skip&quot;:0,&quot;pageSize&quot;:20},&quot;searchId&quot;:${searchId}}</stringProp>
+                    <stringProp name="Argument.metadata">=</stringProp>
+                  </elementProp>
+                </collectionProp>
+              </elementProp>
+              <stringProp name="HTTPSampler.domain">${BASE_URL}</stringProp>
+              <stringProp name="HTTPSampler.port">${reportsPort}</stringProp>
+              <stringProp name="HTTPSampler.protocol">${Protocol}</stringProp>
+              <stringProp name="HTTPSampler.path">api/report/trial-balance-report/get-summary</stringProp>
+              <stringProp name="HTTPSampler.method">POST</stringProp>
+              <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+              <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+              <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+              <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+              <boolProp name="HTTPSampler.BROWSER_COMPATIBLE_MULTIPART">false</boolProp>
+              <boolProp name="HTTPSampler.image_parser">false</boolProp>
+              <boolProp name="HTTPSampler.concurrentDwn">false</boolProp>
+              <stringProp name="HTTPSampler.concurrentPool">6</stringProp>
+              <boolProp name="HTTPSampler.md5">false</boolProp>
+              <intProp name="HTTPSampler.ipSourceType">0</intProp>
+            </HTTPSamplerProxy>
+            <hashTree>
+              <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header manager" enabled="true">
+                <collectionProp name="HeaderManager.headers"/>
+              </HeaderManager>
+              <hashTree/>
+            </hashTree>
+            <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="api/report/trial-balance-report/get-revenue" enabled="true">
+              <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+              <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+                <collectionProp name="Arguments.arguments">
+                  <elementProp name="" elementType="HTTPArgument">
+                    <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                    <stringProp name="Argument.value">{&quot;paging&quot;:{&quot;skip&quot;:0,&quot;pageSize&quot;:20},&quot;searchId&quot;:${searchId}}</stringProp>
+                    <stringProp name="Argument.metadata">=</stringProp>
+                  </elementProp>
+                </collectionProp>
+              </elementProp>
+              <stringProp name="HTTPSampler.domain">${BASE_URL}</stringProp>
+              <stringProp name="HTTPSampler.port">${reportsPort}</stringProp>
+              <stringProp name="HTTPSampler.protocol">${Protocol}</stringProp>
+              <stringProp name="HTTPSampler.path">api/report/trial-balance-report/get-revenue</stringProp>
+              <stringProp name="HTTPSampler.method">POST</stringProp>
+              <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+              <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+              <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+              <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+              <boolProp name="HTTPSampler.BROWSER_COMPATIBLE_MULTIPART">false</boolProp>
+              <boolProp name="HTTPSampler.image_parser">false</boolProp>
+              <boolProp name="HTTPSampler.concurrentDwn">false</boolProp>
+              <stringProp name="HTTPSampler.concurrentPool">6</stringProp>
+              <boolProp name="HTTPSampler.md5">false</boolProp>
+              <intProp name="HTTPSampler.ipSourceType">0</intProp>
+            </HTTPSamplerProxy>
+            <hashTree>
+              <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header manager" enabled="true">
+                <collectionProp name="HeaderManager.headers"/>
+              </HeaderManager>
+              <hashTree/>
+            </hashTree>
+            <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="api/report/trial-balance-report/get-payments" enabled="true">
+              <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+              <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+                <collectionProp name="Arguments.arguments">
+                  <elementProp name="" elementType="HTTPArgument">
+                    <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                    <stringProp name="Argument.value">{&quot;paging&quot;:{&quot;skip&quot;:0,&quot;pageSize&quot;:20},&quot;searchId&quot;:${searchId}}</stringProp>
+                    <stringProp name="Argument.metadata">=</stringProp>
+                  </elementProp>
+                </collectionProp>
+              </elementProp>
+              <stringProp name="HTTPSampler.domain">${BASE_URL}</stringProp>
+              <stringProp name="HTTPSampler.port">${reportsPort}</stringProp>
+              <stringProp name="HTTPSampler.protocol">${Protocol}</stringProp>
+              <stringProp name="HTTPSampler.path">api/report/trial-balance-report/get-payments</stringProp>
+              <stringProp name="HTTPSampler.method">POST</stringProp>
+              <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+              <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+              <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+              <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+              <boolProp name="HTTPSampler.BROWSER_COMPATIBLE_MULTIPART">false</boolProp>
+              <boolProp name="HTTPSampler.image_parser">false</boolProp>
+              <boolProp name="HTTPSampler.concurrentDwn">false</boolProp>
+              <stringProp name="HTTPSampler.concurrentPool">6</stringProp>
+              <boolProp name="HTTPSampler.md5">false</boolProp>
+              <intProp name="HTTPSampler.ipSourceType">0</intProp>
+            </HTTPSamplerProxy>
+            <hashTree>
+              <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header manager" enabled="true">
+                <collectionProp name="HeaderManager.headers"/>
+              </HeaderManager>
+              <hashTree/>
+            </hashTree>
+            <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="api/report/trial-balance-report/get-taxes" enabled="true">
+              <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+              <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+                <collectionProp name="Arguments.arguments">
+                  <elementProp name="" elementType="HTTPArgument">
+                    <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                    <stringProp name="Argument.value">{&quot;paging&quot;:{&quot;skip&quot;:0,&quot;pageSize&quot;:20},&quot;searchId&quot;:${searchId}}</stringProp>
+                    <stringProp name="Argument.metadata">=</stringProp>
+                  </elementProp>
+                </collectionProp>
+              </elementProp>
+              <stringProp name="HTTPSampler.domain">${BASE_URL}</stringProp>
+              <stringProp name="HTTPSampler.port">${reportsPort}</stringProp>
+              <stringProp name="HTTPSampler.protocol">${Protocol}</stringProp>
+              <stringProp name="HTTPSampler.path">api/report/trial-balance-report/get-taxes</stringProp>
+              <stringProp name="HTTPSampler.method">POST</stringProp>
+              <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+              <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+              <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+              <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+              <boolProp name="HTTPSampler.BROWSER_COMPATIBLE_MULTIPART">false</boolProp>
+              <boolProp name="HTTPSampler.image_parser">false</boolProp>
+              <boolProp name="HTTPSampler.concurrentDwn">false</boolProp>
+              <stringProp name="HTTPSampler.concurrentPool">6</stringProp>
+              <boolProp name="HTTPSampler.md5">false</boolProp>
+              <intProp name="HTTPSampler.ipSourceType">0</intProp>
+            </HTTPSamplerProxy>
+            <hashTree>
+              <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header manager" enabled="true">
+                <collectionProp name="HeaderManager.headers"/>
+              </HeaderManager>
+              <hashTree/>
+            </hashTree>
+            <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="api/report/trial-balance-report/get-received" enabled="true">
+              <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+              <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+                <collectionProp name="Arguments.arguments">
+                  <elementProp name="" elementType="HTTPArgument">
+                    <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                    <stringProp name="Argument.value">{&quot;paging&quot;:{&quot;skip&quot;:0,&quot;pageSize&quot;:20},&quot;searchId&quot;:${searchId}}</stringProp>
+                    <stringProp name="Argument.metadata">=</stringProp>
+                  </elementProp>
+                </collectionProp>
+              </elementProp>
+              <stringProp name="HTTPSampler.domain">${BASE_URL}</stringProp>
+              <stringProp name="HTTPSampler.port">${reportsPort}</stringProp>
+              <stringProp name="HTTPSampler.protocol">${Protocol}</stringProp>
+              <stringProp name="HTTPSampler.path">api/report/trial-balance-report/get-received</stringProp>
+              <stringProp name="HTTPSampler.method">POST</stringProp>
+              <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+              <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+              <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+              <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+              <boolProp name="HTTPSampler.BROWSER_COMPATIBLE_MULTIPART">false</boolProp>
+              <boolProp name="HTTPSampler.image_parser">false</boolProp>
+              <boolProp name="HTTPSampler.concurrentDwn">false</boolProp>
+              <stringProp name="HTTPSampler.concurrentPool">6</stringProp>
+              <boolProp name="HTTPSampler.md5">false</boolProp>
+              <intProp name="HTTPSampler.ipSourceType">0</intProp>
+            </HTTPSamplerProxy>
+            <hashTree>
+              <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header manager" enabled="true">
+                <collectionProp name="HeaderManager.headers"/>
+              </HeaderManager>
+              <hashTree/>
+            </hashTree>
+            <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="api/report/trial-balance-report/navigate" enabled="true">
+              <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+              <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+                <collectionProp name="Arguments.arguments">
+                  <elementProp name="" elementType="HTTPArgument">
+                    <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                    <stringProp name="Argument.value">{&quot;paging&quot;:{&quot;skip&quot;:0,&quot;pageSize&quot;:20},&quot;searchId&quot;:${searchId}}</stringProp>
+                    <stringProp name="Argument.metadata">=</stringProp>
+                  </elementProp>
+                </collectionProp>
+              </elementProp>
+              <stringProp name="HTTPSampler.domain">${BASE_URL}</stringProp>
+              <stringProp name="HTTPSampler.port">${reportsPort}</stringProp>
+              <stringProp name="HTTPSampler.protocol">${Protocol}</stringProp>
+              <stringProp name="HTTPSampler.path">api/report/trial-balance-report/navigate</stringProp>
+              <stringProp name="HTTPSampler.method">POST</stringProp>
+              <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+              <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+              <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+              <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+              <boolProp name="HTTPSampler.BROWSER_COMPATIBLE_MULTIPART">false</boolProp>
+              <boolProp name="HTTPSampler.image_parser">false</boolProp>
+              <boolProp name="HTTPSampler.concurrentDwn">false</boolProp>
+              <stringProp name="HTTPSampler.concurrentPool">6</stringProp>
+              <boolProp name="HTTPSampler.md5">false</boolProp>
+              <intProp name="HTTPSampler.ipSourceType">0</intProp>
+            </HTTPSamplerProxy>
+            <hashTree>
+              <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header manager" enabled="true">
+                <collectionProp name="HeaderManager.headers"/>
+              </HeaderManager>
+              <hashTree/>
+            </hashTree>
+            <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="ReportViewer" enabled="true">
+              <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+              <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+                <collectionProp name="Arguments.arguments">
+                  <elementProp name="" elementType="HTTPArgument">
+                    <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                    <stringProp name="Argument.value">{&#xd;
+	&quot;token&quot;: 	&quot;${TOKEN}&quot;,&#xd;
+	&quot;reportName&quot;: &quot;Transactions/MoneyInTransactions_En.trdp&quot;,&#xd;
+	&quot;reportTitle&quot;: &quot;reportPages.transactions&quot;,&#xd;
+		&quot;parameters&quot;:&#xd;
+&#xd;
+		&quot;{\&quot;report\&quot;: \&quot;Transactions/MoneyInTransactions_En.trdp\&quot;,\&quot;parameterValues\&quot;: {\&quot;PropertyId\&quot;:${Property_ID},\&quot;SearchId\&quot;:${searchId},\&quot;PrintedBy\&quot;:\&quot;Load Test\&quot;,\&quot;ShowHeaderFooter\&quot;:true,\&quot;PrintingDate\&quot;:\&quot;${printingDate}\&quot;,\&quot;DateFromSearchCriteria\&quot;:\&quot;${searchFrom}\&quot;,\&quot;DateToSearchCriteria\&quot;:\&quot;${searchTo}\&quot;,\&quot;SelectedSearchCriteriaPropertiesIds\&quot;:\&quot;${Property_ID}\&quot;,\&quot;DateTimeFrom\&quot;:\&quot;2024-03-24 12:00 AM\&quot;,\&quot;DateTimeTo\&quot;:\&quot;2024-03-24 11:59 PM\&quot;,\&quot;ReceiptVoucherTypeId\&quot;:1,\&quot;SecurityDepositReceiptVoucherTypeId\&quot;:3,\&quot;DraftVoucherTypeId\&quot;:2,\&quot;ExpensesVoucherTypeId\&quot;:8,\&quot;SecurityDepositRefundVoucherTypeId\&quot;:5,\&quot;DepositCashVoucherTypeId\&quot;:9,\&quot;RefundVoucherTypeId\&quot;:4,\&quot;IsSearchCriteriaIncludesMultipleProperties\&quot;:false,\&quot;selectedSearchCriteriaPropertiesEn\&quot;:\&quot;${pName}\&quot;,\&quot;selectedSearchCriteriaPropertiesAr\&quot;:\&quot;${pArName}\&quot;,\&quot;HeaderImgUrl\&quot;:\&quot;http://staging.nazeel.net:9000/api/anonymous/get-property-logo/\&quot;}}&quot;,&#xd;
+		&#xd;
+	&quot;initDateTime&quot;: null&#xd;
+}</stringProp>
+                    <stringProp name="Argument.metadata">=</stringProp>
+                  </elementProp>
+                </collectionProp>
+              </elementProp>
+              <stringProp name="HTTPSampler.domain">${BASE_URL}</stringProp>
+              <stringProp name="HTTPSampler.port">${reportsPort}</stringProp>
+              <stringProp name="HTTPSampler.protocol">${Protocol}</stringProp>
+              <stringProp name="HTTPSampler.path">ReportViewer</stringProp>
+              <stringProp name="HTTPSampler.method">POST</stringProp>
+              <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+              <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+              <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+              <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+              <boolProp name="HTTPSampler.BROWSER_COMPATIBLE_MULTIPART">false</boolProp>
+              <boolProp name="HTTPSampler.image_parser">false</boolProp>
+              <boolProp name="HTTPSampler.concurrentDwn">false</boolProp>
+              <stringProp name="HTTPSampler.concurrentPool">6</stringProp>
+              <boolProp name="HTTPSampler.md5">false</boolProp>
+              <intProp name="HTTPSampler.ipSourceType">0</intProp>
+            </HTTPSamplerProxy>
+            <hashTree>
+              <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header manager" enabled="true">
+                <collectionProp name="HeaderManager.headers"/>
+              </HeaderManager>
+              <hashTree/>
+              <JSR223PreProcessor guiclass="TestBeanGUI" testclass="JSR223PreProcessor" testname="JSR223 PreProcessor" enabled="true">
+                <stringProp name="scriptLanguage">groovy</stringProp>
+                <stringProp name="parameters"></stringProp>
+                <stringProp name="filename"></stringProp>
+                <stringProp name="cacheKey">true</stringProp>
+                <stringProp name="script">	String jsonRequest =  &quot;{\&quot;report\&quot;: \&quot;Transactions/MoneyInTransactions_En.trdp\&quot;,&quot;+
+			&quot;\&quot;parameterValues\&quot;: {\&quot;PropertyId\&quot;:&quot;+vars.get(&quot;Property_ID&quot;)+&quot;,&quot;+
+			&quot;\&quot;SearchId\&quot;:&quot;+vars.get(&quot;searchId&quot;)+&quot;,&quot;+
+			&quot;\&quot;PrintedBy\&quot;:\&quot;Load Test\&quot;,&quot;+
+			&quot;\&quot;ShowHeaderFooter\&quot;:true,&quot;+
+			&quot;\&quot;PrintingDate\&quot;:\&quot;&quot;+vars.get(&quot;printingDate&quot;)+&quot;\&quot;,&quot;+
+			&quot;\&quot;DateFromSearchCriteria\&quot;:\&quot;&quot;+vars.get(&quot;searchFrom&quot;)+&quot;\&quot;,&quot;+
+			&quot;\&quot;DateToSearchCriteria\&quot;:\&quot;&quot;+vars.get(&quot;searchTo&quot;)+&quot;\&quot;,&quot;+	
+			&quot;\&quot;SelectedSearchCriteriaPropertiesIds\&quot;:\&quot;&quot;+vars.get(&quot;Property_ID&quot;)+&quot;\&quot;,&quot;+
+			&quot;\&quot;DateTimeFrom\&quot;:\&quot;2024-03-24 12:00 AM\&quot;,&quot;+
+			&quot;\&quot;DateTimeTo\&quot;:\&quot;2024-03-24 11:59 PM\&quot;,&quot;+
+			&quot;\&quot;ReceiptVoucherTypeId\&quot;:1,&quot;+
+			&quot;\&quot;SecurityDepositReceiptVoucherTypeId\&quot;:3,&quot;+
+			&quot;\&quot;DraftVoucherTypeId\&quot;:2,&quot;+
+			&quot;\&quot;ExpensesVoucherTypeId\&quot;:8,&quot;+
+			&quot;\&quot;SecurityDepositRefundVoucherTypeId\&quot;:5,&quot;+
+			&quot;\&quot;DepositCashVoucherTypeId\&quot;:9,&quot;+
+			&quot;\&quot;RefundVoucherTypeId\&quot;:4,&quot;+
+			&quot;\&quot;IsSearchCriteriaIncludesMultipleProperties\&quot;:false,&quot;+
+			&quot;\&quot;selectedSearchCriteriaPropertiesEn\&quot;:\&quot;&quot;+vars.get(&quot;pName&quot;)+&quot;\&quot;,&quot;+
+			&quot;\&quot;selectedSearchCriteriaPropertiesAr\&quot;:\&quot;&quot;+vars.get(&quot;pArName&quot;)+&quot;\&quot;,&quot;+
+			&quot;\&quot;HeaderImgUrl\&quot;:\&quot;http://staging.nazeel.net:9000/api/anonymous/get-property-logo/\&quot;}}&quot;
+//String jsonparam = jsonRequest.replaceAll(&quot;\\&quot;,&quot;&quot;)
+def json = new groovy.json.JsonSlurper().parseText(jsonRequest)
+json.parameterValues.put(&quot;Language&quot;,&quot;&quot;)
+def newJson = new groovy.json.JsonBuilder(json).toPrettyString()
+log.info(newJson)
+vars.put(&quot;reportRequest&quot;,newJson)
+	                    </stringProp>
+              </JSR223PreProcessor>
+              <hashTree/>
+              <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="JSON Extractor" enabled="true">
+                <stringProp name="JSONPostProcessor.referenceNames">key</stringProp>
+                <stringProp name="JSONPostProcessor.jsonPathExprs">$.data</stringProp>
+                <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
+              </JSONPostProcessor>
+              <hashTree/>
+            </hashTree>
+            <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="api/reports/formats" enabled="true">
+              <boolProp name="HTTPSampler.postBodyRaw">false</boolProp>
+              <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
+                <collectionProp name="Arguments.arguments"/>
+              </elementProp>
+              <stringProp name="HTTPSampler.domain">${BASE_URL}</stringProp>
+              <stringProp name="HTTPSampler.port">${reportsPort}</stringProp>
+              <stringProp name="HTTPSampler.protocol">${Protocol}</stringProp>
+              <stringProp name="HTTPSampler.path">api/reports/formats</stringProp>
+              <stringProp name="HTTPSampler.method">GET</stringProp>
+              <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+              <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+              <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+              <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+              <boolProp name="HTTPSampler.BROWSER_COMPATIBLE_MULTIPART">false</boolProp>
+              <boolProp name="HTTPSampler.image_parser">false</boolProp>
+              <boolProp name="HTTPSampler.concurrentDwn">false</boolProp>
+              <stringProp name="HTTPSampler.concurrentPool">6</stringProp>
+              <boolProp name="HTTPSampler.md5">false</boolProp>
+              <intProp name="HTTPSampler.ipSourceType">0</intProp>
+            </HTTPSamplerProxy>
+            <hashTree>
+              <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header manager" enabled="true">
+                <collectionProp name="HeaderManager.headers"/>
+              </HeaderManager>
+              <hashTree/>
+            </hashTree>
+            <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="api/reports/clients" enabled="true">
+              <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+              <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+                <collectionProp name="Arguments.arguments">
+                  <elementProp name="" elementType="HTTPArgument">
+                    <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                    <stringProp name="Argument.value">{&quot;timeStamp&quot;:${__time(/1000,)}}</stringProp>
+                    <stringProp name="Argument.metadata">=</stringProp>
+                  </elementProp>
+                </collectionProp>
+              </elementProp>
+              <stringProp name="HTTPSampler.domain">${BASE_URL}</stringProp>
+              <stringProp name="HTTPSampler.port">${reportsPort}</stringProp>
+              <stringProp name="HTTPSampler.protocol">${Protocol}</stringProp>
+              <stringProp name="HTTPSampler.path">api/reports/clients</stringProp>
+              <stringProp name="HTTPSampler.method">POST</stringProp>
+              <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+              <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+              <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+              <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+              <boolProp name="HTTPSampler.BROWSER_COMPATIBLE_MULTIPART">false</boolProp>
+              <boolProp name="HTTPSampler.image_parser">false</boolProp>
+              <boolProp name="HTTPSampler.concurrentDwn">false</boolProp>
+              <stringProp name="HTTPSampler.concurrentPool">6</stringProp>
+              <boolProp name="HTTPSampler.md5">false</boolProp>
+              <intProp name="HTTPSampler.ipSourceType">0</intProp>
+            </HTTPSamplerProxy>
+            <hashTree>
+              <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header manager" enabled="true">
+                <collectionProp name="HeaderManager.headers"/>
+              </HeaderManager>
+              <hashTree/>
+              <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="clientId Extractor" enabled="true">
+                <stringProp name="JSONPostProcessor.referenceNames">clientId</stringProp>
+                <stringProp name="JSONPostProcessor.jsonPathExprs">$.clientId</stringProp>
+                <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
+              </JSONPostProcessor>
+              <hashTree/>
+              <JSR223PostProcessor guiclass="TestBeanGUI" testclass="JSR223PostProcessor" testname="JSR223 PostProcessor" enabled="true">
+                <stringProp name="scriptLanguage">groovy</stringProp>
+                <stringProp name="parameters"></stringProp>
+                <stringProp name="filename"></stringProp>
+                <stringProp name="cacheKey">true</stringProp>
+                <stringProp name="script">def json = new groovy.json.JsonSlurper().parse(prev.getResponseData())
+
+def repRequest = new groovy.json.JsonSlurper().parseText(vars.get(&quot;reportRequest&quot;))
+//repRequest.put(&quot;clientID&quot;,json.clientId)
+repRequest.parameterValues.put(&quot;Language&quot;,&quot;&quot;)
+
+def updated =new groovy.json.JsonBuilder(repRequest).toPrettyString()
+vars.put(&quot;reportRequest&quot;,updated)</stringProp>
+              </JSR223PostProcessor>
+              <hashTree/>
+            </hashTree>
+            <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="api/reports/clients/{clientId}/parameters" enabled="true">
+              <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+              <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+                <collectionProp name="Arguments.arguments">
+                  <elementProp name="" elementType="HTTPArgument">
+                    <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                    <stringProp name="Argument.value">&#xd;
+&#xd;
+	${reportRequest}&#xd;
+//	&quot;report&quot;: &quot;TaxesAndFees/TaxesAndFeesReport_En.trdp&quot;,&#xd;
+//	&quot;parameterValues&quot;: {&#xd;
+//		&quot;PropertyId&quot;: 2,&#xd;
+//		&quot;ShowHeaderFooter&quot;: true,&#xd;
+//		&quot;PrintedBy&quot;: &quot;Mostafa Hamed&quot;,&#xd;
+//		&quot;PrintingDate&quot;: &quot;2024-03-24 09:34 AM&quot;,&#xd;
+//		&quot;PropertyTimeZone&quot;: &quot;Arab Standard Time&quot;,&#xd;
+//		&quot;SelectedTaxesEn&quot;: &quot;Lodging Fees&quot;,&#xd;
+//		&quot;SelectedTaxesAr&quot;: &quot;رسوم اشغال مرافق الايواء&quot;,&#xd;
+//		&quot;SelectedFromDate&quot;: &quot;2024-03-23&quot;,&#xd;
+//		&quot;SelectedToDate&quot;: &quot;2024-03-24&quot;,&#xd;
+//		&quot;SelectedDirectionEn&quot;: &quot;&quot;,&#xd;
+//		&quot;SelectedDirectionAr&quot;: &quot;All &quot;,&#xd;
+//		&quot;SearchId&quot;: 5295,&#xd;
+//		&quot;TaxIdSearchParameter&quot;: 2,&#xd;
+//		&quot;TaxFeeDirectionSearchParameter&quot;: 1,&#xd;
+//		&quot;DateFormat&quot;: &quot;yyyy-MM-dd&quot;,&#xd;
+//		&quot;IsInDetail&quot;: false,&#xd;
+//		&quot;IsVATTax&quot;: false,&#xd;
+//		&quot;ValidZatcaIntegration&quot;: true&#xd;
+//	}&#xd;
+</stringProp>
+                    <stringProp name="Argument.metadata">=</stringProp>
+                  </elementProp>
+                </collectionProp>
+              </elementProp>
+              <stringProp name="HTTPSampler.domain">${BASE_URL}</stringProp>
+              <stringProp name="HTTPSampler.port">${reportsPort}</stringProp>
+              <stringProp name="HTTPSampler.protocol">${Protocol}</stringProp>
+              <stringProp name="HTTPSampler.path">api/reports/clients/${clientId}/parameters</stringProp>
+              <stringProp name="HTTPSampler.method">POST</stringProp>
+              <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+              <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+              <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+              <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+              <boolProp name="HTTPSampler.BROWSER_COMPATIBLE_MULTIPART">false</boolProp>
+              <boolProp name="HTTPSampler.image_parser">false</boolProp>
+              <boolProp name="HTTPSampler.concurrentDwn">false</boolProp>
+              <stringProp name="HTTPSampler.concurrentPool">6</stringProp>
+              <boolProp name="HTTPSampler.md5">false</boolProp>
+              <intProp name="HTTPSampler.ipSourceType">0</intProp>
+            </HTTPSamplerProxy>
+            <hashTree>
+              <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header manager" enabled="true">
+                <collectionProp name="HeaderManager.headers">
+                  <elementProp name="Referer" elementType="Header">
+                    <stringProp name="Header.name">Referer</stringProp>
+                    <stringProp name="Header.value">http://staging.nazeel.net:9400/ReportViewer?Key=${key}</stringProp>
+                  </elementProp>
+                </collectionProp>
+              </HeaderManager>
+              <hashTree/>
+            </hashTree>
+            <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="api/reports/clients/{clientId}/instances" enabled="true">
+              <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+              <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+                <collectionProp name="Arguments.arguments">
+                  <elementProp name="" elementType="HTTPArgument">
+                    <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                    <stringProp name="Argument.value">&#xd;
+&#xd;
+	${reportRequest}&#xd;
+//	&quot;report&quot;: &quot;TaxesAndFees/TaxesAndFeesReport_En.trdp&quot;,&#xd;
+//	&quot;parameterValues&quot;: {&#xd;
+//		&quot;PropertyId&quot;: 2,&#xd;
+//		&quot;ShowHeaderFooter&quot;: true,&#xd;
+//		&quot;PrintedBy&quot;: &quot;Mostafa Hamed&quot;,&#xd;
+//		&quot;PrintingDate&quot;: &quot;2024-03-24 09:34 AM&quot;,&#xd;
+//		&quot;PropertyTimeZone&quot;: &quot;Arab Standard Time&quot;,&#xd;
+//		&quot;SelectedTaxesEn&quot;: &quot;Lodging Fees&quot;,&#xd;
+//		&quot;SelectedTaxesAr&quot;: &quot;رسوم اشغال مرافق الايواء&quot;,&#xd;
+//		&quot;SelectedFromDate&quot;: &quot;2024-03-23&quot;,&#xd;
+//		&quot;SelectedToDate&quot;: &quot;2024-03-24&quot;,&#xd;
+//		&quot;SelectedDirectionEn&quot;: &quot;&quot;,&#xd;
+//		&quot;SelectedDirectionAr&quot;: &quot;All &quot;,&#xd;
+//		&quot;SearchId&quot;: 5295,&#xd;
+//		&quot;TaxIdSearchParameter&quot;: 2,&#xd;
+//		&quot;TaxFeeDirectionSearchParameter&quot;: 1,&#xd;
+//		&quot;DateFormat&quot;: &quot;yyyy-MM-dd&quot;,&#xd;
+//		&quot;IsInDetail&quot;: false,&#xd;
+//		&quot;IsVATTax&quot;: false,&#xd;
+//		&quot;ValidZatcaIntegration&quot;: true&#xd;
+//	}&#xd;
+</stringProp>
+                    <stringProp name="Argument.metadata">=</stringProp>
+                  </elementProp>
+                </collectionProp>
+              </elementProp>
+              <stringProp name="HTTPSampler.domain">${BASE_URL}</stringProp>
+              <stringProp name="HTTPSampler.port">${reportsPort}</stringProp>
+              <stringProp name="HTTPSampler.protocol">${Protocol}</stringProp>
+              <stringProp name="HTTPSampler.path">api/reports/clients/${clientId}/instances</stringProp>
+              <stringProp name="HTTPSampler.method">POST</stringProp>
+              <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+              <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+              <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+              <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+              <boolProp name="HTTPSampler.BROWSER_COMPATIBLE_MULTIPART">false</boolProp>
+              <boolProp name="HTTPSampler.image_parser">false</boolProp>
+              <boolProp name="HTTPSampler.concurrentDwn">false</boolProp>
+              <stringProp name="HTTPSampler.concurrentPool">6</stringProp>
+              <boolProp name="HTTPSampler.md5">false</boolProp>
+              <intProp name="HTTPSampler.ipSourceType">0</intProp>
+            </HTTPSamplerProxy>
+            <hashTree>
+              <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header manager" enabled="true">
+                <collectionProp name="HeaderManager.headers">
+                  <elementProp name="Accept" elementType="Header">
+                    <stringProp name="Header.name">Accept</stringProp>
+                    <stringProp name="Header.value">application/json, text/javascript, */*; q=0.01</stringProp>
+                  </elementProp>
+                  <elementProp name="Content-Type" elementType="Header">
+                    <stringProp name="Header.name">Content-Type</stringProp>
+                    <stringProp name="Header.value">application/json; charset=UTF-8</stringProp>
+                  </elementProp>
+                  <elementProp name="Referer" elementType="Header">
+                    <stringProp name="Header.name">Referer</stringProp>
+                    <stringProp name="Header.value">http://staging.nazeel.net:9400/ReportViewer?Key=${key}</stringProp>
+                  </elementProp>
+                </collectionProp>
+              </HeaderManager>
+              <hashTree/>
+              <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="instanceId Extractor" enabled="true">
+                <stringProp name="JSONPostProcessor.referenceNames">instanceId</stringProp>
+                <stringProp name="JSONPostProcessor.jsonPathExprs">$.instanceId</stringProp>
+                <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
+              </JSONPostProcessor>
+              <hashTree/>
+            </hashTree>
+            <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="api/reports/clients/{clientId}/instances/{instanceId}/documents" enabled="true">
+              <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+              <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+                <collectionProp name="Arguments.arguments">
+                  <elementProp name="" elementType="HTTPArgument">
+                    <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                    <stringProp name="Argument.value">{&#xd;
+	&quot;format&quot;: &quot;HTML5&quot;,&#xd;
+	&quot;deviceInfo&quot;: {&#xd;
+		&quot;enableSearch&quot;: true,&#xd;
+		&quot;ContentOnly&quot;: true,&#xd;
+		&quot;UseSVG&quot;: true,&#xd;
+		&quot;BasePath&quot;: &quot;/api/reports&quot;&#xd;
+	},&#xd;
+	&quot;useCache&quot;: true&#xd;
+}</stringProp>
+                    <stringProp name="Argument.metadata">=</stringProp>
+                  </elementProp>
+                </collectionProp>
+              </elementProp>
+              <stringProp name="HTTPSampler.domain">${BASE_URL}</stringProp>
+              <stringProp name="HTTPSampler.port">${reportsPort}</stringProp>
+              <stringProp name="HTTPSampler.protocol">${Protocol}</stringProp>
+              <stringProp name="HTTPSampler.path">api/reports/clients/${clientId}/instances/${instanceId}/documents</stringProp>
+              <stringProp name="HTTPSampler.method">POST</stringProp>
+              <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+              <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+              <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+              <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+              <boolProp name="HTTPSampler.BROWSER_COMPATIBLE_MULTIPART">false</boolProp>
+              <boolProp name="HTTPSampler.image_parser">false</boolProp>
+              <boolProp name="HTTPSampler.concurrentDwn">false</boolProp>
+              <stringProp name="HTTPSampler.concurrentPool">6</stringProp>
+              <boolProp name="HTTPSampler.md5">false</boolProp>
+              <intProp name="HTTPSampler.ipSourceType">0</intProp>
+            </HTTPSamplerProxy>
+            <hashTree>
+              <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header manager" enabled="true">
+                <collectionProp name="HeaderManager.headers"/>
+              </HeaderManager>
+              <hashTree/>
+              <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="documentId Extractor" enabled="true">
+                <stringProp name="JSONPostProcessor.referenceNames">documentId</stringProp>
+                <stringProp name="JSONPostProcessor.jsonPathExprs">$.documentId</stringProp>
+                <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
+              </JSONPostProcessor>
+              <hashTree/>
+            </hashTree>
+            <WhileController guiclass="WhileControllerGui" testclass="WhileController" testname="While Controller" enabled="true">
+              <stringProp name="WhileController.condition">${__javaScript(&quot;${docReady}&quot; != &quot;true&quot;,)}</stringProp>
+            </WhileController>
+            <hashTree>
+              <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="api/reports/clients/{clientId}/instances/{instanceId}/documents/{documentId}/info" enabled="true">
+                <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+                <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+                  <collectionProp name="Arguments.arguments">
+                    <elementProp name="" elementType="HTTPArgument">
+                      <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                      <stringProp name="Argument.value">{&#xd;
+	&quot;format&quot;: &quot;HTML5&quot;,&#xd;
+	&quot;deviceInfo&quot;: {&#xd;
+		&quot;enableSearch&quot;: true,&#xd;
+		&quot;ContentOnly&quot;: true,&#xd;
+		&quot;UseSVG&quot;: true,&#xd;
+		&quot;BasePath&quot;: &quot;/api/reports&quot;&#xd;
+	},&#xd;
+	&quot;useCache&quot;: true&#xd;
+}</stringProp>
+                      <stringProp name="Argument.metadata">=</stringProp>
+                    </elementProp>
+                  </collectionProp>
+                </elementProp>
+                <stringProp name="HTTPSampler.domain">${BASE_URL}</stringProp>
+                <stringProp name="HTTPSampler.port">${reportsPort}</stringProp>
+                <stringProp name="HTTPSampler.protocol">${Protocol}</stringProp>
+                <stringProp name="HTTPSampler.path">api/reports/clients/${clientId}/instances/${instanceId}/documents/${documentId}/info</stringProp>
+                <stringProp name="HTTPSampler.method">GET</stringProp>
+                <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+                <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+                <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+                <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+                <boolProp name="HTTPSampler.BROWSER_COMPATIBLE_MULTIPART">false</boolProp>
+                <boolProp name="HTTPSampler.image_parser">false</boolProp>
+                <boolProp name="HTTPSampler.concurrentDwn">false</boolProp>
+                <stringProp name="HTTPSampler.concurrentPool">6</stringProp>
+                <boolProp name="HTTPSampler.md5">false</boolProp>
+                <intProp name="HTTPSampler.ipSourceType">0</intProp>
+              </HTTPSamplerProxy>
+              <hashTree>
+                <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header manager" enabled="true">
+                  <collectionProp name="HeaderManager.headers"/>
+                </HeaderManager>
+                <hashTree/>
+                <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="docReady Extractor" enabled="true">
+                  <stringProp name="JSONPostProcessor.referenceNames">docReady</stringProp>
+                  <stringProp name="JSONPostProcessor.jsonPathExprs">$.documentReady</stringProp>
+                  <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
+                </JSONPostProcessor>
+                <hashTree/>
+                <ConstantTimer guiclass="ConstantTimerGui" testclass="ConstantTimer" testname="Constant Timer" enabled="true">
+                  <stringProp name="ConstantTimer.delay">1000</stringProp>
+                </ConstantTimer>
+                <hashTree/>
+              </hashTree>
+            </hashTree>
+            <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="api/reports/clients/{clientId}/instances/{instanceId}/documents/{documentId}/pages/1" enabled="true">
+              <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+              <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+                <collectionProp name="Arguments.arguments">
+                  <elementProp name="" elementType="HTTPArgument">
+                    <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                    <stringProp name="Argument.value">{&#xd;
+	&quot;format&quot;: &quot;HTML5&quot;,&#xd;
+	&quot;deviceInfo&quot;: {&#xd;
+		&quot;enableSearch&quot;: true,&#xd;
+		&quot;ContentOnly&quot;: true,&#xd;
+		&quot;UseSVG&quot;: true,&#xd;
+		&quot;BasePath&quot;: &quot;/api/reports&quot;&#xd;
+	},&#xd;
+	&quot;useCache&quot;: true&#xd;
+}</stringProp>
+                    <stringProp name="Argument.metadata">=</stringProp>
+                  </elementProp>
+                </collectionProp>
+              </elementProp>
+              <stringProp name="HTTPSampler.domain">${BASE_URL}</stringProp>
+              <stringProp name="HTTPSampler.port">${reportsPort}</stringProp>
+              <stringProp name="HTTPSampler.protocol">${Protocol}</stringProp>
+              <stringProp name="HTTPSampler.path">api/reports/clients/${clientId}/instances/${instanceId}/documents/${documentId}/pages/1</stringProp>
+              <stringProp name="HTTPSampler.method">GET</stringProp>
+              <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+              <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+              <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+              <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+              <boolProp name="HTTPSampler.BROWSER_COMPATIBLE_MULTIPART">false</boolProp>
+              <boolProp name="HTTPSampler.image_parser">false</boolProp>
+              <boolProp name="HTTPSampler.concurrentDwn">false</boolProp>
+              <stringProp name="HTTPSampler.concurrentPool">6</stringProp>
+              <boolProp name="HTTPSampler.md5">false</boolProp>
+              <intProp name="HTTPSampler.ipSourceType">0</intProp>
+            </HTTPSamplerProxy>
+            <hashTree>
+              <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header manager" enabled="true">
+                <collectionProp name="HeaderManager.headers"/>
               </HeaderManager>
               <hashTree/>
             </hashTree>
