@@ -6613,8 +6613,79 @@ vars.put(&quot;reportRequest&quot;,updated)</stringProp>
               </JSONPostProcessor>
               <hashTree/>
             </hashTree>
-            <WhileController guiclass="WhileControllerGui" testclass="WhileController" testname="While Controller" enabled="true">
-              <stringProp name="WhileController.condition">${__javaScript(&quot;${docReady}&quot; != &quot;true&quot;,)}</stringProp>
+            <TransactionController guiclass="TransactionControllerGui" testclass="TransactionController" testname="check doc ready" enabled="true">
+              <boolProp name="TransactionController.includeTimers">false</boolProp>
+              <boolProp name="TransactionController.parent">true</boolProp>
+            </TransactionController>
+            <hashTree>
+              <JSR223Sampler guiclass="TestBeanGUI" testclass="JSR223Sampler" testname="State reset" enabled="true">
+                <stringProp name="cacheKey">true</stringProp>
+                <stringProp name="filename"></stringProp>
+                <stringProp name="parameters"></stringProp>
+                <stringProp name="script">vars.put(&quot;repReady&quot;,vars.get(&quot;docReady&quot;))</stringProp>
+                <stringProp name="scriptLanguage">groovy</stringProp>
+              </JSR223Sampler>
+              <hashTree/>
+              <WhileController guiclass="WhileControllerGui" testclass="WhileController" testname="While Controller" enabled="true">
+                <stringProp name="WhileController.condition">${__javaScript(&quot;${repReady}&quot; != &quot;true&quot;,)}</stringProp>
+              </WhileController>
+              <hashTree>
+                <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="api/reports/clients/{clientId}/instances/{instanceId}/documents/{documentId}/info" enabled="true">
+                  <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+                  <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+                    <collectionProp name="Arguments.arguments">
+                      <elementProp name="" elementType="HTTPArgument">
+                        <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                        <stringProp name="Argument.value">{&#xd;
+	&quot;format&quot;: &quot;HTML5&quot;,&#xd;
+	&quot;deviceInfo&quot;: {&#xd;
+		&quot;enableSearch&quot;: true,&#xd;
+		&quot;ContentOnly&quot;: true,&#xd;
+		&quot;UseSVG&quot;: true,&#xd;
+		&quot;BasePath&quot;: &quot;/api/reports&quot;&#xd;
+	},&#xd;
+	&quot;useCache&quot;: true&#xd;
+}</stringProp>
+                        <stringProp name="Argument.metadata">=</stringProp>
+                      </elementProp>
+                    </collectionProp>
+                  </elementProp>
+                  <stringProp name="HTTPSampler.domain">${BASE_URL}</stringProp>
+                  <stringProp name="HTTPSampler.port">${reportsPort}</stringProp>
+                  <stringProp name="HTTPSampler.protocol">${Protocol}</stringProp>
+                  <stringProp name="HTTPSampler.path">api/reports/clients/${clientId}/instances/${instanceId}/documents/${documentId}/info</stringProp>
+                  <stringProp name="HTTPSampler.method">GET</stringProp>
+                  <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+                  <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+                  <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+                  <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+                  <boolProp name="HTTPSampler.BROWSER_COMPATIBLE_MULTIPART">false</boolProp>
+                  <boolProp name="HTTPSampler.image_parser">false</boolProp>
+                  <boolProp name="HTTPSampler.concurrentDwn">false</boolProp>
+                  <stringProp name="HTTPSampler.concurrentPool">6</stringProp>
+                  <boolProp name="HTTPSampler.md5">false</boolProp>
+                  <intProp name="HTTPSampler.ipSourceType">0</intProp>
+                </HTTPSamplerProxy>
+                <hashTree>
+                  <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header manager" enabled="true">
+                    <collectionProp name="HeaderManager.headers"/>
+                  </HeaderManager>
+                  <hashTree/>
+                  <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="repReady Extractor" enabled="true">
+                    <stringProp name="JSONPostProcessor.referenceNames">repReady</stringProp>
+                    <stringProp name="JSONPostProcessor.jsonPathExprs">$.documentReady</stringProp>
+                    <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
+                  </JSONPostProcessor>
+                  <hashTree/>
+                  <ConstantTimer guiclass="ConstantTimerGui" testclass="ConstantTimer" testname="Constant Timer" enabled="true">
+                    <stringProp name="ConstantTimer.delay">1000</stringProp>
+                  </ConstantTimer>
+                  <hashTree/>
+                </hashTree>
+              </hashTree>
+            </hashTree>
+            <WhileController guiclass="WhileControllerGui" testclass="WhileController" testname="While Controller" enabled="false">
+              <stringProp name="WhileController.condition">${__javaScript(&quot;${repReady}&quot; != &quot;true&quot;,)}</stringProp>
             </WhileController>
             <hashTree>
               <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="api/reports/clients/{clientId}/instances/{instanceId}/documents/{documentId}/info" enabled="true">
@@ -6658,8 +6729,8 @@ vars.put(&quot;reportRequest&quot;,updated)</stringProp>
                   <collectionProp name="HeaderManager.headers"/>
                 </HeaderManager>
                 <hashTree/>
-                <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="docReady Extractor" enabled="true">
-                  <stringProp name="JSONPostProcessor.referenceNames">docReady</stringProp>
+                <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="repReady Extractor" enabled="true">
+                  <stringProp name="JSONPostProcessor.referenceNames">repReady</stringProp>
                   <stringProp name="JSONPostProcessor.jsonPathExprs">$.documentReady</stringProp>
                   <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
                 </JSONPostProcessor>
@@ -6669,6 +6740,14 @@ vars.put(&quot;reportRequest&quot;,updated)</stringProp>
                 </ConstantTimer>
                 <hashTree/>
               </hashTree>
+              <JSR223PreProcessor guiclass="TestBeanGUI" testclass="JSR223PreProcessor" testname="State reset" enabled="true">
+                <stringProp name="scriptLanguage">groovy</stringProp>
+                <stringProp name="parameters"></stringProp>
+                <stringProp name="filename"></stringProp>
+                <stringProp name="cacheKey">true</stringProp>
+                <stringProp name="script">vars.put(&quot;repReady&quot;,vars.get(&quot;docReady&quot;))</stringProp>
+              </JSR223PreProcessor>
+              <hashTree/>
             </hashTree>
             <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="api/reports/clients/{clientId}/instances/{instanceId}/documents/{documentId}/pages/1" enabled="true">
               <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
@@ -7179,17 +7258,30 @@ vars.put(&quot;reportRequest&quot;,updated)</stringProp>
               </JSONPostProcessor>
               <hashTree/>
             </hashTree>
-            <WhileController guiclass="WhileControllerGui" testclass="WhileController" testname="While Controller" enabled="true">
-              <stringProp name="WhileController.condition">${__javaScript(&quot;${docReady}&quot; != &quot;true&quot;,)}</stringProp>
-            </WhileController>
+            <TransactionController guiclass="TransactionControllerGui" testclass="TransactionController" testname="check doc ready" enabled="true">
+              <boolProp name="TransactionController.includeTimers">false</boolProp>
+              <boolProp name="TransactionController.parent">true</boolProp>
+            </TransactionController>
             <hashTree>
-              <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="api/reports/clients/{clientId}/instances/{instanceId}/documents/{documentId}/info" enabled="true">
-                <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
-                <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
-                  <collectionProp name="Arguments.arguments">
-                    <elementProp name="" elementType="HTTPArgument">
-                      <boolProp name="HTTPArgument.always_encode">false</boolProp>
-                      <stringProp name="Argument.value">{&#xd;
+              <JSR223Sampler guiclass="TestBeanGUI" testclass="JSR223Sampler" testname="State reset" enabled="true">
+                <stringProp name="cacheKey">true</stringProp>
+                <stringProp name="filename"></stringProp>
+                <stringProp name="parameters"></stringProp>
+                <stringProp name="script">vars.put(&quot;repReady&quot;,vars.get(&quot;docReady&quot;))</stringProp>
+                <stringProp name="scriptLanguage">groovy</stringProp>
+              </JSR223Sampler>
+              <hashTree/>
+              <WhileController guiclass="WhileControllerGui" testclass="WhileController" testname="While Controller" enabled="true">
+                <stringProp name="WhileController.condition">${__javaScript(&quot;${repReady}&quot; != &quot;true&quot;,)}</stringProp>
+              </WhileController>
+              <hashTree>
+                <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="api/reports/clients/{clientId}/instances/{instanceId}/documents/{documentId}/info" enabled="true">
+                  <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+                  <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+                    <collectionProp name="Arguments.arguments">
+                      <elementProp name="" elementType="HTTPArgument">
+                        <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                        <stringProp name="Argument.value">{&#xd;
 	&quot;format&quot;: &quot;HTML5&quot;,&#xd;
 	&quot;deviceInfo&quot;: {&#xd;
 		&quot;enableSearch&quot;: true,&#xd;
@@ -7199,41 +7291,42 @@ vars.put(&quot;reportRequest&quot;,updated)</stringProp>
 	},&#xd;
 	&quot;useCache&quot;: true&#xd;
 }</stringProp>
-                      <stringProp name="Argument.metadata">=</stringProp>
-                    </elementProp>
-                  </collectionProp>
-                </elementProp>
-                <stringProp name="HTTPSampler.domain">${BASE_URL}</stringProp>
-                <stringProp name="HTTPSampler.port">${reportsPort}</stringProp>
-                <stringProp name="HTTPSampler.protocol">${Protocol}</stringProp>
-                <stringProp name="HTTPSampler.path">api/reports/clients/${clientId}/instances/${instanceId}/documents/${documentId}/info</stringProp>
-                <stringProp name="HTTPSampler.method">GET</stringProp>
-                <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
-                <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
-                <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
-                <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
-                <boolProp name="HTTPSampler.BROWSER_COMPATIBLE_MULTIPART">false</boolProp>
-                <boolProp name="HTTPSampler.image_parser">false</boolProp>
-                <boolProp name="HTTPSampler.concurrentDwn">false</boolProp>
-                <stringProp name="HTTPSampler.concurrentPool">6</stringProp>
-                <boolProp name="HTTPSampler.md5">false</boolProp>
-                <intProp name="HTTPSampler.ipSourceType">0</intProp>
-              </HTTPSamplerProxy>
-              <hashTree>
-                <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header manager" enabled="true">
-                  <collectionProp name="HeaderManager.headers"/>
-                </HeaderManager>
-                <hashTree/>
-                <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="docReady Extractor" enabled="true">
-                  <stringProp name="JSONPostProcessor.referenceNames">docReady</stringProp>
-                  <stringProp name="JSONPostProcessor.jsonPathExprs">$.documentReady</stringProp>
-                  <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
-                </JSONPostProcessor>
-                <hashTree/>
-                <ConstantTimer guiclass="ConstantTimerGui" testclass="ConstantTimer" testname="Constant Timer" enabled="true">
-                  <stringProp name="ConstantTimer.delay">1000</stringProp>
-                </ConstantTimer>
-                <hashTree/>
+                        <stringProp name="Argument.metadata">=</stringProp>
+                      </elementProp>
+                    </collectionProp>
+                  </elementProp>
+                  <stringProp name="HTTPSampler.domain">${BASE_URL}</stringProp>
+                  <stringProp name="HTTPSampler.port">${reportsPort}</stringProp>
+                  <stringProp name="HTTPSampler.protocol">${Protocol}</stringProp>
+                  <stringProp name="HTTPSampler.path">api/reports/clients/${clientId}/instances/${instanceId}/documents/${documentId}/info</stringProp>
+                  <stringProp name="HTTPSampler.method">GET</stringProp>
+                  <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+                  <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+                  <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+                  <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+                  <boolProp name="HTTPSampler.BROWSER_COMPATIBLE_MULTIPART">false</boolProp>
+                  <boolProp name="HTTPSampler.image_parser">false</boolProp>
+                  <boolProp name="HTTPSampler.concurrentDwn">false</boolProp>
+                  <stringProp name="HTTPSampler.concurrentPool">6</stringProp>
+                  <boolProp name="HTTPSampler.md5">false</boolProp>
+                  <intProp name="HTTPSampler.ipSourceType">0</intProp>
+                </HTTPSamplerProxy>
+                <hashTree>
+                  <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header manager" enabled="true">
+                    <collectionProp name="HeaderManager.headers"/>
+                  </HeaderManager>
+                  <hashTree/>
+                  <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="repReady Extractor" enabled="true">
+                    <stringProp name="JSONPostProcessor.referenceNames">repReady</stringProp>
+                    <stringProp name="JSONPostProcessor.jsonPathExprs">$.documentReady</stringProp>
+                    <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
+                  </JSONPostProcessor>
+                  <hashTree/>
+                  <ConstantTimer guiclass="ConstantTimerGui" testclass="ConstantTimer" testname="Constant Timer" enabled="true">
+                    <stringProp name="ConstantTimer.delay">1000</stringProp>
+                  </ConstantTimer>
+                  <hashTree/>
+                </hashTree>
               </hashTree>
             </hashTree>
             <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="api/reports/clients/{clientId}/instances/{instanceId}/documents/{documentId}/pages/1" enabled="true">
@@ -7902,8 +7995,79 @@ vars.put(&quot;reportRequest&quot;,updated)</stringProp>
               </JSONPostProcessor>
               <hashTree/>
             </hashTree>
-            <WhileController guiclass="WhileControllerGui" testclass="WhileController" testname="While Controller" enabled="true">
-              <stringProp name="WhileController.condition">${__javaScript(&quot;${docReady}&quot; != &quot;true&quot;,)}</stringProp>
+            <TransactionController guiclass="TransactionControllerGui" testclass="TransactionController" testname="check doc ready" enabled="true">
+              <boolProp name="TransactionController.includeTimers">false</boolProp>
+              <boolProp name="TransactionController.parent">true</boolProp>
+            </TransactionController>
+            <hashTree>
+              <JSR223Sampler guiclass="TestBeanGUI" testclass="JSR223Sampler" testname="State reset" enabled="true">
+                <stringProp name="cacheKey">true</stringProp>
+                <stringProp name="filename"></stringProp>
+                <stringProp name="parameters"></stringProp>
+                <stringProp name="script">vars.put(&quot;repReady&quot;,vars.get(&quot;docReady&quot;))</stringProp>
+                <stringProp name="scriptLanguage">groovy</stringProp>
+              </JSR223Sampler>
+              <hashTree/>
+              <WhileController guiclass="WhileControllerGui" testclass="WhileController" testname="While Controller" enabled="true">
+                <stringProp name="WhileController.condition">${__javaScript(&quot;${repReady}&quot; != &quot;true&quot;,)}</stringProp>
+              </WhileController>
+              <hashTree>
+                <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="api/reports/clients/{clientId}/instances/{instanceId}/documents/{documentId}/info" enabled="true">
+                  <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+                  <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+                    <collectionProp name="Arguments.arguments">
+                      <elementProp name="" elementType="HTTPArgument">
+                        <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                        <stringProp name="Argument.value">{&#xd;
+	&quot;format&quot;: &quot;HTML5&quot;,&#xd;
+	&quot;deviceInfo&quot;: {&#xd;
+		&quot;enableSearch&quot;: true,&#xd;
+		&quot;ContentOnly&quot;: true,&#xd;
+		&quot;UseSVG&quot;: true,&#xd;
+		&quot;BasePath&quot;: &quot;/api/reports&quot;&#xd;
+	},&#xd;
+	&quot;useCache&quot;: true&#xd;
+}</stringProp>
+                        <stringProp name="Argument.metadata">=</stringProp>
+                      </elementProp>
+                    </collectionProp>
+                  </elementProp>
+                  <stringProp name="HTTPSampler.domain">${BASE_URL}</stringProp>
+                  <stringProp name="HTTPSampler.port">${reportsPort}</stringProp>
+                  <stringProp name="HTTPSampler.protocol">${Protocol}</stringProp>
+                  <stringProp name="HTTPSampler.path">api/reports/clients/${clientId}/instances/${instanceId}/documents/${documentId}/info</stringProp>
+                  <stringProp name="HTTPSampler.method">GET</stringProp>
+                  <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+                  <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+                  <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+                  <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+                  <boolProp name="HTTPSampler.BROWSER_COMPATIBLE_MULTIPART">false</boolProp>
+                  <boolProp name="HTTPSampler.image_parser">false</boolProp>
+                  <boolProp name="HTTPSampler.concurrentDwn">false</boolProp>
+                  <stringProp name="HTTPSampler.concurrentPool">6</stringProp>
+                  <boolProp name="HTTPSampler.md5">false</boolProp>
+                  <intProp name="HTTPSampler.ipSourceType">0</intProp>
+                </HTTPSamplerProxy>
+                <hashTree>
+                  <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header manager" enabled="true">
+                    <collectionProp name="HeaderManager.headers"/>
+                  </HeaderManager>
+                  <hashTree/>
+                  <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="repReady Extractor" enabled="true">
+                    <stringProp name="JSONPostProcessor.referenceNames">repReady</stringProp>
+                    <stringProp name="JSONPostProcessor.jsonPathExprs">$.documentReady</stringProp>
+                    <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
+                  </JSONPostProcessor>
+                  <hashTree/>
+                  <ConstantTimer guiclass="ConstantTimerGui" testclass="ConstantTimer" testname="Constant Timer" enabled="true">
+                    <stringProp name="ConstantTimer.delay">1000</stringProp>
+                  </ConstantTimer>
+                  <hashTree/>
+                </hashTree>
+              </hashTree>
+            </hashTree>
+            <WhileController guiclass="WhileControllerGui" testclass="WhileController" testname="While Controller" enabled="false">
+              <stringProp name="WhileController.condition">${__javaScript(&quot;${repReady}&quot; != &quot;true&quot;,)}</stringProp>
             </WhileController>
             <hashTree>
               <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="api/reports/clients/{clientId}/instances/{instanceId}/documents/{documentId}/info" enabled="true">
@@ -7947,8 +8111,8 @@ vars.put(&quot;reportRequest&quot;,updated)</stringProp>
                   <collectionProp name="HeaderManager.headers"/>
                 </HeaderManager>
                 <hashTree/>
-                <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="docReady Extractor" enabled="true">
-                  <stringProp name="JSONPostProcessor.referenceNames">docReady</stringProp>
+                <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="repReady Extractor" enabled="true">
+                  <stringProp name="JSONPostProcessor.referenceNames">repReady</stringProp>
                   <stringProp name="JSONPostProcessor.jsonPathExprs">$.documentReady</stringProp>
                   <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
                 </JSONPostProcessor>
@@ -7958,6 +8122,14 @@ vars.put(&quot;reportRequest&quot;,updated)</stringProp>
                 </ConstantTimer>
                 <hashTree/>
               </hashTree>
+              <JSR223PreProcessor guiclass="TestBeanGUI" testclass="JSR223PreProcessor" testname="State reset" enabled="true">
+                <stringProp name="scriptLanguage">groovy</stringProp>
+                <stringProp name="parameters"></stringProp>
+                <stringProp name="filename"></stringProp>
+                <stringProp name="cacheKey">true</stringProp>
+                <stringProp name="script">vars.put(&quot;repReady&quot;,vars.get(&quot;docReady&quot;))</stringProp>
+              </JSR223PreProcessor>
+              <hashTree/>
             </hashTree>
             <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="api/reports/clients/{clientId}/instances/{instanceId}/documents/{documentId}/pages/1" enabled="true">
               <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
@@ -8476,8 +8648,79 @@ vars.put(&quot;reportRequest&quot;,updated)</stringProp>
               </JSONPostProcessor>
               <hashTree/>
             </hashTree>
-            <WhileController guiclass="WhileControllerGui" testclass="WhileController" testname="While Controller" enabled="true">
-              <stringProp name="WhileController.condition">${__javaScript(&quot;${docReady}&quot; != &quot;true&quot;,)}</stringProp>
+            <TransactionController guiclass="TransactionControllerGui" testclass="TransactionController" testname="check doc ready" enabled="true">
+              <boolProp name="TransactionController.includeTimers">false</boolProp>
+              <boolProp name="TransactionController.parent">true</boolProp>
+            </TransactionController>
+            <hashTree>
+              <JSR223Sampler guiclass="TestBeanGUI" testclass="JSR223Sampler" testname="State reset" enabled="true">
+                <stringProp name="cacheKey">true</stringProp>
+                <stringProp name="filename"></stringProp>
+                <stringProp name="parameters"></stringProp>
+                <stringProp name="script">vars.put(&quot;repReady&quot;,vars.get(&quot;docReady&quot;))</stringProp>
+                <stringProp name="scriptLanguage">groovy</stringProp>
+              </JSR223Sampler>
+              <hashTree/>
+              <WhileController guiclass="WhileControllerGui" testclass="WhileController" testname="While Controller" enabled="true">
+                <stringProp name="WhileController.condition">${__javaScript(&quot;${repReady}&quot; != &quot;true&quot;,)}</stringProp>
+              </WhileController>
+              <hashTree>
+                <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="api/reports/clients/{clientId}/instances/{instanceId}/documents/{documentId}/info" enabled="true">
+                  <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+                  <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+                    <collectionProp name="Arguments.arguments">
+                      <elementProp name="" elementType="HTTPArgument">
+                        <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                        <stringProp name="Argument.value">{&#xd;
+	&quot;format&quot;: &quot;HTML5&quot;,&#xd;
+	&quot;deviceInfo&quot;: {&#xd;
+		&quot;enableSearch&quot;: true,&#xd;
+		&quot;ContentOnly&quot;: true,&#xd;
+		&quot;UseSVG&quot;: true,&#xd;
+		&quot;BasePath&quot;: &quot;/api/reports&quot;&#xd;
+	},&#xd;
+	&quot;useCache&quot;: true&#xd;
+}</stringProp>
+                        <stringProp name="Argument.metadata">=</stringProp>
+                      </elementProp>
+                    </collectionProp>
+                  </elementProp>
+                  <stringProp name="HTTPSampler.domain">${BASE_URL}</stringProp>
+                  <stringProp name="HTTPSampler.port">${reportsPort}</stringProp>
+                  <stringProp name="HTTPSampler.protocol">${Protocol}</stringProp>
+                  <stringProp name="HTTPSampler.path">api/reports/clients/${clientId}/instances/${instanceId}/documents/${documentId}/info</stringProp>
+                  <stringProp name="HTTPSampler.method">GET</stringProp>
+                  <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+                  <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+                  <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+                  <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+                  <boolProp name="HTTPSampler.BROWSER_COMPATIBLE_MULTIPART">false</boolProp>
+                  <boolProp name="HTTPSampler.image_parser">false</boolProp>
+                  <boolProp name="HTTPSampler.concurrentDwn">false</boolProp>
+                  <stringProp name="HTTPSampler.concurrentPool">6</stringProp>
+                  <boolProp name="HTTPSampler.md5">false</boolProp>
+                  <intProp name="HTTPSampler.ipSourceType">0</intProp>
+                </HTTPSamplerProxy>
+                <hashTree>
+                  <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header manager" enabled="true">
+                    <collectionProp name="HeaderManager.headers"/>
+                  </HeaderManager>
+                  <hashTree/>
+                  <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="repReady Extractor" enabled="true">
+                    <stringProp name="JSONPostProcessor.referenceNames">repReady</stringProp>
+                    <stringProp name="JSONPostProcessor.jsonPathExprs">$.documentReady</stringProp>
+                    <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
+                  </JSONPostProcessor>
+                  <hashTree/>
+                  <ConstantTimer guiclass="ConstantTimerGui" testclass="ConstantTimer" testname="Constant Timer" enabled="true">
+                    <stringProp name="ConstantTimer.delay">1000</stringProp>
+                  </ConstantTimer>
+                  <hashTree/>
+                </hashTree>
+              </hashTree>
+            </hashTree>
+            <WhileController guiclass="WhileControllerGui" testclass="WhileController" testname="While Controller" enabled="false">
+              <stringProp name="WhileController.condition">${__javaScript(&quot;${repReady}&quot; != &quot;true&quot;,)}</stringProp>
             </WhileController>
             <hashTree>
               <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="api/reports/clients/{clientId}/instances/{instanceId}/documents/{documentId}/info" enabled="true">
@@ -8521,8 +8764,8 @@ vars.put(&quot;reportRequest&quot;,updated)</stringProp>
                   <collectionProp name="HeaderManager.headers"/>
                 </HeaderManager>
                 <hashTree/>
-                <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="docReady Extractor" enabled="true">
-                  <stringProp name="JSONPostProcessor.referenceNames">docReady</stringProp>
+                <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="repReady Extractor" enabled="true">
+                  <stringProp name="JSONPostProcessor.referenceNames">repReady</stringProp>
                   <stringProp name="JSONPostProcessor.jsonPathExprs">$.documentReady</stringProp>
                   <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
                 </JSONPostProcessor>
@@ -8532,6 +8775,14 @@ vars.put(&quot;reportRequest&quot;,updated)</stringProp>
                 </ConstantTimer>
                 <hashTree/>
               </hashTree>
+              <JSR223PreProcessor guiclass="TestBeanGUI" testclass="JSR223PreProcessor" testname="State reset" enabled="true">
+                <stringProp name="scriptLanguage">groovy</stringProp>
+                <stringProp name="parameters"></stringProp>
+                <stringProp name="filename"></stringProp>
+                <stringProp name="cacheKey">true</stringProp>
+                <stringProp name="script">vars.put(&quot;repReady&quot;,vars.get(&quot;docReady&quot;))</stringProp>
+              </JSR223PreProcessor>
+              <hashTree/>
             </hashTree>
             <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="api/reports/clients/{clientId}/instances/{instanceId}/documents/{documentId}/pages/1" enabled="true">
               <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
