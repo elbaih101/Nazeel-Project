@@ -73,24 +73,26 @@ public class D11_CorporatesSetup {
                 corporates.cRNumberField.sendKeys("987654");
             }
             if (!ignoredFields.equalsIgnoreCase("city")) {
-                corporates.cityField.clear();
-                corporates.cityField.click();
-                corporates.cityField.sendKeys(Faker.instance().address().city());
+                corporates.cityFieldEn.clear();
+                corporates.cityFieldEn.click();
+                corporates.cityFieldEn.sendKeys(Faker.instance().address().city());
             } else {
-                corporates.cityField.sendKeys((Keys.chord(Keys.CONTROL,"a",Keys.BACK_SPACE)));
-
+                corporates.cityFieldEn.sendKeys((Keys.chord(Keys.CONTROL,"a",Keys.BACK_SPACE)));
+                corporates.arField(corporates.cityFieldEn).sendKeys((Keys.chord(Keys.CONTROL,"a",Keys.BACK_SPACE)));
             }
             if (!ignoredFields.equalsIgnoreCase("district")) {
-                corporates.districtField.clear();
-                corporates.districtField.sendKeys(Faker.instance().address().state());
+                corporates.districtFieldEn.clear();
+                corporates.districtFieldEn.sendKeys(Faker.instance().address().state());
             } else {
-                corporates.districtField.sendKeys((Keys.chord(Keys.CONTROL,"a",Keys.BACK_SPACE)));
+                corporates.districtFieldEn.sendKeys((Keys.chord(Keys.CONTROL,"a",Keys.BACK_SPACE)));
+                corporates.arField(corporates.districtFieldEn).sendKeys((Keys.chord(Keys.CONTROL,"a",Keys.BACK_SPACE)));
             }
             if (!ignoredFields.equalsIgnoreCase("street")) {
-                corporates.streetField.clear();
-                corporates.streetField.sendKeys(Faker.instance().address().streetName());
+                corporates.streetFieldEn.clear();
+                corporates.streetFieldEn.sendKeys(Faker.instance().address().streetName());
             } else {
-                corporates.streetField.sendKeys((Keys.chord(Keys.CONTROL,"a",Keys.BACK_SPACE)));
+                corporates.streetFieldEn.sendKeys((Keys.chord(Keys.CONTROL,"a",Keys.BACK_SPACE)));
+                corporates.arField(corporates.streetFieldEn).sendKeys((Keys.chord(Keys.CONTROL,"a",Keys.BACK_SPACE)));
             }
             if (!ignoredFields.equalsIgnoreCase("bNumber")) {
                 corporates.bNoField.clear();

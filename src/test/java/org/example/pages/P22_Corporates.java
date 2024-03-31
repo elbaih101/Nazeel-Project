@@ -1,6 +1,5 @@
 package org.example.pages;
 
-import org.example.stepDefs.Hooks;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -129,12 +128,15 @@ public class P22_Corporates {
     }
 
     @FindBy(xpath = "//label[contains(text(),\"City\")]/following-sibling::div//input")
-    public WebElement cityField;
+    public WebElement cityFieldEn;
     @FindBy(xpath = "//label[contains(text(),\"District\")]/following-sibling::div//input")
-    public WebElement districtField;
-
+    public WebElement districtFieldEn;
+   public WebElement arField(WebElement enField){
+       enField.findElement(By.xpath("./following-sibling::button")).click();
+       return enField.findElement(By.xpath("./../../following-sibling::div/input[2]"));
+   }
     @FindBy(xpath = "//label[contains(text(),\"Street\")]/following-sibling::div//input")
-    public WebElement streetField;
+    public WebElement streetFieldEn;
 
     @FindBy(xpath = "//label[contains(text(),\"Building Number\")]/following-sibling::div//input")
     public WebElement bNoField;

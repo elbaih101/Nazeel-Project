@@ -79,14 +79,14 @@ Feature: corporates Feature
       Examples:
       #the last two case building number doesnt get deleted
         | name      | country | ignored    | vat | bNum | secBNum | msg                                                                                       |
-        | manga     | Saudi   |            |     | 654  | 13      | Building Number Max Length is 4 digits\nAdditional Building Number Max Length is 4 digits |
-        | manga     | Saudi   | district   |     | 6548 | 6548    | District Is Required                                                                      |
-        | manga     | Saudi   | street     |     | 6548 | 6549    | Street Is Required                                                                        |
-        | manga     | Saudi   | city       |     | 6548 | 3215    | Please Select City                                                                        |
-        | manga     | Saudi   | postalcode |     | 9874 | 9874    | Postal Code Is Required                                                                   |
-        | manga     | Saudi   |            |     |      |         | Building Number Is Required\nAdditional Building Number Is Required                       |
-        | automoto2 | Saudi   |            |     | 6548 | 8456    | Updated Successfully                                                                      |
-        | test new  | Saudi   |            |     | 6548 | 8456    | Name exist before                                                                         |
+        | Zanga     | Saudi   |            |     | 654  | 13      | Building Number Max Length is 4 digits\nAdditional Building Number Max Length is 4 digits |
+        | Zanga     | Saudi   | district   |     | 6548 | 6548    | District Is Required                                                                      |
+        | Zanga     | Saudi   | street     |     | 6548 | 6549    | Street Is Required                                                                        |
+        | Zanga     | Saudi   | city       |     | 6548 | 3215    | Please Select City                                                                        |
+        | Zanga     | Saudi   | postalcode |     | 9874 | 9874    | Postal Code Is Required                                                                   |
+        | Zanga     | Saudi   |            |     |      |         | Building Number Is Required\nAdditional Building Number Is Required                       |
+        | Zutomoto2 | Saudi   |            |     | 6548 | 8456    | Updated Successfully                                                                      |
+        | Zest new  | Saudi   |            |     | 6548 | 8456    | Name exist before                                                                         |
 
     Scenario Outline: delete corporate
       Given delete corporate "<name>"

@@ -92,7 +92,6 @@ public class P15_MasterUnitsTypes {
         return unitTypeDialog.findElement(By.xpath(".//button[contains(@class,\"n-button--danger \")]"));
     }
 
-    //todo : containue the rest
 
 
 }

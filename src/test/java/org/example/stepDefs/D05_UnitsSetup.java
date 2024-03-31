@@ -447,7 +447,7 @@ public class D05_UnitsSetup {
         wait.until(ExpectedConditions.elementToBeClickable(selectedHall));
         selectedHall.click();
 
-        //Todo : kitchens
+        //FixMe : kitchens
 
 //        groupOfUnitsPopUp.featureCheckBox("Kitchen").click();
 //        List<WebElement> kitchens = groupOfUnitsPopUp.kitchens();

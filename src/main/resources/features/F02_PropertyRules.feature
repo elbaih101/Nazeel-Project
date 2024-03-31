@@ -6,6 +6,7 @@ Feature: Property Rules
 
   @Reservation_Rules
   Rule: Reservations Rules
+  #noinspection GherkinMisplacedBackground
   Background:opeening ReservationsRules
     Given go to Reservation Rules Page
 
