@@ -3,6 +3,7 @@ Foundations of Software and System Performance Engineering: Process, Performance
 Ui Profiling tools -> look into it
 
 
+Istqb Advanced test automation engineer syllabus
 
 Response time - software metric
 Throuput -> Network metric
