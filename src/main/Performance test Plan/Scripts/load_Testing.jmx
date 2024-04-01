@@ -85,7 +85,7 @@
           <elementProp name="Property_Code" elementType="Argument">
             <stringProp name="Argument.name">Property_Code</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
-            <stringProp name="Argument.value">&quot;P00020&quot;</stringProp>
+            <stringProp name="Argument.value">&quot;P00997&quot;</stringProp>
           </elementProp>
         </collectionProp>
       </Arguments>
@@ -239,8 +239,8 @@
           <stringProp name="LoopController.loops">1</stringProp>
           <boolProp name="LoopController.continue_forever">false</boolProp>
         </elementProp>
-        <stringProp name="ThreadGroup.num_threads">1</stringProp>
-        <stringProp name="ThreadGroup.ramp_time"></stringProp>
+        <stringProp name="ThreadGroup.num_threads">60</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">5</stringProp>
         <boolProp name="ThreadGroup.delayedStart">false</boolProp>
         <boolProp name="ThreadGroup.scheduler">false</boolProp>
         <stringProp name="ThreadGroup.duration"></stringProp>
@@ -299,8 +299,7 @@
                 <stringProp name="764597751">Test Plan</stringProp>
                 <stringProp name="-1735288294">full plan</stringProp>
                 <stringProp name="-233982402">logging in and choosing property</stringProp>
-                <stringProp name="-1535710817">Reports</stringProp>
-                <stringProp name="-768591924">residence revenue report (not finifshed yet)</stringProp>
+                <stringProp name="-1564234843">Vouchers</stringProp>
               </collectionProp>
             </ModuleController>
             <hashTree/>
@@ -5524,6 +5523,13 @@ log.info(vars.get(&quot;reservation&quot;))
               <collectionProp name="HeaderManager.headers"/>
             </HeaderManager>
             <hashTree/>
+            <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="pMethodId; pMethodName Extractor" enabled="true">
+              <stringProp name="JSONPostProcessor.referenceNames">pMethodId; pMethodName</stringProp>
+              <stringProp name="JSONPostProcessor.jsonPathExprs">$.data[0].value; $.data[0].label</stringProp>
+              <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
+              <stringProp name="JSONPostProcessor.defaultValues">noDefault;noDefault</stringProp>
+            </JSONPostProcessor>
+            <hashTree/>
           </hashTree>
           <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="api/Setting/Currency/GetByPropertyId?propertyId={PropertyID}" enabled="true">
             <boolProp name="HTTPSampler.postBodyRaw">false</boolProp>
@@ -5658,7 +5664,7 @@ if(currency.isDefault){
             <boolProp name="CounterConfig.per_user">false</boolProp>
           </CounterConfig>
           <hashTree/>
-          <TransactionController guiclass="TransactionControllerGui" testclass="TransactionController" testname="Receipt Vouchers" enabled="true">
+          <TransactionController guiclass="TransactionControllerGui" testclass="TransactionController" testname="Receipt Vouchers" enabled="false">
             <boolProp name="TransactionController.includeTimers">false</boolProp>
             <boolProp name="TransactionController.parent">true</boolProp>
           </TransactionController>
@@ -5765,12 +5771,12 @@ if(currency.isDefault){
               <hashTree/>
             </hashTree>
           </hashTree>
-          <TransactionController guiclass="TransactionControllerGui" testclass="TransactionController" testname="Expenses Voucher" enabled="false">
+          <TransactionController guiclass="TransactionControllerGui" testclass="TransactionController" testname="Expenses Voucher" enabled="true">
             <boolProp name="TransactionController.includeTimers">false</boolProp>
             <boolProp name="TransactionController.parent">true</boolProp>
           </TransactionController>
           <hashTree>
-            <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="http://staging.nazeel.net:9000/api/Setting/Financial/CostCenter/get-cost-center-customized-lite/2" enabled="true">
+            <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="api/Setting/Financial/CostCenter/get-cost-center-customized-lite/2" enabled="true">
               <boolProp name="HTTPSampler.postBodyRaw">false</boolProp>
               <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
                 <collectionProp name="Arguments.arguments"/>
@@ -5803,7 +5809,41 @@ if(currency.isDefault){
               </JSONPostProcessor>
               <hashTree/>
             </hashTree>
-            <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="http://staging.nazeel.net:9000/api/Setting/Financial/TaxCustomization/get-expenses-by-propertyId/2" enabled="true">
+            <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="api/Setting/Vendor/get-vendors-ddl/{Company_ID}" enabled="true">
+              <boolProp name="HTTPSampler.postBodyRaw">false</boolProp>
+              <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
+                <collectionProp name="Arguments.arguments"/>
+              </elementProp>
+              <stringProp name="HTTPSampler.domain">${BASE_URL}</stringProp>
+              <stringProp name="HTTPSampler.port">${port}</stringProp>
+              <stringProp name="HTTPSampler.protocol">${Protocol}</stringProp>
+              <stringProp name="HTTPSampler.path">api/Setting/Vendor/get-vendors-ddl/${Company_ID}</stringProp>
+              <stringProp name="HTTPSampler.method">GET</stringProp>
+              <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+              <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
+              <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+              <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
+              <boolProp name="HTTPSampler.BROWSER_COMPATIBLE_MULTIPART">false</boolProp>
+              <boolProp name="HTTPSampler.image_parser">false</boolProp>
+              <boolProp name="HTTPSampler.concurrentDwn">false</boolProp>
+              <stringProp name="HTTPSampler.concurrentPool">6</stringProp>
+              <boolProp name="HTTPSampler.md5">false</boolProp>
+              <intProp name="HTTPSampler.ipSourceType">0</intProp>
+            </HTTPSamplerProxy>
+            <hashTree>
+              <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header manager" enabled="true">
+                <collectionProp name="HeaderManager.headers"/>
+              </HeaderManager>
+              <hashTree/>
+              <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="vendorID" enabled="true">
+                <stringProp name="JSONPostProcessor.referenceNames">vendorID; vendorArName; vendorEnName; vendorVAT</stringProp>
+                <stringProp name="JSONPostProcessor.jsonPathExprs">$.data[0].id; $.data[0].nameAr; $.data[0].nameEn; $.data[0].taxNumber</stringProp>
+                <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
+                <stringProp name="JSONPostProcessor.defaultValues">noDefault;noDefault;noDefault;null</stringProp>
+              </JSONPostProcessor>
+              <hashTree/>
+            </hashTree>
+            <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="api/Setting/Financial/TaxCustomization/get-expenses-by-propertyId/2" enabled="true">
               <boolProp name="HTTPSampler.postBodyRaw">false</boolProp>
               <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
                 <collectionProp name="Arguments.arguments"/>
@@ -5830,7 +5870,7 @@ if(currency.isDefault){
               </HeaderManager>
               <hashTree/>
             </hashTree>
-            <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="http://staging.nazeel.net:9000/api/Setting/Financial/PaymentMethod/get-by-id-anonymous/2" enabled="true">
+            <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="api/Setting/Financial/PaymentMethod/get-by-id-anonymous/2" enabled="true">
               <boolProp name="HTTPSampler.postBodyRaw">false</boolProp>
               <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
                 <collectionProp name="Arguments.arguments"/>
@@ -5857,7 +5897,7 @@ if(currency.isDefault){
               </HeaderManager>
               <hashTree/>
             </hashTree>
-            <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="http://staging.nazeel.net:9000/api/Setting/Financial/BankSetup/get-lite-by-property/2" enabled="true">
+            <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="api/Setting/Financial/BankSetup/get-lite-by-property/2" enabled="true">
               <boolProp name="HTTPSampler.postBodyRaw">false</boolProp>
               <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
                 <collectionProp name="Arguments.arguments"/>
@@ -5883,8 +5923,34 @@ if(currency.isDefault){
                 <collectionProp name="HeaderManager.headers"/>
               </HeaderManager>
               <hashTree/>
+              <JSR223PostProcessor guiclass="TestBeanGUI" testclass="JSR223PostProcessor" testname="JSR223 PostProcessor" enabled="true">
+                <stringProp name="scriptLanguage">groovy</stringProp>
+                <stringProp name="parameters"></stringProp>
+                <stringProp name="filename"></stringProp>
+                <stringProp name="cacheKey">true</stringProp>
+                <stringProp name="script">def json = new groovy.json.JsonSlurper().parse(prev.getResponseData())
+
+def map =[&quot;bankName&quot;: null,
+	&quot;chequeNumber&quot;: null,
+	&quot;depositorName&quot;: null,
+	&quot;transactionNumber&quot;: null,
+	&quot;bankId&quot;:null,]
+if(vars.get(&quot;pMethodName&quot;)!=&quot;Cash&quot;){
+map.put(&quot;bankName&quot;,json.data.bankName)
+map.put(&quot;bankId&quot;,json.data.id)
+	}
+
+def bankDataJson = new groovy.json.JsonBuilder(map).toPrettyString()
+String bankData =bankDataJson.toString()
+	bankData=bankData.minus(&quot;{&quot;)
+	bankData=bankData.minus(&quot;}&quot;)
+    bankData=bankData.trim()
+vars.put(&quot;bankData&quot;,bankData)
+log.info(vars.get(&quot;bankData&quot;))</stringProp>
+              </JSR223PostProcessor>
+              <hashTree/>
             </hashTree>
-            <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="http://staging.nazeel.net:9000/api/Financial/Voucher/create-expenses-voucher" enabled="true">
+            <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="api/Financial/Voucher/create-expenses-voucher" enabled="true">
               <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
               <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
                 <collectionProp name="Arguments.arguments">
@@ -5893,20 +5959,19 @@ if(currency.isDefault){
                     <stringProp name="Argument.value">{&#xd;
 	&quot;expensesVoucherDetails&quot;: {&#xd;
 		&quot;costCenterId&quot;: ${costCenter_ID},&#xd;
-		&quot;givenToEn&quot;: &quot;JmeterReg ${Counter}&quot;&#xd;
+		 &quot;vendorId&quot;: ${vendorID},&#xd;
+		 &quot;vendorTaxNo&quot;: ${vendorVAT},&#xd;
+		 &quot;givenToAr&quot;: &quot;${vendorArName}&quot;,&#xd;
+		 &quot;givenToEn&quot;: &quot;${vendorEnName}&quot;&#xd;
 	},&#xd;
 	&quot;typeId&quot;: 8,&#xd;
 	&quot;propertyId&quot;: ${Property_ID},&#xd;
 	&quot;currencyId&quot;: ${currency_ID},&#xd;
 	&quot;voucherLockStatusId&quot;: ${voucher_lockState},&#xd;
 	&quot;amount&quot;: 20,&#xd;
-	&quot;paymentMethodName&quot;: &quot;Mada&quot;,&#xd;
-	&quot;bankName&quot;: null,&#xd;
-	&quot;chequeNumber&quot;: null,&#xd;
-	&quot;depositorName&quot;: null,&#xd;
-	&quot;transactionNumber&quot;: null,&#xd;
-	&quot;bankId&quot;: 2,&#xd;
-	&quot;paymentMethodId&quot;: 2,&#xd;
+	&quot;paymentMethodName&quot;: &quot;${pMethodName}&quot;,&#xd;
+	${bankData},&#xd;
+	&quot;paymentMethodId&quot;: ${pMethodId},&#xd;
 	&quot;purposeEn&quot;: &quot;JmeterReg ${Counter}&quot;,&#xd;
 	&quot;defaultCurrencyId&quot;: ${defaultCurr_ID},&#xd;
 	&quot;exchangeRate&quot;: ${exchangeRate},&#xd;
@@ -5949,7 +6014,7 @@ if(currency.isDefault){
               </HeaderManager>
               <hashTree/>
             </hashTree>
-            <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="http://staging.nazeel.net:9000/api/Financial/PaymentVoucher/Search" enabled="false">
+            <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="api/Financial/PaymentVoucher/Search" enabled="false">
               <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
               <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
                 <collectionProp name="Arguments.arguments">
@@ -6683,71 +6748,6 @@ vars.put(&quot;reportRequest&quot;,updated)</stringProp>
                   <hashTree/>
                 </hashTree>
               </hashTree>
-            </hashTree>
-            <WhileController guiclass="WhileControllerGui" testclass="WhileController" testname="While Controller" enabled="false">
-              <stringProp name="WhileController.condition">${__javaScript(&quot;${repReady}&quot; != &quot;true&quot;,)}</stringProp>
-            </WhileController>
-            <hashTree>
-              <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="api/reports/clients/{clientId}/instances/{instanceId}/documents/{documentId}/info" enabled="true">
-                <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
-                <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
-                  <collectionProp name="Arguments.arguments">
-                    <elementProp name="" elementType="HTTPArgument">
-                      <boolProp name="HTTPArgument.always_encode">false</boolProp>
-                      <stringProp name="Argument.value">{&#xd;
-	&quot;format&quot;: &quot;HTML5&quot;,&#xd;
-	&quot;deviceInfo&quot;: {&#xd;
-		&quot;enableSearch&quot;: true,&#xd;
-		&quot;ContentOnly&quot;: true,&#xd;
-		&quot;UseSVG&quot;: true,&#xd;
-		&quot;BasePath&quot;: &quot;/api/reports&quot;&#xd;
-	},&#xd;
-	&quot;useCache&quot;: true&#xd;
-}</stringProp>
-                      <stringProp name="Argument.metadata">=</stringProp>
-                    </elementProp>
-                  </collectionProp>
-                </elementProp>
-                <stringProp name="HTTPSampler.domain">${BASE_URL}</stringProp>
-                <stringProp name="HTTPSampler.port">${reportsPort}</stringProp>
-                <stringProp name="HTTPSampler.protocol">${Protocol}</stringProp>
-                <stringProp name="HTTPSampler.path">api/reports/clients/${clientId}/instances/${instanceId}/documents/${documentId}/info</stringProp>
-                <stringProp name="HTTPSampler.method">GET</stringProp>
-                <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
-                <boolProp name="HTTPSampler.auto_redirects">false</boolProp>
-                <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
-                <boolProp name="HTTPSampler.DO_MULTIPART_POST">false</boolProp>
-                <boolProp name="HTTPSampler.BROWSER_COMPATIBLE_MULTIPART">false</boolProp>
-                <boolProp name="HTTPSampler.image_parser">false</boolProp>
-                <boolProp name="HTTPSampler.concurrentDwn">false</boolProp>
-                <stringProp name="HTTPSampler.concurrentPool">6</stringProp>
-                <boolProp name="HTTPSampler.md5">false</boolProp>
-                <intProp name="HTTPSampler.ipSourceType">0</intProp>
-              </HTTPSamplerProxy>
-              <hashTree>
-                <HeaderManager guiclass="HeaderPanel" testclass="HeaderManager" testname="HTTP Header manager" enabled="true">
-                  <collectionProp name="HeaderManager.headers"/>
-                </HeaderManager>
-                <hashTree/>
-                <JSONPostProcessor guiclass="JSONPostProcessorGui" testclass="JSONPostProcessor" testname="repReady Extractor" enabled="true">
-                  <stringProp name="JSONPostProcessor.referenceNames">repReady</stringProp>
-                  <stringProp name="JSONPostProcessor.jsonPathExprs">$.documentReady</stringProp>
-                  <stringProp name="JSONPostProcessor.match_numbers"></stringProp>
-                </JSONPostProcessor>
-                <hashTree/>
-                <ConstantTimer guiclass="ConstantTimerGui" testclass="ConstantTimer" testname="Constant Timer" enabled="true">
-                  <stringProp name="ConstantTimer.delay">1000</stringProp>
-                </ConstantTimer>
-                <hashTree/>
-              </hashTree>
-              <JSR223PreProcessor guiclass="TestBeanGUI" testclass="JSR223PreProcessor" testname="State reset" enabled="true">
-                <stringProp name="scriptLanguage">groovy</stringProp>
-                <stringProp name="parameters"></stringProp>
-                <stringProp name="filename"></stringProp>
-                <stringProp name="cacheKey">true</stringProp>
-                <stringProp name="script">vars.put(&quot;repReady&quot;,vars.get(&quot;docReady&quot;))</stringProp>
-              </JSR223PreProcessor>
-              <hashTree/>
             </hashTree>
             <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="api/reports/clients/{clientId}/instances/{instanceId}/documents/{documentId}/pages/1" enabled="true">
               <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
