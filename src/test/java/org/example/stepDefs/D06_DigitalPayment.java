@@ -65,7 +65,7 @@ public class D06_DigitalPayment {
         }
         wait.until(ExpectedConditions.elementToBeClickable(dashBoardPage.receiptsLink));
         dashBoardPage.receiptsLink.click();
-        }else if(vType.equalsIgnoreCase("payment")||vType.equalsIgnoreCase(Vouchers.Refund.toString())||vType.equalsIgnoreCase(Vouchers.SDRefund.toString())){
+        }else if(vType.equalsIgnoreCase("payment")||vType.equalsIgnoreCase(Vouchers.Refund.toString())||vType.equalsIgnoreCase(Vouchers.SDRefund.toString())||vType.equalsIgnoreCase(Vouchers.Expenses.toString())){
             dashBoardPage.dashBoardLink.click();
             wait.until(ExpectedConditions.elementToBeClickable(dashBoardPage.vouchersDropList));
             dashBoardPage.vouchersDropList.click();

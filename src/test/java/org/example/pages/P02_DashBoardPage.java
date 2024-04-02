@@ -55,6 +55,8 @@ public class P02_DashBoardPage {
     public WebElement customersDropList;
     @FindBy(xpath = "//a[@href=\"/customers/Corporate\"]")
     public WebElement corporatesLink;
+    @FindBy(xpath = "//a[@href=\"/customers/vendor\"]")
+    public WebElement vendorssLink;
     @FindBy(xpath = "//span[contains(text(),\"SMS\")]")
     public WebElement smsDropList;
     @FindBy(xpath = "//a[@href=\"/notifications/sms-logs\"]")

@@ -93,11 +93,13 @@ public class P16_VouchersPopUp {
 //        if (voucherType.equalsIgnoreCase(Vouchers.Receipt.toString())) {
 //            return voucherPopUp.findElement(By.xpath(".//label[contains(text(),\"Received From\")]/following-sibling::div//input"));
 //    }
-         if (voucherType.equalsIgnoreCase(Vouchers.Refund.toString()) || voucherType.equalsIgnoreCase(Vouchers.SDRefund.toString()) || voucherType.equalsIgnoreCase(Vouchers.DropCash.toString())) {
+        if (voucherType.equalsIgnoreCase(Vouchers.Refund.toString()) || voucherType.equalsIgnoreCase(Vouchers.SDRefund.toString()) || voucherType.equalsIgnoreCase(Vouchers.DropCash.toString())) {
             return voucherPopUp.findElement(By.xpath(".//label[contains(text(),\"Paid to\")]/following-sibling::div//input"));
-        } else if (voucherType.equalsIgnoreCase(Vouchers.GenReceipt.toString()) || voucherType.equalsIgnoreCase(Vouchers.SAReceipt.toString())||voucherType.equalsIgnoreCase(Vouchers.Receipt.toString())) {
+        } else if (voucherType.equalsIgnoreCase(Vouchers.GenReceipt.toString()) || voucherType.equalsIgnoreCase(Vouchers.SAReceipt.toString()) || voucherType.equalsIgnoreCase(Vouchers.Receipt.toString())) {
             return voucherPopUp.findElement(By.xpath(".//label[contains(text(),\"Guest Name\")]/following-sibling::div//input"));
-        } else { //TODO : Expenses Vouchers when the Cr is applied
+        } else if (voucherType.equalsIgnoreCase(Vouchers.Expenses.toString())) {
+            return voucherPopUp.findElement(By.xpath(".//label[contains(text(),\"Vendor\")]/following-sibling::kendo-combobox//input"));
+        } else {
             return voucherPopUp.findElement(By.xpath(".//label[contains(text(),\"Guest\")]/../following-sibling::input"));
         }
 
