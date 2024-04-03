@@ -8,7 +8,7 @@ import io.cucumber.testng.CucumberOptions;
         (
                 features = "src/main/resources/features",
                 glue = {"org.example.stepDefs"},
-                tags = "not @Reservation_Rules and not @DigitalPayment and not @Property and not @Blocks_Floors",
+                tags = "@Reservations",//"not @Reservation_Rules and not @DigitalPayment and not @Property and not @Blocks_Floors",
                 plugin = {
                         "pretty",
                         "html:target/cucumber.html",

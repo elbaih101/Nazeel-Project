@@ -26,7 +26,7 @@ public class Hooks {
 
         //options.setExperimentalOption("prefs", new String[]{"download.default_directory", "download_path"});
 
-        //TODO : printing and  download configurations
+        //FixMe : printing and  download configurations
 
 //        //printer config
 //        options.addArguments("--kiosk-printing");

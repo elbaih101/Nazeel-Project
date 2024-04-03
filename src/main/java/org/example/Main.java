@@ -6,7 +6,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.edge.EdgeOptions;
 
-import java.time.Duration;
 import java.util.Map;
 
 public class Main {
@@ -28,8 +27,6 @@ public class Main {
         WebDriver driver = new EdgeDriver(opt);
 
 // now you can use now existing Browser
-
-
     }
 
 
