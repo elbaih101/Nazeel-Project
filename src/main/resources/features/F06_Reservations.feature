@@ -2,11 +2,11 @@ Feature: Making Reservation with Nazeel PMS (web application)
 
   Background: selecting property
     Given Logging in with superuser
-    And Select Property "P01384"
+    And Select Property "P00166"
 
   @Reservations
   Rule: Reservations
-
+  #noinspection GherkinMisplacedBackground
   Background:
     And open reservations Page
 
@@ -32,10 +32,19 @@ Feature: Making Reservation with Nazeel PMS (web application)
     Given  Create "Checked-In" Reservation withSource "RANDOM" purpose "RANDOM" Unit "RANDOM" Guest "RANDOM"
     Then Choose Reservation Status as "Checked-Out"
 
+  @LoadMoreAction @Sprint40
+  Scenario: check load more action
+    When Click on Add new Reservation
+    And open unit selection Popup
+    Then check the cards count to be 12 and by loading more each time 12 new cards are displayed
+
+
+    # TODO Scenario Outline: Search criteria and filter
+
 
   @Penalties
   Rule:Penalties
-
+  #noinspection GherkinMisplacedBackground
   Background:go to penalties page
     Given go to penalties Page
 
@@ -79,7 +88,7 @@ Feature: Making Reservation with Nazeel PMS (web application)
       | penalty 2 | penalty 2 (Edited) | Cancel/No-Show Reservation | Amount | 50     |        | the edited desc of the penalty 2 | Inactive | Saved Successfully        |
 
 
-    Scenario: can delete a penalty with no related data
-      When deleting penalty "penalty 2 (Edited)"
-      Then Check msg "Deleted Successfully" and penalty deletion
+  Scenario: can delete a penalty with no related data
+    When deleting penalty "penalty 2 (Edited)"
+    Then Check msg "Deleted Successfully" and penalty deletion
 

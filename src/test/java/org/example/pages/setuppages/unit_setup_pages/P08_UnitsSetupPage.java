@@ -72,14 +72,14 @@ public P08_UnitsSetupPage(WebDriver driver) {
 //        return unitCard.findElement(By.xpath("//div[@class=\"unit-card__flags\"]//*[name()='svg']"));
 //    }
 public Set<String> unitNums (){
-    List <WebElement> unitNumsElements = driver.findElements(By.xpath("//p[@class=\"unit-card__no\"]"));
+    List <WebElement> unitNumsElements = driver.findElements(By.xpath("//p[contains(@class,\"unit-card__no\")]"));
     Set<String>unitNums = new HashSet<>();
 
     unitNumsElements.forEach(element -> unitNums.add(element.getText()));
     return unitNums;
 }
     public WebElement unitNum(WebElement unitCard) {
-       WebElement unitNum =unitCard.findElement(By.xpath(".//p[@class=\"unit-card__no\"]"));
+       WebElement unitNum =unitCard.findElement(By.xpath(".//p[contains(@class,\"unit-card__no\")]"));
         if (unitNum.getText().contains("..")){
             actions.moveToElement(unitCard);
             actions.moveToElement(unitCard,3,4).build().perform();

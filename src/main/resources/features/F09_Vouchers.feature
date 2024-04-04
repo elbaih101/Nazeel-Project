@@ -151,6 +151,7 @@ Feature: Vouchers
     Scenario: Can't Create a Cash Voucher with Date Before Last DropCash Date
       Given go to "Receipt" Vouchers Page
       Then successfully create a voucher of type "SAReceipt" amount "200" payment Method "Cash" maturity Date "" and Creatian Date "28112023"
+
     Scenario: Can't edit a cash voucher to a date before last drop cash Date
       Given go to "Receipt" Vouchers Page
       And successfully create a voucher of type "SAReceipt" amount "200" payment Method "Cash" maturity Date "" and Creatian Date ""

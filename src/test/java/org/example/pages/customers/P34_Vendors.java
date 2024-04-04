@@ -52,6 +52,11 @@ public class P34_Vendors {
 
     public WebElement vendorDeleteButton(WebElement vendor) {
         vendor.findElement(By.xpath("./..//td[@data-kendo-grid-column-index=\"6\"]//div[contains(@class,\"table__icon\")]")).click();
+        try {
+            Thread.sleep(300);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         return vendor.findElement(By.xpath("./..//td[@data-kendo-grid-column-index=\"6\"]//div[contains(@class,\"popup__item--red\")]"));
     }
 

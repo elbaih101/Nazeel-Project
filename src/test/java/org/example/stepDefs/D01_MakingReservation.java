@@ -275,4 +275,15 @@ public class D01_MakingReservation {
         new P00_multiPurposes(driver).waitLoading();
         reservationMainDataPage.selectCorporateButton.click();
     }
+
+    @Then("check the cards count to be 12 and by loading more each time 12 new cards are displayed")
+    public void checkTheCardsCountToBeAndByLoadingMoreEachTimeNewCardsAreDisplayed() {
+        asrt.assertTrue(unitSelectionPopup.unitCards.size()==12);
+        unitSelectionPopup.loadMoreLink.click();
+        new P00_multiPurposes(driver).waitLoading();
+        asrt.assertTrue(unitSelectionPopup.unitCards.size()==24);
+      //  unitSelectionPopup.floorsPanels.forEach(f-> asrt.assertTrue(Utils.isSorted(unitSelectionPopup.unitNums(f))));
+        asrt.assertAll();
+
+    }
 }

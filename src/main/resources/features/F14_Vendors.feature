@@ -1,4 +1,4 @@
-@Outlets
+@Vendors @Sprint40
 Feature: Vendors Feature
 
   Background:  login and choose property
@@ -7,7 +7,7 @@ Feature: Vendors Feature
     And go to Vendors page
 
   Scenario: Check default vendor
-    Then check vdefault vendor in the grid
+    Then check default vendor in the grid
 
   Scenario Outline: Create a vendor
     When create vendor name "<name>" phone "<phone>" email "<email>" VAT "<vat>" CRNo "<cR>" PostalCode "<pCode>" description "<desc>" address "<address>"

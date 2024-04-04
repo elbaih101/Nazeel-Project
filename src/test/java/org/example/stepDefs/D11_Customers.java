@@ -9,6 +9,7 @@ import org.example.pages.P02_DashBoardPage;
 import org.example.pages.customers.P22_Corporates;
 import org.example.pages.customers.P34_Vendors;
 import org.example.pages.mutlipurposes.P00_multiPurposes;
+import org.example.pages.vouchersPages.P10_VouchersPage;
 import org.example.pages.vouchersPages.P16_VouchersPopUp;
 import org.openqa.selenium.*;
 
@@ -278,7 +279,7 @@ public class D11_Customers {
     @Then("Check msg {string} and vendor is {string}")
     public void checkMsgAndVendorInTheGrid(String msg, String existance) {
         new D03_BlocksAndFloors().checkToastMesageContainsText(msg);
-        if (msg.contains("Successfully")) {
+        if (msg.contains("successfully")) {
             if (existance.equalsIgnoreCase("added")) {
                 new P00_multiPurposes(driver).waitLoading();
                 WebElement selectedVendor = vendors.vendorsNames.stream().filter(c -> c.getText().equalsIgnoreCase(vendorMap.get("name"))).findAny().orElseThrow();
@@ -288,15 +289,18 @@ public class D11_Customers {
                 asrt.assertTrue(vendors.vendorCRNo(selectedVendor).getText().equalsIgnoreCase(vendorMap.get("cR")), "Expected: " + vendorMap.get("cR") + " ,Actual: " + vendors.vendorCRNo(selectedVendor).getText());
                 asrt.assertTrue(vendors.vendorStatus(selectedVendor).getText().equalsIgnoreCase(vendorMap.get("state")), "Expected: " + vendorMap.get("state") + " ,Actual: " + vendors.vendorStatus(selectedVendor).getText());
                 new D06_DigitalPayment().goToDesiredVouchersPage("Expenses");
-                new D08_Vouchers().clickOnTheAddVoucherButton();
+                new P00_multiPurposes(driver).waitLoading();
+                new P10_VouchersPage(driver).newVoucherButton.click();
                 if (vendorMap.get("state").equalsIgnoreCase("active"))
                     asrt.assertTrue(new P16_VouchersPopUp(driver).vendorsList().stream().anyMatch(v -> v.getText().equalsIgnoreCase(vendorMap.get("name"))));
                 else
                     asrt.assertFalse(new P16_VouchersPopUp(driver).vendorsList().stream().anyMatch(v -> v.getText().equalsIgnoreCase(vendorMap.get("name"))));
             } else if (existance.equalsIgnoreCase("deleted")) {
+                new P00_multiPurposes(driver).waitLoading();
                 asrt.assertFalse(vendors.vendorsNames.stream().anyMatch(c -> c.getText().equalsIgnoreCase(vendorMap.get("name"))));
                 new D06_DigitalPayment().goToDesiredVouchersPage("Expenses");
-                new D08_Vouchers().clickOnTheAddVoucherButton();
+                new P00_multiPurposes(driver).waitLoading();
+                new P10_VouchersPage(driver).newVoucherButton.click();
                 asrt.assertFalse(new P16_VouchersPopUp(driver).vendorsList().stream().anyMatch(v -> v.getText().equalsIgnoreCase(vendorMap.get("name"))));
             }
             asrt.assertAll();
@@ -316,9 +320,17 @@ public class D11_Customers {
 
     @When("deleting vendor {string}")
     public void deletingVendor(String name) {
+        new P00_multiPurposes(driver).waitLoading();
         WebElement selectedVendor = vendors.vendorsNames.stream().filter(c -> c.getText().equalsIgnoreCase(name)).findAny().orElseThrow();
         setVendorMap(vendors.vendorName(selectedVendor).getText(), vendors.vendorPhone(selectedVendor).getText(), vendors.vendorEmail(selectedVendor).getText(), vendors.vendorVAT(selectedVendor).getText(), vendors.vendorCRNo(selectedVendor).getText(), "", "", "", vendors.vendorStatus(selectedVendor).getText());
         vendors.vendorDeleteButton(selectedVendor).click();
         vendors.confirmDeleteButton.click();
+    }
+
+    @Then("check default vendor in the grid")
+    public void checkDefaultVendorInTheGrid() {
+        new P00_multiPurposes(driver).waitLoading();
+        asrt.assertTrue(vendors.vendorsNames.stream().anyMatch(c -> c.getText().equalsIgnoreCase("Default vendor")));
+        asrt.assertAll();
     }
 }
