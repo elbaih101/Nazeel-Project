@@ -1,6 +1,6 @@
 package org.example.pages.reservations;
 
-import org.example.stepDefs.Hooks;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -24,6 +24,9 @@ public class P03_ReservationsPage {
         actions = new Actions(driver);
     }
 
+
+    @FindBy(xpath = "//ul[@role=\"listbox\"]//li[@role=\"option\"]")
+    List<WebElement> listItems;
     @FindBy(css = "button[class=\"n-button n-button--green ng-star-inserted\"]")
     public WebElement newReservationButton;
 
@@ -67,6 +70,38 @@ public class P03_ReservationsPage {
 
     @FindBy(xpath = "//div[@class=\"filter-form\"]//button[contains(text(),\"Search\")]")
     public WebElement searchButton;
+
+    @FindBy(xpath = "//input[@placeholder=\"Select unit type\"]")
+    WebElement filterUnitTypeField;
+
+    public List<WebElement> filterUnitTypes() {
+        filterUnitTypeField.click();
+        return listItems;
+    }
+
+    public List<WebElement> filterBlocks() {
+        driver.findElement(By.xpath("//label[contains(text(),\"Block\")]/following-sibling::kendo-combobox//span[@class=\"k-select\"]")).click();
+        return listItems;
+    }
+
+    public List<WebElement> filterResType() {
+        driver.findElement(By.xpath("//label[contains(text(),\"Reservation type\")]/following-sibling::kendo-combobox//span[@class=\"k-select\"]")).click();
+        return listItems;
+    }
+
+    public List<WebElement> filterRentType() {
+        driver.findElement(By.xpath("//label[contains(text(),\"Rental type\")]/following-sibling::kendo-combobox//span[@class=\"k-select\"]")).click();
+        return listItems;
+    }
+
+    @FindBy(id = "unit-number")
+    public WebElement filterUnitNumField;
+
+    public List<WebElement> filterStatuses() {
+        driver.findElement(By.xpath("//input[@placeholder=\"Select Status\"]")).click();
+        return listItems;
+    }
+
 
     //TODO Containue the reservation page filters
 }

@@ -39,8 +39,18 @@ Feature: Making Reservation with Nazeel PMS (web application)
     Then check the cards count to be 12 and by loading more each time 12 new cards are displayed
 
 
-    # TODO Scenario Outline: Search criteria and filter
-
+  Scenario Outline: Search criteria and filter
+    When filtering with "<filter>" as "<value>"
+    And choose page size as "100"
+    And open a reservation and return to reservations page
+    Then check all reservations records "<filter>" as "<value>"
+    And Check page size equal to "100"
+    When refresh page
+    Then check the search criteria is reset
+    Examples:
+      | filter   | value   |
+      | resType  | Single  |
+      | rentType | Monthly |
 
   @Penalties
   Rule:Penalties

@@ -53,6 +53,8 @@ public class P02_DashBoardPage {
     public WebElement dropCashVoucherssLink;
     @FindBy(xpath = "//span[contains(text(),\"Customers\")]")
     public WebElement customersDropList;
+    @FindBy(xpath = "//a[@href=\"/customers/guest-profile\"]")
+    public WebElement guestsLink;
     @FindBy(xpath = "//a[@href=\"/customers/Corporate\"]")
     public WebElement corporatesLink;
     @FindBy(xpath = "//a[@href=\"/customers/vendor\"]")

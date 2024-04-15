@@ -2,6 +2,7 @@ package org.example;
 
 import org.apache.commons.lang.StringUtils;
 import org.openqa.selenium.*;
+import org.openqa.selenium.interactions.Action;
 import org.openqa.selenium.interactions.Actions;
 
 import java.io.File;
@@ -47,7 +48,17 @@ public class Utils {
     public static boolean isSorted(List<String> listOfStrings) {
         return isSorted(listOfStrings, listOfStrings.size());
     }
-
+public static void  draw(WebDriver driver,WebElement element){
+    Actions builder = new Actions(driver);
+    Action drawAction = builder.moveToElement(element,135,15) //start points x axis and y axis.
+            .click()
+            .moveByOffset(200, 60) // 2nd points (x1,y1)
+            .click()
+            .moveByOffset(100, 70)// 3rd points (x2,y2)
+            .doubleClick()
+            .build();
+    drawAction.perform();
+}
     public static boolean isSorted(List<String> listOfStrings, int index) {
         if (index < 2) {
             return true;

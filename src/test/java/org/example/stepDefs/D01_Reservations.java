@@ -11,16 +11,18 @@ import org.example.pages.mutlipurposes.P00_multiPurposes;
 import org.example.pages.reservations.P03_1_ReservationMainDataPage;
 import org.example.pages.reservations.P03_5_UnitSelectionPopup;
 import org.example.pages.reservations.P03_6_EndReservationPopUp;
+import org.example.pages.reservations.P03_ReservationsPage;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.asserts.SoftAssert;
 
 import java.time.Duration;
 import java.util.List;
 
-public class D01_MakingReservation {
+public class D01_Reservations {
     WebDriver driver = Hooks.driver;
 
 
@@ -31,6 +33,7 @@ public class D01_MakingReservation {
     final WebDriverWait wait = new WebDriverWait(Hooks.driver, Duration.ofSeconds(15));
     final P03_5_UnitSelectionPopup unitSelectionPopup = new P03_5_UnitSelectionPopup(driver);
     final P03_6_EndReservationPopUp endReservationPopUp = new P03_6_EndReservationPopUp(driver);
+    P03_ReservationsPage reservationsPage = new P03_ReservationsPage(driver);
     final SoftAssert asrt = new SoftAssert();
     Actions action = new Actions(Hooks.driver);
 
@@ -189,7 +192,7 @@ public class D01_MakingReservation {
             actionButton.click();
             endReservation(status);
         }
-        for (D08_Vouchers.VouchersMap v:D08_Vouchers.vouchersMaps) {
+        for (D08_Vouchers.VouchersMap v : D08_Vouchers.vouchersMaps) {
             v.setvState("Ended");
         }
 
@@ -278,12 +281,77 @@ public class D01_MakingReservation {
 
     @Then("check the cards count to be 12 and by loading more each time 12 new cards are displayed")
     public void checkTheCardsCountToBeAndByLoadingMoreEachTimeNewCardsAreDisplayed() {
-        asrt.assertTrue(unitSelectionPopup.unitCards.size()==12);
+        asrt.assertTrue(unitSelectionPopup.unitCards.size() == 12);
         unitSelectionPopup.loadMoreLink.click();
         new P00_multiPurposes(driver).waitLoading();
-        asrt.assertTrue(unitSelectionPopup.unitCards.size()==24);
-      //  unitSelectionPopup.floorsPanels.forEach(f-> asrt.assertTrue(Utils.isSorted(unitSelectionPopup.unitNums(f))));
+        asrt.assertTrue(unitSelectionPopup.unitCards.size() == 24);
+        //  unitSelectionPopup.floorsPanels.forEach(f-> asrt.assertTrue(Utils.isSorted(unitSelectionPopup.unitNums(f))));
         asrt.assertAll();
 
+    }
+
+    @When("filtering with {string} as {string}")
+    public void filteringWithAs(String filter, String value) {
+        reservationsPage.filterButton.click();
+        switch (filter) {
+            case "resType" ->
+                    reservationsPage.filterResType().stream().filter(t -> t.getText().equalsIgnoreCase(value)).findAny().orElseThrow().click();
+            case "rentType" ->
+                    reservationsPage.filterRentType().stream().filter(t -> t.getText().equalsIgnoreCase(value)).findAny().orElseThrow().click();
+            case "unitType" ->
+                    reservationsPage.filterUnitTypes().stream().filter(t -> t.getText().equalsIgnoreCase(value)).findAny().orElseThrow().click();
+        }
+        reservationsPage.searchButton.click();
+    }
+
+    @And("open a reservation and return to reservations page")
+    public void openAReservationAndReturnToReservationsPage() {
+        reservationsPage.reservationsNumbers.getFirst().click();
+        driver.navigate().back();
+    }
+
+    @Then("check all reservations records {string} as {string}")
+    public void checkAllReservationsRecordsAs(String filter, String value) {
+        new P00_multiPurposes(driver).waitLoading();
+        switch (filter) {
+            case "resType" -> {
+                if (value.equalsIgnoreCase("single"))
+                    asrt.assertTrue(reservationsPage.reservationsUnits_Types.stream().anyMatch(t -> !t.getText().contains("Group")));
+                else
+                    asrt.assertFalse(reservationsPage.reservationsUnits_Types.stream().anyMatch(t -> !t.getText().contains("Group")));
+            }
+            case "rentType" ->
+                    asrt.assertFalse(reservationsPage.reservationsNights.stream().anyMatch(n -> !n.getText().toLowerCase().contains(value.toLowerCase())));
+            // case "unitType" ->
+
+        }
+        asrt.assertAll();
+    }
+
+    @And("choose page size as {string}")
+    public void choosePageSizeAs(String size) {
+        new P00_multiPurposes(driver).waitLoading();
+        Select s =new Select (new P00_multiPurposes(driver).pageSize);
+        s.selectByValue(size);
+    }
+
+    @And("Check page size equal to {string}")
+    public void checkPageSizeEqualTo(String size) {
+        Select s =new Select (new P00_multiPurposes(driver).pageSize);
+        asrt.assertTrue(s.getFirstSelectedOption().getText().contains(size));
+        asrt.assertAll();
+    }
+
+    @When("refresh page")
+    public void refreshPage() {
+        driver.navigate().refresh();
+    }
+
+    @Then("check the search criteria is reset")
+    public void checkTheSearchCriteriaIsReset() {
+        new P00_multiPurposes(driver).waitLoading();
+        Select s =new Select (new P00_multiPurposes(driver).pageSize);
+        asrt.assertTrue(s.getFirstSelectedOption().getText().contains("20"));
+        asrt.assertAll();
     }
 }

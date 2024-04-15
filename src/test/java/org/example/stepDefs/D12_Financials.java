@@ -250,11 +250,11 @@ public class D12_Financials {
     }
 
     private void openReservationTaxesPopUp(String startDate, String endDate) {
-        new D01_MakingReservation().openReservationsPage();
-        new D01_MakingReservation().clickOnAddNewReservation();
-        new D01_MakingReservation().selectStartDateAndEndDate(startDate, endDate);
-        new D01_MakingReservation().openUnitSelectionPopup();
-        new D01_MakingReservation().selectAUnit("RANDOM");
+        new D01_Reservations().openReservationsPage();
+        new D01_Reservations().clickOnAddNewReservation();
+        new D01_Reservations().selectStartDateAndEndDate(startDate, endDate);
+        new D01_Reservations().openUnitSelectionPopup();
+        new D01_Reservations().selectAUnit("RANDOM");
         new P00_multiPurposes(driver).waitLoading();
         new P03_1_ReservationMainDataPage(driver).veiwTaxesButton.click();
     }

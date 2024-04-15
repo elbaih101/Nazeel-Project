@@ -44,3 +44,13 @@ Feature: Vendors Feature
       | name           | msg                                                      |
       | zekwa2         | Vendor deleted successfully                              |
       | Default vendor | Sorry, this item has related data and can not be deleted |
+
+  Scenario Outline: filter vendors
+    When filtering vendors "<filter>" as "<value>"
+    Then Check Records shown "<filter>" as "<value>"
+    Examples:
+      | filter | value           |
+      | name   | vendor          |
+      | status | inActive        |
+      | vat    | 312345678912343 |
+      | crno   | 98898           |
