@@ -1,5 +1,6 @@
 package org.example.pages.customers;
 
+import org.example.Utils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -39,9 +40,9 @@ public class P35_Guests {
     public WebElement searchButton;
 
     @FindBy(xpath = "//label[contains(text(),\"Name\")]/following-sibling::input")
-    public WebElement nameSearchField;
+    public WebElement nameFilterField;
     @FindBy(xpath = "//label[contains(text(),\"Mobile\")]/following-sibling::input")
-    public WebElement mobileSearchField;
+    public WebElement mobileFilterField;
 
     public List<WebElement> filterStatusesList() {
         driver.findElement(By.xpath("//kendo-combobox[@id=\"status\"]//span[@class=\"k-select\"]")).click();
@@ -134,10 +135,11 @@ public class P35_Guests {
 
     //// guest data ////
 
-    @FindBy(xpath = "//span[@role=\"switch\"]")
+    @FindBy(name="status")
     public WebElement statusSwitch;
     @FindBy(xpath = "//input[@placeholder=\"Type first name\"]")
     public WebElement firstNameField;
+
     @FindBy(xpath = "//input[@placeholder=\"Type Second Name\"]")
     public WebElement secondNameField;
 
@@ -162,11 +164,14 @@ public class P35_Guests {
 
     public List<WebElement> getListItems(WebElement comboBox) {
         comboBox.findElement(By.xpath(".//span[@class=\"k-select\"]")).click();
+       Utils.sleep(300);
         return listItems;
     }
 
     public WebElement clearSelectionButton(WebElement comboBox) {
-        return comboBox.findElement(By.xpath(".//span[contains(@class,\"k-clear-value\")]"));
+       WebElement clear =comboBox.findElement(By.xpath(".//span[contains(@class,\"k-clear-value\")]"));
+        actions.moveToElement(comboBox, 3, 4).perform();
+        return clear;
     }
 
     @FindBy(id = "idNumber")
@@ -180,7 +185,7 @@ public class P35_Guests {
     @FindBy(xpath = "//div[@class=\"img-upload img-upload--light\"]")
     public WebElement imageField;
 
-    public List<WebElement> dialCodesList() {
+    public List<WebElement> dialCodes() {
         driver.findElement(By.xpath("//kendo-combobox[@name=\"dialCode\"]//span[@class=\"k-select\"]")).click();
         return listItems;
     }
@@ -207,12 +212,77 @@ public class P35_Guests {
     //// guest Notes //
     @FindBy(xpath = "//span[contains(text(),\"Guest Notes\")]")
     public WebElement guestNotesTab;
-    //TODO Containue guest data
+    @FindBy(xpath = "//label[contains(text(),\"Company Note\")]/following-sibling::multi-lang-ta//textarea")
+    public WebElement companyNotesField;
+    @FindBy(xpath = "//button[contains(text(),\"Company Note\")]")
+    public WebElement addCompanyNoteButton;
+    @FindBy(xpath = "//label[contains(text(),\"Property Note\")]/following-sibling::multi-lang-ta//textarea")
+    public WebElement propertyNotesField;
+    @FindBy(xpath = "//button[contains(text(),\"Property Note\")]")
+    public WebElement addPropertyNoteButton;
+    @FindBy(xpath = "//button[contains(text(),\"Save Changes\")]")
+    public WebElement saveNotesButton;
+
+    @FindBy(className="guest-note__content")
+    public List<WebElement>notesContentes;
+
+    public WebElement noteHeader(WebElement noteContent){
+        return noteContent.findElement(By.xpath("./preceding-sibling::div[@class=\"guest-note__header\"]"));
+    }
+
+    public WebElement noteEditButton(WebElement noteContent) {
+        WebElement moreActions=  noteContent.findElement(By.xpath("./preceding-sibling::div[@class=\"guest-note__header\"]//div[contains(@class,\"guest-note__more\")]"));
+        moreActions.click();
+         return moreActions.findElement(By.xpath("./..//div[contains(text(),\"Edit\")]"));
+    }
+    public WebElement notedeleteButton(WebElement noteContent) {
+        WebElement moreActions=  noteContent.findElement(By.xpath("./preceding-sibling::div[@class=\"guest-note__header\"]//div[contains(@class,\"guest-note__more\")]"));
+        moreActions.click();
+         return moreActions.findElement(By.xpath("./..//div[contains(text(),\"Delete\")]"));
+    }
+    @FindBy(xpath = "//div[@role=\"dialog\"]//textarea")
+    public WebElement editNoteField;
+    @FindBy(xpath = "//div[@role=\"dialog\"]//button[contains(text(),\"Save Changes\")]")
+    public WebElement saveEditNoteButton;
+
 
     ///end guest notes ////
     //// guest document ////
     @FindBy(xpath = "//span[contains(text(),\"Guest Documents\")]")
     public WebElement guestDocumentsTab;
+
+    @FindBy(xpath = "//th//button")
+    public WebElement addDocumentButton;
+    @FindBy(id="file-upload")
+    public WebElement documentUploadField;
+    @FindBy(xpath = "//input[@name=\"document-name\"]")
+    public WebElement documentNameField;
+    @FindBy(xpath = "//button[contains(text(),\"Add Document\")]")
+    public WebElement submitDocumentButton;
+    @FindBy(xpath = "//td[@data-kendo-grid-column-index=\"0\"]")
+    public List<WebElement> documentNames;
+    @FindBy(xpath = "//td[@data-kendo-grid-column-index=\"1\"]")
+    public List<WebElement> documentNotes;
+    @FindBy(xpath = "//td[@data-kendo-grid-column-index=\"2\"]")
+    public List<WebElement> documentsCreationDates;
+    @FindBy(xpath = "//td[@data-kendo-grid-column-index=\"3\"]")
+    List<WebElement> documentMoreActions;
+
+    public WebElement documentDownloadButton(WebElement document){
+        document.findElement(By.xpath("../..//td//button")).click();
+        return document.findElement(By.xpath(".//div[contains(text(),\"Download\")]"));
+    }
+    public WebElement documentDeleteButton(WebElement document){
+        document.findElement(By.xpath("../..//td//button")).click();
+        return document.findElement(By.xpath("./..//div[contains(text(),\"Delete\")]"));
+    }
+    @FindBy(xpath = "//button[contains(@class,\"button--danger\") and contains(text(),\"Yes\")]")
+    public WebElement confirmDeleteDocumentButton;
+
+
+
+
+
 
     //// end guest Documents ////
 

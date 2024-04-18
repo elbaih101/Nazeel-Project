@@ -21,7 +21,9 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.asserts.SoftAssert;
 
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class D11_Customers {
     WebDriver driver = Hooks.driver;
@@ -394,73 +396,86 @@ public class D11_Customers {
 
     }
 
-    private void fillGuestData(String fName, String lName, String phone, String nat, String idType, String idNumb, String state, String ign, String inv) {
+    private void fillGuestData(String fName, String lName, String phone, String nat, String gType, String idType, String idNumb, String state, String ign, String inv) {
+        if (!fName.isEmpty()) {
+            guests.firstNameField.sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.BACK_SPACE));
+            WebElement fnArField = new P00_multiPurposes(driver).secondLanguageField(guests.firstNameField);
+            fnArField.sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.BACK_SPACE));
+            if (!fName.equalsIgnoreCase("non")) {
+                guests.firstNameField.sendKeys(fName);
+                fnArField.sendKeys(fName);
+            }
+        }
+        if (!lName.isEmpty()) {
+            guests.lastNameField.sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.BACK_SPACE));
+            WebElement lNArField = new P00_multiPurposes(driver).secondLanguageField(guests.lastNameField);
+            lNArField.sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.BACK_SPACE));
+            if (!lName.equalsIgnoreCase("non")) {
+                guests.lastNameField.sendKeys(lName);
+                lNArField.sendKeys(lName);
+            }
+        }
+        if (!ign.contains("bDate")) {
+            Utils.setDate(guests.dateOfBirthField, "12/3/1999");
+        }
+        if (inv.contains("bDate")) {
+            Utils.setDate(guests.dateOfBirthField, DateTime.now().toString(DateTimeFormat.forPattern("dd/MM/yyyy")));
+        }
+        if (!ign.contains("Gender")) {
+            guests.getListItems(guests.genderComboBox).getFirst().click();
+        }
+        if (!nat.isEmpty()) {
+            if (nat.equalsIgnoreCase("non")) {
+                guests.clearSelectionButton(guests.nationalityComboBox).click();
+            } else {
+                guests.getListItems(guests.nationalityComboBox).stream().filter(id -> id.getText().equalsIgnoreCase(nat)).findAny().orElseThrow().click();
+            }
+        }
+        if (!gType.isEmpty()) {
+            if (gType.equalsIgnoreCase("non")) {
+                guests.clearSelectionButton(guests.guestTypeComboBox).click();
+            } else {
+                guests.getListItems(guests.guestTypeComboBox).getFirst().click();
+            }
+        }
+
+        if (!idType.isEmpty()) {
+            if (idType.equalsIgnoreCase("non")) {
+                guests.clearSelectionButton(guests.idTypeComboBox).click();
+            } else {
+                guests.getListItems(guests.idTypeComboBox).stream().filter(id -> id.getText().equalsIgnoreCase(idType)).findAny().orElseThrow().click();
+            }
+        }
+        if (!idNumb.isEmpty()) {
+            guests.idNumberField.sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.BACK_SPACE));
+            if (!idNumb.equalsIgnoreCase("non")) {
+                guests.idNumberField.sendKeys(idNumb);
+            }
+        }
         if (!phone.isEmpty()) {
             if (phone.equalsIgnoreCase("non")) {
                 guests.mobileField.sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.BACK_SPACE));
                 guests.dialcodeField.sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.BACK_SPACE));
             } else if (phone.equalsIgnoreCase("dialonly")) {
-                vendors.mobileField.sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.BACK_SPACE));
-                vendors.dialCodes().getFirst().click();
+                guests.mobileField.sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.BACK_SPACE));
+                guests.dialCodes().getFirst().click();
             } else if (phone.equalsIgnoreCase("nodial")) {
-                vendors.dialcodeField.sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.BACK_SPACE));
-                vendors.mobileField.sendKeys("336987");
+                guests.dialcodeField.sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.BACK_SPACE));
+                guests.mobileField.sendKeys("336987897");
             } else {
-                vendors.dialCodes().getFirst().click();
-                vendors.mobileField.sendKeys(phone);
+                guests.dialCodes().getFirst().click();
+                guests.mobileField.sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.BACK_SPACE));
+                guests.mobileField.sendKeys(phone);
             }
         }
-        if (!nat.isEmpty()) {
-            if (nat.equalsIgnoreCase("non")) {
-                guests.clearSelectionButton(guests.nationalityComboBox).click();
-            } else
-                guests.getListItems(guests.nationalityComboBox).getFirst().click();
-        }
 
-        if (!idType.isEmpty()) {
-            if (idType.equalsIgnoreCase("non"))
-                guests.clearSelectionButton(guests.idTypeComboBox).click();
-            else
-                guests.getListItems(guests.idTypeComboBox).stream().filter(id -> id.getText().equalsIgnoreCase(idType)).findAny().orElseThrow().click();
-        }
-        if (!idNumb.isEmpty()) {
-            guests.idNumberField.sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.BACK_SPACE));
-            if (!idNumb.equalsIgnoreCase("non"))
-                guests.idNumberField.sendKeys(idNumb);
-        }
-        if (!fName.isEmpty()) {
-            guests.firstNameField.sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.BACK_SPACE));
-            if (!fName.equalsIgnoreCase("non"))
-                guests.firstNameField.sendKeys(fName);
-        }
-        if (!lName.isEmpty()) {
-            guests.lastNameField.sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.BACK_SPACE));
-            if (lName.equalsIgnoreCase("non"))
-                guests.lastNameField.sendKeys(lName);
-        }
-        if (!ign.contains("bDate")) {
-            Utils.setDate(guests.dateOfBirthField, "12/3/1999");
-        }
-        if (!ign.contains("Gender")) {
-            guests.getListItems(guests.genderComboBox).getFirst().click();
-        }
-
-        if (!ign.contains("GuestType")) {
-            guests.getListItems(guests.guestTypeComboBox).getFirst().click();
-        }
         if (!ign.contains("idSerial")) {
             guests.getListItems(guests.idSerialComboBox).getFirst().click();
-        }
-        if (inv.contains("bDate")) {
-            Utils.setDate(guests.dateOfBirthField, DateTime.now().toString(DateTimeFormat.forPattern("dd/MM/yyyy")));
         }
         if (inv.contains("Gender")) {
             guests.clearSelectionButton(guests.genderComboBox).click();
         }
 
-        if (inv.contains("GuestType")) {
-            guests.clearSelectionButton(guests.guestTypeComboBox).click();
-        }
         if (inv.contains("idSerial")) {
             guests.clearSelectionButton(guests.idSerialComboBox).click();
         }
@@ -471,11 +486,13 @@ public class D11_Customers {
             guests.statusSwitch.click();
     }
 
-    @When("create Guest firstname {string} last name {string}  phone {string} nationality {string} id type {string} id number {string} ignored Fields {string} invailed Fields {string}")
+    @When("create Guest firstname {string} last name {string}  phone {string} nationality {string} Guest Type {string} id type {string} id number {string} ignored Fields {string} invailed Fields {string}")
     public void createGuestFirstnameLastNamePhoneIdTypeIdNumberIgnoredFieldsInvailedFields(String fName, String
-            lName, String phone, String nat, String idType, String idNumb, String ign, String inv) {
+            lName, String phone, String nat, String gType, String idType, String idNumb, String ign, String inv) {
+        new P00_multiPurposes(driver).waitLoading();
         guests.newGuestButton.click();
-        fillGuestData(fName, lName, phone, nat, idType, idNumb, "new", ign, inv);
+        new P00_multiPurposes(driver).waitLoading();
+        fillGuestData(fName, lName, phone, nat, gType, idType, idNumb, "new", ign, inv);
         guests.submitButton.click();
     }
 
@@ -500,21 +517,241 @@ public class D11_Customers {
         }
     }
 
-    @When("edit Guest with id number {string} firstname {string} last name {string}  phone {string} nationality {string} id type {string} id number {string} status {string} ignored Fields {string} invailed Fields {string}")
-    public void editGuestWithIdNumberFirstnameLastNamePhoneNationalityIdTypeIdNumberIgnoredFieldsInvailedFields(String oId, String fName, String lName, String phone, String nat, String idType, String nId, String ign, String inv) {
+    @When("edit Guest with id number {string} firstname {string} last name {string}  phone {string} nationality {string} Guest Type {string} id type {string} id number {string} status {string} ignored Fields {string} invailed Fields {string}")
+    public void editGuestWithIdNumberFirstnameLastNamePhoneNationalityIdTypeIdNumberIgnoredFieldsInvailedFields(String oId, String fName, String lName, String phone, String nat, String gType, String idType, String nId, String state, String ign, String inv) {
+
+        WebElement selectedGuest = getGuestData(oId);
+        guests.guestEditButton(selectedGuest).click();
         new P00_multiPurposes(driver).waitLoading();
-        WebElement selectedGuest = guests.idNumbers.stream().filter(c -> c.getText().equalsIgnoreCase(oId)).findAny().orElseThrow();
+        fillGuestData(fName, lName, phone, nat, gType, idType, nId, state, ign, inv);
+        guests.submitButton.click();
+
+    }
+
+    private WebElement getGuestData(String id) {
+        new P00_multiPurposes(driver).waitLoading();
+        WebElement selectedGuest;
+        if (id.equalsIgnoreCase("random"))
+            selectedGuest = guests.idNumbers.getFirst();
+        else
+            selectedGuest = guests.idNumbers.stream().filter(c -> c.getText().equalsIgnoreCase(id)).findAny().orElseThrow();
         String[] name = guests.guestName(selectedGuest).getText().split("\\s");
         setGuestMap(name[0], name[1], guests.guestphone(selectedGuest).getText().split("\\s")[1], guests.guestNationality(selectedGuest).getText(), guests.guestIDType(selectedGuest).getText(), guests.guestIDNumber(selectedGuest).getText(), guests.guestStatus(selectedGuest).getText());
-        guests.guestEditButton(selectedGuest).click();
+        return selectedGuest;
     }
 
     @When("delete Guest with id number {string}")
     public void deleteGuestWithIdNumber(String idNum) {
-        WebElement selectedGuest = guests.idNumbers.stream().filter(c -> c.getText().equalsIgnoreCase(idNum)).findAny().orElseThrow();
-        String[] name = guests.guestName(selectedGuest).getText().split("\\s");
-        setGuestMap(name[0], name[1], guests.guestphone(selectedGuest).getText().split("\\s")[1], guests.guestNationality(selectedGuest).getText(), guests.guestIDType(selectedGuest).getText(), guests.guestIDNumber(selectedGuest).getText(), guests.guestStatus(selectedGuest).getText());
+        WebElement selectedGuest = getGuestData(idNum);
         guests.guestDeleteButton(selectedGuest).click();
         guests.confirmDeleteButton.click();
     }
+
+    String compNote;
+    String propNote;
+
+    @When("adding a company note {string} and property ote {string} to guest with id {string}")
+    public void addingACompanyNoteAndPropertyOteToGuestWithId(String compNote, String propNote, String guestId) {
+        new P00_multiPurposes(driver).waitLoading();
+        WebElement selectedGuest = guests.idNumbers.stream().filter(c -> c.getText().equalsIgnoreCase(guestId)).findAny().orElseThrow();
+        guests.guestEditButton(selectedGuest).click();
+        new P00_multiPurposes(driver).waitLoading();
+        guests.guestNotesTab.click();
+        guests.companyNotesField.sendKeys(compNote);
+        guests.addCompanyNoteButton.click();
+        new D03_BlocksAndFloors().checkToastMesageContainsText("Saved Successed");
+        this.compNote = compNote;
+        guests.propertyNotesField.sendKeys(propNote);
+        guests.addPropertyNoteButton.click();
+        new D03_BlocksAndFloors().checkToastMesageContainsText("Saved Successed");
+        this.propNote = propNote;
+    }
+
+    private List<Boolean> asseertGuestNote(String note) {
+        WebElement selectedNote = guests.notesContentes.stream().filter(c -> c.getText().contains(note)).findAny().orElseThrow();
+        List<Boolean> aserts = new ArrayList<>();
+        aserts.add(guests.noteHeader(selectedNote).getText().contains(new P00_multiPurposes(driver).userName()));
+        aserts.add(guests.noteHeader(selectedNote).getText().contains(new P00_multiPurposes(driver).propertyName()));
+        return aserts;
+    }
+
+    @Then("check the note is added with the name of the user who created it and the property")
+    public void checkTheNoteIsAddedWithTheNameOfTheUserWhoCreatedItAndTheProperty() {
+        new P00_multiPurposes(driver).waitLoading();
+        asseertGuestNote(compNote).forEach(asrt::assertTrue);
+        asseertGuestNote(propNote).forEach(asrt::assertTrue);
+        asrt.assertAll();
+    }
+
+    String editedNote;
+
+    @When("editing a company note {string} to be {string} to guest with id {string}")
+    public void editingACompanyNoteToBeToGuestWithId(String oldNote, String neNote, String guestId) {
+        WebElement selectedNote = selectNoteFromGuest(oldNote, guestId);
+        guests.noteEditButton(selectedNote).click();
+        guests.editNoteField.sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.BACK_SPACE));
+        guests.editNoteField.sendKeys(neNote);
+        guests.saveEditNoteButton.click();
+        this.editedNote = neNote;
+
+    }
+
+    @Then("Check the Edited Note")
+    public void checkTheEditedNote() {
+        new D03_BlocksAndFloors().checkToastMesageContainsText("Saved Successed");
+        new P00_multiPurposes(driver).waitLoading();
+        asseertGuestNote(editedNote).forEach(asrt::assertTrue);
+        asrt.assertAll();
+
+    }
+
+    private WebElement selectNoteFromGuest(String oldNote, String guestId) {
+        new P00_multiPurposes(driver).waitLoading();
+        WebElement selectedGuest = guests.idNumbers.stream().filter(c -> c.getText().equalsIgnoreCase(guestId)).findAny().orElseThrow();
+        guests.guestEditButton(selectedGuest).click();
+        new P00_multiPurposes(driver).waitLoading();
+        guests.guestNotesTab.click();
+        new P00_multiPurposes(driver).waitLoading();
+        return guests.notesContentes.stream().filter(c -> c.getText().contains(oldNote)).findAny().orElseThrow();
+    }
+
+    String deltetdNote;
+
+    @When("deleting guest Note {string} to guest with id {string}")
+    public void deletingGuestNoteToGuestWithId(String note, String guestId) {
+        WebElement selectedNote = selectNoteFromGuest(note, guestId);
+        guests.notedeleteButton(selectedNote).click();
+        guests.confirmDeleteButton.click();
+        this.deltetdNote = note;
+    }
+
+    @Then("Check the success msg and the note is deleted")
+    public void checkTheSuccessMsgAndTheNoteIsDeleted() {
+        new D03_BlocksAndFloors().checkToastMesageContainsText("Deleted Successfully");
+        new P00_multiPurposes(driver).waitLoading();
+        asrt.assertFalse(guests.notesContentes.stream().anyMatch(c -> c.getText().contains(deltetdNote)));
+    }
+
+    String docName;
+
+    @When("adding a Document to guest with id {string} naming it {string}")
+    public void addingADocumentToGuestWithIdNamingIt(String guestId, String docName) {
+        new P00_multiPurposes(driver).waitLoading();
+        WebElement selectedGuest = guests.idNumbers.stream().filter(c -> c.getText().equalsIgnoreCase(guestId)).findAny().orElseThrow();
+        guests.guestEditButton(selectedGuest).click();
+        new P00_multiPurposes(driver).waitLoading();
+        guests.guestDocumentsTab.click();
+        guests.addDocumentButton.click();
+        Utils.fileUpload(guests.documentUploadField, "src/main/resources/Images", 1);
+        guests.documentNameField.sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.BACK_SPACE));
+        guests.documentNameField.sendKeys(docName);
+        guests.submitDocumentButton.click();
+        guests.submitButton.click();
+        guestMap.put("id", guestId);
+        this.docName = docName;
+
+    }
+
+    WebElement selectedDoc;
+
+    @Then("Check the added document visible with the name {string}")
+    public void checkTheAddedDocumentVisibleWithTheName(String docName) {
+        new D03_BlocksAndFloors().checkToastMesageContainsText("Saved Successfully");
+        selectedDoc = selectDocumentFromGuest(this.docName, guestMap.get("id"));
+        asrt.assertTrue(selectedDoc != null);
+        asrt.assertAll();
+    }
+
+    private WebElement selectDocumentFromGuest(String docName, String guestId) {
+        new P00_multiPurposes(driver).waitLoading();
+        WebElement selectedGuest = guests.idNumbers.stream().filter(c -> c.getText().equalsIgnoreCase(guestId)).findAny().orElseThrow();
+        guests.guestEditButton(selectedGuest).click();
+        new P00_multiPurposes(driver).waitLoading();
+        guests.guestDocumentsTab.click();
+        new P00_multiPurposes(driver).waitLoading();
+        return guests.documentNames.stream().filter(c -> c.getText().contains(docName)).findAny().orElse(null);
+    }
+
+    @When("deleting the document")
+    public void deletingTheDocument() {
+        guests.documentDeleteButton(selectedDoc).click();
+        guests.confirmDeleteDocumentButton.click();
+
+    }
+
+    @Then("Check the document no more exist")
+    public void checkTheDocumentNoMoreExist() {
+        new D03_BlocksAndFloors().checkToastMesageContainsText("Saved Successfully");
+        selectedDoc = selectDocumentFromGuest(docName, guestMap.get("id"));
+        asrt.assertTrue(selectedDoc == null);
+        asrt.assertAll();
+    }
+
+
+    @When("Filtering guest {string} as {string}")
+    public void filteringGuestAs(String filter, String value) {
+        new P00_multiPurposes(driver).waitLoading();
+        guests.filterButton.click();
+        switch (filter.toLowerCase()) {
+            case "status" ->
+                    guests.filterStatusesList().stream().filter(s -> s.getText().equalsIgnoreCase(value)).findAny().orElseThrow().click();
+            case "name" -> guests.nameFilterField.sendKeys(value);
+            case "phone" -> guests.mobileFilterField.sendKeys(value);
+            case "nationality" ->
+                    guests.filterNationalityList().stream().filter(s -> s.getText().equalsIgnoreCase(value)).findAny().orElseThrow().click();
+            case "class" ->
+                    guests.filterGuestClassList().stream().filter(s -> s.getText().equalsIgnoreCase(value)).findAny().orElseThrow().click();
+            case "idtype" ->
+                    guests.filterIdTypeList().stream().filter(s -> s.getText().equalsIgnoreCase(value)).findAny().orElseThrow().click();
+            case "idnum" -> guests.iDFilterField.sendKeys(value);
+        }
+        guests.searchButton.click();
+    }
+
+    @Then("Check all guests shown {string} as {string}")
+    public void checkAllGuestsShownAs(String filter, String value) {
+        new P00_multiPurposes(driver).waitLoading();
+        List<WebElement> theList = new ArrayList<>();
+        switch (filter.toLowerCase()) {
+            case "status" -> {
+                theList = guests.statuses;
+                if (!theList.isEmpty())
+                    asrt.assertFalse(theList.stream().anyMatch(s -> !s.getText().equalsIgnoreCase(value)));
+            }
+            case "name" -> {
+                theList = guests.guestsNames;
+                if (!theList.isEmpty())
+                    asrt.assertFalse(theList.stream().anyMatch(s -> !s.getText().contains(value)));
+            }
+            case "phone" -> {
+                theList = guests.mobiles;
+                if (!theList.isEmpty())
+                    asrt.assertFalse(theList.stream().anyMatch(s -> !s.getText().contains(value)));
+            }
+            case "nationality" -> {
+                theList = guests.nationalities;
+                if (!theList.isEmpty())
+                    asrt.assertFalse(theList.stream().anyMatch(s -> !s.getText().equalsIgnoreCase(value)));
+            }
+            case "class" -> {
+                theList = guests.classes;
+                if (!theList.isEmpty()) {
+                    P00_multiPurposes p00MultiPurposes = new P00_multiPurposes(driver);
+                    asrt.assertTrue(theList.stream().anyMatch(s ->!p00MultiPurposes.toolTip(s.findElement(By.xpath("./div/div"))).getText().toLowerCase().contains(value.toLowerCase())));
+                }
+            }
+            case "idtype" -> {
+                theList = guests.iDTypes;
+                if (!theList.isEmpty())
+                    asrt.assertFalse(theList.stream().anyMatch(s -> !s.getText().equalsIgnoreCase(value)));
+            }
+            case "idnum" -> {
+                theList = guests.idNumbers;
+                if (!theList.isEmpty())
+                    asrt.assertFalse(theList.stream().anyMatch(s -> !s.getText().equalsIgnoreCase(value)));
+            }
+        }
+        asrt.assertAll();
+    }
+
 }

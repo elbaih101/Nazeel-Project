@@ -1,6 +1,7 @@
 package org.example.pages.mutlipurposes;
 
 import org.apache.commons.lang.StringUtils;
+import org.example.Utils;
 import org.example.stepDefs.Hooks;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -40,17 +41,64 @@ public class P00_multiPurposes {
         js = (JavascriptExecutor) driver;
     }
 
-
+    ////List items ////
+    @FindBy(xpath = "//ul[@role=\"listbox\"]//li[@role=\"option\"]")
+    List<WebElement> listItems;
+    public List<WebElement> getListItems(WebElement comboBox) {
+        comboBox.findElement(By.xpath(".//span[@class=\"k-select\"]")).click();
+        Utils.sleep(300);
+        return listItems;
+    }
+    ////End List items ////
     @FindBy(xpath = "//select")
     public WebElement pageSize;
-    public List<WebElement>pageSizes(){
-       pageSize.click();
-       return pageSize.findElements(By.xpath("./option"));
+
+    public List<WebElement> pageSizes() {
+        pageSize.click();
+        return pageSize.findElements(By.xpath("./option"));
+    }
+//// user menu ////
+    @FindBy(className = "user-menu")
+    public WebElement userMenu;
+    @FindBy(id="propertyDropDown")
+    public WebElement propertiesComboBox;
+    @FindBy(xpath = "//app-compnay-dropdown//kendo-combobox//input")
+    public WebElement companyNameField;
+
+
+    @FindBy(className = "user-menu__name")
+    WebElement userNameDiv;
+
+
+    public String userName() {
+        actions.moveToElement(userNameDiv, 3, 4).perform();
+        return bottomToolTip.getText();
+    }
+    @FindBy(className = "user-menu__branch")
+    WebElement propertyNameSpan;
+
+
+    public String propertyName() {
+        actions.moveToElement(propertyNameSpan, 3, 4).perform();
+        return bottomToolTip.getText();
+    }
+    //// end User Menu ////
+
+
+    public WebElement secondLanguageField(WebElement multiLangField) {
+        multiLangField.findElement(By.xpath("./following-sibling::button")).click();
+        Utils.sleep(300);
+        return multiLangField.findElement(By.xpath("./../../following-sibling::div/input[2]"));
     }
 
 
     @FindBy(xpath = "//div[contains(@class,\"p-tooltip-bottom\")]/div[@class=\"p-tooltip-text\"]")
     public WebElement bottomToolTip;
+    public WebElement toolTip(WebElement element){
+        actions.moveToElement(element, 3, 4).perform();
+        Utils.sleep(100);
+        return driver.findElement(By.xpath("//div[@class=\"p-tooltip-text\"]"));
+    }
     @FindBy(xpath = "//div[@class=\"page-loading\"]")
     public WebElement loadingAnimation;
 

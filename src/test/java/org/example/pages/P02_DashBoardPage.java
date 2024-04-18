@@ -19,6 +19,7 @@ public class P02_DashBoardPage {
         PageFactory.initElements(driver, this);
     }
 
+
     @FindBy(xpath = "//div[@class=\"n-topbar__logo ng-star-inserted\"]")
     public WebElement homePageLink;
     @FindBy(xpath = "//a[@href=\"/reservations\"]")

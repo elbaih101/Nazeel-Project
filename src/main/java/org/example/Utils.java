@@ -18,12 +18,13 @@ public class Utils {
      */
     public static void setDate(WebElement dateInput, String date) {
         dateInput.click();
-        date = StringUtils.remove(date,'/');
+        date = StringUtils.remove(date, '/');
         dateInput.sendKeys(Keys.ARROW_LEFT);
         dateInput.sendKeys(Keys.ARROW_LEFT);
         dateInput.sendKeys(date);
     }
-    public static void moveelement(WebElement toMove, WebElement moveTo, WebDriver driver){
+
+    public static void moveelement(WebElement toMove, WebElement moveTo, WebDriver driver) {
         new Actions(driver)
                 .moveToElement(toMove)
                 .pause(Duration.ofSeconds(1))
@@ -35,30 +36,41 @@ public class Utils {
                 .pause(Duration.ofSeconds(1))
                 .release().perform();
     }
-    public static void setTime(WebElement timeInput,String time){
+
+    public static void setTime(WebElement timeInput, String time) {
         timeInput.click();
-        time = StringUtils.remove(time,':');
-        time = StringUtils.remove(time,' ');
+        time = StringUtils.remove(time, ':');
+        time = StringUtils.remove(time, ' ');
         timeInput.sendKeys(Keys.ARROW_LEFT);
         timeInput.sendKeys(Keys.ARROW_LEFT);
         timeInput.sendKeys(time);
 
     }
 
+    public static void sleep(int milliSeconds) {
+        try {
+            Thread.sleep(milliSeconds);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
     public static boolean isSorted(List<String> listOfStrings) {
         return isSorted(listOfStrings, listOfStrings.size());
     }
-public static void  draw(WebDriver driver,WebElement element){
-    Actions builder = new Actions(driver);
-    Action drawAction = builder.moveToElement(element,135,15) //start points x axis and y axis.
-            .click()
-            .moveByOffset(200, 60) // 2nd points (x1,y1)
-            .click()
-            .moveByOffset(100, 70)// 3rd points (x2,y2)
-            .doubleClick()
-            .build();
-    drawAction.perform();
-}
+
+    public static void draw(WebDriver driver, WebElement element) {
+        Actions builder = new Actions(driver);
+        Action drawAction = builder.moveToElement(element, 135, 15) //start points x axis and y axis.
+                .click()
+                .moveByOffset(200, 60) // 2nd points (x1,y1)
+                .click()
+                .moveByOffset(100, 70)// 3rd points (x2,y2)
+                .doubleClick()
+                .build();
+        drawAction.perform();
+    }
+
     public static boolean isSorted(List<String> listOfStrings, int index) {
         if (index < 2) {
             return true;
@@ -68,7 +80,8 @@ public static void  draw(WebDriver driver,WebElement element){
             return isSorted(listOfStrings, index - 1);
         }
     }
-   public static String getStyles = "var s = '';" +
+
+    public static String getStyles = "var s = '';" +
             "var o = getComputedStyle(arguments[0]);" +
             "for(var i = 0; i < o.length; i++){" +
             "s+=o[i] + ':' + o.getPropertyValue(o[i])+';';}" +
@@ -81,16 +94,14 @@ public static void  draw(WebDriver driver,WebElement element){
 
     public static boolean isEnabled(WebElement element) {
         boolean bol = true;
-        if (!element.isEnabled())
-        {
+        if (!element.isEnabled()) {
             return false;
         }
         try {
             element.findElement(By.xpath("./ancestor-or-self::*[contains(@class,\"k-state-disabled\")]"));
-            bol=false;
+            bol = false;
 
-        }catch (NoSuchElementException e)
-        {
+        } catch (NoSuchElementException e) {
         }
 //
 //        // String state = (String) js.executeScript("var form= arguments[0].form.className; return form;",element);
@@ -114,9 +125,9 @@ public static void  draw(WebDriver driver,WebElement element){
 
     public static void fileUpload(WebElement element, String folderPath, int count) {
         File folder = new File(folderPath);
-        File[] photos = folder.listFiles();
+        File[] files = folder.listFiles();
         for (int i = 0; i < count; i++) {
-            File uploadFile = photos != null ? photos[i] : null;
+            File uploadFile = files != null ? files[i] : null;
             element.sendKeys(uploadFile != null ? uploadFile.getAbsolutePath() : null);
             try {
                 Thread.sleep(1000);
