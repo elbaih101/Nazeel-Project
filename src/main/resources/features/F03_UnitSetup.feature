@@ -47,6 +47,7 @@ Feature: Unit Setup
       And delete the created unit type
       Then  Check toast mesage contains text "Task Type is deleted successfully"
   ##end masterdata unit Type Customization ##
+
 ## Setup Unit Type Customization ##
   Rule: property unit type customization
     Background: going to the customization page
@@ -188,8 +189,11 @@ Feature: Unit Setup
       Then Check toast mesage contains text "Unit Merge Deleted Successfully"
       And check the units no more merged
 ## end Merge Settings ##
-## Rates Customization ##
-  Rule: Base Rate Customization
+    ## Rates Customization ##
+
+    @Rates
+    Rule: Base Rate Customization
+    #noinspection GherkinMisplacedBackground
     Background:going to the Base Rate page
       Given go to Base Rate Page
       And open baseRate edit mode

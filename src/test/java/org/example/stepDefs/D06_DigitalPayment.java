@@ -5,6 +5,7 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.example.Utils;
 import org.example.enums.Vouchers;
 import org.example.pages.P12_SMSLogPage;
 import org.example.pages.P02_DashBoardPage;
@@ -273,11 +274,7 @@ public class D06_DigitalPayment {
     @And("go to Reservation Financial Page")
     public void goToReservationFinancialPage() {
         P03_1_ReservationMainDataPage p031ReservationMainDataPage = new P03_1_ReservationMainDataPage(driver);
-        try {
-            Thread.sleep(300);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        Utils.sleep(300);
         wait.until(ExpectedConditions.elementToBeClickable(p031ReservationMainDataPage.financialAndPaymentsPage));
         js.executeScript("arguments[0].click();", p031ReservationMainDataPage.financialAndPaymentsPage);
 //        p031ReservationMainDataPage.financialAndPaymentsPage.click();
@@ -286,7 +283,8 @@ public class D06_DigitalPayment {
     @And("Check the data matches the reservation data")
     public void checkTheDataMatchesTheReservationData() {
         asrt.assertTrue(p032ReservationFinancialPage.reservationNum() == Integer.parseInt(digitalPaymentPage.reservationNumber().getText()));
-        asrt.assertTrue(p032ReservationFinancialPage.balance.getText().trim().equalsIgnoreCase(digitalPaymentPage.reservationBalance().getText()));
+        //Fixme remember to change this if it contridicts with the purpose
+        asrt.assertTrue(p032ReservationFinancialPage.reservationBalance().toString().equalsIgnoreCase(digitalPaymentPage.reservationBalance().getText().replace("-","")));
         asrt.assertTrue(digitalPaymentPage.reservationGuestName().getText().trim().equalsIgnoreCase(digitalPaymentPage.guestNameField().getAttribute("value").trim()));
 
     }

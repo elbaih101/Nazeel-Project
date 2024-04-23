@@ -2,7 +2,7 @@ Feature: Making Reservation with Nazeel PMS (web application)
 
   Background: selecting property
     Given Logging in with superuser
-    And Select Property "P00166"
+    And Select Property "P00020"
 
   @Reservations
   Rule: Reservations
@@ -52,53 +52,12 @@ Feature: Making Reservation with Nazeel PMS (web application)
       | resType  | Single  |
       | rentType | Monthly |
 
-  @Penalties
-  Rule:Penalties
-  #noinspection GherkinMisplacedBackground
-  Background:go to penalties page
-    Given go to penalties Page
+ ## Discount and Taxes Calc
 
-  Scenario Outline: adding new penalty
-    When creating penalty with name "<name>" ctegory "<categ>" type "<type>" amount "<amount>" calculatedOF "<calcOf>" Description "<desc>"
-    Then Check msg "<msg>" and the penalty
-    Examples:
-      | name      | categ          | type       | amount    | calcOf      | desc                                | msg                       |
-      |           | User Defined   | Amount     | 15        |             | userdefined penalty with amount     | Name Is Requird           |
-      | penalty 1 | User Defined   | Amount     |           |             | userdefined penalty with amount     | Please enter amount value |
-      | penalty 1 | User Defined   |            | 15        |             | userdefined penalty with amount     | Please Select Amount Type |
-      | penalty 1 |                | Amount     | 15        |             | userdefined penalty with amount     | Please Select Category    |
-      | penalty 1 | User Defined   | Amount     | 15        |             | userdefined penalty with amount     | Saved Successfully        |
-      | penalty 1 | User Defined   |            | undefined |             | userdefined penalty with amount     | duplicated Penality name  |
-      | penalty 2 | User Defined   | Percentage | 15        |             | userdefined penalty with percentage | Calculated Of is required |
-      | penalty 2 | Early Check-In | Percentage | 15        | First Night | userdefined penalty with percentage | Saved Successfully        |
-
-  Scenario Outline: Filter Penalties
-    When Filtering penalties With "<filter>" as "<value>"
-    Then  Check all visible records "<filter>" as "<value>"
-    Examples:
-      | filter | value          |
-      | name   | penalty 1      |
-      | amount | 15             |
-      | type   | percentage     |
-      | calcOf | First Night    |
-      | categ  | Early Check-In |
-      | state  | Active         |
-
-
-  Scenario Outline: edit penalty
-    When editing penalty "<oName>" name "<nName>" ctegory "<categ>" type "<type>" amount "<amount>" calculatedOF "<calcOf>" Description "<desc>" and state "<state>"
-    Then Check msg "<msg>" and the penalty
-    Examples:
-      | oName     | nName              | categ                      | type   | amount | calcOf | desc                             | state    | msg                       |
-      | penalty 2 | non                |                            |        |        |        |                                  |          | Name Is Requird           |
-      | penalty 2 |                    | non                        |        |        |        |                                  |          | Please Select Category    |
-      | penalty 2 |                    |                            |        | non    |        |                                  |          | Please enter amount value |
-      | penalty 2 |                    |                            |        |        | non    |                                  |          | Calculated Of is required |
-      | penalty 2 | penalty 1          |                            |        |        |        |                                  |          | duplicated Penality name  |
-      | penalty 2 | penalty 2 (Edited) | Cancel/No-Show Reservation | Amount | 50     |        | the edited desc of the penalty 2 | Inactive | Saved Successfully        |
-
-
-  Scenario: can delete a penalty with no related data
-    When deleting penalty "penalty 2 (Edited)"
-    Then Check msg "Deleted Successfully" and penalty deletion
+  Scenario: Check Discount and Tax Calculations on reservtion
+    When Click on Add new Reservation
+    And fill Reservation Data with Source "RANDOM" purpose "RANDOM" Unit "RANDOM" Guest "RANDOM"
+    And ge applied Taxes on reservation
+    And go to Reservation Financial Page
+    Then Check all Discounts types against Taxes Calculations and Balnce
 

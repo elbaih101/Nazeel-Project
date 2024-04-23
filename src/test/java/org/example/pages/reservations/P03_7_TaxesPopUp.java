@@ -1,5 +1,8 @@
 package org.example.pages.reservations;
 
+import org.example.pojos.Tax;
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -9,6 +12,7 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.List;
 
 public class P03_7_TaxesPopUp {
@@ -23,6 +27,9 @@ public class P03_7_TaxesPopUp {
         wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         actions = new Actions(driver);
     }
+
+    @FindBy(xpath = "//a[@href=\"#\"]/span")
+    public WebElement closeButton;
 
     @FindBy(xpath = "//div[@role=\"dialog\"]//td[@data-kendo-grid-column-index=\"1\"]")
     public List<WebElement> taxesNames;
@@ -46,6 +53,14 @@ public class P03_7_TaxesPopUp {
 
     public WebElement taxMethod(WebElement tax) {
         return tax.findElement(By.xpath("./..//td[@data-kendo-grid-column-index=\"3\"]"));
+    }
+
+    public WebElement taxAmount(WebElement tax) {
+        return tax.findElement(By.xpath("./..//td[@data-kendo-grid-column-index=\"2\"]"));
+    }
+
+    public WebElement taxInclusveCheckbox(WebElement tax){
+       return tax.findElement(By.xpath("./..//td[@data-kendo-grid-column-index=\"4\"]//input"));
     }
 
     public WebElement taxAppliedFor(WebElement tax) {
@@ -76,5 +91,10 @@ public class P03_7_TaxesPopUp {
         return tax.findElement(By.xpath("./..//td[@data-kendo-grid-column-index=\"4\"]//input")).isSelected();
     }
 
+    public List<Tax> appliedTaxes() {
+        List<Tax> appliedTaxesList = new ArrayList<>();
+        taxesNames.forEach(t -> appliedTaxesList.add(new Tax(t.getText(), Double.parseDouble(taxAmount(t).getText()), Double.parseDouble(taxMethod(t).getText().replace("%","").trim()), taxMethod(t).getText().contains("%") ? "percentage" : "amount", taxInclusveCheckbox(t).isSelected(), taxAppliedFor(t).getText(), DateTimeFormat.forPattern("dd/MM/yyyy").parseDateTime(taxStartDate(t).getText().isEmpty()?taxStartDate(t).getAttribute("value"):taxStartDate(t).getText()), DateTimeFormat.forPattern("dd/MM/yyyy").parseDateTime(taxEndDate(t).getText().isEmpty()?taxEndDate(t).getAttribute("value"):taxEndDate(t).getText()), taxApplyCheckBox(t).isSelected())));
+        return appliedTaxesList;
+    }
 
 }

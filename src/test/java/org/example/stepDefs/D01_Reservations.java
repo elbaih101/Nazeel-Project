@@ -4,14 +4,13 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.example.Nazeel_Calculations;
 import org.example.Utils;
 import org.example.pages.P01_LoginPage;
 import org.example.pages.P02_DashBoardPage;
 import org.example.pages.mutlipurposes.P00_multiPurposes;
-import org.example.pages.reservations.P03_1_ReservationMainDataPage;
-import org.example.pages.reservations.P03_5_UnitSelectionPopup;
-import org.example.pages.reservations.P03_6_EndReservationPopUp;
-import org.example.pages.reservations.P03_ReservationsPage;
+import org.example.pages.reservations.*;
+import org.example.pojos.Tax;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -20,6 +19,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.asserts.SoftAssert;
 
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.List;
 
 public class D01_Reservations {
@@ -27,7 +27,7 @@ public class D01_Reservations {
 
 
     final P01_LoginPage loginPage = new P01_LoginPage();
-    final P02_DashBoardPage homePage = new P02_DashBoardPage();
+    final P02_DashBoardPage homePage = new P02_DashBoardPage(driver);
     final JavascriptExecutor js = (JavascriptExecutor) driver;
     final P03_1_ReservationMainDataPage reservationMainDataPage = new P03_1_ReservationMainDataPage(driver);
     final WebDriverWait wait = new WebDriverWait(Hooks.driver, Duration.ofSeconds(15));
@@ -135,29 +135,20 @@ public class D01_Reservations {
         asrt.assertAll();
     }
 
-    void sleep() {
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
 
-
-    @Given("create a successfull reservation Source {string} purpose {string} Unit {string} Guest {string} state {string}")
-    public void createASuccessfullReservation(String source, String purpose, String unit, String guest, String state) {
-        D06_DigitalPayment d06DigitalPayment = new D06_DigitalPayment();
-        clickOnAddNewReservation();
+    public void fillReservationData(String source, String purpose, String unit, String guest) {
         selectReservationSourceAndPurpose(source, purpose);
         openUnitSelectionPopup();
         selectAUnit(unit);
         clickOnSelectguestNowButton();
-        try {
-            Thread.sleep(300);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        d06DigitalPayment.selectGuest(guest, "", "");
+        new D06_DigitalPayment().selectGuest(guest, "", "");
+    }
+
+    @Given("create a successfull reservation Source {string} purpose {string} Unit {string} Guest {string} state {string}")
+    public void createASuccessfullReservation(String source, String purpose, String unit, String guest, String state) {
+
+        clickOnAddNewReservation();
+        fillReservationData(source, purpose, unit, guest);
         if (state.equalsIgnoreCase("confirmed"))
             clickOnSaveReservationButton();
         else if (state.toLowerCase().contains("in"))
@@ -331,13 +322,13 @@ public class D01_Reservations {
     @And("choose page size as {string}")
     public void choosePageSizeAs(String size) {
         new P00_multiPurposes(driver).waitLoading();
-        Select s =new Select (new P00_multiPurposes(driver).pageSize);
+        Select s = new Select(new P00_multiPurposes(driver).pageSize);
         s.selectByValue(size);
     }
 
     @And("Check page size equal to {string}")
     public void checkPageSizeEqualTo(String size) {
-        Select s =new Select (new P00_multiPurposes(driver).pageSize);
+        Select s = new Select(new P00_multiPurposes(driver).pageSize);
         asrt.assertTrue(s.getFirstSelectedOption().getText().contains(size));
         asrt.assertAll();
     }
@@ -350,8 +341,53 @@ public class D01_Reservations {
     @Then("check the search criteria is reset")
     public void checkTheSearchCriteriaIsReset() {
         new P00_multiPurposes(driver).waitLoading();
-        Select s =new Select (new P00_multiPurposes(driver).pageSize);
+        Select s = new Select(new P00_multiPurposes(driver).pageSize);
         asrt.assertTrue(s.getFirstSelectedOption().getText().contains("20"));
         asrt.assertAll();
+    }
+
+    @And("fill Reservation Data with Source {string} purpose {string} Unit {string} Guest {string}")
+    public void fillReservationDataWithSourcePurposeUnitGuest(String source, String purpose, String unit, String guest) {
+        fillReservationData(source, purpose, unit, guest);
+    }
+
+    @Then("Check all Discounts types against Taxes Calculations and Balnce")
+    public void checkAllDiscountsTypesAgainstTaxesCalculationsAndBalnce() {
+        double discountValue = 10.0;
+        P03_2_ReservationFinancialPage financialPage = new P03_2_ReservationFinancialPage(driver);
+        financialPage.discountAmountField.sendKeys(Double.toString(discountValue));
+        List<String> discountsTypes = new ArrayList<>();
+        for (WebElement dicType : financialPage.discountsList()) {
+            discountsTypes.add(dicType.getText());
+        }
+        financialPage.discountAmountField.click();
+        for (String discType : discountsTypes) {
+            financialPage.discountsList().stream().filter(d -> d.getText().equalsIgnoreCase(discType)).findFirst().orElse(null).click();
+            Double discountAmount = Nazeel_Calculations.getDiscountAmount(financialPage.reservationRent(), discountValue, discType);
+            Double reservationRentTaxes = Nazeel_Calculations.reservationRentTaxes(financialPage.reservationRent(), discountValue, discType, appliedTaxes);
+            Double subTotal = discType.contains("From Balance") ? financialPage.reservationRent() : financialPage.reservationRent() - discountAmount;
+            Double total;
+            asrt.assertTrue(reservationRentTaxes.equals(financialPage.reservationTaxes()), "Calculated Tax = " + reservationRentTaxes + "\n Found Taxes = " + financialPage.reservationTaxes());
+            asrt.assertTrue( subTotal.equals(financialPage.reservationSubTotal()), "Expected SubTotal = " + subTotal + "\n Actual subTotal = " + financialPage.reservationSubTotal());
+            asrt.assertTrue(discountAmount.equals(financialPage.reservationDiscount()), "Expected Discount = " + discountAmount + "\nActual Discount = " + financialPage.reservationDiscount());
+            if (financialPage.isTaxInclusive()) {
+                total =discType.contains("From Balance") ?subTotal-discountAmount : subTotal;
+            } else {
+                total = (subTotal + reservationRentTaxes);
+            }
+            asrt.assertTrue(total.equals(financialPage.reservationTotal()), "Expected Total = " + total + "\nActual Total = " + financialPage.reservationTotal());
+        }
+        asrt.assertAll();
+
+    }
+
+    List<Tax> appliedTaxes;
+
+    @And("ge applied Taxes on reservation")
+    public void geAppliedTaxesOnReservation() {
+        reservationMainDataPage.veiwTaxesButton.click();
+        P03_7_TaxesPopUp TaxesPopUp = new P03_7_TaxesPopUp(driver);
+        appliedTaxes = TaxesPopUp.appliedTaxes();
+        TaxesPopUp.closeButton.click();
     }
 }

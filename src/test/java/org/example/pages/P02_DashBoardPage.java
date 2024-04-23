@@ -10,10 +10,6 @@ import java.util.List;
 
 @SuppressWarnings("ALL")
 public class P02_DashBoardPage {
-    public P02_DashBoardPage() {
-        PageFactory.initElements(Hooks.driver, this);
-
-    }
 
     public P02_DashBoardPage(WebDriver driver) {
         PageFactory.initElements(driver, this);
@@ -62,6 +58,11 @@ public class P02_DashBoardPage {
     public WebElement vendorssLink;
     @FindBy(xpath = "//span[contains(text(),\"SMS\")]")
     public WebElement smsDropList;
+    @FindBy(xpath = "//span[contains(text()=\" Outlets \")]")
+    public WebElement outletsDropList;
+
+    @FindBy(xpath = "//a[@href=\"/outlets/property-outlets\"]")
+    public WebElement outletsPageLink;
     @FindBy(xpath = "//a[@href=\"/notifications/sms-logs\"]")
     public WebElement smsLogPage;
     @FindBy(xpath = "//a[@href=\"/financial/cash-drawer-balance\"]")

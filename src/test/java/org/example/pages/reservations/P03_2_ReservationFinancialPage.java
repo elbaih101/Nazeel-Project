@@ -1,6 +1,7 @@
 package org.example.pages.reservations;
 
 import org.apache.commons.lang.StringUtils;
+import org.example.pages.mutlipurposes.P00_multiPurposes;
 import org.example.stepDefs.Hooks;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -11,19 +12,13 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
+import java.util.List;
 
 @SuppressWarnings("unused")
 public class P03_2_ReservationFinancialPage {
     final WebDriver driver;
     final WebDriverWait wait;
     final Actions actions;
-
-    public P03_2_ReservationFinancialPage() {
-        PageFactory.initElements(Hooks.driver, this);
-        this.driver = Hooks.driver;
-        wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        actions = new Actions(driver);
-    }
 
     public P03_2_ReservationFinancialPage(WebDriver driver) {
         PageFactory.initElements(driver, this);
@@ -66,12 +61,54 @@ public class P03_2_ReservationFinancialPage {
         return 0;
     }
 
-    public double reservationBalance (){
-         WebElement balance = driver.findElement(By.xpath("//div[@class=\"financial-summary\"]//div[contains(text(),\"Balance\")]/following-sibling::div/span"));
+    public Double reservationBalance (){
+         WebElement balance = financialSummary.findElement(By.xpath(".//div[contains(text(),\"Balance\")]/following-sibling::div/span"));
         return Double.parseDouble(balance.getText().replaceFirst("-","").trim());
     }
-    @FindBy(xpath = "//div[@class=\"financial-summary\"]//div[contains(text(),\"Balance\")]/following-sibling::div/span")
-    public WebElement balance;
+    public Double reservationRent(){
+        WebElement rent = financialSummary.findElement(By.xpath(".//div[contains(text(),\"Rent\")]/following-sibling::div"));
+        return Double.parseDouble((rent.getText()));
+    }
+    public Double reservationExtras(){
+        WebElement rent = financialSummary.findElement(By.xpath(".//div[contains(text(),\"Extras\")]/following-sibling::div"));
+        return Double.parseDouble((rent.getText()));
+    }
+    public Double reservationPenalties(){
+        WebElement rent = financialSummary.findElement(By.xpath(".//div[contains(text(),\"Penalties\")]/following-sibling::div"));
+        return Double.parseDouble((rent.getText()));
+    }
+    public Double reservationDiscount(){
+        WebElement discount = financialSummary.findElement(By.xpath(".//div[(text()=\" Discount \")]/following-sibling::div"));
+        return Double.parseDouble((discount.getText()));
+    }
+    public Double reservationSubTotal(){
+        WebElement rent = financialSummary.findElement(By.xpath(".//div[(text()=\"Sub-Total\")]/following-sibling::div"));
+        return Double.parseDouble((rent.getText()));
+    }
+    public Double reservationTaxes(){
+        WebElement taxAmount = financialSummary.findElement(By.xpath(".//div[contains(text(),\"Taxes\")]/following-sibling::div"));
+        return Double.parseDouble((taxAmount.getText()));
+    }
+    public Double reservationTotal(){
+        WebElement total = financialSummary.findElement(By.xpath(".//div[(text()=\" Total\")]/following-sibling::div"));
+        return Double.parseDouble((total.getText()));
+    }
+    public boolean isTaxInclusive(){
+        return !financialSummary.findElements(By.xpath(".//div[contains(text(),\"Taxes\")]/span")).isEmpty();
+    }
+    @FindBy(name="discount-amount")
+    public WebElement discountAmountField;
+    @FindBy(name="discount-method")
+    public WebElement discountMethodComboBox;
+
+     public List<WebElement>discountsList(){
+         return new P00_multiPurposes(driver).getListItems(discountMethodComboBox);
+     }
+     @FindBy(xpath = "//div[contains(@class,\"table__tag--red\")]")
+     public WebElement tableTagAlert;
+
+    @FindBy(xpath = "//app-reservation-financial-payment-step//div[@class=\"financial-summary\"]")
+    public WebElement financialSummary;
 
 
 }
