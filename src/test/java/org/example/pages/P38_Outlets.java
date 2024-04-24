@@ -36,20 +36,17 @@ public class P38_Outlets {
     @FindBy(className = "item-card")
     public List<WebElement> outletItems;
 
-    public WebElement itemName(WebElement outletItem) {
-        return outletItem.findElement(By.xpath("./div"));
-    }
 
     @FindBy(name = "item-name")
     public WebElement filterItemNameFeld;
     @FindBy(name = "outletItemsPages.category")
     WebElement itemCategoriescomboBox;
     @FindBy(xpath = "//kendo-combobox[@textfield=\"outletNameItemNamePrice\"]")
-    WebElement itemsListCombiBox;
+    WebElement itemsListComboBox;
 
 
     public List<WebElement> itemsList() {
-        return new P00_multiPurposes(driver).getListItems(itemsListCombiBox);
+        return new P00_multiPurposes(driver).getListItems(itemsListComboBox);
     }
 
     public List<WebElement> itemsCategoriesList() {
@@ -72,9 +69,9 @@ public class P38_Outlets {
         return item.findElement(By.xpath(locator));
     }
 
-    public Double itemPriceAmount(WebElement itemPrice) {
-        String price = itemPrice.getText();
-        price = price.isEmpty() ? itemPrice.getAttribute("value") : price;
+    public Double itemPriceAmount(WebElement itemPriceField) {
+        String price = itemPriceField.getText();
+        price = price.isEmpty() ? itemPriceField.getAttribute("value") : price;
         return Double.parseDouble(price.trim());
     }
 
@@ -100,7 +97,7 @@ public class P38_Outlets {
 
     public WebElement insertDiscountButto(WebElement item) {
         wait.withTimeout(Duration.ofMillis(100));
-        String locator = "..//td[@data-kendo-grid-column-index=\"5\"]//*[@name()=\"use\"]";
+        String locator = "..//td[@data-kendo-grid-column-index=\"5\"]//*[name()=\"use\"]";
         return item.findElement(By.xpath(locator));
     }
 
@@ -121,6 +118,11 @@ public class P38_Outlets {
     public WebElement totalPriceSection;
     @FindBy(xpath = "//button[contains(text(),\"Next\")]")
     public WebElement nextButton;
+    @FindBy(xpath = "//button[contains(text(),\"Save\")]")
+    public WebElement saveDiscountButton;
+
+    @FindBy(xpath = "//span[contains(text(),\"General Discount\")]/preceding-sibling::div//*[name()=\"use\"]")
+    public WebElement genralDisocuntButton;
     @FindBy(id = "complimentary")
     public WebElement complimentaryCheckBox;
     @FindBy(xpath = "//button[contains(text(),\"Walk-In order\")]")
@@ -161,6 +163,7 @@ public class P38_Outlets {
         WebElement subTotal = orderTotals.findElement(By.xpath(".//span[(text()=\" Tax(es) \")]/following-sibling::b"));
         return Double.parseDouble((subTotal.getText()));
     }
+
     public boolean inclusive() {
         return !orderTotals.findElements(By.xpath(".//span[(text()=\" Tax(es) \")]/span")).isEmpty();
 

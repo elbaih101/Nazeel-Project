@@ -4,8 +4,10 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.apache.commons.lang3.StringUtils;
+import org.example.Nazeel_Calculations;
 import org.example.Utils;
 import org.example.pages.P02_DashBoardPage;
+import org.example.pages.P38_Outlets;
 import org.example.pages.mutlipurposes.P00_multiPurposes;
 import org.example.pages.setuppages.P05_SetupPage;
 import org.example.pages.setuppages.outlets.P30_OutletsSetup;
@@ -17,6 +19,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 //import org.openqa.selenium.interactions.Actions;
 //import org.openqa.selenium.support.ui.WebDriverWait;
+import org.openqa.selenium.devtools.v85.domstorage.model.Item;
 import org.testng.asserts.SoftAssert;
 
 //import java.time.Duration;
@@ -28,12 +31,13 @@ public class D14_Outlets {
     JavascriptExecutor js = (JavascriptExecutor) driver;
     //Actions actions = new Actions(driver);
     final SoftAssert asrt = new SoftAssert();
-  //  final WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+    //  final WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
     P02_DashBoardPage dashBoardPage = new P02_DashBoardPage(driver);
     P05_SetupPage setupPage = new P05_SetupPage(driver);
     P30_OutletsSetup outletsSetup = new P30_OutletsSetup(driver);
     P31_OutletCategories categories = new P31_OutletCategories(driver);
     P32_OutletItems items = new P32_OutletItems(driver);
+    P38_Outlets outlets = new P38_Outlets(driver);
 
     @Given("go to outlets Setup Page")
     public void goToOutletsSetupPage() {
@@ -233,7 +237,7 @@ public class D14_Outlets {
                 categories.nTMPCategoriesList().stream().filter(o -> o.getText().equalsIgnoreCase(ntmp)).findFirst().orElseThrow().click();
         }
         if (!name.isEmpty()) {
-            categories.categoryNameField.sendKeys(Keys.chord(Keys.CONTROL,"a",Keys.BACK_SPACE));
+            categories.categoryNameField.sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.BACK_SPACE));
             if (!name.equalsIgnoreCase("non"))
                 categories.categoryNameField.sendKeys(name);
         }
@@ -556,5 +560,60 @@ public class D14_Outlets {
             asrt.assertFalse(items.names.stream().anyMatch(i -> i.getText().equalsIgnoreCase(item)));
             asrt.assertAll();
         }
+    }
+
+    @Given("navigate to outlet orders Page")
+    public void navigateToOutletOrdersPage() {
+        dashBoardPage.outletsDropList.click();
+        dashBoardPage.outletsPageLink.click();
+    }
+
+    @When("creating an order for item {string} from outlet {string}")
+    public void creatingAnOrderForItemFromOutlet(String itemName, String outletName) {
+        WebElement selectedOutlet = outlets.outletsList.stream().filter(o -> outlets.outletName(o).getText().contains(outletName)).findFirst().orElse(outlets.outletsList.getFirst());
+        selectedOutlet.click();
+        new P00_multiPurposes(driver).waitLoading();
+        WebElement selectedItem = outlets.outletItems.stream().filter(i -> i.getText().contains(itemName)).findFirst().orElse(outlets.outletItems.getFirst());
+        selectedItem.click();
+        outlets.nextButton.click();
+        new P00_multiPurposes(driver).waitLoading();
+    }
+
+    @Then("Check the Tax and Discount Calculations")
+    public void checkTheTaxAndDiscountCalculations() {
+        double discountValue = 10.0;
+        String discountType;
+
+        boolean inclusive = outlets.inclusive();
+        for (int i = 0; i <= 1; i++) {
+            double orderSubTotal = 0.0;
+            double totalbeforeTax;
+            double totalAfteTax;
+            outlets.genralDisocuntButton.click();
+            outlets.discountValueField().sendKeys(Keys.chord(Keys.CONTROL,"a",Keys.BACK_SPACE));
+            outlets.discountValueField().sendKeys(Double.toString(discountValue));
+            discountType = outlets.discountTypes().get(i).getText();
+            outlets.saveDiscountButton.click();
+            for (WebElement itemPriceCell : outlets.selectedItemsPrices) {
+                double itemPrice = outlets.itemPriceAmount(outlets.itemPriceField(itemPriceCell));
+                asrt.assertEquals(itemPrice, outlets.itemSubTotalAmount(itemPriceCell));
+                orderSubTotal += itemPrice;
+                asrt.assertFalse(Utils.isEnabled(outlets.insertDiscountButto(itemPriceCell)));
+            }
+            double discountAmount = Nazeel_Calculations.getDiscountAmount(orderSubTotal, discountValue, discountType);
+            totalbeforeTax = orderSubTotal - discountAmount;
+            double taxes = Nazeel_Calculations.outletOrderTaxes(orderSubTotal, discountValue, discountType, inclusive);
+            if (inclusive)
+                totalAfteTax = totalbeforeTax;
+            else
+                totalAfteTax = totalbeforeTax + taxes;
+
+            asrt.assertEquals( outlets.orderSubTotal(),orderSubTotal,discountType +"subtotal");
+            asrt.assertEquals(outlets.orderGenralDiscountAmount(),discountAmount, discountType+"discountamount");
+            asrt.assertEquals(outlets.orderTaxes(),taxes, discountType);
+            asrt.assertEquals( outlets.orderAmountBeforeTaxes(),totalbeforeTax,discountType);
+            asrt.assertEquals( outlets.orderAmountAfterTaxes(),totalAfteTax,discountType);
+        }
+        asrt.assertAll();
     }
 }

@@ -3,7 +3,7 @@ Feature: Outlets Feature
 
   Background:  login and choose property
     Given Logging in with superuser
-    And Select Property "P01384"
+    And Select Property "P00020"
 
   Rule: Outlets Setup
     Background: go to outlets Setup Page
@@ -149,3 +149,13 @@ Feature: Outlets Feature
     Scenario: can't delete  related Data outlet
       When deleting outlet "2"
       Then Check msg "Outlet Related To Catogries Could not be Deleted" and outlet "2" is deleted
+
+
+  Rule: outlet Orders
+
+  Background:go to outlet Orders Page
+    Given navigate to outlet orders Page
+
+  Scenario: Check the Discount and Tax Calculation
+    When creating an order for item "1" from outlet "qwe"
+    Then Check the Tax and Discount Calculations
