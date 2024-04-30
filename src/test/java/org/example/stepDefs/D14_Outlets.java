@@ -79,6 +79,7 @@ public class D14_Outlets {
         }
         if (!name.isEmpty()) {
             outletsSetup.outletNameField.sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.BACK_SPACE));
+            new P00_multiPurposes(driver).secondLanguageField(outletsSetup.outletNameField).sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.BACK_SPACE));
             if (!name.equalsIgnoreCase("non"))
                 outletsSetup.outletNameField.sendKeys(name);
         }
