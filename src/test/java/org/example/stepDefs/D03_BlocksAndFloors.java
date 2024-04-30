@@ -43,6 +43,7 @@ final JavascriptExecutor js =(JavascriptExecutor) driver;
     ////////////////////////// check default block /////////////////////////////////
     @And("go to Blocks Page")
     public void goToBlocksPage() {
+        wait.until(ExpectedConditions.elementToBeClickable(dashBoardPage.setupPageLink));
         dashBoardPage.setupPageLink.click();
         wait.until(ExpectedConditions.elementToBeClickable(setupPagec.blocksAndFloorsDroplist));
         setupPagec.blocksAndFloorsDroplist.click();
@@ -184,6 +185,7 @@ final JavascriptExecutor js =(JavascriptExecutor) driver;
 
     @And("click on block's delete button")
     public void clickOnBlockSDeleteButton() {
+        new P00_multiPurposes(driver).waitLoading();
         blocksPage.blockDeleteButton.click();
         wait.until(ExpectedConditions.visibilityOf(blocksPage.confirmationPopUp));
     }
