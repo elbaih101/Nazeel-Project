@@ -241,6 +241,7 @@ public class D11_Customers {
         }
         if (!name.isEmpty()) {
             vendors.vendorNameField.sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.BACK_SPACE));
+            new P00_multiPurposes(driver).secondLanguageField(vendors.vendorNameField).sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.BACK_SPACE));
             if (!name.equalsIgnoreCase("non"))
                 vendors.vendorNameField.sendKeys(name);
         }
