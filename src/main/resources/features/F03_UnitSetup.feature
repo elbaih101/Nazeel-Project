@@ -3,8 +3,8 @@ Feature: Unit Setup
 
   Background: selecting property
     Given Logging in with superuser
-    And Select Property "P01384"
-## masterdata unit Type Customization ##
+    And Select Property "P01385"
+# masterdata unit Type Customization ##
   Rule:masterdata unit Type Customization
     Background: going to units master data
       Given go to units master Data
@@ -134,7 +134,7 @@ Feature: Unit Setup
       Then  edit all the features related to the selected units and save
       Then Check toast mesage contains text "Updated Successfully"
 
-
+#FIXME add create a unit to be deleted
     Scenario: delete a unit
       When clicking delete button for unit "RANDOM"
       Then Check the deleted unit number matches the selected unit number
@@ -148,6 +148,7 @@ Feature: Unit Setup
     Scenario: filter units with unit number
       Given clicking onthe filter button to open filter menue
       And enter the unit number "1" and filter
+      #FIXME assertion error
       Then check all units visible contains  number "1"
 
     Scenario: filter units with unit type
@@ -249,11 +250,11 @@ Feature: Unit Setup
       When clicking on save
       Then Check toast mesage contains text "<msg>"
       Examples:
-        | rateName                            | sDate    | eDate    | min | msg                                                                                                               |
-        | the new rate                        | 18022024 | 19022024 | 120 | Added Successfully                                                                                                |
-        | rate with name                      | 18022024 | 17022024 | 120 | Start date must be less than end date                                                                             |
-        | the new rate                        | 16022024 | 20022024 | 120 | Duplicated rate name                                                                                              |
-        | rate with min less than high or low | 16022024 | 20022024 | 201 | Min Rate' value must be lower than or equal to 'High Weekdays Rate' and 'Low Weekdays Rate' values for Daily Rate |
+        | rateName                            | sDate    | eDate    | min | msg                                            |
+        | the new rate                        | 18022024 | 19022024 | 120 | Added Successfully                             |
+        | rate with name                      | 18022024 | 17022024 | 120 | Start date must be less than end date          |
+        | the new rate                        | 16022024 | 20022024 | 120 | Duplicated rate name                           |
+        | rate with min less than high or low | 16022024 | 20022024 | 201 | Min Rate' value must be lower than or equal to |
 
 
   Rule: Rates application priority

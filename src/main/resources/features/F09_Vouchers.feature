@@ -48,9 +48,9 @@ Feature: Vouchers
       And go to Reservation Financial Page
 
     Scenario: check the voucers edit mode after drop cash actions
-      Given successfully create a voucher of type "SD" amount "200" payment Method "Cash" maturity Date "" and Creatian Date "28112023"
-      Given successfully create a voucher of type "Receipt" amount "200" payment Method "Cash" maturity Date "" and Creatian Date "28112023"
-      And create a drop cash action to date "28112023"
+      Given successfully create a voucher of type "SD" amount "200" payment Method "Cash" maturity Date "" and Creatian Date "29/04/2024"
+      Given successfully create a voucher of type "Receipt" amount "200" payment Method "Cash" maturity Date "" and Creatian Date "29/04/2024"
+      And create a drop cash action to date "29/04/2024"
       And go to "Receipt" Vouchers Page
       Then Check "receipt" Voucher with state "CashDrop" edit mode
 

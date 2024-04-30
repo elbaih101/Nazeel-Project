@@ -2,7 +2,7 @@ Feature: Property Rules
 
   Background: logging in
     Given Logging in with superuser
-    And Select Property "P01384"
+    And Select Property "P01385"
 
   @Reservation_Rules
   Rule: Reservations Rules
@@ -27,9 +27,9 @@ Feature: Property Rules
     Then check "<view>" view is selecetd
     Examples:
       | view     |
-      | List     |
-      | Units    |
       | Calender |
+      | Units    |
+      | List     |
 
   Scenario Outline: switches
     When  switch "<switch>" SWitch "<state>"
@@ -42,7 +42,7 @@ Feature: Property Rules
       | restrictchangeunit    | off   |
       | reasonsrequire        | on    |
       | enableunconfirmed     | on    |
-      | enablemonthly         | on     |
+      | enablemonthly         | on    |
       | autonoshow            | off   |
       | autorejectota         | off   |
       | mandatorycheckintoday | on    |
@@ -64,6 +64,7 @@ Feature: Property Rules
 
 
   Scenario: Change auto cancel Reasons
+    #FixMe add validation over if property has channel manager subscription
     When  changing the auto cancel reason to "Customer changed the dates"
     Then Check toast mesage contains text "Saved Successfully"
     And cancel reasons are "Customer changed the dates"

@@ -28,6 +28,8 @@ public class P02_DashBoardPage {
     public WebElement dashBoardLink;
     @FindBy(xpath = "//button[contains(text(),\" Agree on contract terms \")]")
     public WebElement contractAgreementButton;
+    @FindBy(xpath = "//div[@class=\"n-topbar__item\"]")
+    public List<WebElement> onlineReservationsLink;
 
     @FindBy(xpath = "//a[@href=\"/master-data\"]")
     public List<WebElement> masterDataLink;

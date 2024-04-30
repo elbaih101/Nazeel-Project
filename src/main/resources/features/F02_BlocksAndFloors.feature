@@ -2,7 +2,7 @@
 Feature: Blocks And Floors
   Background: selecting property
     Given Logging in with superuser
-    And Select Property "P01384"
+    And Select Property "P01385"
   Rule: blocks
     Background: going to blocks Page
       And go to Blocks Page
@@ -48,6 +48,7 @@ Feature: Blocks And Floors
       And click on confirmation messsage yes button
       Then Check toast mesage contains text "Deleted Successfully !"
 
+
     Scenario: check number of floors is incremented when adding new floor to the block
       And note the number of floors in the grid for block "1"
       Then go to Floors Page
@@ -79,6 +80,7 @@ Feature: Blocks And Floors
 #
     Scenario: check Default Floor name and
       Then Check Default Floor name to be "1" and Description to be "Default Floor"
+
 
     Scenario: add a floor to the default block
       And click on new floor button

@@ -40,9 +40,9 @@ Feature: Outlets Feature
         | 2     |         |      | non   |          |      | Name is required                                                    |
         | 2     | non     |      |       |          |      | Operating status is required                                        |
         | 2     |         | non  |       |          |      | Outlet code is required                                             |
-        | 2     |         | 3    |       |          |      | Repeated outlet code detected, each outlet must has it unique code. |
-        | 2     |         |      | 3     |          |      | Name exist before                                                   |
-        | 3     | Closed  | 4    | 4     | Inactive | 4    | Updated Successfully                                                |
+        | 2     |         | 1    |       |          |      | Repeated outlet code detected, each outlet must has it unique code. |
+        | 2     |         |      | 1     |          |      | Name exist before                                                   |
+        | 2     | Closed  | 4    | 4     | Inactive | 4    | Updated Successfully                                                |
 
     Scenario: deleting non related Data outlet
       When deleting outlet "4"
@@ -70,7 +70,7 @@ Feature: Outlets Feature
         | filter | value   |
         | status | Active  |
         | name   | categ 2 |
-        | outlet | 2       |
+        | outlet | 1       |
         | ntmp   | Other   |
 
     Scenario Outline:editing Categories
@@ -82,7 +82,7 @@ Feature: Outlets Feature
         | categ 1 | non    |                                  |                |         |          | Outlet is required        |
         | categ 1 |        | non                              |                |         |          | NTMP Category is required |
         | categ 2 |        |                                  |                | categ 2 |          | Name exist before         |
-        | categ 2 | 2      | Pick & Drop (Transport Services) | Edited Categ 3 |         | inactive | Updated Successfully      |
+        | categ 2 | 1      | Pick & Drop (Transport Services) | Edited Categ 3 |         | inactive | Updated Successfully      |
 
     Scenario: delete non related data category
       When deleting category "categ 2"
