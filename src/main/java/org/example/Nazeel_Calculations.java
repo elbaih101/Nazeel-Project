@@ -9,10 +9,10 @@ import static org.example.Utils.round;
 public class Nazeel_Calculations {
 
 
-    public static Double reservationRentTaxes(double rentAmount, double discountValue, String discountType, List<Tax> appliedTaxes) {
+    public static Double reservationRentTaxes(double rentAmount, double discountAmount, String discountType, List<Tax> appliedTaxes) {
         double taxValue = 0.0;
         double taxPercentage = 0.0;
-        Double discountAmount = getDiscountAmount(rentAmount, discountValue, discountType);
+//        Double discountAmount = getDiscountAmount(rentAmount, discountValue, discountType);
         for (Tax tax : appliedTaxes) {
             if (!tax.getAppliedfor().equalsIgnoreCase("Penalties") && !tax.getAppliedfor().equalsIgnoreCase("extras")) {
                 if (tax.getMethod().contains("amount")) {
@@ -40,10 +40,10 @@ public class Nazeel_Calculations {
         return taxValue;
     }
 
-    public static Double outletOrderTaxes(double orderAmount, double discountValue, String discountType, boolean inclusive) {
+    public static Double outletOrderTaxes(double orderAmount, double discountAmount, boolean inclusive) {
         double taxValue = 0.0;
         double taxPercentage = 0.15;
-        Double discountAmount = getDiscountAmount(orderAmount, discountValue, discountType);
+       // Double discountAmount = getDiscountAmount(orderAmount, discountValue, discountType);
 
         if (inclusive) {
             //inclusive

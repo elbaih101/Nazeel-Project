@@ -26,7 +26,7 @@ public class D01_Reservations {
     WebDriver driver = Hooks.driver;
 
 
-    final P01_LoginPage loginPage = new P01_LoginPage();
+
     final P02_DashBoardPage homePage = new P02_DashBoardPage(driver);
     final JavascriptExecutor js = (JavascriptExecutor) driver;
     final P03_1_ReservationMainDataPage reservationMainDataPage = new P03_1_ReservationMainDataPage(driver);
@@ -76,6 +76,7 @@ public class D01_Reservations {
 
     @And("open unit selection Popup")
     public void openUnitSelectionPopup() {
+        new P00_multiPurposes(driver).waitLoading();
         reservationMainDataPage.selectUnitNowSpan.click();
     }
 
@@ -158,7 +159,7 @@ public class D01_Reservations {
 
     @And("Choose Reservation Status as {string}")
     public void chooseReservationStatusAs(String status) {
-        WebElement actionButton = null;
+        WebElement actionButton ;
         wait.until(ExpectedConditions.elementToBeClickable(reservationMainDataPage.reservatinMoreActionsMenu));
         try {
             Thread.sleep(300);
@@ -364,7 +365,7 @@ public class D01_Reservations {
         for (String discType : discountsTypes) {
             financialPage.discountsList().stream().filter(d -> d.getText().equalsIgnoreCase(discType)).findFirst().orElse(null).click();
             Double discountAmount = Nazeel_Calculations.getDiscountAmount(financialPage.reservationRent(), discountValue, discType);
-            Double reservationRentTaxes = Nazeel_Calculations.reservationRentTaxes(financialPage.reservationRent(), discountValue, discType, appliedTaxes);
+            Double reservationRentTaxes = Nazeel_Calculations.reservationRentTaxes(financialPage.reservationRent(), discountAmount, discType, appliedTaxes);
             Double subTotal = discType.contains("From Balance") ? financialPage.reservationRent() : financialPage.reservationRent() - discountAmount;
             Double total;
             asrt.assertTrue(reservationRentTaxes.equals(financialPage.reservationTaxes()), "Calculated Tax = " + reservationRentTaxes + "\n Found Taxes = " + financialPage.reservationTaxes());

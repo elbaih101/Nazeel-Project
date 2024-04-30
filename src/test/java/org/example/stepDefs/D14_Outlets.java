@@ -17,9 +17,6 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-//import org.openqa.selenium.interactions.Actions;
-//import org.openqa.selenium.support.ui.WebDriverWait;
-import org.openqa.selenium.devtools.v85.domstorage.model.Item;
 import org.testng.asserts.SoftAssert;
 
 //import java.time.Duration;
@@ -602,7 +599,7 @@ public class D14_Outlets {
             }
             double discountAmount = Nazeel_Calculations.getDiscountAmount(orderSubTotal, discountValue, discountType);
             totalbeforeTax = orderSubTotal - discountAmount;
-            double taxes = Nazeel_Calculations.outletOrderTaxes(orderSubTotal, discountValue, discountType, inclusive);
+            double taxes = Nazeel_Calculations.outletOrderTaxes(orderSubTotal, discountAmount, inclusive);
             if (inclusive)
                 totalAfteTax = totalbeforeTax;
             else
