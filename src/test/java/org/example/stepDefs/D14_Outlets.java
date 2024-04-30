@@ -393,6 +393,7 @@ public class D14_Outlets {
         }
         if (!name.isEmpty()) {
             items.itemNameField.clear();
+            new P00_multiPurposes(driver).secondLanguageField(items.itemNameField).sendKeys(Keys.chord(Keys.CONTROL,"a",Keys.BACK_SPACE));
             if (!name.equalsIgnoreCase("non"))
                 items.itemNameField.sendKeys(name);
         }
