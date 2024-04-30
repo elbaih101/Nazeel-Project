@@ -3,7 +3,7 @@ Feature: Property Taxes and Fees setup
 
   Background:  login and choose property
     Given Logging in with superuser
-    And Select Property "P01384"
+    And Select Property "P01385"
 
   Rule:Taxes and Fees
     Background: go to taxes page
@@ -20,10 +20,10 @@ Feature: Property Taxes and Fees setup
         | Fee  | Tourism | non                    | 15     |        | 20/12/2023 | 21/12/2023 |           | Active | Select the method                                 |
         | Fee  | Tourism | Percentage             | 15     |        | non        | 21/12/2023 |           | Active | enter Valid Start Date Time                       |
         | Fee  | Tourism | Percentage             | 15     |        | 20/12/2023 | 19/12/2023 |           | Active | Start Date/Time must be before Than End Date/Time |
-        | Fee  | Lodging | Percentage             | 2.5    |        | 20/12/2023 | 21/12/2023 |           | Active |                                                   |
+        | Fee  | Lodging | Percentage             | 2.5    |        | 20/12/2023 | 21/12/2023 |           | Active | Saved Successfully                                |
         | Tax  | VAT     | Percentage             | 15     | non    | 20/12/2023 | 21/12/2023 | Lodging   | Active | choose at least one Applied For                   |
-        | Fee  | Tourism | Amount Per Reservation | 20     |        | 20/12/2023 | 21/12/2023 |           | Active |                                                   |
-        | Tax  | VAT     | Percentage             | 15     | All    | 20/12/2023 | 21/12/2023 | Lodging   | Active |                                                   |
+        | Fee  | Tourism | Amount Per Reservation | 20     |        | 20/12/2023 | 21/12/2023 |           | Active | Saved Successfully                                |
+        | Tax  | VAT     | Percentage             | 15     | All    | 20/12/2023 | 21/12/2023 | Lodging   | Active | Saved Successfully                                |
 
     Scenario Outline:edit customization
       Given  edit customization "<name>" method "<method>" amount "<amount>" applied on "<aplied>" startDate "<sDate>" endDate "<eDate>" Charged on "<chargedOn>" status "<stat>"
