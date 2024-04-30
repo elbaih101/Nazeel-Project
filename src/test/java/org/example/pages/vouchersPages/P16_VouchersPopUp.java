@@ -1,5 +1,6 @@
 package org.example.pages.vouchersPages;
 
+import org.example.Utils;
 import org.example.enums.Vouchers;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -10,6 +11,7 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.List;
 
 public class P16_VouchersPopUp {
@@ -163,8 +165,14 @@ public class P16_VouchersPopUp {
     }
 
     public List<WebElement> currenciesList() {
-        voucherPopUp.findElement(By.xpath(".//kendo-dropdownlist[@textfield=\"symbol\"]")).click();
-        return listItems;
+        WebElement dropdownlist = voucherPopUp.findElement(By.xpath(".//kendo-dropdownlist[@textfield=\"symbol\"]"));
+        List<WebElement> currencies = new ArrayList<>();
+        if (Utils.isEnabled(dropdownlist)) {
+            dropdownlist.click();
+            currencies = listItems;
+        } else
+            currencies.add(dropdownlist);
+        return currencies;
     }
 
 }
