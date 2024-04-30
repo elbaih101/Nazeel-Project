@@ -14,7 +14,7 @@ public class Utils {
 
     /**
      * @param dateInput Webelement input
-     * @param date      date on format DDMMYYYY
+     * @param date      date on format DD/MM/YYYY
      */
     public static void setDate(WebElement dateInput, String date) {
         dateInput.click();
@@ -24,6 +24,13 @@ public class Utils {
         dateInput.sendKeys(date);
     }
 
+    /**
+     * function to click on an element and move it to another desired element location
+     *
+     * @param toMove the element to be moved
+     * @param moveTo the element to move to
+     * @param driver
+     */
     public static void moveelement(WebElement toMove, WebElement moveTo, WebDriver driver) {
         new Actions(driver)
                 .moveToElement(toMove)
@@ -37,6 +44,12 @@ public class Utils {
                 .release().perform();
     }
 
+    /**
+     * this function stes the time in time fields with
+     *
+     * @param timeInput the time field
+     * @param time      the time in the form HH:mm
+     */
     public static void setTime(WebElement timeInput, String time) {
         timeInput.click();
         time = StringUtils.remove(time, ':');
@@ -47,6 +60,11 @@ public class Utils {
 
     }
 
+    /**
+     * function to sleep the thread with desired time in millis
+     *
+     * @param milliSeconds
+     */
     public static void sleep(int milliSeconds) {
         try {
             Thread.sleep(milliSeconds);
@@ -59,6 +77,12 @@ public class Utils {
         return isSorted(listOfStrings, listOfStrings.size());
     }
 
+    /**
+     * this function uses the actions to draw a simple outline to check signature and free draw fields
+     *
+     * @param driver
+     * @param element the free draw fied
+     */
     public static void draw(WebDriver driver, WebElement element) {
         Actions builder = new Actions(driver);
         Action drawAction = builder.moveToElement(element, 135, 15) //start points x axis and y axis.
@@ -71,6 +95,13 @@ public class Utils {
         drawAction.perform();
     }
 
+    /**
+     * check if a list of strings is sorted from a desired index
+     *
+     * @param listOfStrings
+     * @param index
+     * @return
+     */
     public static boolean isSorted(List<String> listOfStrings, int index) {
         if (index < 2) {
             return true;
@@ -81,35 +112,46 @@ public class Utils {
         }
     }
 
+    /**
+     * supposedly gets the styles of an element
+     */
     public static String getStyles = "var s = '';" +
             "var o = getComputedStyle(arguments[0]);" +
             "for(var i = 0; i < o.length; i++){" +
             "s+=o[i] + ':' + o.getPropertyValue(o[i])+';';}" +
             "return s;";
 
+    /**
+     * it setes an attribute  for a web element using java script
+     *
+     * @param js       the java script excuter
+     * @param element  the element to be changed its attribute
+     * @param attName  the attribute name
+     * @param attValue the attribute value to be changed to
+     */
     public static void setAttribute(JavascriptExecutor js, WebElement element, String attName, String attValue) {
         js.executeScript("arguments[0].setAttribute(arguments[1], arguments[2]);",
                 element, attName, attValue);
     }
 
+    /**
+     * returns if an element is enabled or not
+     *
+     * @param element
+     * @return boolean enabled or not
+     */
     public static boolean isEnabled(WebElement element) {
         boolean bol = true;
-        if (!element.isEnabled()) {
+        if (!element.isEnabled())
             return false;
-        }
+        if (element.getAttribute("aria-disabled") != null && element.getAttribute("aria-disabled").equalsIgnoreCase("true"))
+            return false;
         try {
             element.findElement(By.xpath("./ancestor-or-self::*[contains(@class,\"k-state-disabled\")]"));
             bol = false;
 
-        } catch (NoSuchElementException e) {
+        } catch (NoSuchElementException ignored) {
         }
-//
-//        // String state = (String) js.executeScript("var form= arguments[0].form.className; return form;",element);
-//        if (state.contains("ng-touched")) {
-//            bol = true;
-//        } else if (state.contains("ng-untouched")) {
-//            bol = false;
-//        }
         return bol;
     }
 
