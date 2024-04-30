@@ -2,6 +2,7 @@ package org.example.pages.setuppages.unit_setup_pages;
 
 
 import org.apache.commons.lang.StringUtils;
+import org.example.pages.mutlipurposes.P00_multiPurposes;
 import org.example.stepDefs.Hooks;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -83,7 +84,7 @@ public Set<String> unitNums (){
         if (unitNum.getText().contains("..")){
             actions.moveToElement(unitCard);
             actions.moveToElement(unitCard,3,4).build().perform();
-            wait.until(ExpectedConditions.invisibilityOf(driver.findElement(By.xpath("//div[contains(@class,\"p-tooltip-bottom\")]/div[@class=\"p-tooltip-text\"]"))));
+            wait.until(ExpectedConditions.visibilityOf(new P00_multiPurposes(driver).bottomToolTip));
             unitNum = driver.findElement(By.xpath("//div[contains(@class,\"p-tooltip-bottom\")]/div[@class=\"p-tooltip-text\"]"));
             }
         return unitNum;
