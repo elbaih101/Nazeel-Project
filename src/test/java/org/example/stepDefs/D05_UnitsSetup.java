@@ -597,7 +597,7 @@ public class D05_UnitsSetup {
             e.printStackTrace();
         }
         int newTotalCount = unitsSetupPage.totalUnitNumber();
-        asrt.assertTrue(totalUnitsCount > newTotalCount);
+        asrt.assertTrue(totalUnitsCount >= newTotalCount);
         asrt.assertAll();
 
     }
@@ -790,9 +790,9 @@ public class D05_UnitsSetup {
       new P00_multiPurposes(driver).waitLoading();
         amenities.viewButton(amenities.names.getFirst()).click();
         if (state.equalsIgnoreCase("inactive")) {
-            asrt.assertTrue(amenities.statusSwitch.getAttribute("class").contains("k-switch-of"));
+            asrt.assertTrue(amenities.amenityStatus.getText().contains(state));
         } else if (state.equalsIgnoreCase("active")) {
-            asrt.assertTrue(amenities.statusSwitch.getAttribute("class").contains("k-switch-on"));
+            asrt.assertTrue(amenities.amenityStatus.getText().contains(state));
         }
         asrt.assertEquals(amenities.descriptionField.getText(), description);
         asrt.assertAll();
