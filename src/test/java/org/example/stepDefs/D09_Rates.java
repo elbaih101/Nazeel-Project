@@ -95,8 +95,8 @@ public class D09_Rates {
     @When("selecting week day {string}")
     public void selectingWeekDay(String day) {
         ratesPages.highWeekDaysButton.click();
+        new P00_multiPurposes(driver).waitLoading();
         WebElement selectedDay = ratesPages.highWeekDays().get(week.get(day));
-        wait.until(ExpectedConditions.elementToBeClickable(selectedDay));
         selectedDay.click();
     }
 
@@ -104,8 +104,8 @@ public class D09_Rates {
     public void checkWeekdaysAfterNextOrBeforePreviousAreDisabled(String day) {
         asrt.assertTrue(ratesPages.highWeekDays().get(week.get(day) + 2).getAttribute("class").contains("k-state-disabled"));
         asrt.assertTrue(ratesPages.highWeekDays().get(week.get(day) - 2).getAttribute("class").contains("k-state-disabled"));
-        asrt.assertTrue(!ratesPages.highWeekDays().get(week.get(day) + 1).getAttribute("class").contains("k-state-disabled"));
-        asrt.assertTrue(!ratesPages.highWeekDays().get(week.get(day) - 1).getAttribute("class").contains("k-state-disabled"));
+        asrt.assertFalse(ratesPages.highWeekDays().get(week.get(day) + 1).getAttribute("class").contains("k-state-disabled"));
+        asrt.assertFalse(ratesPages.highWeekDays().get(week.get(day) - 1).getAttribute("class").contains("k-state-disabled"));
         asrt.assertAll();
     }
 
