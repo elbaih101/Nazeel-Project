@@ -78,9 +78,9 @@ Feature: Outlets Feature
       Then Check msg "<msg>" and Categorey
       Examples:
         | oName   | outlet | ntmp                             | desc           | nName   | state    | msg                       |
-        | categ 1 |        |                                  |                | non     |          | English Name Is required  |
-        | categ 1 | non    |                                  |                |         |          | Outlet is required        |
-        | categ 1 |        | non                              |                |         |          | NTMP Category is required |
+        | categ 2 |        |                                  |                | non     |          | English Name Is required  |
+        | categ 2 | non    |                                  |                |         |          | Outlet is required        |
+        | categ 2 |        | non                              |                |         |          | NTMP Category is required |
         | categ 2 |        |                                  |                | categ 2 |          | Name exist before         |
         | categ 2 | 1      | Pick & Drop (Transport Services) | Edited Categ 3 |         | inactive | Updated Successfully      |
 
@@ -140,15 +140,15 @@ Feature: Outlets Feature
     Background:goto Outlets Categories Page
       Given go to categories Page
     Scenario: cant delete  related data category
-      When deleting category "categ 2"
-      Then Check msg "Can not delete this category, it has related items" and category "categ 2"
+      When deleting category "categ 1"
+      Then Check msg "Can not delete this category, it has related items" and category "categ 1"
 
   Rule: Outlets Setup2
     Background: go to outlets Setup Page
       Given go to outlets Setup Page
     Scenario: can't delete  related Data outlet
-      When deleting outlet "2"
-      Then Check msg "Outlet Related To Catogries Could not be Deleted" and outlet "2" is deleted
+      When deleting outlet "1"
+      Then Check msg "Outlet Related To Catogries Could not be Deleted" and outlet "1" is deleted
 
 
   Rule: outlet Orders
@@ -157,5 +157,5 @@ Feature: Outlets Feature
     Given navigate to outlet orders Page
 
   Scenario: Check the Discount and Tax Calculation
-    When creating an order for item "item 1" from outlet "qwe"
+    When creating an order for item "item 1" from outlet "1"
     Then Check the Tax and Discount Calculations
