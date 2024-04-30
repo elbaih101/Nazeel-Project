@@ -52,6 +52,8 @@ public class P24_Amenities {
     public WebElement submitButton;
     @FindBy(xpath = "//kendo-switch[@name=\"status\"]")
     public WebElement statusSwitch;
+    @FindBy(xpath = "//div[@role=\"dialog\"]//label[contains(text(),\"Status\")]/following-sibling::span")
+    public WebElement amenityStatus;
 
 
     //// grid ////
