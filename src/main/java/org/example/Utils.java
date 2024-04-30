@@ -31,7 +31,7 @@ public class Utils {
      *
      * @param toMove the element to be moved
      * @param moveTo the element to move to
-     * @param driver
+     * @param driver WebDriver
      */
     public static void moveelement(WebElement toMove, WebElement moveTo, WebDriver driver) {
         new Actions(driver)
@@ -65,12 +65,13 @@ public class Utils {
     /**
      * function to sleep the thread with desired time in millis
      *
-     * @param milliSeconds
+     * @param milliSeconds time in millis
      */
     public static void sleep(int milliSeconds) {
         try {
             Thread.sleep(milliSeconds);
         } catch (InterruptedException e) {
+            //noinspection CallToPrintStackTrace
             e.printStackTrace();
         }
     }
@@ -82,7 +83,7 @@ public class Utils {
     /**
      * this function uses the actions to draw a simple outline to check signature and free draw fields
      *
-     * @param driver
+     * @param driver  WebDriver
      * @param element the free draw fied
      */
     public static void draw(WebDriver driver, WebElement element) {
@@ -100,9 +101,9 @@ public class Utils {
     /**
      * check if a list of strings is sorted from a desired index
      *
-     * @param listOfStrings
-     * @param index
-     * @return
+     * @param listOfStrings the list of strings
+     * @param index         start position of the function
+     * @return boolean result of the the function
      */
     public static boolean isSorted(List<String> listOfStrings, int index) {
         if (index < 2) {
@@ -139,7 +140,7 @@ public class Utils {
     /**
      * returns if an element is enabled or not
      *
-     * @param element
+     * @param element WebElemnet to be checked if enabled or not
      * @return boolean enabled or not
      */
     public static boolean isEnabled(WebElement element) {
@@ -176,6 +177,7 @@ public class Utils {
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
+                //noinspection CallToPrintStackTrace
                 e.printStackTrace();
             }
         }
@@ -224,12 +226,20 @@ public class Utils {
         return element;
     }
 
+    /**
+     * Check whether a file is downloaded by searching a path for the file name
+     *
+     * @param downloadPath pathfor wich the file may exist
+     * @param fileName     name of the file
+     * @return boolean ensuring file is downloaded or not
+     */
     public static boolean isFileDownloaded(String downloadPath, String fileName) {
         File dir = new File(downloadPath);
         File[] dirContents = dir.listFiles();
 
-        for (int i = 0; i < dirContents.length; i++) {
-            if (dirContents[i].getName().equals(fileName)) {
+        assert dirContents != null;
+        for (File dirContent : dirContents) {
+            if (dirContent.getName().equals(fileName)) {
                 // File has been found, it can now be deleted:
 //                dirContents[i].delete();
                 return true;
@@ -238,38 +248,63 @@ public class Utils {
         return false;
     }
 
+    /**
+     * using java script to opn a new empty tab in browser
+     *
+     * @param driver driver initiated to handle the tab oppening
+     * @throws InterruptedException Exception
+     */
     public void openNewTab(WebDriver driver) throws InterruptedException {
         JavascriptExecutor js = (JavascriptExecutor) driver;
         js.executeScript("window.open('');");
         Thread.sleep(100);
     }
 
+    /**
+     * goes to a tab by its index
+     *
+     * @param driver   WebDriver initiated to handle the tab switching
+     * @param tabIndex index of the tab
+     * @throws InterruptedException exception
+     */
     public void gotoTab(WebDriver driver, int tabIndex) throws InterruptedException {
         List<String> winHandles = new ArrayList<>(driver.getWindowHandles());
         Thread.sleep(500);
         driver.switchTo().window(winHandles.get(tabIndex));
     }
 
+    /**
+     * Rounds the given double to the int pklaces
+     *
+     * @param value  double value of number to be roundedto be rounded to
+     * @param places int number of places
+     * @return double rounded number
+     */
     public static double round(double value, int places) {
         double scale = Math.pow(10, places);
         return Math.round(value * scale) / scale;
     }
 
 
-
-
-    public static void attatchScreenShot(Scenario scenario,WebDriver driver) throws Exception {
+    /**
+     * @param scenario the current Scenario running
+     * @param driver   WebDriver initiated to take screenshot
+     * @throws Exception Throws WebDriver/ClassCast Exceptions
+     */
+    public static void screenShotOnFailure(Scenario scenario, WebDriver driver) throws Exception {
         if (scenario.isFailed()) {
             try {
                 byte[] screenshot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
                 String testName = scenario.getName();
 
-                FileUtils.writeByteArrayToFile(new File("target/screenshots/"+testName+".png"), screenshot);
-                scenario.attach(screenshot, "image/png",testName);
+                FileUtils.writeByteArrayToFile(new File("target/screenshots/" + testName + ".png"), screenshot);
+                scenario.attach(screenshot, "image/png", testName);
             } catch (WebDriverException wde) {
                 System.err.println(wde.getMessage());
             } catch (ClassCastException cce) {
-                cce.printStackTrace();}
+                //noinspection CallToPrintStackTrace
+                cce.printStackTrace();
+            }
         }
     }
 }

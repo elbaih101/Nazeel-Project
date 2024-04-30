@@ -70,7 +70,7 @@ public class D05_UnitsSetup {
         }
 
         List<WebElement> classes = newUnitPage.unitClasses();
-        WebElement selectedClass ;
+        WebElement selectedClass;
         if (uClass.equalsIgnoreCase("Random")) {
             selectedClass = classes.get(new Random().nextInt(classes.size()));
         } else {
@@ -204,9 +204,10 @@ public class D05_UnitsSetup {
 
     /////////// add group of units //////////////
     @Given("open the add group of units popup")
+
     public void openTheAddGroupOfUnitsPopup() {
         WebElement addgroupunit = unitsSetupPage.addGroupUnitsButton();
-        wait.until(ExpectedConditions.elementToBeClickable(addgroupunit));
+        new P00_multiPurposes(driver).waitLoading();
         addgroupunit.click();
 
     }
@@ -339,8 +340,7 @@ public class D05_UnitsSetup {
             blocksAndFloors.checkToastMesageContainsText(msg);
 
         } catch (AssertionError e) {
-            if (e.getMessage().contains("Invalid action, had related data"))
-            {
+            if (e.getMessage().contains("Invalid action, had related data")) {
 
                 unitsSetupPage.discardDeleteButton().click();
 
@@ -636,28 +636,28 @@ public class D05_UnitsSetup {
         }
         switch (unitA) {
             case "generated" ->
-                mergeSettings.unitA().stream().filter(unit -> unit.getText().contains(tobemergedUnits.get(0))).findAny().orElseThrow().click();
+                    mergeSettings.unitA().stream().filter(unit -> unit.getText().contains(tobemergedUnits.get(0))).findAny().orElseThrow().click();
 
-            case "Random" ->
-                mergeSettings.unitA().getFirst().click();
+            case "Random" -> mergeSettings.unitA().getFirst().click();
 
-            case "" ->{}
+            case "" -> {
+            }
 
             case null, default ->
-                mergeSettings.unitA().stream().filter(unit -> unit.getText().contains(unitA)).findAny().orElseThrow().click();
+                    mergeSettings.unitA().stream().filter(unit -> unit.getText().contains(unitA)).findAny().orElseThrow().click();
 
         }
         switch (unitB) {
             case "generated" ->
-                mergeSettings.unitB().stream().filter(unit -> unit.getText().contains(tobemergedUnits.get(1))).findAny().orElseThrow().click();
+                    mergeSettings.unitB().stream().filter(unit -> unit.getText().contains(tobemergedUnits.get(1))).findAny().orElseThrow().click();
 
-            case "Random" ->
-                mergeSettings.unitB().getFirst().click();
+            case "Random" -> mergeSettings.unitB().getFirst().click();
 
-            case "" -> { }
+            case "" -> {
+            }
 
             case null, default ->
-                mergeSettings.unitB().stream().filter(unit -> unit.getText().contains(unitB)).findAny().orElseThrow().click();
+                    mergeSettings.unitB().stream().filter(unit -> unit.getText().contains(unitB)).findAny().orElseThrow().click();
 
         }
 
@@ -787,7 +787,7 @@ public class D05_UnitsSetup {
 
     @And("Check the edited amenity ddescriptioon {string} and state {string}")
     public void checkTheEditedAmenityDdescriptioonAndState(String description, String state) {
-      new P00_multiPurposes(driver).waitLoading();
+        new P00_multiPurposes(driver).waitLoading();
         amenities.viewButton(amenities.names.getFirst()).click();
         if (state.equalsIgnoreCase("inactive")) {
             asrt.assertTrue(amenities.amenityStatus.getText().contains(state));
@@ -822,24 +822,23 @@ public class D05_UnitsSetup {
     public void deleteAmenity(String amenity) {
         WebElement seectedAmenity;
 
-        if (amenity.equalsIgnoreCase("related")){
-            seectedAmenity=amenities.names.getFirst();
-        }else if(amenity.equalsIgnoreCase("nonrelated")) {
+        if (amenity.equalsIgnoreCase("related")) {
+            seectedAmenity = amenities.names.getFirst();
+        } else if (amenity.equalsIgnoreCase("nonrelated")) {
             seectedAmenity = amenities.names.getLast();
-        }else{
+        } else {
             seectedAmenity = amenities.names.stream().filter(am -> am.getText().equalsIgnoreCase(amenity)).findAny().orElseThrow();
         }
         retreavedAmenities.add(0, seectedAmenity.getText());
-            amenities.deleteButton(seectedAmenity).click();
-            amenities.confirmDeleteButton.click();
+        amenities.deleteButton(seectedAmenity).click();
+        amenities.confirmDeleteButton.click();
     }
 
     @Then("Check toast mesage contains text {string} and the amenity is removed")
     public void checkToastMesageContainsTextAndTheAmenityIsRemoved(String msg) {
         D03_BlocksAndFloors blocksAndFloors = new D03_BlocksAndFloors();
         blocksAndFloors.checkToastMesageContainsText(msg);
-        if (msg.contains("successfully"))
-        {
+        if (msg.contains("successfully")) {
             goToUnitSetupPage();
             openTheNewUnitPage();
             asrt.assertFalse(newUnitPage.amenities().stream().anyMatch(am -> am.getText().contains(retreavedAmenities.get(0))));
