@@ -239,8 +239,8 @@ public class D12_Financials {
                 if (taxMap.get("method").contains("Percentage")) {
                     asrt.assertTrue(taxesPopUp.taxMethod(selectedTax).getText().contains("%"));
                 }
-                asrt.assertEquals(taxesPopUp.taxStartDate(selectedTax).getText(), taxMap.get("sDate"));
-                asrt.assertEquals(taxesPopUp.taxEndDate(selectedTax).getText(), taxMap.get("eDate"));
+                asrt.assertEquals(taxMap.get("sDate"),taxesPopUp.taxStartDate(selectedTax).getText());
+                asrt.assertEquals(taxMap.get("eDate"),taxesPopUp.taxEndDate(selectedTax).getText());
             } else {
 
                 asrt.assertFalse(taxesPopUp.taxesNames.stream().anyMatch(t -> t.getText().contains(taxMap.get("name"))));
@@ -624,6 +624,7 @@ public class D12_Financials {
             } else
                 asrt.assertTrue(currencies.currencyExchangeRate(createdCurr).getText().equalsIgnoreCase(currencyMap.get("exRate")), "exRate not right");
             new D06_DigitalPayment().goToDesiredVouchersPage("Receipt");
+            new P00_multiPurposes(driver).waitLoading();
             new P10_VouchersPage(driver).newVoucherButton.click();
             List<WebElement> currencies = new P16_VouchersPopUp(driver).currenciesList();
             asrt.assertTrue(currencies.stream().anyMatch(c -> c.getText().equalsIgnoreCase(currencyMap.get("symbol"))));
