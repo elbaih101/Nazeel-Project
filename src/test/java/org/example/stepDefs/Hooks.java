@@ -4,25 +4,34 @@ package org.example.stepDefs;
 
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
+import io.cucumber.java.Scenario;
 import io.github.bonigarcia.wdm.WebDriverManager;
+import org.apache.commons.io.FileUtils;
 import org.example.TestData;
+import org.example.Utils;
 import org.example.pages.P01_LoginPage;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.edge.EdgeDriver;
 
+import java.io.File;
 import java.time.Duration;
 
 public class Hooks {
     public static WebDriver driver;
+    private static Scenario scenario;
 
     @Before
-    public static void start() {
+    public static void start(Scenario scenario) {
+        Hooks.scenario = scenario;
         WebDriverManager.edgedriver().setup();
         driver = new EdgeDriver();
         driver.manage().window().maximize();
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
         driver.get(TestData.stageUrl);
-      //EdgeOptions options =new EdgeOptions();
+        //EdgeOptions options =new EdgeOptions();
 
         //options.setExperimentalOption("prefs", new String[]{"download.default_directory", "download_path"});
 
@@ -41,7 +50,8 @@ public class Hooks {
 
 
     @After
-    public static void end() {
+    public static void end() throws Exception {
+        Utils.attatchScreenShot(scenario, driver);
         try {
             Thread.sleep(5000);
         } catch (InterruptedException e) {
@@ -59,7 +69,6 @@ public class Hooks {
         loginPage.passwordField.sendKeys(password);
         loginPage.accField.sendKeys(acc);
         loginPage.loginButton.click();
-
 
 
     }

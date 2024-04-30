@@ -1,5 +1,7 @@
 package org.example;
 
+import io.cucumber.java.Scenario;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Action;
@@ -251,5 +253,23 @@ public class Utils {
     public static double round(double value, int places) {
         double scale = Math.pow(10, places);
         return Math.round(value * scale) / scale;
+    }
+
+
+
+
+    public static void attatchScreenShot(Scenario scenario,WebDriver driver) throws Exception {
+        if (scenario.isFailed()) {
+            try {
+                byte[] screenshot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
+                String testName = scenario.getName();
+
+                FileUtils.writeByteArrayToFile(new File("target/screenshots/"+testName+".png"), screenshot);
+                scenario.attach(screenshot, "image/png",testName);
+            } catch (WebDriverException wde) {
+                System.err.println(wde.getMessage());
+            } catch (ClassCastException cce) {
+                cce.printStackTrace();}
+        }
     }
 }
