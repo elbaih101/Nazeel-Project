@@ -4,6 +4,7 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.example.CustomAssert;
 import org.example.Utils;
 import org.example.pages.P02_DashBoardPage;
 import org.example.pages.mutlipurposes.P00_multiPurposes;
@@ -23,7 +24,7 @@ public class D13_ProppertyRules {
 
     WebDriver driver = Hooks.driver;
     JavascriptExecutor js = (JavascriptExecutor) driver;
-    final SoftAssert asrt = new SoftAssert();
+    final CustomAssert asrt = new CustomAssert();
     //    final WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
     P02_DashBoardPage dashBoardPage = new P02_DashBoardPage(driver);
     P05_SetupPage setupPage = new P05_SetupPage(driver);
@@ -120,9 +121,9 @@ public class D13_ProppertyRules {
 
     @And("Check the inTime {string} and out time {string} and auto etend after {string}")
     public void checkTheInTimeAndOutTimeAndAutoEtendAfter(String in, String out, String auEx) {
-        asrt.assertTrue(reservationRules.checkInTimeField.getAttribute("value").equalsIgnoreCase(in));
-        asrt.assertTrue(reservationRules.checkOutTimeField.getAttribute("value").equalsIgnoreCase(out));
-        asrt.assertTrue(reservationRules.autoExtendAfterTimeField.getAttribute("value").equalsIgnoreCase(auEx));
+        asrt.assertEquals(reservationRules.checkInTimeField.getAttribute("value"), in);
+        asrt.assertEquals(reservationRules.checkOutTimeField.getAttribute("value"), out);
+        asrt.assertEquals(reservationRules.autoExtendAfterTimeField.getAttribute("value"), auEx, "Expected auto Extend: ");
         asrt.assertAll();
 
 
@@ -197,9 +198,10 @@ public class D13_ProppertyRules {
 
     @When("changing the auto cancel reason to {string}")
     public void changingTheAutoCancelReasonTo(String reas) {
-        switchSWitch("autorejectota", "on");
+        if (!dashBoardPage.onlineReservationsLink.isEmpty()){
+            switchSWitch("autorejectota", "on");
         reservationRules.cancelREasonsList().stream().filter(re -> re.getText().equals(reas)).findAny().orElseThrow().click();
-        reservationRules.submitButton.click();
+        reservationRules.submitButton.click();}
     }
 
     @And("cancel reasons are {string}")
@@ -321,7 +323,7 @@ public class D13_ProppertyRules {
     public void creatingPenaltyWithNameCtegoryTypeAmountCalculatedOFDescription(String name, String categ, String
             type, String amount, String calcOF, String desc) {
         penalties.newpenaltyButton.click();
-        fillPenaltyData(name, categ, type, amount, calcOF, desc, "new");
+        fillPenaltyData(name, categ.replace("-", " "), type, amount, calcOF, desc, "new");
         penalties.submitButton.click();
     }
 
@@ -331,10 +333,10 @@ public class D13_ProppertyRules {
         if (msg.contains("Successfully")) {
             new P00_multiPurposes(driver).waitLoading();
             WebElement createdPenalty = penalties.names.stream().filter(n -> n.getText().equalsIgnoreCase(penaltyMap.get("name"))).findAny().orElseThrow();
-            asrt.assertTrue(penalties.penaltyAmount(createdPenalty).getText().equalsIgnoreCase(penaltyMap.get("amount")));
-            asrt.assertTrue(penalties.penaltyCategory(createdPenalty).getText().equalsIgnoreCase(penaltyMap.get("categ")));
-            asrt.assertTrue(penalties.penaltyType(createdPenalty).getText().equalsIgnoreCase(penaltyMap.get("type")));
-            asrt.assertTrue(penalties.penaltyCOf(createdPenalty).getText().equalsIgnoreCase(penaltyMap.get("calcOf")));
+            asrt.AssertEqualsIgnoreCase(penalties.penaltyAmount(createdPenalty).getText(), penaltyMap.get("amount"));
+            asrt.AssertEqualsIgnoreCase(penalties.penaltyCategory(createdPenalty).getText(), penaltyMap.get("categ"));
+            asrt.AssertEqualsIgnoreCase(penalties.penaltyType(createdPenalty).getText(), penaltyMap.get("type"));
+            asrt.AssertEqualsIgnoreCase(penalties.penaltyCOf(createdPenalty).getText().isEmpty() ? null : penalties.penaltyCOf(createdPenalty).getText(), penaltyMap.get("calcOf"));
 
             if (penaltyMap.get("state").equalsIgnoreCase("active"))
                 asrt.assertTrue(penalties.penaltyStatus(createdPenalty).getAttribute("xlink:href").contains("icon-check"));
@@ -428,8 +430,9 @@ public class D13_ProppertyRules {
     @Then("Check msg {string} and penalty deletion")
     public void checkMsgAndPenaltyDeletion(String msg) {
         new D03_BlocksAndFloors().checkToastMesageContainsText(msg);
-        if (msg.contains("Successfully")){
+        if (msg.contains("Successfully")) {
             new P00_multiPurposes(driver).waitLoading();
-            asrt.assertFalse(penalties.names.stream().anyMatch(n -> n.getText().equalsIgnoreCase(penaltyMap.get("name"))));}
+            asrt.assertFalse(penalties.names.stream().anyMatch(n -> n.getText().equalsIgnoreCase(penaltyMap.get("name"))));
+        }
     }
 }
