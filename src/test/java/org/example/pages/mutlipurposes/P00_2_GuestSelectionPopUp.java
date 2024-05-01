@@ -1,6 +1,5 @@
-package org.example.pages.reservations;
+package org.example.pages.mutlipurposes;
 
-import org.example.pages.mutlipurposes.P00_multiPurposes;
 import org.example.stepDefs.Hooks;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -15,19 +14,19 @@ import java.time.Duration;
 import java.util.List;
 
 @SuppressWarnings("unused")
-public class P03_4_GuestSelectionPopUp {
+public class P00_2_GuestSelectionPopUp {
     final WebDriver driver;
     final WebDriverWait wait;
     final Actions actions;
 
-    public P03_4_GuestSelectionPopUp() {
+    public P00_2_GuestSelectionPopUp() {
         PageFactory.initElements(Hooks.driver, this);
         this.driver = Hooks.driver;
         wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         actions = new Actions(driver);
     }
 
-    public P03_4_GuestSelectionPopUp(WebDriver driver) {
+    public P00_2_GuestSelectionPopUp(WebDriver driver) {
         PageFactory.initElements(driver, this);
         this.driver = driver;
         wait = new WebDriverWait(driver, Duration.ofSeconds(10));

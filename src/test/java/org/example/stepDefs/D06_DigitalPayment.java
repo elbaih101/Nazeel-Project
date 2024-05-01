@@ -15,7 +15,7 @@ import org.example.pages.mutlipurposes.P00_1_PaytabsExternalPage;
 import org.example.pages.mutlipurposes.P00_multiPurposes;
 import org.example.pages.reservations.P03_1_ReservationMainDataPage;
 import org.example.pages.reservations.P03_2_ReservationFinancialPage;
-import org.example.pages.reservations.P03_4_GuestSelectionPopUp;
+import org.example.pages.mutlipurposes.P00_2_GuestSelectionPopUp;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -38,7 +38,7 @@ public class D06_DigitalPayment {
     final P02_DashBoardPage dashBoardPage = new P02_DashBoardPage(driver);
     final P10_VouchersPage vouchersPage = new P10_VouchersPage(driver);
     final P11_DigitalPaymentPage digitalPaymentPage = new P11_DigitalPaymentPage(driver);
-    final P03_4_GuestSelectionPopUp guestSelectionPopUp = new P03_4_GuestSelectionPopUp(driver);
+    final P00_2_GuestSelectionPopUp guestSelectionPopUp = new P00_2_GuestSelectionPopUp(driver);
     final P12_SMSLogPage smsLogPage = new P12_SMSLogPage(driver);
     final P00_multiPurposes multiPurposes = new P00_multiPurposes(driver);
     final P00_1_PaytabsExternalPage paytabsExternalPage = new P00_1_PaytabsExternalPage(driver);
