@@ -9,8 +9,10 @@ import io.github.bonigarcia.wdm.WebDriverManager;
 import org.example.TestData;
 import org.example.Utils;
 import org.example.pages.P01_LoginPage;
+import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.edge.EdgeDriver;
+import org.openqa.selenium.edge.EdgeOptions;
 
 import java.time.Duration;
 
@@ -22,8 +24,11 @@ public class Hooks {
     public static void start(Scenario scenario) {
         Hooks.scenario = scenario;
         WebDriverManager.edgedriver().setup();
-        driver = new EdgeDriver();
-        driver.manage().window().maximize();
+        EdgeOptions op = new EdgeOptions();
+        op.addArguments("headless","start-maximized");
+        driver = new EdgeDriver(op);
+        driver.manage().window().setSize(new Dimension(1920, 1080));
+        // driver.manage().window().maximize();
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
         driver.get(TestData.stageUrl);
         //EdgeOptions options =new EdgeOptions();
