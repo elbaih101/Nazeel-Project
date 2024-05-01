@@ -23,3 +23,8 @@ https://stackoverflow.com/questions/6252678/converting-a-date-string-to-a-dateti
 
 https://toolsqa.com/extent-report/extent-report-for-cucumber-testng-project/       Reports creation and maintaining   [Extent Reports]
     continue  https://www.linkedin.com/pulse/creating-cucumber-extent-report-right-way-praveen-mathew/
+
+
+https://learn.microsoft.com/en-us/microsoft-edge/webdriver-chromium/capabilities-edge-options
+
+https://www.w3.org/TR/webdriver/#capabilities

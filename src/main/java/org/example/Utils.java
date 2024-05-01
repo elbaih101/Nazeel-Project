@@ -1,15 +1,19 @@
 package org.example;
 
 import io.cucumber.java.Scenario;
+import io.github.bonigarcia.wdm.WebDriverManager;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 import org.openqa.selenium.*;
+import org.openqa.selenium.edge.EdgeDriver;
+import org.openqa.selenium.edge.EdgeOptions;
 import org.openqa.selenium.interactions.Action;
 import org.openqa.selenium.interactions.Actions;
 
 import java.io.File;
 import java.time.Duration;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class Utils {
@@ -306,5 +310,47 @@ public class Utils {
                 cce.printStackTrace();
             }
         }
+    }
+    /**
+     * starts a driver in the headless mode
+     * @param driver web driver to be initialized
+     */
+    public static void setDriverHeadless(WebDriver driver) {
+        WebDriverManager.edgedriver().setup();
+        EdgeOptions op = new EdgeOptions();
+        op.addArguments("headless","start-maximized");
+        driver = new EdgeDriver(op);
+        driver.manage().window().setSize(new Dimension(1920, 1080));
+    }
+
+    /**
+     * starts a web driver in ui mode
+     * @param driver a web driver that is going to be initialized
+     */
+    public static void setDriverUi(WebDriver driver) {
+        WebDriverManager.edgedriver().setup();
+        EdgeOptions op = new EdgeOptions();
+        driver = new EdgeDriver(op);
+        driver.manage().window().setSize(new Dimension(1920, 1080));
+    }
+
+    /**
+     * function to return pre sett edge printing and download options
+     * @return EdgeOptions pre configured
+     */
+    public static EdgeOptions edgePrintingAndDownloadOptions(){
+        EdgeOptions options =new EdgeOptions();
+        options.setExperimentalOption("prefs", new String[]{"download.default_directory", "download_path"});
+
+        //printer config
+        options.addArguments("--kiosk-printing");
+        //download config    // relates to this import ::   import com.microsoft.edge.seleniumtools.EdgeOptions;
+        HashMap<String, Object> edgePrefs= new HashMap<>();
+        edgePrefs.put("download.default_directory", "F:\\java maven projects\\Nazeel-Project\\src\\main\\resources\\downloaded");
+        options.setExperimentalOption("prefs", edgePrefs);
+
+        options.addArguments("print.printer_Microsoft_Print_to_PDF.print_to_filename", "F:\\java maven projects\\Nazeel-Project\\src\\main\\resources\\downloaded");
+        return options;
+
     }
 }

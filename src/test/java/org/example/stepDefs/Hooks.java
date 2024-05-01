@@ -5,16 +5,17 @@ package org.example.stepDefs;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
 import io.cucumber.java.Scenario;
-import io.github.bonigarcia.wdm.WebDriverManager;
+
 import org.example.TestData;
 import org.example.Utils;
 import org.example.pages.P01_LoginPage;
-import org.openqa.selenium.Dimension;
+
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.edge.EdgeDriver;
-import org.openqa.selenium.edge.EdgeOptions;
+
 
 import java.time.Duration;
+
+import static org.example.Utils.setDriverHeadless;
 
 public class Hooks {
     public static WebDriver driver;
@@ -23,28 +24,10 @@ public class Hooks {
     @Before
     public static void start(Scenario scenario) {
         Hooks.scenario = scenario;
-        WebDriverManager.edgedriver().setup();
-        EdgeOptions op = new EdgeOptions();
-        op.addArguments("headless","start-maximized");
-        driver = new EdgeDriver(op);
-        driver.manage().window().setSize(new Dimension(1920, 1080));
-        // driver.manage().window().maximize();
+        setDriverHeadless(driver);
+        //Utils.setDriverUi(driver);
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
         driver.get(TestData.stageUrl);
-        //EdgeOptions options =new EdgeOptions();
-
-        //options.setExperimentalOption("prefs", new String[]{"download.default_directory", "download_path"});
-
-        //FixMe : printing and  download configurations
-
-//        //printer config
-//        options.addArguments("--kiosk-printing");
-//        //download config    // relates to this import ::   import com.microsoft.edge.seleniumtools.EdgeOptions;
-//        HashMap<String, Object> edgePrefs= new HashMap<String, Object>();
-//        edgePrefs.put("download.default_directory", "F:\\java maven projects\\Nazeel-Project\\src\\main\\resources\\downloaded");
-//        options.setExperimentalOption("prefs", edgePrefs);
-
-//        options.addArguments("print.printer_Microsoft_Print_to_PDF.print_to_filename", "F:\java maven projects\Nazeel-Project\src\main\resources\downloaded");
 
     }
 
