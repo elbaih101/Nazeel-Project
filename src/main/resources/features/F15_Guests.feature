@@ -1,13 +1,10 @@
 @Guests @SideSp
-Feature: Vendors Feature
+Feature: Guest Feature
 
   Background:  login and choose property
     Given Logging in with superuser
     And Select Property "P01385"
     And go to Guests page
-
-  Scenario: Check default vendor
-    Then check default vendor in the grid
 
   Scenario Outline: Create a Guest
     When create Guest firstname "<fName>" last name "<lName>"  phone "<phone>" nationality "<nat>" Guest Type "<gType>" id type "<idType>" id number "<idNumber>" ignored Fields "<ign>" invailed Fields "<inv>"
