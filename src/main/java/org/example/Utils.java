@@ -297,7 +297,7 @@ public class Utils {
                 byte[] screenshot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
                 String testName = scenario.getName();
 
-                FileUtils.writeByteArrayToFile(new File("target/screenshots/" + testName +scenario.getId()+ ".png"), screenshot);
+                FileUtils.writeByteArrayToFile(new File("target/screenshots/" + testName+"/" +scenario.getLine()+ ".png"), screenshot);
                 scenario.attach(screenshot, "image/png", testName);
             } catch (WebDriverException wde) {
                 System.err.println(wde.getMessage());
