@@ -15,7 +15,7 @@ import org.openqa.selenium.WebDriver;
 
 import java.time.Duration;
 
-import static org.example.Utils.setDriverHeadless;
+
 
 public class Hooks {
     public static WebDriver driver;
@@ -24,7 +24,7 @@ public class Hooks {
     @Before
     public static void start(Scenario scenario) {
         Hooks.scenario = scenario;
-        setDriverHeadless(driver);
+        driver =  Utils.setDriverHeadless();
         //Utils.setDriverUi(driver);
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
         driver.get(TestData.stageUrl);

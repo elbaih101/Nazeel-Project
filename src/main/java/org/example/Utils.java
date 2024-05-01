@@ -313,25 +313,25 @@ public class Utils {
     }
     /**
      * starts a driver in the headless mode
-     * @param driver web driver to be initialized
      */
-    public static void setDriverHeadless(WebDriver driver) {
+    public static WebDriver setDriverHeadless() {
         WebDriverManager.edgedriver().setup();
         EdgeOptions op = new EdgeOptions();
         op.addArguments("headless","start-maximized");
-        driver = new EdgeDriver(op);
+        WebDriver driver = new EdgeDriver(op);
         driver.manage().window().setSize(new Dimension(1920, 1080));
+        return driver;
     }
 
     /**
      * starts a web driver in ui mode
-     * @param driver a web driver that is going to be initialized
      */
-    public static void setDriverUi(WebDriver driver) {
+    public static WebDriver setDriverUi() {
         WebDriverManager.edgedriver().setup();
         EdgeOptions op = new EdgeOptions();
-        driver = new EdgeDriver(op);
+        WebDriver driver = new EdgeDriver(op);
         driver.manage().window().setSize(new Dimension(1920, 1080));
+        return driver;
     }
 
     /**
