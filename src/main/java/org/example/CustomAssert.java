@@ -14,14 +14,18 @@ public class CustomAssert extends SoftAssert {
     public void AssertContains(String a, String b) {
         assertTrue(a.contains(b), "Expected: " + a + "\nActual: " + b);
     }
-
-    public void AssertEqualsIgnoreCase(String a, String b) {
-
-        assertTrue(a.equalsIgnoreCase(b), "Expected :" + a + "\nActual: " + b);
+    public void AssertContains(List<String> a, String b) {
+        for (String s:a){
+        assertTrue(s.contains(b), "Expected: " + a + "\nActual: " + b);}
     }
 
-    public void AssertEqualsIgnoreCase(String a, String b, String expectedName) {
-        assertTrue(a.equalsIgnoreCase(b), "Expected " + expectedName + ":" + a + "\nActual: " + b);
+    public void AssertEqualsIgnoreCase(String expected, String actual) {
+
+        assertTrue(expected.equalsIgnoreCase(actual), "Expected :" + expected + "\nActual: " + actual);
+    }
+
+    public void AssertEqualsIgnoreCase(String expected, String actual, String expectedName) {
+        assertTrue(expected.equalsIgnoreCase(actual), "Expected " + expectedName + ":" + expected + "\nActual: " + actual);
     }
 
     public void AssertAnyMatch(List<Object> a, Predicate<Object> condition) {
