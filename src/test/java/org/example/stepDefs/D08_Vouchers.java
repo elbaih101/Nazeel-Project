@@ -46,6 +46,16 @@ public class D08_Vouchers {
     String createdVoucherType;
     String createdVoucherState;
     VouchersMap vMap;
+    String selectedCorporate;
+
+    @Then("check the created voucher owner to be the selected corporate")
+
+    public void checkTheCreatedVoucherOwnerToBeTheSelectedCorporate() {
+        multiPurposes.waitLoading();
+        WebElement createdVoucher = vouchersPage.vouchersNums.stream().filter(t -> t.getText().equalsIgnoreCase(vMap.getvNumber())).findAny().orElseThrow();
+        asrt.assertEquals(selectedCorporate, vouchersPage.voucherOwner(createdVoucher, vMap.getvType()).getText());
+        asrt.assertAll();
+    }
 
 
     public class VouchersMap {
@@ -143,19 +153,19 @@ public class D08_Vouchers {
     public void submitTheVoucherAndCheckSuccessMessage(String prefix, String postfix) {
         wait.until(ExpectedConditions.elementToBeClickable(vouchersPopUp.submitButton()));
         vouchersPopUp.submitButton().click();
-        voucherNums = StringUtils.substringBetween(multiPurposes.toastMsg.getText().toLowerCase(), prefix.toLowerCase(), postfix.toLowerCase());
+        voucherNums = StringUtils.substringBetween(multiPurposes.toastMsgs.getFirst().getText().toLowerCase(), prefix.toLowerCase(), postfix.toLowerCase());
         try {
 
             new D03_BlocksAndFloors().checkToastMesageContainsText(prefix + voucherNums + postfix);
             i++;
         } catch (AssertionError e) {
-            if (multiPurposes.toastMsg.getText().contains("Invalid voucher issue date/ time value")) {
+            if (multiPurposes.toastMsgs.getFirst().getText().contains("Invalid voucher issue date/ time value")) {
                 Reporter.log("checked can't create voucher with date after drop cash date");
                 asrt.assertTrue(true);
                 asrt.assertAll();
             } else {
-                System.out.println(e.getMessage() + "\nActual : " + multiPurposes.toastMsg.getText() + "\nExpected : " + prefix + voucherNums + postfix);
-                Reporter.log(e.getMessage() + "\nActual : " + multiPurposes.toastMsg.getText() + "\nExpected : " + prefix + voucherNums + postfix);
+                System.out.println(e.getMessage() + "\nActual : " + multiPurposes.toastMsgs.getFirst().getText() + "\nExpected : " + prefix + voucherNums + postfix);
+                Reporter.log(e.getMessage() + "\nActual : " + multiPurposes.toastMsgs.getFirst().getText() + "\nExpected : " + prefix + voucherNums + postfix);
             }
         }
     }
@@ -180,8 +190,8 @@ public class D08_Vouchers {
         reservationFinancialPage.refundsTap.click();
     }
 
-    @Given("successfully create a voucher of type {string} amount {string} payment Method {string} maturity Date {string} and Creatian Date {string}")
-    public void successfullyCreateAVoucherOfTypeAmountPaymentMethodMaturityDate(String voucherType, String amount, String paymentMethod, String maturityDate, String creatianDate) {
+    @Given("successfully create a voucher of type {string} amount {string} payment Method {string} maturity Date {string} and Creatian Date {string} for a {string}")
+    public void successfullyCreateAVoucherOfTypeAmountPaymentMethodMaturityDate(String voucherType, String amount, String paymentMethod, String maturityDate, String creatianDate, String guestType) {
         String prefix = "";
         //Receipt Number. 000057 generated successfully
         String Postfix = " Generated successfully";
@@ -195,45 +205,9 @@ public class D08_Vouchers {
         };
         multiPurposes.waitLoading();
         if (!voucherType.contains("SA")) {
-            if (voucherType.equalsIgnoreCase(Vouchers.Refund.toString()) || voucherType.equalsIgnoreCase(Vouchers.SDRefund.toString())) {
-                openRefundVouchersTab();
-                clickOnTheAddVoucherButton();
-                selectVoucherTab(voucherType);
-
-            }
-
-            if (voucherType.equalsIgnoreCase(Vouchers.Receipt.toString()) || voucherType.equalsIgnoreCase(Vouchers.SD.toString())) {
-
-                reservationFinancialPage.receiptsTap.click();
-                clickOnTheAddVoucherButton();
-                selectVoucherTab(voucherType);
-
-            }
-
-            if (voucherType.equalsIgnoreCase(Vouchers.Draft.toString())) {
-                clickOnTheAddVoucherButton();
-                selectVoucherTab(voucherType);
-
-            }
+            reservationVouchersInitialize(voucherType);
         } else {
-            wait.until(ExpectedConditions.not(ExpectedConditions.urlContains("/dashboard")));
-            if (voucherType.equalsIgnoreCase(Vouchers.SADraft.toString())) {
-                wait.until(ExpectedConditions.elementToBeClickable(vouchersPage.newVoucherButton));
-                vouchersPage.newVoucherButton.click();
-                wait.until(ExpectedConditions.elementToBeClickable(vouchersPopUp.selctGuestButton()));
-                vouchersPopUp.selctGuestButton().click();
-                new D06_DigitalPayment().selectGuest("RANDOM", "", "");
-                vouchersPopUp.purposeField().sendKeys("testing automation SADraft");
-
-            }
-            if (voucherType.equalsIgnoreCase(Vouchers.SAReceipt.toString())) {
-                vouchersPage.newVoucherButton.click();
-                wait.until(ExpectedConditions.elementToBeClickable(vouchersPopUp.selctGuestButton()));
-                vouchersPopUp.selctGuestButton().click();
-                new D06_DigitalPayment().selectGuest("RANDOM", "", "");
-                vouchersPopUp.purposeField().sendKeys("testing automation SAReceipt");
-
-            }
+            standAloneVouchersInitialize(voucherType, guestType);
         }
 
         if (voucherType.contains("Draft")) {
@@ -260,6 +234,60 @@ public class D08_Vouchers {
         vouchersMaps.add(vMap);
     }
 
+    private void standAloneVouchersInitialize(String voucherType, String guestType) {
+        wait.until(ExpectedConditions.not(ExpectedConditions.urlContains("/dashboard")));
+        if (voucherType.equalsIgnoreCase(Vouchers.SADraft.toString())) {
+            wait.until(ExpectedConditions.elementToBeClickable(vouchersPage.newVoucherButton));
+            vouchersPage.newVoucherButton.click();
+            wait.until(ExpectedConditions.elementToBeClickable(vouchersPopUp.selctGuestButton()));
+            vouchersPopUp.selctGuestButton().click();
+            new D06_DigitalPayment().selectGuest("RANDOM", "", "");
+            vouchersPopUp.purposeField().sendKeys("testing automation SADraft");
+
+        }
+        if (voucherType.equalsIgnoreCase(Vouchers.SAReceipt.toString())) {
+            vouchersPage.newVoucherButton.click();
+
+            multiPurposes.waitLoading();
+            switch (guestType.toLowerCase()) {
+                case "corporate" -> {
+                    vouchersPopUp.selctCorporateButton().click();
+                    selectedCorporate = new D11_Customers().selectCorporate("RANDOM", "", "", "");
+                }
+                case "guest" -> {
+                    vouchersPopUp.selctGuestButton().click();
+                    new D06_DigitalPayment().selectGuest("RANDOM", "", "");
+                }
+            }
+            vouchersPopUp.purposeField().sendKeys("testing automation SAReceipt");
+
+        }
+    }
+
+    private void reservationVouchersInitialize(String voucherType) {
+        if (voucherType.equalsIgnoreCase(Vouchers.Refund.toString()) || voucherType.equalsIgnoreCase(Vouchers.SDRefund.toString())) {
+            reservationFinancialPage.refundsTap.click();
+            clickOnTheAddVoucherButton();
+            selectVoucherTab(voucherType);
+
+        }
+
+        if (voucherType.equalsIgnoreCase(Vouchers.Receipt.toString()) || voucherType.equalsIgnoreCase(Vouchers.SD.toString())) {
+
+            reservationFinancialPage.receiptsTap.click();
+            clickOnTheAddVoucherButton();
+            selectVoucherTab(voucherType);
+
+        }
+
+        if (voucherType.equalsIgnoreCase(Vouchers.Draft.toString())) {
+            reservationFinancialPage.receiptsTap.click();
+            clickOnTheAddVoucherButton();
+            selectVoucherTab(voucherType);
+
+        }
+    }
+
     void openEditModeForVoucher(String voucherType, String voucherState, String vNumber) {
 
         multiPurposes.waitLoading();
@@ -278,12 +306,12 @@ public class D08_Vouchers {
 
     @Given("create all vouchers Types")
     public void createVouchers() {
-        successfullyCreateAVoucherOfTypeAmountPaymentMethodMaturityDate("Draft", "200", "Cash", "15/12/2025", "");
-        successfullyCreateAVoucherOfTypeAmountPaymentMethodMaturityDate("Receipt", "200", "Cash", "", "");
-        successfullyCreateAVoucherOfTypeAmountPaymentMethodMaturityDate("SD", "200", "Cash", "", "");
+        successfullyCreateAVoucherOfTypeAmountPaymentMethodMaturityDate("Draft", "200", "Cash", "15/12/2025", "", "guest");
+        successfullyCreateAVoucherOfTypeAmountPaymentMethodMaturityDate("Receipt", "200", "Cash", "", "", "guest");
+        successfullyCreateAVoucherOfTypeAmountPaymentMethodMaturityDate("SD", "200", "Cash", "", "", "guest");
         openRefundVouchersTab();
-        successfullyCreateAVoucherOfTypeAmountPaymentMethodMaturityDate("Refund", "200", "Cash", "", "");
-        successfullyCreateAVoucherOfTypeAmountPaymentMethodMaturityDate("SDRefund", "200", "Cash", "", "");
+        successfullyCreateAVoucherOfTypeAmountPaymentMethodMaturityDate("Refund", "200", "Cash", "", "", "guest");
+        successfullyCreateAVoucherOfTypeAmountPaymentMethodMaturityDate("SDRefund", "200", "Cash", "", "", "guest");
 
     }
 

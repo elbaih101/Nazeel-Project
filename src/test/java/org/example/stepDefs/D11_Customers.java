@@ -10,6 +10,7 @@ import org.example.pages.P02_DashBoardPage;
 import org.example.pages.customers.P22_Corporates;
 import org.example.pages.customers.P34_Vendors;
 import org.example.pages.customers.P35_Guests;
+import org.example.pages.mutlipurposes.P00_3_CorporateSelectionPopUp;
 import org.example.pages.mutlipurposes.P00_multiPurposes;
 import org.example.pages.vouchersPages.P10_VouchersPage;
 import org.example.pages.vouchersPages.P16_VouchersPopUp;
@@ -17,6 +18,7 @@ import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.openqa.selenium.*;
 
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.asserts.SoftAssert;
 
@@ -24,6 +26,7 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 
 public class D11_Customers {
     WebDriver driver = Hooks.driver;
@@ -35,6 +38,7 @@ public class D11_Customers {
     P22_Corporates corporates = new P22_Corporates(driver);
     P34_Vendors vendors = new P34_Vendors(driver);
     P35_Guests guests = new P35_Guests(driver);
+    P00_3_CorporateSelectionPopUp selectCorpPopup = new P00_3_CorporateSelectionPopUp(driver);
 
 
     @And("go to corporates page")
@@ -52,7 +56,7 @@ public class D11_Customers {
 
         try {
             wait.withTimeout(Duration.ofMillis(500));
-            corporates.popupSaveButton.click();
+           selectCorpPopup.saveButton.click();
 
         } catch (NoSuchElementException e) {
             wait.withTimeout(Duration.ofSeconds(10));
@@ -738,7 +742,7 @@ public class D11_Customers {
                 theList = guests.classes;
                 if (!theList.isEmpty()) {
                     P00_multiPurposes p00MultiPurposes = new P00_multiPurposes(driver);
-                    asrt.assertTrue(theList.stream().anyMatch(s ->!p00MultiPurposes.toolTip(s.findElement(By.xpath("./div/div"))).getText().toLowerCase().contains(value.toLowerCase())));
+                    asrt.assertTrue(theList.stream().anyMatch(s -> !p00MultiPurposes.toolTip(s.findElement(By.xpath("./div/div"))).getText().toLowerCase().contains(value.toLowerCase())));
                 }
             }
             case "idtype" -> {
@@ -754,5 +758,40 @@ public class D11_Customers {
         }
         asrt.assertAll();
     }
+
+    public String selectCorporate(String corporateName, String corpPhone, String corpEmail, String corpVAT) {
+        WebElement criteriaButton;
+        String searchText;
+        if (corporateName.equalsIgnoreCase("RANDOM")) {
+            criteriaButton = selectCorpPopup.searchCriteriasButtons.stream().filter(t -> t.getText().equalsIgnoreCase("name")).findAny().orElseThrow();
+            searchText="";
+        } else if (corpPhone.equalsIgnoreCase("") && corpEmail.equalsIgnoreCase("") && corpVAT.equalsIgnoreCase("")) {
+            criteriaButton = selectCorpPopup.searchCriteriasButtons.stream().filter(t -> t.getText().equalsIgnoreCase("name")).findAny().orElseThrow();
+            searchText=corporateName;
+        } else if (corporateName.equalsIgnoreCase("") && corpEmail.equalsIgnoreCase("") && corpVAT.equalsIgnoreCase("")) {
+            criteriaButton = selectCorpPopup.searchCriteriasButtons.stream().filter(t -> t.getText().equalsIgnoreCase("phone")).findAny().orElseThrow();
+            searchText=corpPhone;
+        } else if (corporateName.equalsIgnoreCase("") && corpPhone.equalsIgnoreCase("") && corpVAT.equalsIgnoreCase("")) {
+            criteriaButton = selectCorpPopup.searchCriteriasButtons.stream().filter(t -> t.getText().equalsIgnoreCase("email")).findAny().orElseThrow();
+            searchText=corpEmail;
+        }else {
+            criteriaButton = selectCorpPopup.searchCriteriasButtons.stream().filter(t -> t.getText().equalsIgnoreCase("vat no.")).findAny().orElseThrow();
+            searchText=corpEmail;
+        }
+        wait.until(ExpectedConditions.elementToBeClickable(criteriaButton));
+
+        criteriaButton.click();
+        selectCorpPopup.searchFiled.sendKeys(searchText);
+        selectCorpPopup.searchButton.click();
+
+        List<WebElement> corpNames = selectCorpPopup.corporatesNAmes;
+        WebElement selectedCorp = corpNames.get(new Random().nextInt(corpNames.size()));
+        wait.until(ExpectedConditions.elementToBeClickable(selectedCorp));
+        String corpName =selectedCorp.getText();
+        selectedCorp.click();
+        return corpName;
+
+        }
+
 
 }
