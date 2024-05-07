@@ -1,14 +1,12 @@
 package org.example;
 
-import org.openqa.selenium.WebElement;
+
 import org.openqa.selenium.devtools.DevTools;
 import org.openqa.selenium.devtools.v124.network.Network;
 import org.openqa.selenium.edge.EdgeDriver;
 
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.function.Consumer;
-import java.util.function.Function;
 
 /**
  * Handling APi Requests and Responses senta nd receaved from the driver to ease th elive of the auto generated vuchers and invoices to insure the created voucher number is the same from the responses as the front end
