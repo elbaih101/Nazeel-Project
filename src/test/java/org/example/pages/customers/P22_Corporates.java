@@ -165,7 +165,6 @@ public class P22_Corporates {
     @FindBy(xpath = "//button[contains(@class,\"n-button n-button--primary\")]")
     public WebElement saveButton;
     //in reservation popup
-    @FindBy(xpath = "//div[@role=\"dialog\"]//button[contains(@class,\"n-button n-button--primary\")]")
-    public WebElement popupSaveButton;
+
 
 }

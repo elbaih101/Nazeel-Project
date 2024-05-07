@@ -1,7 +1,7 @@
 package org.example.pages.vouchersPages;
 
 import org.apache.commons.lang.NullArgumentException;
-import org.bouncycastle.jcajce.provider.asymmetric.X509;
+
 import org.example.enums.Vouchers;
 import org.example.pages.mutlipurposes.P00_multiPurposes;
 import org.example.stepDefs.Hooks;
@@ -14,7 +14,7 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import javax.xml.xpath.XPath;
+
 import java.time.Duration;
 import java.util.List;
 
@@ -54,6 +54,7 @@ public class P10_VouchersPage {
     @FindBy(xpath = "//td[@data-kendo-grid-column-index=\"8\"]")
     public List<WebElement> receitRelatedDrafts;
 
+
     public WebElement digialPaymentButton() {
         wait.until(ExpectedConditions.elementToBeClickable(moreAddOptionsButton));
         new P00_multiPurposes(driver).waitLoading();
@@ -62,7 +63,15 @@ public class P10_VouchersPage {
     }
 
     //Grid //
-
+public WebElement voucherOwner (WebElement voucher,String voucherType){
+    WebElement owner;
+    if (voucherType.equalsIgnoreCase(Vouchers.Draft.toString())) {
+        owner = voucher.findElement(By.xpath("..//td[@data-kendo-grid-column-index=\"5\"]"));
+    } else  {
+        owner = voucher.findElement(By.xpath("..//td[@data-kendo-grid-column-index=\"4\"]"));
+    }
+    return owner;
+}
     //FIXME : dont forget the error
     public List<WebElement> moreActions(WebElement voucherAmount, String voucherType) {
         WebElement moreMenu = null;
@@ -78,8 +87,7 @@ public class P10_VouchersPage {
 
     public List<WebElement> draftsRemainigAmounts() {
         wait.until(ExpectedConditions.urlContains("draft-vouchers"));
-        List<WebElement> rem = driver.findElements(By.xpath("//td[@data-kendo-grid-column-index=\"3\"]"));
-        return rem;
+        return driver.findElements(By.xpath("//td[@data-kendo-grid-column-index=\"3\"]"));
     }
 
     public WebElement editButton(WebElement voucherAmount, String voucherType) {
@@ -90,8 +98,8 @@ public class P10_VouchersPage {
         } else if (voucherType.equalsIgnoreCase(Vouchers.Receipt.toString()) || voucherType.equalsIgnoreCase(Vouchers.Expenses.toString()) || voucherType.equalsIgnoreCase(Vouchers.Refund.toString()) || voucherType.equalsIgnoreCase(Vouchers.SAReceipt.toString()) || voucherType.equalsIgnoreCase(Vouchers.SD.toString()) || voucherType.equalsIgnoreCase(Vouchers.SDRefund.toString()) || voucherType.equalsIgnoreCase(Vouchers.GenReceipt.toString())) {
             button = voucherAmount.findElement(By.xpath("..//td[@data-kendo-grid-column-index=\"10\"]//div/button[1]"));
         }
-        if (button.equals(null)) {
-            throw new NullArgumentException("the edit btton wasn't retreaved");
+        if (button==null) {
+            throw new NullArgumentException("the edit button wasn't retreaved");
         }
         return button;
     }

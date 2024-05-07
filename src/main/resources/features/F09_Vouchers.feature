@@ -3,53 +3,28 @@ Feature: Vouchers
 
   Background:  login and choose property
     Given Logging in with superuser
-    And Select Property "P01384"
-#  Rule:Reservations Related Receipt Vouchers
-#    Background:
-#      Given open reservations Page
-#      And create a successfull reservation Source "RANDOM" purpose "RANDOM" Unit "RANDOM" Guest "RANDOM" state "confirmed"
-#      And go to Reservation Financial Page
-
-#    Scenario: Create a draft Voucher
-#      Given click on the add voucher button
-#      And select voucher "Draft" tab
-#      And enter maturity Date "01122024" and amount "20"
-#      Then submit the voucher and check success message prefix "Draft Voucher Number. " postfix " Generated successfully!"
-#    Scenario Outline: Create  Vouchers
-#      Given click on the add voucher button
-#      And select voucher "<type>" tab
-#      And select Payment Method "<method>" and enter amount "<amount>"
-#      Then submit the voucher and check success message prefix <prefix> postfix <postfix>
-#      Examples:
-#        | type    | method | amount | prefix                                      | postfix                    |
-#        | Receipt | Cash   | 50     | "Receipt Number. "                          | " Generated successfully!" |
-#        | SD      | Cash   | 50     | "Security Deposit Receipt Voucher Number. " | " Generated successfully!" |
-#
-#    Scenario Outline: Create Refund Vouchers
-#      Given successfully create a voucher of type "<vType>" amount "<amount>" payment Method "<method>" maturity Date "<mDate>" and Creatian Date "<cDate>"
-#      Given open Refund Vouchers tab
-#      And click on the add voucher button
-#      And select voucher "<rvType>" tab
-#      And select Payment Method "<method>" and enter amount "<amount>"
-#      Then submit the voucher and check success message prefix <prefix> postfix <postfix>
-#      Examples:
-#        | vType   | amount | method | mDate | cDate | rvType   | prefix                                     | postfix                    |
-#        | Receipt | 50     | Cash   |       |       | Refund   | "Refund Voucher Number. "                  | "Generated successfully!"  |
-#        | SD      | 50     | Cash   |       |       | SDRefund | "Security Deposit Refund Voucher Number. " | " Generated successfully!" |
-#
-
-
+    And Select Property "P01385"
     # TODO NO show Scenario
-    # TODO  :: Create one scenario to check all vouchers with one reservation
+  @corporate_vouchers,orders
+  Rule:Stand corporate Vouchers
+    #noinspection GherkinMisplacedBackground
+  Background: going to receipt vouchers page
+      Given go to "Receipt" Vouchers Page
+    Scenario: create SA receipt Voucher for a corporate
+      And successfully create a voucher of type "SAReceipt" amount "200" payment Method "Cash" maturity Date "" and Creatian Date "" for a "corporate"
+      Then check the created voucher owner to be the selected corporate
+
+
+
   Rule:ended Reservations Vouchers
-    Background:
+    Background: creating checked in reservation
       Given open reservations Page
       And  Create "Checked-In" Reservation withSource "RANDOM" purpose "RANDOM" Unit "RANDOM" Guest "RANDOM"
       And go to Reservation Financial Page
 
     Scenario: check the voucers edit mode after drop cash actions
-      Given successfully create a voucher of type "SD" amount "200" payment Method "Cash" maturity Date "" and Creatian Date "29/04/2024"
-      Given successfully create a voucher of type "Receipt" amount "200" payment Method "Cash" maturity Date "" and Creatian Date "29/04/2024"
+      Given successfully create a voucher of type "SD" amount "200" payment Method "Cash" maturity Date "" and Creatian Date "29/04/2024" for a "guest"
+      Given successfully create a voucher of type "Receipt" amount "200" payment Method "Cash" maturity Date "" and Creatian Date "29/04/2024" for a "guest"
       And create a drop cash action to date "29/04/2024"
       And go to "Receipt" Vouchers Page
       Then Check "receipt" Voucher with state "CashDrop" edit mode
@@ -69,7 +44,7 @@ Feature: Vouchers
 
     Background:
       Given go to Draft Vouchers Page
-      And successfully create a voucher of type "SADraft" amount "200" payment Method "Cash" maturity Date "25012024" and Creatian Date ""
+      And successfully create a voucher of type "SADraft" amount "200" payment Method "Cash" maturity Date "25012024" and Creatian Date "" for a "guest"
 
     Scenario: Check edit mode for Receipt Voucher for Collected Draft
       And click on draft more menu and choose collect by "Normal" payment
@@ -150,13 +125,17 @@ Feature: Vouchers
 
     Scenario: Can't Create a Cash Voucher with Date Before Last DropCash Date
       Given go to "Receipt" Vouchers Page
-      Then successfully create a voucher of type "SAReceipt" amount "200" payment Method "Cash" maturity Date "" and Creatian Date "28112023"
+      Then successfully create a voucher of type "SAReceipt" amount "200" payment Method "Cash" maturity Date "" and Creatian Date "28112023" for a "guest"
 
     Scenario: Can't edit a cash voucher to a date before last drop cash Date
       Given go to "Receipt" Vouchers Page
-      And successfully create a voucher of type "SAReceipt" amount "200" payment Method "Cash" maturity Date "" and Creatian Date ""
+      And successfully create a voucher of type "SAReceipt" amount "200" payment Method "Cash" maturity Date "" and Creatian Date "" for a "guest"
       When editing the Created Voucher's  amount "" payment Method "" maturity Date "" and Creatian Date "28112023"
       Then Check toast mesage contains text "issue date/ time of cash vouchers could not be changed"
+
+
+
+  Scenario: create a SA Voucher for a corporate
 
 
  # TODO : REceipts and Refunds on wlakin Orders

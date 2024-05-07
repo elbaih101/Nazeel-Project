@@ -1,9 +1,14 @@
 package org.example.stepDefs;
 
+import io.cucumber.cienvironment.internal.com.eclipsesource.json.Json;
+import io.cucumber.cienvironment.internal.com.eclipsesource.json.JsonObject;
+import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.apache.commons.lang3.StringUtils;
+import org.example.API;
+import org.example.CustomAssert;
 import org.example.Nazeel_Calculations;
 import org.example.Utils;
 import org.example.pages.P02_DashBoardPage;
@@ -17,17 +22,19 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.testng.asserts.SoftAssert;
+import org.openqa.selenium.edge.EdgeDriver;
 
 //import java.time.Duration;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class D14_Outlets {
     WebDriver driver = Hooks.driver;
 
     JavascriptExecutor js = (JavascriptExecutor) driver;
     //Actions actions = new Actions(driver);
-    final SoftAssert asrt = new SoftAssert();
+    final CustomAssert asrt = new CustomAssert();
     //  final WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
     P02_DashBoardPage dashBoardPage = new P02_DashBoardPage(driver);
     P05_SetupPage setupPage = new P05_SetupPage(driver);
@@ -394,7 +401,7 @@ public class D14_Outlets {
         }
         if (!name.isEmpty()) {
             items.itemNameField.clear();
-            new P00_multiPurposes(driver).secondLanguageField(items.itemNameField).sendKeys(Keys.chord(Keys.CONTROL,"a",Keys.BACK_SPACE));
+            new P00_multiPurposes(driver).secondLanguageField(items.itemNameField).sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.BACK_SPACE));
             if (!name.equalsIgnoreCase("non"))
                 items.itemNameField.sendKeys(name);
         }
@@ -590,7 +597,7 @@ public class D14_Outlets {
             double totalbeforeTax;
             double totalAfteTax;
             outlets.genralDisocuntButton.click();
-            outlets.discountValueField().sendKeys(Keys.chord(Keys.CONTROL,"a",Keys.BACK_SPACE));
+            outlets.discountValueField().sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.BACK_SPACE));
             outlets.discountValueField().sendKeys(Double.toString(discountValue));
             discountType = outlets.discountTypes().get(i).getText();
             outlets.saveDiscountButton.click();
@@ -608,11 +615,63 @@ public class D14_Outlets {
             else
                 totalAfteTax = totalbeforeTax + taxes;
 
-            asrt.assertEquals( outlets.orderSubTotal(),orderSubTotal,discountType +"subtotal");
-            asrt.assertEquals(outlets.orderGenralDiscountAmount(),discountAmount, discountType+"discountamount");
-            asrt.assertEquals(outlets.orderTaxes(),taxes, discountType);
-            asrt.assertEquals( outlets.orderAmountBeforeTaxes(),totalbeforeTax,discountType);
-            asrt.assertEquals( outlets.orderAmountAfterTaxes(),totalAfteTax,discountType);
+            asrt.assertEquals(outlets.orderSubTotal(), orderSubTotal, discountType + "subtotal");
+            asrt.assertEquals(outlets.orderGenralDiscountAmount(), discountAmount, discountType + "discountamount");
+            asrt.assertEquals(outlets.orderTaxes(), taxes, discountType);
+            asrt.assertEquals(outlets.orderAmountBeforeTaxes(), totalbeforeTax, discountType);
+            asrt.assertEquals(outlets.orderAmountAfterTaxes(), totalAfteTax, discountType);
+        }
+        asrt.assertAll();
+    }
+
+    @And("submiting the order as {string} for a {string}")
+    public void submitingTheOrderAsForA(String orderType, String ownerType) {
+        if (orderType.toLowerCase().contains("walk")) {
+            outlets.walkinOrderButton.click();
+            new P00_multiPurposes(driver).waitLoading();
+            if (ownerType.equalsIgnoreCase("corporate")) {
+                outlets.selctCorporateButton.click();
+                new D11_Customers().selectCorporate("RANDOM", "", "", "");
+            } else {
+                outlets.selctGuestButton.click();
+                new D06_DigitalPayment().selectGuest("Random", "", "");
+            }
+
+            API api = new API();
+            outlets.payMethodsList().stream().filter(t -> t.getText().equalsIgnoreCase("cash")).findFirst().orElseThrow().click();
+            new P00_multiPurposes(driver).waitLoading();
+
+            String body = api.getResponseBody((EdgeDriver) driver, "api/hotel-services/orders/create", () -> {
+                outlets.addPayMethodButton.click();
+                outlets.submitOrderButton.click();
+            });
+
+            JsonObject json = Json.parse(body).asObject();
+            invoiceNo = json.get("data").asObject().getString("invoiceNumber", null);
+            receiptNo = json.get("data").asObject().get("vouchersSequanceNumber").asArray().get(0).asString();
+
+
+        }
+
+
+    }
+    String invoiceNo;
+    String receiptNo;
+    @Then("Check {string} order is created")
+    public void checkOrderIsCreated(String orderType) {
+        new P00_multiPurposes(driver).waitLoading();
+        List<String> toastMessages = new ArrayList<>();
+        for (WebElement msg : new P00_multiPurposes(driver).toastMsgs) {
+            toastMessages.add(msg.getText());
+        }
+        if (orderType.toLowerCase().contains("walk")) {
+            asrt.AssertEqualsIgnoreCase(outlets.orderStatus.getText(), "paid");
+            asrt.assertFalse(outlets.receiptVouchersNums.isEmpty());
+            asrt.AssertContains(toastMessages, invoiceNo);
+            asrt.AssertContains(toastMessages, receiptNo);
+            asrt.assertEquals(invoiceNo,outlets.orderInvoiceNumber.getText());
+            asrt.assertEquals(receiptNo,outlets.receiptVouchersNums.get(0).getText());
+
         }
         asrt.assertAll();
     }

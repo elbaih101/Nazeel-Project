@@ -62,6 +62,14 @@ public class P38_Outlets {
     @FindBy(xpath = "//td[@data-kendo-grid-column-index=\"7\"]")
     public List<WebElement> selectedItemsDeletes;
 
+
+    @FindBy(xpath = "//label[contains(text(),\"Status\")]/span")
+    public WebElement orderStatus;
+    @FindBy(xpath = "//label[contains(text(),\"Invoice\")]/span")
+    public WebElement orderInvoiceNumber;
+    @FindBy(xpath = "//kendo-grid[2]//td[@data-kendo-grid-column-index=\"2\"]")
+    public List<WebElement> receiptVouchersNums;
+
     public WebElement itemPriceField(WebElement item) {
         wait.withTimeout(Duration.ofMillis(100));
         String locator = "..//td[@data-kendo-grid-column-index=\"2\"]/span";
@@ -178,4 +186,22 @@ public class P38_Outlets {
         WebElement subTotal = orderTotals.findElement(By.xpath(".//span[(text()=\"Balance:\")]/following-sibling::b"));
         return Double.parseDouble((subTotal.getText()));
     }
+
+    @FindBy(xpath = "//div[contains(@class,\"guest-name__actions\")]/div[1]")
+    public WebElement selctGuestButton;
+    @FindBy(xpath = "//div[contains(@class,\"guest-name__actions\")]/div[2]")
+    public WebElement selctCorporateButton;
+    @FindBy(name = "paymentMethod")
+    WebElement paymentmethodCmpoBox;
+
+    public List<WebElement> payMethodsList() {
+        return new P00_multiPurposes(driver).getListItems(paymentmethodCmpoBox);
+    }
+
+    @FindBy(xpath = "//app-walk-in-pop-up//button[contains(text(),\"Add\")]")
+    public WebElement addPayMethodButton;
+    @FindBy(xpath = "//app-walk-in-pop-up//kendo-datepicker//input")
+    public WebElement issueDateField;
+    @FindBy(xpath = "//app-walk-in-pop-up//button[contains(text(),\"Create Order\")]")
+    public WebElement submitOrderButton;
 }
