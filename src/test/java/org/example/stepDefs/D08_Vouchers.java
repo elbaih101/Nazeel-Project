@@ -1,10 +1,13 @@
 package org.example.stepDefs;
 
+import io.cucumber.cienvironment.internal.com.eclipsesource.json.Json;
+import io.cucumber.cienvironment.internal.com.eclipsesource.json.JsonObject;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.apache.commons.lang.StringUtils;
+import org.example.API;
 import org.example.Utils;
 import org.example.enums.PaymentMethods;
 import org.example.enums.Vouchers;
@@ -19,6 +22,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.support.Color;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -151,9 +155,8 @@ public class D08_Vouchers {
 
     @Then("submit the voucher and check success message prefix {string} postfix {string}")
     public void submitTheVoucherAndCheckSuccessMessage(String prefix, String postfix) {
-        wait.until(ExpectedConditions.elementToBeClickable(vouchersPopUp.submitButton()));
-        vouchersPopUp.submitButton().click();
-        voucherNums = StringUtils.substringBetween(multiPurposes.toastMsgs.getFirst().getText().toLowerCase(), prefix.toLowerCase(), postfix.toLowerCase());
+     //   wait.until(ExpectedConditions.elementToBeClickable(vouchersPopUp.submitButton()));
+      //  voucherNums = StringUtils.substringBetween(multiPurposes.toastMsgs.getFirst().getText().toLowerCase(), prefix.toLowerCase(), postfix.toLowerCase());
         try {
 
             new D03_BlocksAndFloors().checkToastMesageContainsText(prefix + voucherNums + postfix);
@@ -203,6 +206,7 @@ public class D08_Vouchers {
             case "Draft", "SADraft" -> "Draft Voucher Number. ";
             default -> prefix;
         };
+        String url = voucherType.toLowerCase().contains("sa") ? "/api/Financial/Voucher/create" : "api/Reservation/create";
         multiPurposes.waitLoading();
         if (!voucherType.contains("SA")) {
             reservationVouchersInitialize(voucherType);
@@ -226,7 +230,11 @@ public class D08_Vouchers {
             vouchersPopUp.dateField().clear();
             Utils.setDate(vouchersPopUp.dateField(), creatianDate);
         }
-
+        API api = new API();
+        JsonObject json = Json.parse(api.getResponseBody((EdgeDriver) driver, url, () -> {
+            vouchersPopUp.submitButton().click();
+        })).asObject();
+        voucherNums = json.getString("data", null);
         submitTheVoucherAndCheckSuccessMessage(prefix, Postfix);
         createdVoucherType = voucherType;
         createdVoucherState = "Created";

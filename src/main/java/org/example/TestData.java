@@ -10,13 +10,8 @@ import java.util.List;
 public class TestData
 {
 
-    public static final String stageUrl ="http://staging.nazeel.net:9002/";
-    public static final String username= "Mostafa Hamed";
+    public static final String stageUrl ="https://staging.nazeel.net:9002/";
 
-    public static final String password = "123456&Mh";
-
-    public static final String accessCode = "00720";
-    public static final String guestName ="mostafa";
     public static void KendoSelectByValue(WebDriver driver, WebElement select, String value)
     {
         var selectElement = new Select(select);

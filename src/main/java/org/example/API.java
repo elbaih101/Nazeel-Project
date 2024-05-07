@@ -55,6 +55,8 @@ public class API {
             }
         });
         requestTrigger.run();
+
+
         int timeout = 30;
         while (asyncResponse.get() == null && timeout > 0) {
             Utils.sleep(1000);

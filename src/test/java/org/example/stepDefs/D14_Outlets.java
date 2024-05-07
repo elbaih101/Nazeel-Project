@@ -640,9 +640,9 @@ public class D14_Outlets {
             API api = new API();
             outlets.payMethodsList().stream().filter(t -> t.getText().equalsIgnoreCase("cash")).findFirst().orElseThrow().click();
             new P00_multiPurposes(driver).waitLoading();
+            outlets.addPayMethodButton.click();
 
             String body = api.getResponseBody((EdgeDriver) driver, "api/hotel-services/orders/create", () -> {
-                outlets.addPayMethodButton.click();
                 outlets.submitOrderButton.click();
             });
 

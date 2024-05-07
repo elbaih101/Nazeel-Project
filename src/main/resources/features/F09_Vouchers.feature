@@ -135,7 +135,5 @@ Feature: Vouchers
 
 
 
-  Scenario: create a SA Voucher for a corporate
-
 
  # TODO : REceipts and Refunds on wlakin Orders
