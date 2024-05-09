@@ -1,6 +1,7 @@
 package org.example;
 
 
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.devtools.DevTools;
 import org.openqa.selenium.devtools.v124.network.Network;
 import org.openqa.selenium.edge.EdgeDriver;
@@ -45,6 +46,8 @@ public class API {
 
 
     public String getResponseBody(EdgeDriver driver, String requestUrl, Runnable requestTrigger) {
+        int timeout = 10;
+
         devTools = driver.getDevTools();
         devTools.createSession();
         devTools.send(Network.enable(Optional.empty(), Optional.empty(), Optional.empty()));
@@ -56,17 +59,45 @@ public class API {
         });
         requestTrigger.run();
 
-
-        int timeout = 30;
         while (asyncResponse.get() == null && timeout > 0) {
             Utils.sleep(1000);
             timeout--;
         }
 
-        if (asyncResponse.get() == null)
-            throw new RuntimeException("no body found");
         devTools.disconnectSession();
         devTools.close();
+        if (asyncResponse.get() == null) {
+            throw new RuntimeException("no body found");
+        }
+        return asyncResponse.get().getBody();
+
+    }
+    public String getResponseBody(ChromeDriver driver, String requestUrl, Runnable requestTrigger) {
+        int timeout = 10;
+
+        devTools = driver.getDevTools();
+        devTools.createSession();
+        devTools.send(Network.enable(Optional.empty(), Optional.empty(), Optional.empty()));
+
+        devTools.addListener(Network.responseReceived(), response -> {
+
+            if (response.getResponse().getUrl().contains(requestUrl) && response.getResponse().getStatus().equals(200)) { //Network.loadingFinished();
+                asyncResponse.set(devTools.send(Network.getResponseBody(response.getRequestId())));
+            }
+        });
+
+        requestTrigger.run();
+
+        while (asyncResponse.get() == null && timeout > 0) {
+            Utils.sleep(1000);
+            timeout--;
+        }
+
+        devTools.disconnectSession();
+        devTools.close();
+        if (asyncResponse.get() == null) {
+            throw new RuntimeException("no body found");
+        }
         return asyncResponse.get().getBody();
 
     }
