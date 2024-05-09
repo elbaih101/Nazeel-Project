@@ -156,7 +156,7 @@ JavascriptExecutor js=(JavascriptExecutor) driver;
     @Given("click on filter button and enter name of type {string} and status {string} and click search")
     public void clickOnFilterButtonAndEnterNameOfTypeAndStatusAndClickSearch(String typeName, String status) {
         wait.until(ExpectedConditions.elementToBeClickable(masterUnitsTypes.filterButton));
-        new P00_multiPurposes().waitLoading();
+        new P00_multiPurposes(driver).waitLoading();
         masterUnitsTypes.filterButton.click();
         if (!typeName.isEmpty()) {
             masterUnitsTypes.nameSearchField.clear();
@@ -166,7 +166,7 @@ JavascriptExecutor js=(JavascriptExecutor) driver;
             masterUnitsTypes.statuses().stream().filter(element -> element.getText().equalsIgnoreCase(status)).toList().get(0).click();
         }
         masterUnitsTypes.searchButton.click();
-        new P00_multiPurposes().waitLoading();
+        new P00_multiPurposes(driver).waitLoading();
         wait.until(ExpectedConditions.refreshed(ExpectedConditions.visibilityOfAllElements(masterUnitsTypes.typesNames)));
     }
 

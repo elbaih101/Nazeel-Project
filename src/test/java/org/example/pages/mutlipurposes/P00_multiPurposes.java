@@ -1,6 +1,7 @@
 package org.example.pages.mutlipurposes;
 
 import org.apache.commons.lang.StringUtils;
+import org.example.CustomAssert;
 import org.example.Utils;
 import org.example.stepDefs.Hooks;
 import org.openqa.selenium.By;
@@ -22,15 +23,7 @@ public class P00_multiPurposes {
     final WebDriverWait wait;
     final Actions actions;
     JavascriptExecutor js;
-
-    public P00_multiPurposes() {
-        PageFactory.initElements(Hooks.driver, this);
-        this.driver = Hooks.driver;
-        wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        actions = new Actions(driver);
-        js = (JavascriptExecutor) driver;
-
-    }
+    CustomAssert asrt;
 
     public P00_multiPurposes(WebDriver driver) {
         PageFactory.initElements(driver, this);
@@ -38,16 +31,19 @@ public class P00_multiPurposes {
         wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         actions = new Actions(driver);
         js = (JavascriptExecutor) driver;
+        asrt=new CustomAssert();
     }
 
     ////List items ////
     @FindBy(xpath = "//ul[@role=\"listbox\"]//li[@role=\"option\"]")
     List<WebElement> listItems;
+
     public List<WebElement> getListItems(WebElement comboBox) {
         comboBox.findElement(By.xpath(".//span[@class=\"k-select\"]")).click();
         Utils.sleep(300);
         return listItems;
     }
+
     ////End List items ////
     @FindBy(xpath = "//select")
     public WebElement pageSize;
@@ -56,10 +52,11 @@ public class P00_multiPurposes {
         pageSize.click();
         return pageSize.findElements(By.xpath("./option"));
     }
-//// user menu ////
+
+    //// user menu ////
     @FindBy(className = "user-menu")
     public WebElement userMenu;
-    @FindBy(id="propertyDropDown")
+    @FindBy(id = "propertyDropDown")
     public WebElement propertiesComboBox;
     @FindBy(xpath = "//app-compnay-dropdown//kendo-combobox//input")
     public WebElement companyNameField;
@@ -73,6 +70,7 @@ public class P00_multiPurposes {
         actions.moveToElement(userNameDiv, 3, 4).perform();
         return bottomToolTip.getText();
     }
+
     @FindBy(className = "user-menu__branch")
     WebElement propertyNameSpan;
 
@@ -93,21 +91,30 @@ public class P00_multiPurposes {
 
     @FindBy(xpath = "//div[contains(@class,\"p-tooltip-bottom\")]/div[@class=\"p-tooltip-text\"]")
     public WebElement bottomToolTip;
-    public WebElement toolTip(WebElement element){
+
+    public WebElement toolTip(WebElement element) {
         actions.moveToElement(element, 3, 4).perform();
         Utils.sleep(100);
         return driver.findElement(By.xpath("//div[@class=\"p-tooltip-text\"]"));
     }
+
     @FindBy(xpath = "//div[@class=\"page-loading\"]")
     public WebElement loadingAnimation;
 
 
     @FindBy(className = "toast-message")
-    public List <WebElement> toastMsgs;
+    public List<WebElement> toastMsgs;
 
     public void waitLoading() {
         wait.withTimeout(Duration.ofSeconds(50));
         wait.until(ExpectedConditions.refreshed(ExpectedConditions.invisibilityOf(loadingAnimation)));
+    }
+
+    public void assertToastMessageContains(String msg ) {
+
+        asrt.assertTrue(toastMsgs.getFirst().isDisplayed());
+        asrt.assertTrue(toastMsgs.getFirst().getText().trim().toLowerCase().contains(msg.toLowerCase()), "actual : " + toastMsgs.getFirst().getText().trim().toLowerCase() + "\nExpected : " + msg.toLowerCase() + "\n");
+
     }
 
     @FindBy(xpath = "//div[contains(@class,\"n-pager__info\")]")

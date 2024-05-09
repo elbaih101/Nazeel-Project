@@ -47,7 +47,7 @@ public class D07_PrintingOptions {
 
     @When("selcting all reports and clicking {string} button and check the checkboxes are selected")
     public void selctingAllReportsAndClickingButton(String paperType) {
-        new P00_multiPurposes().waitLoading();
+        new P00_multiPurposes(driver).waitLoading();
         if (!printingOptionsPage.selectAllCheckBox.isSelected()) {
             printingOptionsPage.selectAllCheckBox.click();
         }
