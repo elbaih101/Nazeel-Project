@@ -10,31 +10,30 @@ import org.example.TestData;
 import org.example.Utils;
 import org.example.pages.P01_LoginPage;
 
+
 import org.openqa.selenium.WebDriver;
+
 import org.openqa.selenium.devtools.DevTools;
-import org.openqa.selenium.devtools.Event;
-import org.openqa.selenium.devtools.v124.fetch.Fetch;
-import org.openqa.selenium.devtools.v124.network.Network;
-import org.openqa.selenium.edge.EdgeDriver;
 
 
+
+import java.awt.*;
+import java.awt.event.KeyEvent;
 import java.time.Duration;
-import java.util.Optional;
 
 
 public class Hooks {
     public static WebDriver driver;
     private static Scenario scenario;
     public static DevTools devTools;
+
     @Before
     public static void start(Scenario scenario) {
         Hooks.scenario = scenario;
         //driver =  Utils.setDriverHeadless();
-        driver=Utils.setDriverUi();
+        driver = Utils.setDriverUiChrome();
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(30));
         driver.get(TestData.stageUrl);
-
-
 
     }
 
