@@ -5,11 +5,16 @@ import io.github.bonigarcia.wdm.WebDriverManager;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 import org.openqa.selenium.*;
+import org.openqa.selenium.Dimension;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.edge.EdgeOptions;
 import org.openqa.selenium.interactions.Action;
 import org.openqa.selenium.interactions.Actions;
 
+import java.awt.*;
+import java.awt.event.KeyEvent;
 import java.io.File;
 import java.time.Duration;
 import java.util.ArrayList;
@@ -317,7 +322,7 @@ public class Utils {
     public static WebDriver setDriverHeadless() {
       //  WebDriverManager.edgedriver().setup();
         EdgeOptions op = new EdgeOptions();
-        op.addArguments("headless","start-maximized");
+        op.addArguments("headless","start-maximized","--ignore-certificate-errors","--ignore-urlfetcher-cert-requests","--guest");
         WebDriver driver = new EdgeDriver(op);
         driver.manage().window().setSize(new Dimension(1920, 1080));
         return driver;
@@ -326,10 +331,21 @@ public class Utils {
     /**
      * starts a web driver in ui mode
      */
-    public static WebDriver setDriverUi() {
-//        WebDriverManager.edgedriver().setup();
+    public static WebDriver setDriverUiEdge() {
+        WebDriverManager.edgedriver().setup();
         EdgeOptions op = new EdgeOptions();
+        op.addArguments("--ignore-certificate-errors","--ignore-urlfetcher-cert-requests","--guest");
+        op.setAcceptInsecureCerts(true);
         WebDriver driver = new EdgeDriver(op);
+        driver.manage().window().setSize(new Dimension(1920, 1080));
+        return driver;
+    }
+    public static WebDriver setDriverUiChrome() {
+        WebDriverManager.chromedriver().setup();
+        ChromeOptions op = new ChromeOptions();
+        op.addArguments("ignore-certificate-errors","ignore-urlfetcher-cert-requests","--guest");
+        op.setAcceptInsecureCerts(true);
+        ChromeDriver driver = new ChromeDriver(op);
         driver.manage().window().setSize(new Dimension(1920, 1080));
         return driver;
     }
@@ -351,6 +367,38 @@ public class Utils {
 
         options.addArguments("print.printer_Microsoft_Print_to_PDF.print_to_filename", "F:\\java maven projects\\Nazeel-Project\\src\\main\\resources\\downloaded");
         return options;
+
+    }
+
+    public static void handleCertificateAuth(){
+        Thread certSelectionThread = null;
+        Runnable r = new Runnable() {
+
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(1000 * 10);
+                    Robot robot = new Robot();
+                    robot.keyPress(KeyEvent.VK_TAB);
+                    robot.keyPress(KeyEvent.VK_TAB);
+                    robot.keyPress(KeyEvent.VK_TAB);
+                    robot.keyPress(KeyEvent.VK_SPACE);
+                } catch (AWTException e) {
+                    e.printStackTrace();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+        certSelectionThread = new Thread(r);
+        certSelectionThread.start();
+        if(certSelectionThread != null){
+            try {
+                certSelectionThread.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
 
     }
 }
