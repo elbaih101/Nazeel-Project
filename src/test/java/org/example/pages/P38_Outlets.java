@@ -202,6 +202,8 @@ public class P38_Outlets {
     public WebElement addPayMethodButton;
     @FindBy(xpath = "//app-walk-in-pop-up//kendo-datepicker//input")
     public WebElement issueDateField;
+    @FindBy(xpath = "//kendo-timepicker//input")
+    public WebElement issueTimeField;
     @FindBy(xpath = "//app-walk-in-pop-up//button[contains(text(),\"Create Order\")]")
     public WebElement submitOrderButton;
 }
