@@ -8,17 +8,11 @@ import io.cucumber.java.Scenario;
 
 import org.example.TestData;
 import org.example.Utils;
+import org.example.enums.Driver_Mode;
+import org.example.enums.Drivers;
 import org.example.pages.P01_LoginPage;
-
-
 import org.openqa.selenium.WebDriver;
-
 import org.openqa.selenium.devtools.DevTools;
-
-
-
-import java.awt.*;
-import java.awt.event.KeyEvent;
 import java.time.Duration;
 
 
@@ -30,8 +24,8 @@ public class Hooks {
     @Before
     public static void start(Scenario scenario) {
         Hooks.scenario = scenario;
-        //driver =  Utils.setDriverHeadless();
-        driver = Utils.setDriverUiChrome();
+
+        driver = Utils.setDriver(Drivers.Chrome, Driver_Mode.UI);
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(30));
         driver.get(TestData.stageUrl);
 
@@ -66,6 +60,7 @@ public class Hooks {
 
         //initiating Waits and Pages
         P01_LoginPage loginPage = new P01_LoginPage(driver);
+
         //logging in
         loginPage.usernameField.sendKeys(username);
         loginPage.passwordField.sendKeys(password);

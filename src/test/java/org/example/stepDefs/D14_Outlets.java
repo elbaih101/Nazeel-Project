@@ -1,11 +1,13 @@
 package org.example.stepDefs;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import io.cucumber.cienvironment.internal.com.eclipsesource.json.Json;
-import io.cucumber.cienvironment.internal.com.eclipsesource.json.JsonObject;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import jdk.jshell.execution.Util;
 import org.apache.commons.lang3.StringUtils;
 import org.example.API;
 import org.example.CustomAssert;
@@ -18,14 +20,18 @@ import org.example.pages.setuppages.P05_SetupPage;
 import org.example.pages.setuppages.outlets.P30_OutletsSetup;
 import org.example.pages.setuppages.outlets.P31_OutletCategories;
 import org.example.pages.setuppages.outlets.P32_OutletItems;
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.edge.EdgeDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+
 
 //import java.time.Duration;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -624,8 +630,10 @@ public class D14_Outlets {
         asrt.assertAll();
     }
 
-    @And("submiting the order as {string} for a {string}")
-    public void submitingTheOrderAsForA(String orderType, String ownerType) {
+    int ExcutedOnce = 0;
+
+    @And("submiting the order as {string} for a {string} issue date {string}")
+    public void submitingTheOrderAsForA(String orderType, String ownerType, String issueDate) {
         if (orderType.toLowerCase().contains("walk")) {
             outlets.walkinOrderButton.click();
             new P00_multiPurposes(driver).waitLoading();
@@ -636,43 +644,74 @@ public class D14_Outlets {
                 outlets.selctGuestButton.click();
                 new D06_DigitalPayment().selectGuest("Random", "", "");
             }
+            switch (issueDate.toLowerCase()) {
+                case "futuredate" ->
+                        Utils.setDate(outlets.issueDateField, DateTimeFormat.forPattern("MM/dd/yyyy").print(DateTime.now().plusDays(1)));
+                case "futuretime" ->
+                        Utils.setTime(outlets.issueTimeField, DateTimeFormat.forPattern("HH:mm").print(DateTime.now().plusHours(4)));
+                case "pastdate" ->
+                        Utils.setDate(outlets.issueDateField, DateTimeFormat.forPattern("MM/dd/yyyy").print(DateTime.now().plusDays(-1)));
+                case "" -> {
+                }
+                default -> Utils.setDate(outlets.issueDateField, issueDate);
+            }
+            if (ExcutedOnce == 0) {
+                outlets.payMethodsList().stream().filter(t -> t.getText().equalsIgnoreCase("cash")).findFirst().orElseThrow().click();
+                new P00_multiPurposes(driver).waitLoading();
+                outlets.addPayMethodButton.click();
+            }
 
             API api = new API();
-            outlets.payMethodsList().stream().filter(t -> t.getText().equalsIgnoreCase("cash")).findFirst().orElseThrow().click();
-            new P00_multiPurposes(driver).waitLoading();
-            outlets.addPayMethodButton.click();
-
-            String body = api.getResponseBody((EdgeDriver) driver, "api/hotel-services/orders/create", () -> {
+            String body = api.getResponseBody((ChromeDriver) driver, "api/hotel-services/orders/create", () -> {
                 outlets.submitOrderButton.click();
             });
+            if (!body.equals(null)) {
 
-            JsonObject json = Json.parse(body).asObject();
-            invoiceNo = json.get("data").asObject().getString("invoiceNumber", null);
-            receiptNo = json.get("data").asObject().get("vouchersSequanceNumber").asArray().get(0).asString();
-
+                JsonObject json = (JsonObject) new JsonParser().parse(body);
+                if (!json.get("data").isJsonNull()) {
+                    invoiceNo = json.get("data").getAsJsonObject().get("invoiceNumber").getAsString();
+                    receiptNo = json.get("data").getAsJsonObject().get("vouchersSequanceNumber").getAsJsonArray().get(0).getAsString();
+                }
+            }
 
         }
-
+        ExcutedOnce++;
 
     }
+
     String invoiceNo;
     String receiptNo;
+
     @Then("Check {string} order is created")
     public void checkOrderIsCreated(String orderType) {
-        new P00_multiPurposes(driver).waitLoading();
         List<String> toastMessages = new ArrayList<>();
         for (WebElement msg : new P00_multiPurposes(driver).toastMsgs) {
             toastMessages.add(msg.getText());
         }
+        new P00_multiPurposes(driver).waitLoading();
         if (orderType.toLowerCase().contains("walk")) {
             asrt.AssertEqualsIgnoreCase(outlets.orderStatus.getText(), "paid");
             asrt.assertFalse(outlets.receiptVouchersNums.isEmpty());
             asrt.AssertContains(toastMessages, invoiceNo);
             asrt.AssertContains(toastMessages, receiptNo);
-            asrt.assertEquals(invoiceNo,outlets.orderInvoiceNumber.getText());
-            asrt.assertEquals(receiptNo,outlets.receiptVouchersNums.get(0).getText());
+            asrt.assertEquals( outlets.orderInvoiceNumber.getText(),invoiceNo);
+            asrt.assertEquals( outlets.receiptVouchersNums.get(0).getText(),receiptNo);
 
         }
+        asrt.assertAll();
+    }
+
+    @Then("check the issue date validation")
+    public void checkTheIssueDateValidation() {
+        P00_multiPurposes multiPurposes = new P00_multiPurposes(driver);
+        List<String> issueDates = Arrays.asList("futureDate", "futureTime", "pastDate");
+        for (int i = 0; i < issueDates.size(); i++) {
+            submitingTheOrderAsForA("walkin", "corporate", issueDates.get(i));
+            if (issueDates.get(i).equalsIgnoreCase("pastDate"))
+                checkOrderIsCreated("walkin");
+            multiPurposes.assertToastMessageContains("Issue Date Must Not Exceed Today Date");
+        }
+
         asrt.assertAll();
     }
 }

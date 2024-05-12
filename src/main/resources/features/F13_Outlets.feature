@@ -153,15 +153,23 @@ Feature: Outlets Feature
 
   Rule: outlet Orders
 
-  Background:go to outlet Orders Page
-    Given navigate to outlet orders Page
+    Background:go to outlet Orders Page
+      Given navigate to outlet orders Page
 
-  Scenario: Check the Discount and Tax Calculation
-    When creating an order for item "item 1" from outlet "1"
-    Then Check the Tax and Discount Calculations
+    Scenario: Check the Discount and Tax Calculation
+      When creating an order for item "item 1" from outlet "1"
+      Then Check the Tax and Discount Calculations
 
     @corporate_vouchers,orders
     Scenario: outlet order for a corporate
       When creating an order for item "item 1" from outlet "1"
-      And submiting the order as "walk in" for a "corporate"
+      And submiting the order as "walk in" for a "corporate" issue date ""
       Then  Check "walk in" order is created
+
+
+
+    @Walk-inOrders_IssueDate
+    Scenario: cant create a walk in order with future date
+      When creating an order for item "item 1" from outlet "1"
+      Then check the issue date validation
+

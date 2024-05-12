@@ -4,12 +4,15 @@ import io.cucumber.java.Scenario;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
+import org.example.enums.Driver_Mode;
+import org.example.enums.Drivers;
 import org.openqa.selenium.*;
 import org.openqa.selenium.Dimension;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.edge.EdgeOptions;
+import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.interactions.Action;
 import org.openqa.selenium.interactions.Actions;
 
@@ -306,7 +309,7 @@ public class Utils {
                 byte[] screenshot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
                 String testName = scenario.getName();
 
-                FileUtils.writeByteArrayToFile(new File("target/screenshots/" + testName+"/" +scenario.getLine()+ ".png"), screenshot);
+                FileUtils.writeByteArrayToFile(new File("target/screenshots/" + testName + "/" + scenario.getLine() + ".png"), screenshot);
                 scenario.attach(screenshot, "image/png", testName);
             } catch (WebDriverException wde) {
                 System.err.println(wde.getMessage());
@@ -316,52 +319,78 @@ public class Utils {
             }
         }
     }
+
     /**
      * starts a driver in the headless mode
      */
-    public static WebDriver setDriverHeadless() {
-      //  WebDriverManager.edgedriver().setup();
-        EdgeOptions op = new EdgeOptions();
-        op.addArguments("headless","start-maximized","--ignore-certificate-errors","--ignore-urlfetcher-cert-requests","--guest");
-        WebDriver driver = new EdgeDriver(op);
+    public static WebDriver setDriver(Drivers driverName, Driver_Mode mode) {
+        WebDriver driver = null;
+        switch (driverName) {
+            case Chrome -> {
+                WebDriverManager.chromedriver().setup();
+                ChromeOptions op = new ChromeOptions();
+
+                op.addArguments("start-maximized", "--ignore-certificate-errors", "--ignore-urlfetcher-cert-requests", "--guest");
+                if (mode.equals(Driver_Mode.Headless))
+                    op.addArguments("headless");
+                driver = new ChromeDriver(op);
+            }
+            case Edge -> {
+                WebDriverManager.edgedriver().setup();
+                EdgeOptions op = new EdgeOptions();
+                op.addArguments("start-maximized", "--ignore-certificate-errors", "--ignore-urlfetcher-cert-requests", "--guest");
+                if (mode.equals(Driver_Mode.Headless))
+                    op.addArguments("headless");
+                driver = new EdgeDriver(op);
+            }
+            case FireFox -> {
+            }
+            case Safari -> {
+            }
+            default -> throw new IllegalStateException("Unexpected value: " + driverName);
+        }
         driver.manage().window().setSize(new Dimension(1920, 1080));
         return driver;
+
+
     }
 
     /**
      * starts a web driver in ui mode
      */
-    public static WebDriver setDriverUiEdge() {
-        WebDriverManager.edgedriver().setup();
-        EdgeOptions op = new EdgeOptions();
-        op.addArguments("--ignore-certificate-errors","--ignore-urlfetcher-cert-requests","--guest");
-        op.setAcceptInsecureCerts(true);
-        WebDriver driver = new EdgeDriver(op);
-        driver.manage().window().setSize(new Dimension(1920, 1080));
-        return driver;
-    }
-    public static WebDriver setDriverUiChrome() {
-        WebDriverManager.chromedriver().setup();
-        ChromeOptions op = new ChromeOptions();
-        op.addArguments("ignore-certificate-errors","ignore-urlfetcher-cert-requests","--guest");
-        op.setAcceptInsecureCerts(true);
-        ChromeDriver driver = new ChromeDriver(op);
-        driver.manage().window().setSize(new Dimension(1920, 1080));
-        return driver;
-    }
+//    public static WebDriver setDriverUiEdge() {
+//        WebDriverManager.edgedriver().setup();
+//        EdgeOptions op = new EdgeOptions();
+//        op.addArguments("--ignore-certificate-errors", "--ignore-urlfetcher-cert-requests", "--guest");
+//        op.setAcceptInsecureCerts(true);
+//        WebDriver driver = new EdgeDriver(op);
+//        driver.manage().window().setSize(new Dimension(1920, 1080));
+//        return driver;
+//    }
+//
+//    public static WebDriver setDriverUiChrome() {
+//        WebDriverManager.chromedriver().setup();
+//        ChromeOptions op = new ChromeOptions();
+//        op.addArguments("ignore-certificate-errors", "ignore-urlfetcher-cert-requests", "--guest");
+//        op.setAcceptInsecureCerts(true);
+//        ChromeDriver driver = new ChromeDriver(op);
+//        driver.manage().window().setSize(new Dimension(1920, 1080));
+//        return driver;
+//    }
 
     /**
      * function to return pre sett edge printing and download options
+     *
      * @return EdgeOptions pre configured
      */
-    public static EdgeOptions edgePrintingAndDownloadOptions(){
-        EdgeOptions options =new EdgeOptions();
+    public static EdgeOptions edgePrintingAndDownloadOptions() {
+        EdgeOptions options = new EdgeOptions();
         options.setExperimentalOption("prefs", new String[]{"download.default_directory", "download_path"});
 
         //printer config
         options.addArguments("--kiosk-printing");
         //download config    // relates to this import ::   import com.microsoft.edge.seleniumtools.EdgeOptions;
-        HashMap<String, Object> edgePrefs= new HashMap<>();
+        HashMap<String, Object> edgePrefs = new HashMap<>();
         edgePrefs.put("download.default_directory", "F:\\java maven projects\\Nazeel-Project\\src\\main\\resources\\downloaded");
         options.setExperimentalOption("prefs", edgePrefs);
 
@@ -370,7 +399,7 @@ public class Utils {
 
     }
 
-    public static void handleCertificateAuth(){
+    public static void handleCertificateAuth() {
         Thread certSelectionThread = null;
         Runnable r = new Runnable() {
 
@@ -392,7 +421,7 @@ public class Utils {
         };
         certSelectionThread = new Thread(r);
         certSelectionThread.start();
-        if(certSelectionThread != null){
+        if (certSelectionThread != null) {
             try {
                 certSelectionThread.join();
             } catch (InterruptedException e) {
