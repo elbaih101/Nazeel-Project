@@ -72,8 +72,16 @@ public class API {
         return asyncResponse.get().getBody();
 
     }
+
+    /**
+     * retuns a response body of aresponse after atrigger with provided url of the response
+     * @param driver driver element to initiate the devtools
+     * @param requestUrl String response url or partial url
+     * @param requestTrigger runnable code to trigger request
+     * @return String respone body
+     */
     public String getResponseBody(ChromeDriver driver, String requestUrl, Runnable requestTrigger) {
-        int timeout = 10;
+        int timeout = 20;
 
         devTools = driver.getDevTools();
         devTools.createSession();
