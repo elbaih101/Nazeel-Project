@@ -1,13 +1,13 @@
 package org.example.stepDefs;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import io.cucumber.cienvironment.internal.com.eclipsesource.json.Json;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import jdk.jshell.execution.Util;
 import org.apache.commons.lang3.StringUtils;
 import org.example.API;
 import org.example.CustomAssert;
@@ -27,9 +27,12 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 
 //import java.time.Duration;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -37,7 +40,7 @@ import java.util.List;
 
 public class D14_Outlets {
     WebDriver driver = Hooks.driver;
-
+    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(2));
     JavascriptExecutor js = (JavascriptExecutor) driver;
     //Actions actions = new Actions(driver);
     final CustomAssert asrt = new CustomAssert();
@@ -419,6 +422,9 @@ public class D14_Outlets {
             case "userdefined" -> {
                 if (items.userDefinedPriceSwitch.getAttribute("class").contains("k-switch-off"))
                     items.userDefinedPriceSwitch.click();
+                items.priceInput_FilterField.clear();
+                price = "100";
+                items.priceInput_FilterField.sendKeys(price);
             }
             case "non" -> {
                 if (items.freeItemSwitch.getAttribute("class").contains("k-switch-on"))
@@ -464,8 +470,10 @@ public class D14_Outlets {
     public void creatingItemWithNameAndTypeAndOutletAndCategoryDescription(String name, String type, String outlet, String categ, String desc, String price, String tax) {
         items.newItemButton.click();
         fillItemData(name, type, outlet, categ, desc, price, tax, "new");
-        if (price.equalsIgnoreCase("userdefined") || price.equalsIgnoreCase("free"))
+        if (price.equalsIgnoreCase("free"))
             asrt.assertFalse(Utils.isEnabled(items.priceInput_FilterField), "the price field was not disabled ");
+        if (price.equalsIgnoreCase("userdefined"))
+            asrt.assertTrue(Utils.isEnabled(items.priceInput_FilterField), "the price field was not disabled ");
         items.submitButton.click();
         asrt.assertAll();
     }
@@ -583,13 +591,21 @@ public class D14_Outlets {
 
     @When("creating an order for item {string} from outlet {string}")
     public void creatingAnOrderForItemFromOutlet(String itemName, String outletName) {
-        WebElement selectedOutlet = outlets.outletsList.stream().filter(o -> outlets.outletName(o).getText().contains(outletName)).findFirst().orElse(outlets.outletsList.getFirst());
-        selectedOutlet.click();
+        selectOutlet(outletName);
         new P00_multiPurposes(driver).waitLoading();
-        WebElement selectedItem = outlets.outletItems.stream().filter(i -> i.getText().contains(itemName)).findFirst().orElse(outlets.outletItems.getFirst());
-        selectedItem.click();
+        selectItem(itemName);
         outlets.nextButton.click();
         new P00_multiPurposes(driver).waitLoading();
+    }
+
+    private void selectItem(String itemName) {
+        WebElement selectedItem = outlets.outletItems.stream().filter(i -> i.getText().contains(itemName)).findFirst().orElse(outlets.outletItems.getFirst());
+        selectedItem.click();
+    }
+
+    private void selectOutlet(String outletName) {
+        WebElement selectedOutlet = outlets.outletsList.stream().filter(o -> outlets.outletName(o).getText().contains(outletName)).findFirst().orElse(outlets.outletsList.getFirst());
+        selectedOutlet.click();
     }
 
     @Then("Check the Tax and Discount Calculations")
@@ -662,16 +678,12 @@ public class D14_Outlets {
             }
 
             API api = new API();
-            String body = api.getResponseBody((ChromeDriver) driver, "api/hotel-services/orders/create", () -> {
-                outlets.submitOrderButton.click();
-            });
-            if (!body.equals(null)) {
+            String body = api.getResponseBody((ChromeDriver) driver, "api/hotel-services/orders/create", () -> outlets.submitOrderButton.click());
 
-                JsonObject json = (JsonObject) new JsonParser().parse(body);
-                if (!json.get("data").isJsonNull()) {
-                    invoiceNo = json.get("data").getAsJsonObject().get("invoiceNumber").getAsString();
-                    receiptNo = json.get("data").getAsJsonObject().get("vouchersSequanceNumber").getAsJsonArray().get(0).getAsString();
-                }
+            JsonObject json = JsonParser.parseString(body).getAsJsonObject();
+            if (!json.get("data").isJsonNull()) {
+                invoiceNo = json.get("data").getAsJsonObject().get("invoiceNumber").getAsString();
+                receiptNo = json.get("data").getAsJsonObject().get("vouchersSequanceNumber").getAsJsonArray().get(0).getAsString();
             }
 
         }
@@ -685,7 +697,9 @@ public class D14_Outlets {
     @Then("Check {string} order is created")
     public void checkOrderIsCreated(String orderType) {
         List<String> toastMessages = new ArrayList<>();
-        for (WebElement msg : new P00_multiPurposes(driver).toastMsgs) {
+        wait.until(ExpectedConditions.visibilityOfAllElements((new P00_multiPurposes(driver).toastMsgs)));
+        List<WebElement> toasts = new P00_multiPurposes(driver).toastMsgs;
+        for (WebElement msg : toasts) {
             toastMessages.add(msg.getText());
         }
         new P00_multiPurposes(driver).waitLoading();
@@ -694,8 +708,8 @@ public class D14_Outlets {
             asrt.assertFalse(outlets.receiptVouchersNums.isEmpty());
             asrt.AssertContains(toastMessages, invoiceNo);
             asrt.AssertContains(toastMessages, receiptNo);
-            asrt.assertEquals( outlets.orderInvoiceNumber.getText(),invoiceNo);
-            asrt.assertEquals( outlets.receiptVouchersNums.get(0).getText(),receiptNo);
+            asrt.assertEquals(outlets.orderInvoiceNumber.getText(), invoiceNo);
+            asrt.assertEquals(outlets.receiptVouchersNums.get(0).getText(), receiptNo);
 
         }
         asrt.assertAll();
@@ -705,13 +719,47 @@ public class D14_Outlets {
     public void checkTheIssueDateValidation() {
         P00_multiPurposes multiPurposes = new P00_multiPurposes(driver);
         List<String> issueDates = Arrays.asList("futureDate", "futureTime", "pastDate");
-        for (int i = 0; i < issueDates.size(); i++) {
-            submitingTheOrderAsForA("walkin", "corporate", issueDates.get(i));
-            if (issueDates.get(i).equalsIgnoreCase("pastDate"))
+        for (String issueDate : issueDates) {
+            submitingTheOrderAsForA("walkin", "corporate", issueDate);
+            if (issueDate.equalsIgnoreCase("pastDate"))
                 checkOrderIsCreated("walkin");
-            multiPurposes.assertToastMessageContains("Issue Date Must Not Exceed Today Date");
+            else {
+                multiPurposes.assertToastMessageContains("Issue Date Must Not Exceed Today Date");
+            }
         }
 
+        asrt.assertAll();
+    }
+
+    float itemPrice;
+
+    @When("selecting item {string} from outlet {string}")
+    public void selectingItemFromOutlet(String item, String outletName) {
+        if (item.equalsIgnoreCase("user defined")) {
+            API api = new API();
+            JsonObject json = JsonParser.parseString(api.getResponseBody((ChromeDriver) driver, "AddOns/OutletItemSetup/GetByOutletId", () -> selectOutlet(outletName))).getAsJsonObject();
+            JsonArray items = json.getAsJsonArray("data");
+            JsonObject userDefinedItem = null;
+            for (JsonElement i : items
+            ) {
+                if (i.getAsJsonObject().get("priceIsUserDefined").getAsBoolean()) {
+                    userDefinedItem = i.getAsJsonObject();
+                    continue;
+                }
+            }
+            asrt.assertFalse(userDefinedItem==null,"no user defined items");
+            String itemName = userDefinedItem.get("nameEn").getAsString();
+            itemPrice = userDefinedItem.get("price").getAsFloat();
+
+
+            selectItem(itemName);
+        }
+    }
+
+    @Then("check item price is rewritable")
+    public void checkItemPriceIsRewritable() {
+        asrt.assertTrue(Utils.isEnabled(outlets.itemPriceField()));
+        asrt.assertEquals(Float.parseFloat(outlets.itemPriceField().getAttribute("value")), itemPrice);
         asrt.assertAll();
     }
 }

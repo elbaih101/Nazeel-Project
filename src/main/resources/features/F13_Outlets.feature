@@ -93,6 +93,7 @@ Feature: Outlets Feature
     Background: go to items setup
       Given  go to items setup
 
+    @Outlet_Items  @Item_suggested_price
     Scenario Outline: creating outlet Item
       When creating item with name "<name>" and type "<type>" and outlet "<outlet>" and category "<categ>" description "<desc>" price "<price>" taxstate "<tax>"
       Then Check msg "<msg>" and the item
@@ -106,6 +107,7 @@ Feature: Outlets Feature
         | item 1 | Service | 1      | categ 1 | item 1 categ 2 outlet 2 | 15          | applied  | Added Successfully     |
         | item 1 | Product | 1      | categ 1 | item 1 categ 2 outlet 2 | 20          |          | Name exist before      |
         | item 2 | Service | 1      | categ 1 | item 2 categ 2 outlet 2 | userdefined | exempted | Added Successfully     |
+
 
     Scenario Outline: edit Item
       When editing item "<oName>" name "<nName>" and type "<type>" and outlet "<outlet>" and category "<categ>" description "<desc>" price "<price>" taxstate "<tax>" state "<state>"
@@ -173,3 +175,7 @@ Feature: Outlets Feature
       When creating an order for item "item 1" from outlet "1"
       Then check the issue date validation
 
+    @Item_suggested_price
+    Scenario: check userDefined item Price is rewritable
+      When selecting item "user defined" from outlet "1"
+      Then  check item price is rewritable

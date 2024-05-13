@@ -70,12 +70,29 @@ public class P38_Outlets {
     @FindBy(xpath = "//kendo-grid[2]//td[@data-kendo-grid-column-index=\"2\"]")
     public List<WebElement> receiptVouchersNums;
 
+    /**
+     * returns item price field from the order grid
+     * @param item WebElement item related cell
+     * @return WebElement the field of the item Span/Input
+     */
     public WebElement itemPriceField(WebElement item) {
         wait.withTimeout(Duration.ofMillis(100));
         String locator = "..//td[@data-kendo-grid-column-index=\"2\"]/span";
         locator = item.findElements(By.xpath(locator)).isEmpty() ? "..//td[@data-kendo-grid-column-index=\"2\"]//input" : locator;
         return item.findElement(By.xpath(locator));
     }
+
+    /**
+     * returns item price field from the item selection grid
+     * @return WebElement the field of the item Span/Input
+     */
+    public WebElement itemPriceField() {
+        wait.withTimeout(Duration.ofMillis(100));
+        String locator = "..//td[@data-kendo-grid-column-index=\"1\"]/span";
+        locator = driver.findElements(By.xpath(locator)).isEmpty() ? "//td[@data-kendo-grid-column-index=\"1\"]//input" : locator;
+        return driver.findElement(By.xpath(locator));
+    }
+
 
     public Double itemPriceAmount(WebElement itemPriceField) {
         String price = itemPriceField.getText();
