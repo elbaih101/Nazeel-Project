@@ -1,5 +1,6 @@
 package org.example;
 
+import org.openqa.selenium.WebElement;
 import org.testng.asserts.SoftAssert;
 import java.util.List;
 import java.util.function.Predicate;
@@ -43,22 +44,23 @@ public class CustomAssert extends SoftAssert {
         assertTrue(expected.equalsIgnoreCase(actual), "Expected " + expectedName + ":" + expected + "\nActual: " + actual);
     }
 
-    public void AssertAnyMatch(List<Object> a, Predicate<Object> condition) {
+    public void AssertAnyMatch(List<WebElement> a, Predicate<WebElement> condition) {
 
         assertTrue(a.stream().anyMatch(condition));
     }
 
-    public void AssertAnyMatch(List<Object> a, Predicate<Object> condition, String msg) {
+
+    public void AssertAnyMatch(List<WebElement> a, Predicate<WebElement> condition, String msg) {
 
         assertTrue(a.stream().anyMatch(condition), msg);
     }
 
-    public void AssertNonMatch(List<Object> a, Predicate<Object> condition) {
+    public void AssertNonMatch(List<WebElement> a, Predicate<WebElement> condition) {
 
         assertTrue(a.stream().noneMatch(condition));
     }
 
-    public void AssertNonMatch(List<Object> a, Predicate<Object> condition, String msg) {
+    public void AssertNonMatch(List<WebElement> a, Predicate<WebElement> condition, String msg) {
 
         assertTrue(a.stream().noneMatch(condition), msg);
     }
