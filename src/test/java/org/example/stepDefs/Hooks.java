@@ -26,7 +26,8 @@ public class Hooks {
         Hooks.scenario = scenario;
 
         driver = Utils.setDriver(Drivers.Chrome, Driver_Mode.UI);
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(30));
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+        driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(20));
         driver.get(TestData.stageUrl);
 
     }

@@ -4,10 +4,7 @@ import org.apache.commons.lang.StringUtils;
 import org.example.CustomAssert;
 import org.example.Utils;
 import org.example.stepDefs.Hooks;
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
@@ -31,7 +28,7 @@ public class P00_multiPurposes {
         wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         actions = new Actions(driver);
         js = (JavascriptExecutor) driver;
-        asrt=new CustomAssert();
+        asrt = new CustomAssert();
     }
 
     ////List items ////
@@ -98,7 +95,7 @@ public class P00_multiPurposes {
         return driver.findElement(By.xpath("//div[@class=\"p-tooltip-text\"]"));
     }
 
-    @FindBy(xpath = "//div[@class=\"page-loading\"]")
+    @FindBy(xpath = "//app-loading-page/*")
     public WebElement loadingAnimation;
 
 
@@ -106,11 +103,20 @@ public class P00_multiPurposes {
     public List<WebElement> toastMsgs;
 
     public void waitLoading() {
-        wait.withTimeout(Duration.ofSeconds(50));
-        wait.until(ExpectedConditions.refreshed(ExpectedConditions.invisibilityOf(loadingAnimation)));
+        try {
+            driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(1));
+            // Wait until the loading animation disappears or becomes stale
+            wait.withTimeout(Duration.ofSeconds(20))
+                    .ignoring(NoSuchElementException.class, StaleElementReferenceException.class)
+                    .until(ExpectedConditions.invisibilityOf(loadingAnimation));
+            driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+        } catch (Exception e) {
+            // Handle any exceptions or logging here
+            e.printStackTrace();
+        }
     }
 
-    public void assertToastMessageContains(String msg ) {
+    public void assertToastMessageContains(String msg) {
 
         asrt.assertTrue(toastMsgs.getFirst().isDisplayed());
         asrt.assertTrue(toastMsgs.getFirst().getText().trim().toLowerCase().contains(msg.toLowerCase()), "actual : " + toastMsgs.getFirst().getText().trim().toLowerCase() + "\nExpected : " + msg.toLowerCase() + "\n");

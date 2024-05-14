@@ -4,6 +4,7 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.example.CustomAssert;
 import org.example.Nazeel_Calculations;
 import org.example.Utils;
 import org.example.pages.P01_LoginPage;
@@ -26,7 +27,6 @@ public class D01_Reservations {
     WebDriver driver = Hooks.driver;
 
 
-
     final P02_DashBoardPage homePage = new P02_DashBoardPage(driver);
     final JavascriptExecutor js = (JavascriptExecutor) driver;
     final P03_1_ReservationMainDataPage reservationMainDataPage = new P03_1_ReservationMainDataPage(driver);
@@ -34,7 +34,7 @@ public class D01_Reservations {
     final P03_5_UnitSelectionPopup unitSelectionPopup = new P03_5_UnitSelectionPopup(driver);
     final P03_6_EndReservationPopUp endReservationPopUp = new P03_6_EndReservationPopUp(driver);
     P03_ReservationsPage reservationsPage = new P03_ReservationsPage(driver);
-    final SoftAssert asrt = new SoftAssert();
+    final CustomAssert asrt = new CustomAssert();
     Actions action = new Actions(Hooks.driver);
 
 
@@ -159,7 +159,7 @@ public class D01_Reservations {
 
     @And("Choose Reservation Status as {string}")
     public void chooseReservationStatusAs(String status) {
-        WebElement actionButton ;
+        WebElement actionButton;
         wait.until(ExpectedConditions.elementToBeClickable(reservationMainDataPage.reservatinMoreActionsMenu));
         try {
             Thread.sleep(300);
@@ -284,7 +284,9 @@ public class D01_Reservations {
 
     @When("filtering with {string} as {string}")
     public void filteringWithAs(String filter, String value) {
-        reservationsPage.filterButton.click();
+        new P00_multiPurposes(driver).waitLoading();
+        if (!driver.findElement(By.xpath("//div[contains(@class,\"filter-form__container\")]")).getAttribute("class").contains("is-open"))
+            reservationsPage.filterButton.click();
         switch (filter) {
             case "resType" ->
                     reservationsPage.filterResType().stream().filter(t -> t.getText().equalsIgnoreCase(value)).findAny().orElseThrow().click();
@@ -292,6 +294,9 @@ public class D01_Reservations {
                     reservationsPage.filterRentType().stream().filter(t -> t.getText().equalsIgnoreCase(value)).findAny().orElseThrow().click();
             case "unitType" ->
                     reservationsPage.filterUnitTypes().stream().filter(t -> t.getText().equalsIgnoreCase(value)).findAny().orElseThrow().click();
+            case "corporate" -> {
+                reservationsPage.selectCorp(value).click();
+            }
         }
         reservationsPage.searchButton.click();
     }
@@ -314,7 +319,8 @@ public class D01_Reservations {
             }
             case "rentType" ->
                     asrt.assertFalse(reservationsPage.reservationsNights.stream().anyMatch(n -> !n.getText().toLowerCase().contains(value.toLowerCase())));
-            // case "unitType" ->
+            case "corporate" ->
+                    asrt.AssertNonMatch(reservationsPage.reservationsGuests_Corps, i -> !i.getText().contains(value), "the corporate is not fifltered right");
 
         }
         asrt.assertAll();
@@ -369,10 +375,10 @@ public class D01_Reservations {
             Double subTotal = discType.contains("From Balance") ? financialPage.reservationRent() : financialPage.reservationRent() - discountAmount;
             Double total;
             asrt.assertTrue(reservationRentTaxes.equals(financialPage.reservationTaxes()), "Calculated Tax = " + reservationRentTaxes + "\n Found Taxes = " + financialPage.reservationTaxes());
-            asrt.assertTrue( subTotal.equals(financialPage.reservationSubTotal()), "Expected SubTotal = " + subTotal + "\n Actual subTotal = " + financialPage.reservationSubTotal());
+            asrt.assertTrue(subTotal.equals(financialPage.reservationSubTotal()), "Expected SubTotal = " + subTotal + "\n Actual subTotal = " + financialPage.reservationSubTotal());
             asrt.assertTrue(discountAmount.equals(financialPage.reservationDiscount()), "Expected Discount = " + discountAmount + "\nActual Discount = " + financialPage.reservationDiscount());
             if (financialPage.isTaxInclusive()) {
-                total =discType.contains("From Balance") ?subTotal-discountAmount : subTotal;
+                total = discType.contains("From Balance") ? subTotal - discountAmount : subTotal;
             } else {
                 total = (subTotal + reservationRentTaxes);
             }

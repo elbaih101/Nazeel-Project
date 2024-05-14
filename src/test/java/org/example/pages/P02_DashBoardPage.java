@@ -20,8 +20,10 @@ public class P02_DashBoardPage {
     public WebElement homePageLink;
     @FindBy(xpath = "//a[@href=\"/reservations\"]")
     public WebElement ReservationsLink;
-    @FindBy(xpath = "//Button[contains(text(),\"Close\")]")
+    @FindBy(xpath = "//app-announcement-popup//button")
     public WebElement closeAnnouncementButton;
+    @FindBy(xpath = "//app-service-expiration-warning//button[contains(@class,\"danger\")]")
+    public WebElement closeSubscriptionsAlertButton;
     @FindBy(xpath = "//a[@href=\"/setup\"]")
     public WebElement setupPageLink;
     @FindBy(className = "n-topbar__logo")

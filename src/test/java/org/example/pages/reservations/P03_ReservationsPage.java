@@ -1,6 +1,8 @@
 package org.example.pages.reservations;
 
+import org.example.Utils;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -79,6 +81,11 @@ public class P03_ReservationsPage {
         return listItems;
     }
 
+    public List<WebElement> filterCorporates() {
+        filterUnitTypeField.click();
+        return listItems;
+    }
+
     public List<WebElement> filterBlocks() {
         driver.findElement(By.xpath("//label[contains(text(),\"Block\")]/following-sibling::kendo-combobox//span[@class=\"k-select\"]")).click();
         return listItems;
@@ -97,11 +104,22 @@ public class P03_ReservationsPage {
     @FindBy(id = "unit-number")
     public WebElement filterUnitNumField;
 
-    public List<WebElement> filterStatuses() {
-        driver.findElement(By.xpath("//input[@placeholder=\"Select Status\"]")).click();
+    @FindBy(xpath = "//label[contains(text(),\"Reservation Status\")]/../following-sibling::kendo-multiselect//input")
+    public WebElement customStatusField;
+    public List<WebElement> filterCustomStatuses() {
+        customStatusField.click();
         return listItems;
     }
 
+    @FindBy(xpath = "//app-corporate-auto-complete//input")
+    WebElement corporateFilterField;
+
+    public WebElement selectCorp(String corpName) {
+        corporateFilterField.sendKeys(Keys.chord(Keys.CONTROL,"a",Keys.BACK_SPACE));
+        corporateFilterField.sendKeys(corpName);
+        Utils.sleep(600);
+        return listItems.get(0);
+    }
 
     //TODO Containue the reservation page filters
 }

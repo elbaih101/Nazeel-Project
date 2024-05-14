@@ -2,7 +2,7 @@ Feature: Making Reservation with Nazeel PMS (web application)
 
   Background: selecting property
     Given Logging in with superuser
-    And Select Property "P00020"
+    And Select Property "P00166"
 
   @Reservations
   Rule: Reservations
@@ -52,6 +52,12 @@ Feature: Making Reservation with Nazeel PMS (web application)
       | resType  | Single  |
       | rentType | Monthly |
 
+  @filter_Reservation_by_corporate @28509
+  Scenario: Check Search With Corporate feature
+    When filtering with "corporate" as "test"
+    Then check all reservations records "corporate" as "test"
+    When filtering with "corporate" as "اختبار"
+    Then check all reservations records "corporate" as "test"
  ## Discount and Taxes Calc
 
   Scenario: Check Discount and Tax Calculations on reservtion
