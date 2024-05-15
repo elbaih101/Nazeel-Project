@@ -1,6 +1,5 @@
 package org.example.pages.vouchersPages;
 
-import org.apache.commons.lang.NullArgumentException;
 
 import org.example.enums.Vouchers;
 import org.example.pages.mutlipurposes.P00_multiPurposes;
@@ -94,7 +93,7 @@ public WebElement voucherOwner (WebElement voucher,String voucherType){
             button = voucherAmount.findElement(By.xpath("..//td[@data-kendo-grid-column-index=\"10\"]//div/button[1]"));
         }
         if (button==null) {
-            throw new NullArgumentException("the edit button wasn't retreaved");
+            throw new RuntimeException("the edit button wasn't retreaved");
         }
         return button;
     }

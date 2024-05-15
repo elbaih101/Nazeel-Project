@@ -1,6 +1,6 @@
 package org.example.pages.setuppages.unit_setup_pages;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;

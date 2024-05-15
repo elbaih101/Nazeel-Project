@@ -10,7 +10,7 @@ import org.testng.annotations.DataProvider;
 
                 features = "src/main/resources/features",
                 glue = {"org.example.stepDefs"},
-                tags = "@CorporateSetup",//"not @Reservation_Rules and not @DigitalPayment and not @Property and not @Blocks_Floors",
+                tags = "@corporate_vouchers,orders",//"not @Reservation_Rules and not @DigitalPayment and not @Property and not @Blocks_Floors",
                 plugin = {
                         "pretty",
                         "html:target/cucumber.html",

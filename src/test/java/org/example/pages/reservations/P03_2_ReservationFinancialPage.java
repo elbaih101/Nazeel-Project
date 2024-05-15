@@ -1,6 +1,6 @@
 package org.example.pages.reservations;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.example.pages.mutlipurposes.P00_multiPurposes;
 import org.example.stepDefs.Hooks;
 import org.openqa.selenium.By;

@@ -1,6 +1,6 @@
 package org.example.pages.mutlipurposes;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.example.CustomAssert;
 import org.example.Utils;
 import org.example.stepDefs.Hooks;

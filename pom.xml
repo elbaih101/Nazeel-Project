@@ -36,7 +36,7 @@
         <dependency>
             <groupId>net.masterthought</groupId>
             <artifactId>maven-cucumber-reporting</artifactId>
-            <version>5.8.0</version>
+            <version>5.8.1</version>
         </dependency>
         <dependency>
             <groupId>io.github.bonigarcia</groupId>
@@ -98,6 +98,16 @@
                         <include>**/*Runners.java</include> <!-- this should be the name of your runner class -->
                     </includes>
                 </configuration>
+                <!-- this excution so that only the tesets are run during test phase-->
+                <executions>
+                    <execution>
+                        <id>surefire-test</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>test</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <!-- https://repo.maven.apache.org/maven2/net/masterthought/cucumber-reporting/ -->
@@ -107,7 +117,7 @@
                 <executions>
                     <execution>
                         <id>execution</id>
-                        <phase>verify</phase>
+                        <phase>test</phase>
                         <goals>
                             <goal>generate</goal>
                         </goals>

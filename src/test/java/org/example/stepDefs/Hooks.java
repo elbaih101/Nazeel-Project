@@ -9,18 +9,22 @@ import org.example.Utils;
 import org.example.enums.Driver_Mode;
 import org.example.enums.Drivers;
 import org.example.pages.P01_LoginPage;
+import org.example.pojos.User;
+import org.example.pojos.UserDataReader;
 import org.openqa.selenium.WebDriver;
+
 import java.time.Duration;
 
 
 public class Hooks {
-    public  WebDriver driver;
-    private  Scenario scenario;
+    public WebDriver driver;
+    private Scenario scenario;
+    private static int numberofUsers = 0;
 
 
     @Before
     public void start(Scenario scenario) {
-       this.scenario = scenario;
+        this.scenario = scenario;
         DriverManager.initializeDriver(Drivers.Chrome, Driver_Mode.UI);
         this.driver = DriverManager.getDriver();
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
@@ -55,15 +59,18 @@ public class Hooks {
     }
 
     public static void superUserLogin(WebDriver driver, String username, String password) {
-
+        User user = UserDataReader.getNextUser();
         //initiating Waits and Pages
         P01_LoginPage loginPage = new P01_LoginPage(driver);
+        if (user != null) {
+            //logging in
 
-        //logging in
-        loginPage.usernameField.sendKeys(username);
-        loginPage.passwordField.sendKeys(password);
-        loginPage.loginButton.click();
-
+            loginPage.usernameField.sendKeys(user.getUserName());
+            loginPage.passwordField.sendKeys(user.getPassword());
+            loginPage.loginButton.click();
+        } else {
+            System.out.println("No users available");
+        }
 
     }
 }
