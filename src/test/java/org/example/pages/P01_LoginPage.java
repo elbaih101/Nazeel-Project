@@ -1,6 +1,6 @@
 package org.example.pages;
 
-import org.example.stepDefs.Hooks;
+
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindAll;
@@ -11,10 +11,7 @@ import java.util.List;
 
 public class P01_LoginPage
 {
-    public P01_LoginPage()
-    {
-        PageFactory.initElements(Hooks.driver,this);
-    }
+
 
     public P01_LoginPage(WebDriver driver){
         PageFactory.initElements(driver,this);

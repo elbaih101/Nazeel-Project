@@ -4,6 +4,7 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.example.DriverManager;
 import org.example.enums.Services;
 import org.example.pages.P02_DashBoardPage;
 import org.example.pages.masterdata_pages.P14_MasterData;
@@ -20,8 +21,8 @@ import java.time.Duration;
 import java.util.List;
 
 public class D10_Supscriptions {
-    WebDriver driver = Hooks.driver;
 
+    WebDriver driver = DriverManager.getDriver();
 
     final SoftAssert asrt = new SoftAssert();
     final WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));

@@ -1,6 +1,6 @@
 package org.example.pages.setuppages.properties_pages;
 
-import org.example.stepDefs.Hooks;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -14,8 +14,6 @@ public class P06_1_PropeertyDataPage {
 
     public P06_1_PropeertyDataPage(WebDriver driver){
         PageFactory.initElements(driver,this);
-    }   public P06_1_PropeertyDataPage(){
-        PageFactory.initElements(Hooks.driver,this);
     }
     @FindBy(xpath = "//ul[@role=\"listbox\"]")
     public WebElement genralListBox;

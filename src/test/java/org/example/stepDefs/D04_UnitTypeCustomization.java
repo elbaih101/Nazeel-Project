@@ -5,6 +5,7 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.example.DriverManager;
 import org.example.Utils;
 import org.example.pages.P02_DashBoardPage;
 import org.example.pages.masterdata_pages.P14_MasterData;
@@ -24,7 +25,7 @@ import java.util.NoSuchElementException;
 
 public class D04_UnitTypeCustomization {
 
-    final WebDriver driver = Hooks.driver;
+    final WebDriver driver = DriverManager.getDriver();
     final SoftAssert asrt = new SoftAssert();
     final WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
     final P02_DashBoardPage dashBoardPage = new P02_DashBoardPage(driver);
@@ -34,7 +35,8 @@ public class D04_UnitTypeCustomization {
     P15_MasterUnitsTypes masterUnitsTypes = new P15_MasterUnitsTypes(driver);
     String existantUnitType;
     Faker faker = new Faker();
-JavascriptExecutor js=(JavascriptExecutor) driver;
+    JavascriptExecutor js = (JavascriptExecutor) driver;
+
     @And("go to unit type customization page")
 
     public void goToUnitTypeCustomizationPage() {
@@ -204,9 +206,9 @@ JavascriptExecutor js=(JavascriptExecutor) driver;
         clickOnFilterButtonAndEnterNameOfTypeAndStatusAndClickSearch(oldName, "");
         WebElement type = masterUnitsTypes.typesNames.stream().findAny().orElseThrow();
         new P00_multiPurposes(driver).waitLoading();
-        js.executeScript("arguments[0].click();",masterUnitsTypes.editButton(type));
-      //  masterUnitsTypes.editButton(type).click();
-wait.until(ExpectedConditions.visibilityOf(masterUnitsTypes.typeNameField()));
+        js.executeScript("arguments[0].click();", masterUnitsTypes.editButton(type));
+        //  masterUnitsTypes.editButton(type).click();
+        wait.until(ExpectedConditions.visibilityOf(masterUnitsTypes.typeNameField()));
         masterUnitsTypes.typeNameField().clear();
         masterUnitsTypes.typeNameField().sendKeys(newName);
         masterUnitsTypes.submitButton().click();
@@ -222,6 +224,7 @@ wait.until(ExpectedConditions.visibilityOf(masterUnitsTypes.typeNameField()));
         masterUnitsTypes.confirmDeleteButton().click();
 
     }
+
     @Given("create a unit type {string}")
     public void createAUnitType(String typeName) {
         if (typeName.equalsIgnoreCase("RANDOM")) {
@@ -242,13 +245,13 @@ wait.until(ExpectedConditions.visibilityOf(masterUnitsTypes.typeNameField()));
         clickOnFilterButtonAndEnterNameOfTypeAndStatusAndClickSearch(name, "");
         WebElement type = masterUnitsTypes.typesNames.stream().findAny().orElseThrow();
         new P00_multiPurposes(driver).waitLoading();
-        js.executeScript("arguments[0].click();",masterUnitsTypes.editButton(type));
+        js.executeScript("arguments[0].click();", masterUnitsTypes.editButton(type));
         if (status.equalsIgnoreCase("inactive")) {
             if (masterUnitsTypes.statusButton().getAttribute("aria-checked").contains("true")) {
                 masterUnitsTypes.statusButton().click();
             }
-        }else if (status.equalsIgnoreCase("active")){
-            if (masterUnitsTypes.statusButton().getAttribute("aria-checked").contains("false")){
+        } else if (status.equalsIgnoreCase("active")) {
+            if (masterUnitsTypes.statusButton().getAttribute("aria-checked").contains("false")) {
                 masterUnitsTypes.statusButton().click();
             }
         }

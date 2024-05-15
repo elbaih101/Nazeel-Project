@@ -3,6 +3,7 @@ package org.example.stepDefs;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.example.DriverManager;
 import org.example.pages.P02_DashBoardPage;
 import org.example.pages.mutlipurposes.P00_multiPurposes;
 import org.example.pages.setuppages.P13_PrintingOptionsPage;
@@ -17,7 +18,7 @@ import java.time.Duration;
 
 public class D07_PrintingOptions {
 
-    WebDriver driver = Hooks.driver;
+    WebDriver driver = DriverManager.getDriver();
 
 
     final SoftAssert asrt = new SoftAssert();

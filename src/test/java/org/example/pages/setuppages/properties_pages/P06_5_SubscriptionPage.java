@@ -1,6 +1,6 @@
 package org.example.pages.setuppages.properties_pages;
 
-import org.example.stepDefs.Hooks;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -15,10 +15,7 @@ public class P06_5_SubscriptionPage {
 
     public P06_5_SubscriptionPage(WebDriver driver){
         PageFactory.initElements(driver,this);
-    }   public P06_5_SubscriptionPage(){
-        PageFactory.initElements(Hooks.driver,this);
     }
-
 
     @FindBy(xpath = "//ul[@role=\"listbox\"]")
      WebElement genralListBox;

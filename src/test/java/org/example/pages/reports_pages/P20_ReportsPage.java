@@ -1,6 +1,6 @@
 package org.example.pages.reports_pages;
 
-import org.example.stepDefs.Hooks;
+
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -16,12 +16,7 @@ public class P20_ReportsPage {
     final WebDriverWait wait;
     final Actions actions;
 
-    public P20_ReportsPage() {
-        PageFactory.initElements(Hooks.driver, this);
-        this.driver = Hooks.driver;
-        wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        actions = new Actions(driver);
-    }
+
 
     public P20_ReportsPage(WebDriver driver) {
         PageFactory.initElements(driver, this);

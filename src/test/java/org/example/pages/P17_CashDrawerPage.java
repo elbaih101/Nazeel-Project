@@ -1,6 +1,6 @@
 package org.example.pages;
 
-import org.example.stepDefs.Hooks;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -17,12 +17,7 @@ public class P17_CashDrawerPage {
     final WebDriverWait wait;
     final Actions actions;
 
-    public P17_CashDrawerPage() {
-        PageFactory.initElements(Hooks.driver, this);
-        this.driver = Hooks.driver;
-        wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        actions = new Actions(driver);
-    }
+
 
     public P17_CashDrawerPage(WebDriver driver) {
         PageFactory.initElements(driver, this);

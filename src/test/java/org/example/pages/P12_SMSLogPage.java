@@ -1,6 +1,6 @@
 package org.example.pages;
 
-import org.example.stepDefs.Hooks;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -19,12 +19,7 @@ public class P12_SMSLogPage {
     final WebDriverWait wait;
     final Actions actions;
 
-    public P12_SMSLogPage() {
-        PageFactory.initElements(Hooks.driver, this);
-        this.driver = Hooks.driver;
-        wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        actions = new Actions(driver);
-    }
+
 
     public P12_SMSLogPage(WebDriver driver) {
         PageFactory.initElements(driver, this);
@@ -52,7 +47,7 @@ public class P12_SMSLogPage {
     public List<WebElement> paytabsMessages() {
         List<WebElement> paytabsEvents = events.stream().filter(event -> event.getText().contains("PayTabs")).toList();
         List<WebElement> paytabsMessages = new ArrayList<>();
-        paytabsEvents.stream().forEach(event -> paytabsMessages.add(event.findElement(By.xpath(".."))));
+        paytabsEvents.forEach(event -> paytabsMessages.add(event.findElement(By.xpath(".."))));
         return paytabsMessages;
     }
 

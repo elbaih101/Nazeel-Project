@@ -1,6 +1,6 @@
 package org.example.pages.setuppages.properties_pages;
 
-import org.example.stepDefs.Hooks;
+
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -12,10 +12,7 @@ import java.util.List;
 public class P06_PropertiesPage {
     public P06_PropertiesPage(WebDriver driver){
         PageFactory.initElements(driver,this);
-    }   public P06_PropertiesPage(){
-        PageFactory.initElements(Hooks.driver,this);
     }
-
 
     @FindBy(xpath = "//Button[contains(text(),\" New Property  \")]")
     public WebElement newPropertyButton;

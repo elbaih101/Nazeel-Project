@@ -1,8 +1,8 @@
 package org.example.pages.reports_pages;
 
-import org.example.stepDefs.Hooks;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
+
+ import org.openqa.selenium.By;
+ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
@@ -17,12 +17,7 @@ public class P19_DigitalPayementsReport {
     final WebDriverWait wait;
     final Actions actions;
 
-    public P19_DigitalPayementsReport() {
-        PageFactory.initElements(Hooks.driver, this);
-        this.driver = Hooks.driver;
-        wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        actions = new Actions(driver);
-    }
+
 
     public P19_DigitalPayementsReport(WebDriver driver) {
         PageFactory.initElements(driver, this);

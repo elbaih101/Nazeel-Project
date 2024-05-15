@@ -5,7 +5,8 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import org.example.Utils;
+import org.example.DriverManager;
+
 import org.example.pages.P01_LoginPage;
 import org.example.pages.P02_DashBoardPage;
 import org.example.pages.mutlipurposes.P00_multiPurposes;
@@ -24,7 +25,7 @@ public class D02_CreateProperty {
 
     final Locale locale = new Locale("SA");
     final Faker faker = new Faker(locale);
-    final WebDriver driver = Hooks.driver;
+    final WebDriver driver = DriverManager.getDriver();
     final SoftAssert asrt = new SoftAssert();
     final Actions actions = new Actions(driver);
     final WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
@@ -43,12 +44,12 @@ public class D02_CreateProperty {
 
     @Given("Logging in with end user {string} {string} {string}")
     public void loggingInWithEndUser(String username, String password, String acc) {
-        Hooks.endUserLogin(username, password, acc);
+        Hooks.endUserLogin(driver,username, password, acc);
     }
 
     @Given("Logging in with superuser")
     public void loggingInWithSuperuser() {
-        Hooks.superUserLogin("baih", "Aa@123456");
+        Hooks.superUserLogin(driver,"baih", "Aa@123456");
     }
 
 
@@ -92,123 +93,123 @@ public class D02_CreateProperty {
         } catch (NoSuchElementException e) {
             System.out.println("no subscriptions alert");
         }
-            //clicking on later to bypass user verification
-            if (dashBoardPage.masterDataLink.isEmpty()) {
-                try {
-                    JavascriptExecutor js = (JavascriptExecutor) driver;
+        //clicking on later to bypass user verification
+        if (dashBoardPage.masterDataLink.isEmpty()) {
+            try {
+                JavascriptExecutor js = (JavascriptExecutor) driver;
 
-                    wait.until(ExpectedConditions.urlMatches("http://staging.nazeel.net:9002/dashboard"));
-                    wait.until(ExpectedConditions.visibilityOf(loginPage.verificationButton));
-                    wait.until(ExpectedConditions.elementToBeClickable(loginPage.verificationButton));
-                    js.executeScript("arguments[0].click();", loginPage.verificationButton);
+                wait.until(ExpectedConditions.urlMatches("http://staging.nazeel.net:9002/dashboard"));
+                wait.until(ExpectedConditions.visibilityOf(loginPage.verificationButton));
+                wait.until(ExpectedConditions.elementToBeClickable(loginPage.verificationButton));
+                js.executeScript("arguments[0].click();", loginPage.verificationButton);
 
-                } catch (TimeoutException e) {
+            } catch (TimeoutException e) {
 
-                    System.out.println("logged in as super user");
-                }
-                try {
-                    dashBoardPage.contractAgreementButton.click();
-                } catch (NoSuchElementException e) {
-                    System.out.println("no agreement contract");
-                }
+                System.out.println("logged in as super user");
+            }
+            try {
+                dashBoardPage.contractAgreementButton.click();
+            } catch (NoSuchElementException e) {
+                System.out.println("no agreement contract");
             }
         }
-
-        @And("Go to Properties Page")
-        public void goToPropertiesPage () {
-
-
-            dashBoardPage.setupPageLink.click();
-            setupPagec.companyDroplist.click();
-
-            wait.until(ExpectedConditions.visibilityOf(setupPagec.propertiesLink));
-            setupPagec.propertiesLink.click();
-        }
-
-
-        @When("click on new propery button")
-        public void clickOnNewProperyButton () {
-            propertiesPage.newPropertyButton.click();
-        }
-
-        @And("fill property Data")
-        public void fillPropertyData () {
-            wait.until(ExpectedConditions.visibilityOf(propeertyDataPage.reportNameField));
-            propeertyDataPage.propertyNameField.sendKeys(propertyName);
-            propeertyDataPage.propertyType().get(0).click();
-            propeertyDataPage.unitClass().get(0).click();
-
-
-            propeertyDataPage.propertyClass().get(0).click();
-            subscriptionPage.salesman().get(0).click();
-            propeertyDataPage.nextButton.click();
-        }
-
-        @And("fill Location Data")
-        public void fillLocationData () {
-            wait.until(ExpectedConditions.visibilityOf(locationDataPage.buildingNumberField));
-            locationDataPage.country().get(0).click();
-            locationDataPage.region().get(0).click();
-            locationDataPage.city().get(0).click();
-            locationDataPage.district().get(0).click();
-            locationDataPage.street().get(0).click();
-            locationDataPage.buildingNumberField.sendKeys(String.valueOf(faker.number().numberBetween(1, 99)));
-            locationDataPage.additionalNoField.sendKeys(String.valueOf(faker.number().numberBetween(1, 99)));
-            locationDataPage.addressField.sendKeys(String.valueOf(faker.address()));
-            locationDataPage.phoneNumberField.sendKeys(String.valueOf(faker.phoneNumber().cellPhone()));
-            locationDataPage.mobileNumberField.sendKeys(String.valueOf(faker.phoneNumber().cellPhone()));
-            locationDataPage.emailField.sendKeys(faker.internet().emailAddress());
-            locationDataPage.postalCodeField.sendKeys(faker.address().zipCode());
-            locationDataPage.nextButton.click();
-        }
-
-        @And("fill Owner Data")
-        public void fillOwnerData () {
-            wait.until(ExpectedConditions.visibilityOf(ownerDataPage.nextButton));
-            ownerDataPage.nextButton.click();
-        }
-
-        @And("fill sms Data")
-        public void fillSmsData () {
-            wait.until(ExpectedConditions.visibilityOf(smsPage.smsBalanceField));
-            smsPage.smsprovider().get(0).click();
-            WebElement selection = smsPage.smsSender().get(0);
-            wait.until(ExpectedConditions.elementToBeClickable(selection));
-            selection.click();
-            smsPage.smsBalanceField.sendKeys("80");
-            smsPage.nextButton.click();
-        }
-
-        @And("Fill Subscription Data")
-        public void fillSubscriptionData () {
-            wait.until(ExpectedConditions.visibilityOf(subscriptionPage.startDateField));
-            subscriptionPage.selecttoday();
-            subscriptionPage.subscriptionPeriodField.sendKeys("12");
-            subscriptionPage.depositerNameField.sendKeys(faker.name().fullName());
-            subscriptionPage.startingAmountField.sendKeys("8000");
-            subscriptionPage.startingAmountTaxField.sendKeys("800");
-            subscriptionPage.annualRenewalPriceField.sendKeys("18");
-            WebElement selection = propeertyDataPage.propertyAccount().get(0);
-            wait.until(ExpectedConditions.elementToBeClickable(selection));
-            selection.click();
-            propeertyDataPage.numberOfUnitsField.sendKeys("80");
-            subscriptionPage.commentField.sendKeys("some comment");
-            subscriptionPage.nextButton.click();
-        }
-
-        @And("Finish the Summary")
-        public void finishTheSummary () {
-            wait.until(ExpectedConditions.visibilityOf(summaryPage.saveButton));
-            summaryPage.saveButton.click();
-        }
-
-        @Then("Check new property is created")
-        public void checkNewPropertyIsCreated () {
-            wait.until(ExpectedConditions.invisibilityOf(summaryPage.saveButton));
-
-            asrt.assertTrue(propertiesPage.propertiesNames.stream().anyMatch(element -> element.getText().contains(propertyName)));
-            asrt.assertAll();
-        }
-
-
     }
+
+    @And("Go to Properties Page")
+    public void goToPropertiesPage() {
+
+
+        dashBoardPage.setupPageLink.click();
+        setupPagec.companyDroplist.click();
+
+        wait.until(ExpectedConditions.visibilityOf(setupPagec.propertiesLink));
+        setupPagec.propertiesLink.click();
+    }
+
+
+    @When("click on new propery button")
+    public void clickOnNewProperyButton() {
+        propertiesPage.newPropertyButton.click();
+    }
+
+    @And("fill property Data")
+    public void fillPropertyData() {
+        wait.until(ExpectedConditions.visibilityOf(propeertyDataPage.reportNameField));
+        propeertyDataPage.propertyNameField.sendKeys(propertyName);
+        propeertyDataPage.propertyType().get(0).click();
+        propeertyDataPage.unitClass().get(0).click();
+
+
+        propeertyDataPage.propertyClass().get(0).click();
+        subscriptionPage.salesman().get(0).click();
+        propeertyDataPage.nextButton.click();
+    }
+
+    @And("fill Location Data")
+    public void fillLocationData() {
+        wait.until(ExpectedConditions.visibilityOf(locationDataPage.buildingNumberField));
+        locationDataPage.country().get(0).click();
+        locationDataPage.region().get(0).click();
+        locationDataPage.city().get(0).click();
+        locationDataPage.district().get(0).click();
+        locationDataPage.street().get(0).click();
+        locationDataPage.buildingNumberField.sendKeys(String.valueOf(faker.number().numberBetween(1, 99)));
+        locationDataPage.additionalNoField.sendKeys(String.valueOf(faker.number().numberBetween(1, 99)));
+        locationDataPage.addressField.sendKeys(String.valueOf(faker.address()));
+        locationDataPage.phoneNumberField.sendKeys(String.valueOf(faker.phoneNumber().cellPhone()));
+        locationDataPage.mobileNumberField.sendKeys(String.valueOf(faker.phoneNumber().cellPhone()));
+        locationDataPage.emailField.sendKeys(faker.internet().emailAddress());
+        locationDataPage.postalCodeField.sendKeys(faker.address().zipCode());
+        locationDataPage.nextButton.click();
+    }
+
+    @And("fill Owner Data")
+    public void fillOwnerData() {
+        wait.until(ExpectedConditions.visibilityOf(ownerDataPage.nextButton));
+        ownerDataPage.nextButton.click();
+    }
+
+    @And("fill sms Data")
+    public void fillSmsData() {
+        wait.until(ExpectedConditions.visibilityOf(smsPage.smsBalanceField));
+        smsPage.smsprovider().get(0).click();
+        WebElement selection = smsPage.smsSender().get(0);
+        wait.until(ExpectedConditions.elementToBeClickable(selection));
+        selection.click();
+        smsPage.smsBalanceField.sendKeys("80");
+        smsPage.nextButton.click();
+    }
+
+    @And("Fill Subscription Data")
+    public void fillSubscriptionData() {
+        wait.until(ExpectedConditions.visibilityOf(subscriptionPage.startDateField));
+        subscriptionPage.selecttoday();
+        subscriptionPage.subscriptionPeriodField.sendKeys("12");
+        subscriptionPage.depositerNameField.sendKeys(faker.name().fullName());
+        subscriptionPage.startingAmountField.sendKeys("8000");
+        subscriptionPage.startingAmountTaxField.sendKeys("800");
+        subscriptionPage.annualRenewalPriceField.sendKeys("18");
+        WebElement selection = propeertyDataPage.propertyAccount().get(0);
+        wait.until(ExpectedConditions.elementToBeClickable(selection));
+        selection.click();
+        propeertyDataPage.numberOfUnitsField.sendKeys("80");
+        subscriptionPage.commentField.sendKeys("some comment");
+        subscriptionPage.nextButton.click();
+    }
+
+    @And("Finish the Summary")
+    public void finishTheSummary() {
+        wait.until(ExpectedConditions.visibilityOf(summaryPage.saveButton));
+        summaryPage.saveButton.click();
+    }
+
+    @Then("Check new property is created")
+    public void checkNewPropertyIsCreated() {
+        wait.until(ExpectedConditions.invisibilityOf(summaryPage.saveButton));
+
+        asrt.assertTrue(propertiesPage.propertiesNames.stream().anyMatch(element -> element.getText().contains(propertyName)));
+        asrt.assertAll();
+    }
+
+
+}

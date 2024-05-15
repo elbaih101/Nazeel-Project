@@ -6,8 +6,9 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import org.apache.commons.lang.StringUtils;
+
 import org.example.API;
+import org.example.DriverManager;
 import org.example.Utils;
 import org.example.enums.PaymentMethods;
 import org.example.enums.Vouchers;
@@ -22,7 +23,8 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.edge.EdgeDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+
 import org.openqa.selenium.support.Color;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -33,7 +35,8 @@ import java.time.Duration;
 import java.util.*;
 
 public class D08_Vouchers {
-    WebDriver driver = Hooks.driver;
+
+    WebDriver driver = DriverManager.getDriver();
 
     JavascriptExecutor js = (JavascriptExecutor) driver;
 
@@ -231,9 +234,7 @@ public class D08_Vouchers {
             Utils.setDate(vouchersPopUp.dateField(), creatianDate);
         }
         API api = new API();
-        JsonObject json = Json.parse(api.getResponseBody((EdgeDriver) driver, url, () -> {
-            vouchersPopUp.submitButton().click();
-        })).asObject();
+        JsonObject json = Json.parse(api.getResponseBody((ChromeDriver) driver, url, () -> vouchersPopUp.submitButton().click())).asObject();
         voucherNums = json.getString("data", null);
         submitTheVoucherAndCheckSuccessMessage(prefix, Postfix);
         createdVoucherType = voucherType;

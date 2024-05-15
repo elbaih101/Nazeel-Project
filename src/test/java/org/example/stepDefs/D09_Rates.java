@@ -4,6 +4,7 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.example.DriverManager;
 import org.example.Utils;
 import org.example.pages.P02_DashBoardPage;
 import org.example.pages.mutlipurposes.P00_multiPurposes;
@@ -12,7 +13,7 @@ import org.example.pages.setuppages.unit_setup_pages.P09_RatesPages;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.ExpectedConditions;
+
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.asserts.SoftAssert;
 
@@ -21,7 +22,8 @@ import java.time.Duration;
 import java.util.Map;
 
 public class D09_Rates {
-    WebDriver driver = Hooks.driver;
+
+    WebDriver driver = DriverManager.getDriver();
 
 
     final SoftAssert asrt = new SoftAssert();

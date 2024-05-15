@@ -1,6 +1,6 @@
 package org.example.pages.mutlipurposes;
 
-import org.example.stepDefs.Hooks;
+
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -16,12 +16,7 @@ public class P00_1_PaytabsExternalPage {
     final WebDriverWait wait;
     final Actions actions;
 
-    public P00_1_PaytabsExternalPage() {
-        PageFactory.initElements(Hooks.driver, this);
-        this.driver = Hooks.driver;
-        wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        actions = new Actions(driver);
-    }
+
 
     public P00_1_PaytabsExternalPage(WebDriver driver) {
         PageFactory.initElements(driver, this);

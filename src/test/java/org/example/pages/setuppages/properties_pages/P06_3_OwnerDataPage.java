@@ -1,6 +1,6 @@
 package org.example.pages.setuppages.properties_pages;
 
-import org.example.stepDefs.Hooks;
+
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -12,8 +12,6 @@ public class P06_3_OwnerDataPage {
 
     public P06_3_OwnerDataPage(WebDriver driver){
         PageFactory.initElements(driver,this);
-    }   public P06_3_OwnerDataPage(){
-        PageFactory.initElements(Hooks.driver,this);
     }
 
     @FindBy(xpath = "//ul[@role=\"listbox\"]")

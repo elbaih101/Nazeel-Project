@@ -1,7 +1,7 @@
 package org.example.pages.reservations;
 
 import org.example.pages.mutlipurposes.P00_multiPurposes;
-import org.example.stepDefs.Hooks;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
@@ -23,12 +23,7 @@ public class P03_1_ReservationMainDataPage {
 
     JavascriptExecutor js;
 
-    public P03_1_ReservationMainDataPage() {
-        PageFactory.initElements(Hooks.driver, this);
-        this.driver = Hooks.driver;
-        wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        actions = new Actions(driver);
-    }
+
 
     public P03_1_ReservationMainDataPage(WebDriver driver) {
         PageFactory.initElements(driver, this);

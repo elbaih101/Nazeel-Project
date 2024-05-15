@@ -1,7 +1,7 @@
 package org.example.stepDefs;
 
 import io.cucumber.java.en.And;
-import io.cucumber.java.en.Given;
+import org.example.DriverManager;
 import org.example.pages.mutlipurposes.P00_multiPurposes;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
@@ -14,7 +14,7 @@ import java.time.Duration;
 
 public class D00_multipurpose {
 
-    WebDriver driver = Hooks.driver;
+    WebDriver driver = DriverManager.getDriver();
 
     JavascriptExecutor js = (JavascriptExecutor) driver;
     final SoftAssert asrt = new SoftAssert();

@@ -5,6 +5,7 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.apache.commons.lang3.StringUtils;
+import org.example.DriverManager;
 import org.example.Utils;
 import org.example.pages.P02_DashBoardPage;
 import org.example.pages.mutlipurposes.P00_multiPurposes;
@@ -33,7 +34,8 @@ import java.util.HashMap;
 import java.util.List;
 
 public class D12_Financials {
-    WebDriver driver = Hooks.driver;
+
+    WebDriver driver = DriverManager.getDriver();
 
     // JavascriptExecutor js = (JavascriptExecutor) driver;
     final SoftAssert asrt = new SoftAssert();

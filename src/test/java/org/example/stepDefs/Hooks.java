@@ -1,31 +1,28 @@
 package org.example.stepDefs;
 
-//import com.microsoft.edge.seleniumtools.EdgeOptions;
-
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
 import io.cucumber.java.Scenario;
-
+import org.example.DriverManager;
 import org.example.TestData;
 import org.example.Utils;
 import org.example.enums.Driver_Mode;
 import org.example.enums.Drivers;
 import org.example.pages.P01_LoginPage;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.devtools.DevTools;
 import java.time.Duration;
 
 
 public class Hooks {
-    public static WebDriver driver;
-    private static Scenario scenario;
-    public static DevTools devTools;
+    public  WebDriver driver;
+    private  Scenario scenario;
+
 
     @Before
-    public static void start(Scenario scenario) {
-        Hooks.scenario = scenario;
-
-        driver = Utils.setDriver(Drivers.Chrome, Driver_Mode.UI);
+    public void start(Scenario scenario) {
+       this.scenario = scenario;
+        DriverManager.initializeDriver(Drivers.Chrome, Driver_Mode.UI);
+        this.driver = DriverManager.getDriver();
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
         driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(20));
         driver.get(TestData.stageUrl);
@@ -34,7 +31,7 @@ public class Hooks {
 
 
     @After
-    public static void end() throws Exception {
+    public void end() throws Exception {
         Utils.screenShotOnFailure(scenario, driver);
         try {
             Thread.sleep(5000);
@@ -45,7 +42,7 @@ public class Hooks {
     }
 
 
-    public static void endUserLogin(String username, String password, String acc) {
+    public static void endUserLogin(WebDriver driver, String username, String password, String acc) {
         //initiating Waits and Pages
         P01_LoginPage loginPage = new P01_LoginPage(driver);
         //logging in
@@ -57,7 +54,7 @@ public class Hooks {
 
     }
 
-    public static void superUserLogin(String username, String password) {
+    public static void superUserLogin(WebDriver driver, String username, String password) {
 
         //initiating Waits and Pages
         P01_LoginPage loginPage = new P01_LoginPage(driver);

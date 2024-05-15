@@ -5,9 +5,10 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.example.CustomAssert;
+import org.example.DriverManager;
 import org.example.Nazeel_Calculations;
 import org.example.Utils;
-import org.example.pages.P01_LoginPage;
+
 import org.example.pages.P02_DashBoardPage;
 import org.example.pages.mutlipurposes.P00_multiPurposes;
 import org.example.pages.reservations.*;
@@ -17,25 +18,26 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import org.testng.asserts.SoftAssert;
+
 
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
 public class D01_Reservations {
-    WebDriver driver = Hooks.driver;
+
+    WebDriver driver = DriverManager.getDriver();
 
 
     final P02_DashBoardPage homePage = new P02_DashBoardPage(driver);
     final JavascriptExecutor js = (JavascriptExecutor) driver;
     final P03_1_ReservationMainDataPage reservationMainDataPage = new P03_1_ReservationMainDataPage(driver);
-    final WebDriverWait wait = new WebDriverWait(Hooks.driver, Duration.ofSeconds(15));
+    final WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
     final P03_5_UnitSelectionPopup unitSelectionPopup = new P03_5_UnitSelectionPopup(driver);
     final P03_6_EndReservationPopUp endReservationPopUp = new P03_6_EndReservationPopUp(driver);
     P03_ReservationsPage reservationsPage = new P03_ReservationsPage(driver);
     final CustomAssert asrt = new CustomAssert();
-    Actions action = new Actions(Hooks.driver);
+    Actions action = new Actions(driver);
 
 
     @And("open reservations Page")
@@ -294,9 +296,9 @@ public class D01_Reservations {
                     reservationsPage.filterRentType().stream().filter(t -> t.getText().equalsIgnoreCase(value)).findAny().orElseThrow().click();
             case "unitType" ->
                     reservationsPage.filterUnitTypes().stream().filter(t -> t.getText().equalsIgnoreCase(value)).findAny().orElseThrow().click();
-            case "corporate" -> {
+            case "corporate" ->
                 reservationsPage.selectCorp(value).click();
-            }
+
         }
         reservationsPage.searchButton.click();
     }

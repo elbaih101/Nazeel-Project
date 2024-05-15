@@ -5,6 +5,7 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.example.CustomAssert;
+import org.example.DriverManager;
 import org.example.Utils;
 import org.example.pages.P02_DashBoardPage;
 import org.example.pages.mutlipurposes.P00_multiPurposes;
@@ -15,14 +16,15 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.testng.asserts.SoftAssert;
+
 
 import java.util.HashMap;
 
 public class D13_ProppertyRules {
 
 
-    WebDriver driver = Hooks.driver;
+
+    WebDriver driver = DriverManager.getDriver();
     JavascriptExecutor js = (JavascriptExecutor) driver;
     final CustomAssert asrt = new CustomAssert();
     //    final WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
@@ -198,10 +200,11 @@ public class D13_ProppertyRules {
 
     @When("changing the auto cancel reason to {string}")
     public void changingTheAutoCancelReasonTo(String reas) {
-        if (!dashBoardPage.onlineReservationsLink.isEmpty()){
+        if (!dashBoardPage.onlineReservationsLink.isEmpty()) {
             switchSWitch("autorejectota", "on");
-        reservationRules.cancelREasonsList().stream().filter(re -> re.getText().equals(reas)).findAny().orElseThrow().click();
-        reservationRules.submitButton.click();}
+            reservationRules.cancelREasonsList().stream().filter(re -> re.getText().equals(reas)).findAny().orElseThrow().click();
+            reservationRules.submitButton.click();
+        }
     }
 
     @And("cancel reasons are {string}")

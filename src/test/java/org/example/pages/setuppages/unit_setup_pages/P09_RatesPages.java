@@ -1,6 +1,6 @@
 package org.example.pages.setuppages.unit_setup_pages;
 
-import org.example.stepDefs.Hooks;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -13,9 +13,7 @@ import java.util.List;
 public class P09_RatesPages {
 
 
-    public P09_RatesPages() {
-        PageFactory.initElements(Hooks.driver, this);
-    }
+
 
     public P09_RatesPages(WebDriver driver) {
         PageFactory.initElements(driver, this);

@@ -3,7 +3,7 @@ package org.example.pages.setuppages.unit_setup_pages;
 
 import org.apache.commons.lang.StringUtils;
 import org.example.pages.mutlipurposes.P00_multiPurposes;
-import org.example.stepDefs.Hooks;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -14,7 +14,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
-import java.util.ArrayList;
+
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -28,12 +28,7 @@ public class P08_UnitsSetupPage {
 
     final Actions actions;
 
-    public P08_UnitsSetupPage() {
-        PageFactory.initElements(Hooks.driver, this);
-        this.driver = Hooks.driver;
-        wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        actions = new Actions(driver);
-    }
+
 
 public P08_UnitsSetupPage(WebDriver driver) {
         PageFactory.initElements(driver, this);

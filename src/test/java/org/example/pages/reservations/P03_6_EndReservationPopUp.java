@@ -1,6 +1,6 @@
 package org.example.pages.reservations;
 
-import org.example.stepDefs.Hooks;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -17,13 +17,6 @@ public class P03_6_EndReservationPopUp {
     final WebDriver driver;
     final WebDriverWait wait;
     final Actions actions;
-
-    public P03_6_EndReservationPopUp() {
-        PageFactory.initElements(Hooks.driver, this);
-        this.driver = Hooks.driver;
-        wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        actions = new Actions(driver);
-    }
 
     public P03_6_EndReservationPopUp(WebDriver driver) {
         PageFactory.initElements(driver, this);

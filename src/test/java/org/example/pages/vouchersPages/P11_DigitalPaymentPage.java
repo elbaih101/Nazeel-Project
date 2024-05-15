@@ -1,6 +1,6 @@
 package org.example.pages.vouchersPages;
 
-import org.example.stepDefs.Hooks;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -19,12 +19,7 @@ public class P11_DigitalPaymentPage {
     final WebDriverWait wait;
     final Actions actions;
 
-    public P11_DigitalPaymentPage() {
-        PageFactory.initElements(Hooks.driver, this);
-        this.driver = Hooks.driver;
-        wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        actions = new Actions(driver);
-    }
+
 
     public P11_DigitalPaymentPage(WebDriver driver) {
         PageFactory.initElements(driver, this);

@@ -1,6 +1,6 @@
 package org.example.pages.mutlipurposes;
 
-import org.example.stepDefs.Hooks;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -19,12 +19,6 @@ public class P00_2_GuestSelectionPopUp {
     final WebDriverWait wait;
     final Actions actions;
 
-    public P00_2_GuestSelectionPopUp() {
-        PageFactory.initElements(Hooks.driver, this);
-        this.driver = Hooks.driver;
-        wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        actions = new Actions(driver);
-    }
 
     public P00_2_GuestSelectionPopUp(WebDriver driver) {
         PageFactory.initElements(driver, this);

@@ -1,7 +1,6 @@
 package org.example.pages.setuppages;
 
 import org.apache.commons.lang.StringUtils;
-import org.example.stepDefs.Hooks;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -13,9 +12,7 @@ import java.util.List;
 @SuppressWarnings("unused")
 public class P04_BlocksPage {
 
-    public P04_BlocksPage() {
-        PageFactory.initElements(Hooks.driver, this);
-    }
+
 
     public P04_BlocksPage(WebDriver driver) {
         PageFactory.initElements(driver, this);

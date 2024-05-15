@@ -1,6 +1,6 @@
 package org.example.pages.setuppages.properties_pages;
 
-import org.example.stepDefs.Hooks;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -18,9 +18,6 @@ final WebDriverWait wait;
     public P06_4_SmsPage(WebDriver driver){
         PageFactory.initElements(driver,this);
         wait=new WebDriverWait(driver, Duration.ofSeconds(20));
-    }   public P06_4_SmsPage(){
-        PageFactory.initElements(Hooks.driver,this);
-        wait=new WebDriverWait(Hooks.driver, Duration.ofSeconds(20));
     }
     @FindBy(xpath = "//ul[@role=\"listbox\"]")
     public WebElement genralListBox;

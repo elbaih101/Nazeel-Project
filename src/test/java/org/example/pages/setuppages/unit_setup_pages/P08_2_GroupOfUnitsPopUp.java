@@ -1,6 +1,6 @@
 package org.example.pages.setuppages.unit_setup_pages;
 
-import org.example.stepDefs.Hooks;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
@@ -15,9 +15,7 @@ import java.util.List;
 public class P08_2_GroupOfUnitsPopUp {
 
 
-    public P08_2_GroupOfUnitsPopUp() {
-        PageFactory.initElements(Hooks.driver, this);
-    }
+
 
     public P08_2_GroupOfUnitsPopUp(WebDriver driver) {
         PageFactory.initElements(driver, this);

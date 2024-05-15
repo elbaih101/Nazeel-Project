@@ -5,6 +5,7 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.example.DriverManager;
 import org.example.Utils;
 import org.example.enums.Vouchers;
 import org.example.pages.P12_SMSLogPage;
@@ -32,7 +33,7 @@ import java.util.Random;
 
 public class D06_DigitalPayment {
 
-    final WebDriver driver = Hooks.driver;
+    final WebDriver driver = DriverManager.getDriver();
     final SoftAssert asrt = new SoftAssert();
     final WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
     final P02_DashBoardPage dashBoardPage = new P02_DashBoardPage(driver);

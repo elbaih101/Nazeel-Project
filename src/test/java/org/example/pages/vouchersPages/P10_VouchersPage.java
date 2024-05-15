@@ -4,7 +4,7 @@ import org.apache.commons.lang.NullArgumentException;
 
 import org.example.enums.Vouchers;
 import org.example.pages.mutlipurposes.P00_multiPurposes;
-import org.example.stepDefs.Hooks;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -25,12 +25,7 @@ public class P10_VouchersPage {
     final WebDriverWait wait;
     final Actions actions;
 
-    public P10_VouchersPage() {
-        PageFactory.initElements(Hooks.driver, this);
-        this.driver = Hooks.driver;
-        wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        actions = new Actions(driver);
-    }
+
 
     public P10_VouchersPage(WebDriver driver) {
         PageFactory.initElements(driver, this);

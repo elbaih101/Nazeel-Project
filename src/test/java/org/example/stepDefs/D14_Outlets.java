@@ -9,10 +9,7 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.apache.commons.lang3.StringUtils;
-import org.example.API;
-import org.example.CustomAssert;
-import org.example.Nazeel_Calculations;
-import org.example.Utils;
+import org.example.*;
 import org.example.pages.P02_DashBoardPage;
 import org.example.pages.P38_Outlets;
 import org.example.pages.mutlipurposes.P00_multiPurposes;
@@ -39,7 +36,8 @@ import java.util.HashMap;
 import java.util.List;
 
 public class D14_Outlets {
-    WebDriver driver = Hooks.driver;
+
+    WebDriver driver = DriverManager.getDriver();
     WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(2));
     JavascriptExecutor js = (JavascriptExecutor) driver;
     //Actions actions = new Actions(driver);
@@ -744,7 +742,6 @@ public class D14_Outlets {
             ) {
                 if (i.getAsJsonObject().get("priceIsUserDefined").getAsBoolean()) {
                     userDefinedItem = i.getAsJsonObject();
-                    continue;
                 }
             }
             asrt.assertFalse(userDefinedItem==null,"no user defined items");

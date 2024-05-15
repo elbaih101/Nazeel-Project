@@ -5,6 +5,7 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.example.DriverManager;
 import org.example.Utils;
 import org.example.pages.P02_DashBoardPage;
 import org.example.pages.customers.P22_Corporates;
@@ -29,7 +30,8 @@ import java.util.List;
 import java.util.Random;
 
 public class D11_Customers {
-    WebDriver driver = Hooks.driver;
+
+    WebDriver driver = DriverManager.getDriver();
 
 
     final SoftAssert asrt = new SoftAssert();
