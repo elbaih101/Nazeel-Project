@@ -329,8 +329,7 @@ public class Utils {
             case Chrome -> {
                 WebDriverManager.chromedriver().setup();
                 ChromeOptions op = new ChromeOptions();
-
-                op.addArguments("start-maximized", "--ignore-certificate-errors", "--ignore-urlfetcher-cert-requests", "--guest");
+                op.addArguments("start-maximized", "--ignore-certificate-errors", "--ignore-urlfetcher-cert-requests"/*, "--guest"*/);
                 if (mode.equals(Driver_Mode.Headless))
                     op.addArguments("headless");
                 driver = new ChromeDriver(op);
