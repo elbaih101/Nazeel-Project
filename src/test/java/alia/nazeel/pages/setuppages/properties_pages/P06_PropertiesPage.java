@@ -1,6 +1,7 @@
 package alia.nazeel.pages.setuppages.properties_pages;
 
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -18,4 +19,8 @@ public class P06_PropertiesPage {
     public WebElement newPropertyButton;
     @FindBy(xpath = "//kendo-grid-list//td[@data-kendo-grid-column-index=\"0\"]")
     public List<WebElement> propertiesNames;
+
+    public WebElement propertyCode(WebElement property){
+      return   property.findElement(By.xpath("..//td[@data-kendo-grid-column-index=\"1\"]"));
+    }
 }

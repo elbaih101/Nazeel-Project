@@ -5,6 +5,7 @@ import alia.nazeel.pages.P02_DashBoardPage;
 import alia.nazeel.pages.mutlipurposes.P00_multiPurposes;
 import alia.nazeel.pages.setuppages.P05_SetupPage;
 import alia.nazeel.pages.setuppages.properties_pages.*;
+import alia.nazeel.pojos.JsonDataTools;
 import alia.nazeel.tools.DriverManager;
 import com.github.javafaker.Faker;
 import io.cucumber.java.en.And;
@@ -45,17 +46,22 @@ public class D02_CreateProperty {
 
     @Given("Logging in with end user {string} {string} {string}")
     public void loggingInWithEndUser(String username, String password, String acc) {
-        Hooks.endUserLogin(driver,username, password, acc);
+        Hooks.endUserLogin(driver, username, password, acc);
     }
 
     @Given("Logging in with superuser")
     public void loggingInWithSuperuser() {
-        Hooks.superUserLogin(driver,"baih", "Aa@123456");
+        Hooks.superUserLogin(driver, "baih", "Aa@123456");
     }
 
+    String createdProperty = JsonDataTools.getValueFromJsonFile("src/main/resources/testdata/property.json", "propertyName");
 
     @And("Select Property {string}")
     public void selectProperty(String propertyName) throws InterruptedException {
+
+        if (propertyName.equalsIgnoreCase("created"))
+            propertyName = createdProperty;
+
         /// find property ///
         try {
             wait.until(ExpectedConditions.visibilityOf(loginPage.propertyNameField));
@@ -130,6 +136,7 @@ public class D02_CreateProperty {
 
     @When("click on new propery button")
     public void clickOnNewProperyButton() {
+        new P00_multiPurposes(driver).waitLoading();
         propertiesPage.newPropertyButton.click();
     }
 
@@ -207,8 +214,13 @@ public class D02_CreateProperty {
     @Then("Check new property is created")
     public void checkNewPropertyIsCreated() {
         wait.until(ExpectedConditions.invisibilityOf(summaryPage.saveButton));
+        asrt.assertTrue(propertiesPage.propertiesNames.stream().anyMatch(element -> {
+            boolean contains = element.getText().contains(propertyName);
+            if (contains)
+                JsonDataTools.writeValueToJsonFile("src/main/resources/testdata/property.json", "propertyName", propertiesPage.propertyCode(element).getText().trim());
+            return contains;
+        }));
 
-        asrt.assertTrue(propertiesPage.propertiesNames.stream().anyMatch(element -> element.getText().contains(propertyName)));
         asrt.assertAll();
     }
 

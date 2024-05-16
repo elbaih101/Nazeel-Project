@@ -1,8 +1,9 @@
+@Group1
 Feature: Property Rules
 
   Background: logging in
     Given Logging in with superuser
-    And Select Property "P01385"
+    And Select Property "created"
 
   @Reservation_Rules
   Rule: Reservations Rules

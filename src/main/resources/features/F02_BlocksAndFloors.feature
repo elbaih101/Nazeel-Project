@@ -1,8 +1,8 @@
-@Regression @Sprint36 @Blocks_Floors
+@Regression @Sprint36 @Blocks_Floors @Group1
 Feature: Blocks And Floors
   Background: selecting property
     Given Logging in with superuser
-    And Select Property "P01385"
+    And Select Property "created"
   Rule: blocks
     Background: going to blocks Page
       And go to Blocks Page

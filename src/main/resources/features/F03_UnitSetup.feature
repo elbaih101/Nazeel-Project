@@ -1,9 +1,9 @@
-@Regression @Sprint36
+@Regression @Sprint36 @Group1
 Feature: Unit Setup
 
   Background: selecting property
     Given Logging in with superuser
-    And Select Property "P01385"
+    And Select Property "created"
 # masterdata unit Type Customization ##
   Rule:masterdata unit Type Customization
     Background: going to units master data
