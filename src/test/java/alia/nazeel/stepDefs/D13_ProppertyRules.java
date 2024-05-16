@@ -24,15 +24,15 @@ public class D13_ProppertyRules {
 
 
 
-    WebDriver driver = DriverManager.getDriver();
-    JavascriptExecutor js = (JavascriptExecutor) driver;
+    final WebDriver driver = DriverManager.getDriver();
+    final JavascriptExecutor js = (JavascriptExecutor) driver;
     final CustomAssert asrt = new CustomAssert();
     //    final WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
-    P02_DashBoardPage dashBoardPage = new P02_DashBoardPage(driver);
-    P05_SetupPage setupPage = new P05_SetupPage(driver);
-    P27_ReservationRules reservationRules = new P27_ReservationRules(driver);
-    P33_Penalties penalties = new P33_Penalties(driver);
-    String sucMsg = "Saved Successfully";
+    final P02_DashBoardPage dashBoardPage = new P02_DashBoardPage(driver);
+    final P05_SetupPage setupPage = new P05_SetupPage(driver);
+    final P27_ReservationRules reservationRules = new P27_ReservationRules(driver);
+    final P33_Penalties penalties = new P33_Penalties(driver);
+    final String sucMsg = "Saved Successfully";
 
     @Given("go to Reservation Rules Page")
     public void goToReservationRulesPage() {
@@ -221,7 +221,7 @@ public class D13_ProppertyRules {
     }
 
 
-    HashMap<String, String> penaltyMap = new HashMap<>();
+    final HashMap<String, String> penaltyMap = new HashMap<>();
 
     private void setPenaltyMap(String name, String categ, String type, String amount, String calcOf, String desc, String state) {
         if (!name.isEmpty())
@@ -315,7 +315,7 @@ public class D13_ProppertyRules {
 
         if (!state.isEmpty()) {
             if (state.equalsIgnoreCase("new"))
-                System.out.println("");
+                System.out.println();
             else if ((penalties.statusSwitch.getAttribute("class").contains("k-switch-off") && state.equalsIgnoreCase("active")) || (penalties.statusSwitch.getAttribute("class").contains("k-switch-on") && state.equalsIgnoreCase("inactive")))
                 penalties.statusSwitch.click();
         }

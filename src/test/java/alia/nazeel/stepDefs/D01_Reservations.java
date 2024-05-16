@@ -10,10 +10,8 @@ import io.cucumber.java.en.When;
 import alia.nazeel.tools.CustomAssert;
 import alia.nazeel.tools.DriverManager;
 import alia.nazeel.tools.Utils;
-
 import alia.nazeel.pages.P02_DashBoardPage;
 import alia.nazeel.pages.mutlipurposes.P00_multiPurposes;
-import alia.nazeel.pages.reservations.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -27,7 +25,7 @@ import java.util.List;
 
 public class D01_Reservations {
 
-    WebDriver driver = DriverManager.getDriver();
+    final WebDriver driver = DriverManager.getDriver();
 
 
     final P02_DashBoardPage homePage = new P02_DashBoardPage(driver);
@@ -36,9 +34,9 @@ public class D01_Reservations {
     final WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
     final P03_5_UnitSelectionPopup unitSelectionPopup = new P03_5_UnitSelectionPopup(driver);
     final P03_6_EndReservationPopUp endReservationPopUp = new P03_6_EndReservationPopUp(driver);
-    P03_ReservationsPage reservationsPage = new P03_ReservationsPage(driver);
+    final P03_ReservationsPage reservationsPage = new P03_ReservationsPage(driver);
     final CustomAssert asrt = new CustomAssert();
-    Actions action = new Actions(driver);
+    final Actions action = new Actions(driver);
 
 
     @And("open reservations Page")
@@ -372,7 +370,7 @@ public class D01_Reservations {
         }
         financialPage.discountAmountField.click();
         for (String discType : discountsTypes) {
-            financialPage.discountsList().stream().filter(d -> d.getText().equalsIgnoreCase(discType)).findFirst().orElse(null).click();
+            financialPage.discountsList().stream().filter(d -> d.getText().equalsIgnoreCase(discType)).findFirst().orElseThrow().click();
             Double discountAmount = Nazeel_Calculations.getDiscountAmount(financialPage.reservationRent(), discountValue, discType);
             Double reservationRentTaxes = Nazeel_Calculations.reservationRentTaxes(financialPage.reservationRent(), discountAmount, discType, appliedTaxes);
             Double subTotal = discType.contains("From Balance") ? financialPage.reservationRent() : financialPage.reservationRent() - discountAmount;

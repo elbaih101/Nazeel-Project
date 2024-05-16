@@ -31,16 +31,16 @@ import java.util.Random;
 
 public class D11_Customers {
 
-    WebDriver driver = DriverManager.getDriver();
+    final WebDriver driver = DriverManager.getDriver();
 
 
     final SoftAssert asrt = new SoftAssert();
     final WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
-    P02_DashBoardPage dashBoardPage = new P02_DashBoardPage(driver);
-    P22_Corporates corporates = new P22_Corporates(driver);
-    P34_Vendors vendors = new P34_Vendors(driver);
-    P35_Guests guests = new P35_Guests(driver);
-    P00_3_CorporateSelectionPopUp selectCorpPopup = new P00_3_CorporateSelectionPopUp(driver);
+    final P02_DashBoardPage dashBoardPage = new P02_DashBoardPage(driver);
+    final P22_Corporates corporates = new P22_Corporates(driver);
+    final P34_Vendors vendors = new P34_Vendors(driver);
+    final P35_Guests guests = new P35_Guests(driver);
+    final P00_3_CorporateSelectionPopUp selectCorpPopup = new P00_3_CorporateSelectionPopUp(driver);
 
 
     @And("go to corporates page")
@@ -194,7 +194,7 @@ public class D11_Customers {
         dashBoardPage.vendorssLink.click();
     }
 
-    HashMap<String, String> vendorMap = new HashMap<>();
+    final HashMap<String, String> vendorMap = new HashMap<>();
 
     private void setVendorMap(String name, String phone, String email, String vat, String cR, String pCode, String desc, String address, String state) {
         if (!phone.isEmpty())
@@ -381,7 +381,7 @@ public class D11_Customers {
     }
 
 
-    HashMap<String, String> guestMap = new HashMap<>();
+    final HashMap<String, String> guestMap = new HashMap<>();
 
     private void setGuestMap(String fName, String lName, String phone, String nat, String idType, String idNum, String state) {
         if (!phone.isEmpty())
@@ -718,7 +718,7 @@ public class D11_Customers {
     @Then("Check all guests shown {string} as {string}")
     public void checkAllGuestsShownAs(String filter, String value) {
         new P00_multiPurposes(driver).waitLoading();
-        List<WebElement> theList = new ArrayList<>();
+        List<WebElement> theList ;
         switch (filter.toLowerCase()) {
             case "status" -> {
                 theList = guests.statuses;

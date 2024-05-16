@@ -1,4 +1,4 @@
-import org.apache.jmeter.services.FileServer;
+import org.apache.jmeter.services.FileServer
 
 
 def json = new groovy.json.JsonSlurper().parse(prev.getResponseData())

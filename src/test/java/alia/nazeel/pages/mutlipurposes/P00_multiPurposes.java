@@ -18,8 +18,8 @@ public class P00_multiPurposes {
     final WebDriver driver;
     final WebDriverWait wait;
     final Actions actions;
-    JavascriptExecutor js;
-    CustomAssert asrt;
+    final JavascriptExecutor js;
+    final CustomAssert asrt;
 
     public P00_multiPurposes(WebDriver driver) {
         PageFactory.initElements(driver, this);
@@ -140,7 +140,7 @@ public class P00_multiPurposes {
     public WebElement popUp;
 
     public WebElement closeButton() {
-        List<WebElement> buttons = new ArrayList<>();
+        List<WebElement> buttons ;
         buttons = popUp.findElements(By.xpath(".//button[contains(text(),\"Close\")]"));
         if (buttons.isEmpty()) {
             buttons = popUp.findElements(By.xpath(".//button[contains(@class,\"n-button--danger-border\")]"));

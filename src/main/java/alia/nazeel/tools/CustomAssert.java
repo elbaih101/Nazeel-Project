@@ -20,8 +20,8 @@ public class CustomAssert extends SoftAssert {
     /**
      * Check Each string of
      *
-     * @param a
-     * @param b
+     * @param a Ist of Strins to combare
+     * @param b the string to compare with
      */
     public void AssertContains(List<String> a, String b) {
         int matches = 0;
@@ -32,6 +32,7 @@ public class CustomAssert extends SoftAssert {
                 matches++;
         }
         if (matches == 0)
+            //noinspection DataFlowIssue
             assertTrue(false, "Expected: " + b + "\nActual: " + currentItem);
     }
 

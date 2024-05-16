@@ -17,11 +17,11 @@ import java.util.List;
 
 @SuppressWarnings("unused")
 public class P03_1_ReservationMainDataPage {
-     WebDriver driver;
-     WebDriverWait wait;
-     Actions actions;
+     final WebDriver driver;
+     final WebDriverWait wait;
+     final Actions actions;
 
-    JavascriptExecutor js;
+    final JavascriptExecutor js;
 
 
 

@@ -35,18 +35,18 @@ import java.util.List;
 
 public class D12_Financials {
 
-    WebDriver driver = DriverManager.getDriver();
+    final WebDriver driver = DriverManager.getDriver();
 
     // JavascriptExecutor js = (JavascriptExecutor) driver;
     final SoftAssert asrt = new SoftAssert();
     final WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
-    P02_DashBoardPage dashBoardPage = new P02_DashBoardPage(driver);
-    P05_SetupPage setupPage = new P05_SetupPage(driver);
-    P25_TaxesAndFees taxesAndFees = new P25_TaxesAndFees(driver);
-    P03_7_TaxesPopUp taxesPopUp = new P03_7_TaxesPopUp(driver);
-    P26_CostCenter costCenter = new P26_CostCenter(driver);
-    P28_DiscountTypes discountTypes = new P28_DiscountTypes(driver);
-    P29_Currencies currencies = new P29_Currencies(driver);
+    final P02_DashBoardPage dashBoardPage = new P02_DashBoardPage(driver);
+    final P05_SetupPage setupPage = new P05_SetupPage(driver);
+    final P25_TaxesAndFees taxesAndFees = new P25_TaxesAndFees(driver);
+    final P03_7_TaxesPopUp taxesPopUp = new P03_7_TaxesPopUp(driver);
+    final P26_CostCenter costCenter = new P26_CostCenter(driver);
+    final P28_DiscountTypes discountTypes = new P28_DiscountTypes(driver);
+    final P29_Currencies currencies = new P29_Currencies(driver);
 
     @Given("open Taxes and Fees Page")
     public void openTaxesAndFeesPage() {
@@ -64,7 +64,7 @@ public class D12_Financials {
         taxesAndFees.submitButon.click();
     }
 
-    HashMap<String, String> taxMap = new HashMap<>();
+    final HashMap<String, String> taxMap = new HashMap<>();
 
     public void fillTaxData(String type, String name, String method, String amount, String aplOn, String sDate, String eDate, String chrgOn) {
         new P00_multiPurposes(driver).waitLoading();
@@ -161,7 +161,7 @@ public class D12_Financials {
 
     }
 
-    DateTimeFormatter dateFormater = DateTimeFormat.forPattern("dd/MM/yyyy");
+    final DateTimeFormatter dateFormater = DateTimeFormat.forPattern("dd/MM/yyyy");
 
     @And("Check the type {string}  with name {string} and method {string} and amount {string} applied on {string} and start date {string} end date {string} Charged on {string} status {string}")
     public void checkTheTypeWithNameAndMethodAndAmountAppliedOnAndStartDateEndDateChargedOn(String type, String name, String method, String amount, String aplOn, String sDate, String eDate, String chrgOn, String stat) {
@@ -296,7 +296,7 @@ public class D12_Financials {
         setupPage.costCentersLink.click();
     }
 
-    HashMap<String, String> costMap = new HashMap<>();
+    final HashMap<String, String> costMap = new HashMap<>();
 
     @When("adding new Cost Center with name {string} category {string}")
     public void addingNewCostCenter(String name, String categ) {
@@ -538,7 +538,7 @@ public class D12_Financials {
         discountTypes.confirmDeleteButton.click();
     }
 
-    List<String> discountsListNames = new ArrayList<>();
+    final List<String> discountsListNames = new ArrayList<>();
 
     @When("replacing the order of the first record with the last")
     public void replacingTheOrderOfTheFirstRecordWithTheLast() {
@@ -571,7 +571,7 @@ public class D12_Financials {
 
     }
 
-    HashMap<String, String> currencyMap = new HashMap<>();
+    final HashMap<String, String> currencyMap = new HashMap<>();
 
     private void setCurrency(String currName, String symbol, String exRate, String isDef, String state) {
         currencyMap.put("currName", currName);

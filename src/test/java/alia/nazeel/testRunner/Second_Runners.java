@@ -5,6 +5,7 @@ import io.cucumber.testng.CucumberOptions;
 import org.testng.annotations.DataProvider;
 
 
+@SuppressWarnings("EmptyMethod")
 @CucumberOptions
         (
 

@@ -14,12 +14,12 @@ import java.time.Duration;
 
 public class D00_multipurpose {
 
-    WebDriver driver = DriverManager.getDriver();
+    final WebDriver driver = DriverManager.getDriver();
 
     JavascriptExecutor js = (JavascriptExecutor) driver;
     final SoftAssert asrt = new SoftAssert();
     final WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
-    P00_multiPurposes multiPurposes=new P00_multiPurposes(driver);
+    final P00_multiPurposes multiPurposes=new P00_multiPurposes(driver);
 
 
     @And("Close the open popup")

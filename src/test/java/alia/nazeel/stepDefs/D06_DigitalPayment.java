@@ -43,10 +43,10 @@ public class D06_DigitalPayment {
     final P12_SMSLogPage smsLogPage = new P12_SMSLogPage(driver);
     final P00_multiPurposes multiPurposes = new P00_multiPurposes(driver);
     final P00_1_PaytabsExternalPage paytabsExternalPage = new P00_1_PaytabsExternalPage(driver);
-    P03_2_ReservationFinancialPage p032ReservationFinancialPage = new P03_2_ReservationFinancialPage(driver);
+    final P03_2_ReservationFinancialPage p032ReservationFinancialPage = new P03_2_ReservationFinancialPage(driver);
 
     final Actions actions = new Actions(driver);
-    JavascriptExecutor js = (JavascriptExecutor) driver;
+    final JavascriptExecutor js = (JavascriptExecutor) driver;
 
     @And("go to {string} Vouchers Page")
     public void goToDesiredVouchersPage(String vType) {

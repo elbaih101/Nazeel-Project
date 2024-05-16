@@ -27,7 +27,7 @@ public class Nazeel_Calculations {
                     taxValue = taxValue + tax.getValue();
                 } else {
                     if (tax.getAppliedfor().contains("Lodging")) {
-                        taxPercentage = taxPercentage + ((appliedTaxes.stream().filter(at -> at.getName().contains("Lodging")).findAny().orElse(null).getValue() * 0.01) * (tax.getValue() * 0.01));
+                        taxPercentage = taxPercentage + ((appliedTaxes.stream().filter(at -> at.getName().contains("Lodging")).findAny().orElseThrow().getValue() * 0.01) * (tax.getValue() * 0.01));
                     } else {
                         taxPercentage = taxPercentage + (tax.getValue() * 0.01);
                     }

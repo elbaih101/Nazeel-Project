@@ -10,13 +10,16 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.edge.EdgeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.safari.SafariDriver;
+import org.openqa.selenium.safari.SafariOptions;
 
 public class DriverManager {
     private static final ThreadLocal<WebDriver> driverThreadLocal = new ThreadLocal<>();
 
     /**
      * retreeaves the thread webDriver
+     *
      * @return WebDriver the local Thread WebDriver
      */
     public static WebDriver getDriver() {
@@ -25,6 +28,7 @@ public class DriverManager {
 
     /**
      * stores  the driver provided in its local thread reference
+     *
      * @param driver WebDriver inistantiated in the thread
      */
     public static void setDriver(WebDriver driver) {
@@ -42,11 +46,12 @@ public class DriverManager {
 
     /**
      * this function initialize a local driver of any type provided then it stores it in its local thread so its thread safe
+     *
      * @param driverName enum Drivers driver name provided from list of drivers
-     * @param mode enum Driver_Mode the running mode of the driver
+     * @param mode       enum Driver_Mode the running mode of the driver
      */
     public static void initializeDriver(Drivers driverName, Driver_Mode mode) {
-        WebDriver driver = null;
+        WebDriver driver ;
         switch (driverName) {
             case Chrome -> {
                 WebDriverManager.chromedriver().setup();
@@ -65,8 +70,17 @@ public class DriverManager {
                 driver = new EdgeDriver(op);
             }
             case FireFox -> {
+                WebDriverManager.firefoxdriver().setup();
+                FirefoxOptions op = new FirefoxOptions();
+                op.addArguments("start-maximized", "--ignore-certificate-errors", "--ignore-urlfetcher-cert-requests", "--guest");
+                if (mode.equals(Driver_Mode.Headless))
+                    op.addArguments("headless");
+                driver = new FirefoxDriver(op);
             }
             case Safari -> {
+                WebDriverManager.safaridriver().setup();
+                SafariOptions op = new SafariOptions();
+                driver = new SafariDriver(op);
             }
             default -> throw new IllegalStateException("Unexpected value: " + driverName);
         }
@@ -83,9 +97,9 @@ public class DriverManager {
             driverType = Drivers.Chrome;
         } else if (driver instanceof EdgeDriver) {
             driverType = Drivers.Edge;
-        } else if (driver instanceof FirefoxDriver){
+        } else if (driver instanceof FirefoxDriver) {
             driverType = Drivers.FireFox;
-        } else if (driver instanceof SafariDriver){
+        } else if (driver instanceof SafariDriver) {
             driverType = Drivers.Safari;
         }
 

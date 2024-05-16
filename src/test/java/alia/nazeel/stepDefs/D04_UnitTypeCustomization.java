@@ -31,11 +31,11 @@ public class D04_UnitTypeCustomization {
     final P02_DashBoardPage dashBoardPage = new P02_DashBoardPage(driver);
     final P05_SetupPage setupPagec = new P05_SetupPage(driver);
     final P07_UnitTypeCustomization typeCustomization = new P07_UnitTypeCustomization(driver);
-    P14_MasterData masterData = new P14_MasterData(driver);
-    P15_MasterUnitsTypes masterUnitsTypes = new P15_MasterUnitsTypes(driver);
+    final P14_MasterData masterData = new P14_MasterData(driver);
+    final P15_MasterUnitsTypes masterUnitsTypes = new P15_MasterUnitsTypes(driver);
     String existantUnitType;
-    Faker faker = new Faker();
-    JavascriptExecutor js = (JavascriptExecutor) driver;
+    final Faker faker = new Faker();
+    final JavascriptExecutor js = (JavascriptExecutor) driver;
 
     @And("go to unit type customization page")
 

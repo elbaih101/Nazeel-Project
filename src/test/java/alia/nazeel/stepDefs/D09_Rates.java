@@ -23,14 +23,14 @@ import java.util.Map;
 
 public class D09_Rates {
 
-    WebDriver driver = DriverManager.getDriver();
+    final WebDriver driver = DriverManager.getDriver();
 
 
     final SoftAssert asrt = new SoftAssert();
     final WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
-    P02_DashBoardPage dashBoardPage = new P02_DashBoardPage(driver);
-    P05_SetupPage setupPage = new P05_SetupPage(driver);
-    P09_RatesPages ratesPages = new P09_RatesPages(driver);
+    final P02_DashBoardPage dashBoardPage = new P02_DashBoardPage(driver);
+    final P05_SetupPage setupPage = new P05_SetupPage(driver);
+    final P09_RatesPages ratesPages = new P09_RatesPages(driver);
 
 
     @Given("go to Base Rate Page")
@@ -92,7 +92,7 @@ public class D09_Rates {
 
     }
 
-    Map<String, Integer> week = Map.of("sat", 1, "sun", 2, "mon", 3, "Tue", 4, "wen", 5, "thu", 6, "fri", 7);
+    final Map<String, Integer> week = Map.of("sat", 1, "sun", 2, "mon", 3, "Tue", 4, "wen", 5, "thu", 6, "fri", 7);
 
     @When("selecting week day {string}")
     public void selectingWeekDay(String day) {

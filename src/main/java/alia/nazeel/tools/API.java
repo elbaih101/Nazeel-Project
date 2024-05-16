@@ -15,7 +15,7 @@ import java.util.concurrent.atomic.AtomicReference;
  * Handling APi Requests and Responses senta nd receaved from the driver to ease th elive of the auto generated vuchers and invoices to insure the created voucher number is the same from the responses as the front end
  */
 public class API {
-    AtomicReference<Network.GetResponseBodyResponse> asyncResponse = new AtomicReference<>(null);
+    final AtomicReference<Network.GetResponseBodyResponse> asyncResponse = new AtomicReference<>(null);
     DevTools devTools = null;
 
     public void asyncRequestListener(EdgeDriver driver, String requestUrl) {
@@ -57,11 +57,11 @@ public class API {
 
     public String getResponseBody(WebDriver driver, String requestUrl, Runnable requestTrigger) {
         int timeout = 10;
-        ChromiumDriver driver1 = null;
-        if (driver instanceof ChromeDriver)
-             driver1=(ChromeDriver)driver;
-        else if (driver instanceof EdgeDriver)
-            driver1=(EdgeDriver)driver;
+        ChromiumDriver driver1 = (ChromiumDriver) driver;
+//        if (driver instanceof ChromeDriver)
+//             driver1=(ChromeDriver)driver;
+//        else if (driver instanceof EdgeDriver)
+//            driver1=(EdgeDriver)driver;
 
         devTools = driver1.getDevTools();
         devTools.createSession();

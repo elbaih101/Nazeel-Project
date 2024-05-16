@@ -14,7 +14,7 @@ import java.util.List;
 
 
 public class P06_2_LocationDataPage {
-    WebDriverWait wait;
+    final WebDriverWait wait;
     public P06_2_LocationDataPage(WebDriver driver){
         PageFactory.initElements(driver,this);
         wait = new WebDriverWait(driver, Duration.ofSeconds(10));

@@ -35,9 +35,9 @@ import java.util.*;
 
 public class D08_Vouchers {
 
-    WebDriver driver = DriverManager.getDriver();
+    final WebDriver driver = DriverManager.getDriver();
 
-    JavascriptExecutor js = (JavascriptExecutor) driver;
+    final JavascriptExecutor js = (JavascriptExecutor) driver;
 
 
     final SoftAssert asrt = new SoftAssert();
@@ -103,7 +103,7 @@ public class D08_Vouchers {
         }
     }
 
-    static List<VouchersMap> vouchersMaps = new ArrayList<>();
+    static final List<VouchersMap> vouchersMaps = new ArrayList<>();
 
     @When("go to Payment Vouchers Page")
     public void goToPaymentVouchersPage() {

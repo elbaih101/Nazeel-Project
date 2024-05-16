@@ -11,7 +11,7 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.apache.commons.lang3.StringUtils;
 import alia.nazeel.pages.setuppages.P05_SetupPage;
-import alia.nazeel.pages.setuppages.unit_setup_pages.*;
+
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -31,14 +31,14 @@ public class D05_UnitsSetup {
     final P08_UnitsSetupPage unitsSetupPage = new P08_UnitsSetupPage(driver);
     final P08_1_NewUnitPage newUnitPage = new P08_1_NewUnitPage(driver);
     final P08_2_GroupOfUnitsPopUp groupOfUnitsPopUp = new P08_2_GroupOfUnitsPopUp(driver);
-    P23_MergeSettings mergeSettings = new P23_MergeSettings(driver);
-    P24_Amenities amenities = new P24_Amenities(driver);
+    final P23_MergeSettings mergeSettings = new P23_MergeSettings(driver);
+    final P24_Amenities amenities = new P24_Amenities(driver);
     final Faker faker = new Faker();
     String randomUnitNum;
     int numberofNewUnits;
     final Actions actions = new Actions(driver);
     final JavascriptExecutor js = (JavascriptExecutor) driver;
-    List<String> tobemergedUnits = new ArrayList<>();
+    final List<String> tobemergedUnits = new ArrayList<>();
 
     @And("go to unit Setup page")
     public void goToUnitSetupPage() {
@@ -646,7 +646,10 @@ public class D05_UnitsSetup {
             }
 
             case null, default ->
-                    mergeSettings.unitA().stream().filter(unit -> unit.getText().contains(unitA)).findAny().orElseThrow().click();
+                    mergeSettings.unitA().stream().filter(unit -> {
+                        assert unitA != null;
+                        return unit.getText().contains(unitA);
+                    }).findAny().orElseThrow().click();
 
         }
         switch (unitB) {
@@ -659,7 +662,10 @@ public class D05_UnitsSetup {
             }
 
             case null, default ->
-                    mergeSettings.unitB().stream().filter(unit -> unit.getText().contains(unitB)).findAny().orElseThrow().click();
+                    mergeSettings.unitB().stream().filter(unit -> {
+                        assert unitB != null;
+                        return unit.getText().contains(unitB);
+                    }).findAny().orElseThrow().click();
 
         }
 
@@ -690,7 +696,7 @@ public class D05_UnitsSetup {
         asrt.assertAll();
     }
 
-    List<String> retreavedMergeUnits = new ArrayList<>();
+    final List<String> retreavedMergeUnits = new ArrayList<>();
 
     @Given("delete any merge setting and note the related units")
     public void deleteAnyMergeSettingAndNoteTheRelatedUnits() {
@@ -752,7 +758,7 @@ public class D05_UnitsSetup {
         setupPagec.amenitiesLink.click();
     }
 
-    List<String> retreavedAmenities = new ArrayList<>();
+    final List<String> retreavedAmenities = new ArrayList<>();
 
     @When("adding new amenity")
     public void addingNewAmenity() {

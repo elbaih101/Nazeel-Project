@@ -22,13 +22,13 @@ import java.util.List;
 
 public class D10_Supscriptions {
 
-    WebDriver driver = DriverManager.getDriver();
+    final WebDriver driver = DriverManager.getDriver();
 
     final SoftAssert asrt = new SoftAssert();
     final WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
-    P02_DashBoardPage dashBoardPage = new P02_DashBoardPage(driver);
-    P14_MasterData masterData = new P14_MasterData(driver);
-    P21_SubscriptionPrices subscriptionPrices = new P21_SubscriptionPrices(driver);
+    final P02_DashBoardPage dashBoardPage = new P02_DashBoardPage(driver);
+    final P14_MasterData masterData = new P14_MasterData(driver);
+    final P21_SubscriptionPrices subscriptionPrices = new P21_SubscriptionPrices(driver);
 
 
     @And("go to subscriptions prices page")

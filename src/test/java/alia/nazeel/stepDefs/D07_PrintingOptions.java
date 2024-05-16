@@ -18,7 +18,7 @@ import java.time.Duration;
 
 public class D07_PrintingOptions {
 
-    WebDriver driver = DriverManager.getDriver();
+    final WebDriver driver = DriverManager.getDriver();
 
 
     final SoftAssert asrt = new SoftAssert();

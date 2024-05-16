@@ -27,6 +27,7 @@ import org.testng.annotations.DataProvider;
 
 public class Runners extends AbstractTestNGCucumberTests {
 //   to run in parallel
+    @SuppressWarnings({"DefaultAnnotationParam", "EmptyMethod"})
     @Override
     @DataProvider(parallel = false)
     public Object[][] scenarios(){

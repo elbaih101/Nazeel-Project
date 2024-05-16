@@ -17,7 +17,6 @@ import alia.nazeel.pages.mutlipurposes.P00_multiPurposes;
 import alia.nazeel.pages.setuppages.P05_SetupPage;
 import alia.nazeel.pages.setuppages.outlets.P30_OutletsSetup;
 import alia.nazeel.pages.setuppages.outlets.P31_OutletCategories;
-import alia.nazeel.tools.*;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.openqa.selenium.JavascriptExecutor;
@@ -37,18 +36,18 @@ import java.util.List;
 
 public class D14_Outlets {
 
-    WebDriver driver = DriverManager.getDriver();
-    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(2));
-    JavascriptExecutor js = (JavascriptExecutor) driver;
+    final WebDriver driver = DriverManager.getDriver();
+    final WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(2));
+    final JavascriptExecutor js = (JavascriptExecutor) driver;
     //Actions actions = new Actions(driver);
     final CustomAssert asrt = new CustomAssert();
     //  final WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
-    P02_DashBoardPage dashBoardPage = new P02_DashBoardPage(driver);
-    P05_SetupPage setupPage = new P05_SetupPage(driver);
-    P30_OutletsSetup outletsSetup = new P30_OutletsSetup(driver);
-    P31_OutletCategories categories = new P31_OutletCategories(driver);
-    P32_OutletItems items = new P32_OutletItems(driver);
-    P38_Outlets outlets = new P38_Outlets(driver);
+    final P02_DashBoardPage dashBoardPage = new P02_DashBoardPage(driver);
+    final P05_SetupPage setupPage = new P05_SetupPage(driver);
+    final P30_OutletsSetup outletsSetup = new P30_OutletsSetup(driver);
+    final P31_OutletCategories categories = new P31_OutletCategories(driver);
+    final P32_OutletItems items = new P32_OutletItems(driver);
+    final P38_Outlets outlets = new P38_Outlets(driver);
 
     @Given("go to outlets Setup Page")
     public void goToOutletsSetupPage() {
@@ -64,7 +63,7 @@ public class D14_Outlets {
         outletsSetup.submitButton.click();
     }
 
-    HashMap<String, String> outletMap = new HashMap<>();
+    final HashMap<String, String> outletMap = new HashMap<>();
 
     private void setOutletMap(String opState, String code, String name, String desc, String state) {
         if (!opState.isEmpty())
@@ -220,7 +219,7 @@ public class D14_Outlets {
         categories.submitButton.click();
     }
 
-    HashMap<String, String> categMap = new HashMap<>();
+    final HashMap<String, String> categMap = new HashMap<>();
 
     private void setCategMap(String outlet, String ntmp, String name, String desc, String state) {
         if (!outlet.isEmpty())
@@ -366,7 +365,7 @@ public class D14_Outlets {
         setupPage.itemsLink.click();
     }
 
-    HashMap<String, String> itemMap = new HashMap<>();
+    final HashMap<String, String> itemMap = new HashMap<>();
 
     private void setItemMap(String name, String type, String outlet, String categ, String desc, String price, String tax, String state) {
         if (!outlet.isEmpty())

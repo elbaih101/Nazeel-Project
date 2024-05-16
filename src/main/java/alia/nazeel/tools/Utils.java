@@ -1,24 +1,13 @@
 package alia.nazeel.tools;
 
 import io.cucumber.java.Scenario;
-import io.github.bonigarcia.wdm.WebDriverManager;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
-import alia.nazeel.enums.Driver_Mode;
-import alia.nazeel.enums.Drivers;
 import org.openqa.selenium.*;
-import org.openqa.selenium.Dimension;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.edge.EdgeOptions;
-
 import org.openqa.selenium.interactions.Action;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.Select;
-
-import java.awt.*;
-import java.awt.event.KeyEvent;
 import java.io.File;
 import java.time.Duration;
 import java.util.ArrayList;
@@ -321,64 +310,8 @@ public class Utils {
         }
     }
 
-    /**
-     * starts a driver in the headless mode
-     */
-    public static WebDriver setDriver(Drivers driverName, Driver_Mode mode) {
-        WebDriver driver = null;
-        switch (driverName) {
-            case Chrome -> {
-                WebDriverManager.chromedriver().setup();
-                ChromeOptions op = new ChromeOptions();
-                op.addArguments("start-maximized", "--ignore-certificate-errors", "--ignore-urlfetcher-cert-requests"/*, "--guest"*/);
-                if (mode.equals(Driver_Mode.Headless))
-                    op.addArguments("headless");
-                driver = new ChromeDriver(op);
-            }
-            case Edge -> {
-                WebDriverManager.edgedriver().setup();
-                EdgeOptions op = new EdgeOptions();
-                op.addArguments("start-maximized", "--ignore-certificate-errors", "--ignore-urlfetcher-cert-requests", "--guest");
-                if (mode.equals(Driver_Mode.Headless))
-                    op.addArguments("headless");
-                driver = new EdgeDriver(op);
-            }
-            case FireFox -> {
-            }
-            case Safari -> {
-            }
-            default -> throw new IllegalStateException("Unexpected value: " + driverName);
-        }
-        driver.manage().window().setSize(new Dimension(1920, 1080));
-        return driver;
 
-
-    }
-
-    /**
-     * starts a web driver in ui mode
-     */
-//    public static WebDriver setDriverUiEdge() {
-//        WebDriverManager.edgedriver().setup();
-//        EdgeOptions op = new EdgeOptions();
-//        op.addArguments("--ignore-certificate-errors", "--ignore-urlfetcher-cert-requests", "--guest");
-//        op.setAcceptInsecureCerts(true);
-//        WebDriver driver = new EdgeDriver(op);
-//        driver.manage().window().setSize(new Dimension(1920, 1080));
-//        return driver;
-//    }
-//
-//    public static WebDriver setDriverUiChrome() {
-//        WebDriverManager.chromedriver().setup();
-//        ChromeOptions op = new ChromeOptions();
-//        op.addArguments("ignore-certificate-errors", "ignore-urlfetcher-cert-requests", "--guest");
-//        op.setAcceptInsecureCerts(true);
-//        ChromeDriver driver = new ChromeDriver(op);
-//        driver.manage().window().setSize(new Dimension(1920, 1080));
-//        return driver;
-//    }
-
-    /**
+ /**
      * function to return pre sett edge printing and download options
      *
      * @return EdgeOptions pre configured
@@ -399,37 +332,7 @@ public class Utils {
 
     }
 
-    public static void handleCertificateAuth() {
-        Thread certSelectionThread = null;
-        Runnable r = new Runnable() {
 
-            @Override
-            public void run() {
-                try {
-                    Thread.sleep(1000 * 10);
-                    Robot robot = new Robot();
-                    robot.keyPress(KeyEvent.VK_TAB);
-                    robot.keyPress(KeyEvent.VK_TAB);
-                    robot.keyPress(KeyEvent.VK_TAB);
-                    robot.keyPress(KeyEvent.VK_SPACE);
-                } catch (AWTException e) {
-                    e.printStackTrace();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        };
-        certSelectionThread = new Thread(r);
-        certSelectionThread.start();
-        if (certSelectionThread != null) {
-            try {
-                certSelectionThread.join();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-
-    }
     public static void KendoSelectByValue(WebDriver driver, WebElement select, String value)
     {
         var selectElement = new Select(select);
@@ -437,7 +340,7 @@ public class Utils {
         for (int i = 0; i < options.size(); i++)
         {
             WebElement element = options.get(i);
-            if (element.getAttribute("value") == value || element.getAttribute("text") == value)
+            if (element.getAttribute("value").equals(value) || element.getAttribute("text").equals(value))
             {
                 var id = select.getAttribute("id");
                 ((JavascriptExecutor) driver).executeScript(String.format("$('#{0}').data('kendoDropDownList').select({1});", id, i));
