@@ -1,4 +1,4 @@
-@Guests @SideSp
+@Guests @SideSp @Group4
 Feature: Guest Feature
 
   Background:  login and choose property

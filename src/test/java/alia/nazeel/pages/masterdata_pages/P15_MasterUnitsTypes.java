@@ -32,7 +32,7 @@ public class P15_MasterUnitsTypes {
     @FindBy(xpath = "//button[contains(text(),\"Filter\")]")
     public WebElement filterButton;
 
-    @FindBy(xpath = "//button[contains(text(),\"Search\")]")
+    @FindBy(xpath = "//app-master-unit-type//button[contains(text(),\"Search\")]")
     public WebElement searchButton;
 
     @FindBy(xpath = "//input[@id=\"name\"]")

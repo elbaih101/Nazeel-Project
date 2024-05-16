@@ -1,8 +1,9 @@
+@Group2
 Feature: Making Reservation with Nazeel PMS (web application)
 
   Background: selecting property
     Given Logging in with superuser
-    And Select Property "created"
+    And Select Property "P01404"
 
   @Reservations
   Rule: Reservations

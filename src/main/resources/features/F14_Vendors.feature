@@ -1,4 +1,4 @@
-@Vendors @Sprint40
+@Vendors @Sprint40 @Group4
 Feature: Vendors Feature
 
   Background:  login and choose property

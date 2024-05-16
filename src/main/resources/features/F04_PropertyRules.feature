@@ -3,7 +3,7 @@ Feature: Property Rules
 
   Background: logging in
     Given Logging in with superuser
-    And Select Property "created"
+    And Select Property "P01404"
 
   @Reservation_Rules
   Rule: Reservations Rules

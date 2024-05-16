@@ -50,12 +50,12 @@ public class D06_DigitalPayment {
 
     @And("go to {string} Vouchers Page")
     public void goToDesiredVouchersPage(String vType) {
-        if (vType.equalsIgnoreCase(Vouchers.Draft.toString())) {
+        if (vType.equalsIgnoreCase(Vouchers.promissory.toString())) {
             wait.until(ExpectedConditions.elementToBeClickable(dashBoardPage.vouchersDropList));
             dashBoardPage.dashBoardLink.click();
             dashBoardPage.vouchersDropList.click();
-            wait.until(ExpectedConditions.elementToBeClickable(dashBoardPage.draftsLink));
-            dashBoardPage.draftsLink.click();
+            wait.until(ExpectedConditions.elementToBeClickable(dashBoardPage.PromissoryLink));
+            dashBoardPage.PromissoryLink.click();
         } else if (vType.equalsIgnoreCase(Vouchers.Receipt.toString()) || vType.equalsIgnoreCase(Vouchers.SD.toString())) {
 //            if (!dashBoardPage.receiptsLink.isDisplayed()) {
 //                multiPurposes.waitLoading();
@@ -354,9 +354,9 @@ public class D06_DigitalPayment {
     public void checkTheGeneratedLinkIsPresentInTheGridWithStateAndVoucherType(String state, String voucherType) {
         wait.until(ExpectedConditions.visibilityOfAllElements(digitalPaymentPage.links()));
         WebElement link = digitalPaymentPage.links().stream().filter(element -> element.getAttribute("href").trim().contains(generatedLink)).toList().get(0);
-        if (voucherType.equalsIgnoreCase("Draft")) {
-            asrt.assertTrue(digitalPaymentPage.draftLinkStatus(link).getText().toLowerCase().contains(state.toLowerCase()));
-            asrt.assertTrue(digitalPaymentPage.drafNoinGrid(link).getText().toLowerCase().contains(draftNo));
+        if (voucherType.equalsIgnoreCase("promissory")) {
+            asrt.assertTrue(digitalPaymentPage.propmissoryLinkStatus(link).getText().toLowerCase().contains(state.toLowerCase()));
+            asrt.assertTrue(digitalPaymentPage.promissoryNoinGrid(link).getText().toLowerCase().contains(promissoryNo));
 
         } else {
             asrt.assertTrue(digitalPaymentPage.linkType(link).getText().trim().equalsIgnoreCase(voucherType.trim()), digitalPaymentPage.linkType(link).getText().trim() + ":" + voucherType.trim());
@@ -370,17 +370,17 @@ public class D06_DigitalPayment {
     public void oppenTheLinkAndPayItSuccessfully() {
     }
 
-    @Given("go to Draft Vouchers Page")
-    public void goToDraftVouchersPage() {
+    @Given("go to Promissory Vouchers Page")
+    public void goToPromissoryVouchersPage() {
         wait.until(ExpectedConditions.elementToBeClickable(dashBoardPage.vouchersDropList));
         dashBoardPage.vouchersDropList.click();
-        wait.until(ExpectedConditions.elementToBeClickable(dashBoardPage.draftsLink));
-        dashBoardPage.draftsLink.click();
+        wait.until(ExpectedConditions.elementToBeClickable(dashBoardPage.PromissoryLink));
+        dashBoardPage.PromissoryLink.click();
     }
 
-    @When("succefully create a paytabs draftcollection link with amount {string} remaining amount")
-    public void succefullyCreateAPaytabsDraftcollectionLinkWithAmountRemainingAmount(String value) {
-        double remaining = Double.parseDouble(digitalPaymentPage.draftRemainingBalance().getText());
+    @When("succefully create a paytabs Promissory collection link with amount {string} remaining amount")
+    public void succefullyCreateAPaytabsPromissorycollectionLinkWithAmountRemainingAmount(String value) {
+        double remaining = Double.parseDouble(digitalPaymentPage.promissoryRemainingBalance().getText());
         double amount = 0;
         if (value.toLowerCase().contains("less")) {
             amount = new Random().nextDouble(1, remaining);
@@ -394,8 +394,8 @@ public class D06_DigitalPayment {
         clickGenerateAndCheckToastMessage("Saved Successfully");
         checkTheLinkIsGeneratedInTheLinkField();
     }
-
-    public static String draftNo;
+//Todo : this statuc variable may casue issues pay attenttion
+    public static String promissoryNo;
 
 
 }

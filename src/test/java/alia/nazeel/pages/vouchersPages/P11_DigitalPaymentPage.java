@@ -54,16 +54,16 @@ public class P11_DigitalPaymentPage {
         return digitalPayDialog.findElement(By.xpath(".//div[contains(text(),\"Balance\")]/following-sibling::div"));
     }
 
-    /////////// Draft Data /////
-    public WebElement draftRemainingBalance() {
+    /////////// promissory Data /////
+    public WebElement promissoryRemainingBalance() {
         return digitalPayDialog.findElement(By.xpath(".//div[contains(text(),\"Remaining Amount\")]/following-sibling::div"));
     }
 
-    public WebElement draftCollectedAmount() {
+    public WebElement PromissoryCollectedAmount() {
         return digitalPayDialog.findElement(By.xpath(".//div[contains(text(),\"Collected Amount\")]/following-sibling::div"));
     }
-    public WebElement draftNumber() {
-        return digitalPayDialog.findElement(By.xpath(".//div[contains(text(),\"Draft No\")]/following-sibling::div"));
+    public WebElement promissoryNumber() {
+        return digitalPayDialog.findElement(By.xpath(".//div[contains(text(),\"Promissory Note No\")]/following-sibling::div"));
     }
 
     public WebElement generateLinkTab() {
@@ -190,11 +190,11 @@ public class P11_DigitalPaymentPage {
     public WebElement copyAction(WebElement link) {
         return link.findElement(By.xpath("//kendo-popup//div[contains(text(),\"Copy\")]"));
     }
-    // draft //
-    public WebElement draftLinkStatus(WebElement link) {
+    // promissory //
+    public WebElement propmissoryLinkStatus(WebElement link) {
         return link.findElement(By.xpath("../../..//td[@data-kendo-grid-column-index=\"3\"]/span"));
     }
-    public WebElement drafNoinGrid(WebElement link) {
+    public WebElement promissoryNoinGrid(WebElement link) {
         return link.findElement(By.xpath("../../..//td[@data-kendo-grid-column-index=\"0\"]/span"));
     }
     /// whatsapp page///

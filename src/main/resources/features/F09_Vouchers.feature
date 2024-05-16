@@ -1,4 +1,4 @@
-@Regression @Sprint38 @Vouchers
+@Regression @Sprint38 @Vouchers @Group2
 Feature: Vouchers
 
   Background:  login and choose property
@@ -40,15 +40,15 @@ Feature: Vouchers
       And Close the open popup
       Then Check "GenReceipt" Voucher with state "Generated" edit mode
 
-  Rule: Drafts Collection
+  Rule: Promissories Collection
 
     Background:
-      Given go to Draft Vouchers Page
-      And successfully create a voucher of type "SADraft" amount "200" payment Method "Cash" maturity Date "25012024" and Creatian Date "" for a "guest"
+      Given go to Promissory Vouchers Page
+      And successfully create a voucher of type "sapromissory" amount "200" payment Method "Cash" maturity Date "25012024" and Creatian Date "" for a "guest"
 
-    Scenario: Check edit mode for Receipt Voucher for Collected Draft
-      And click on draft more menu and choose collect by "Normal" payment
-      When finish Draft Normal collecting process with amount "200" PaymentMethod "Cash"
+    Scenario: Check edit mode for Receipt Voucher for Collected promissory
+      And click on Promissory more menu and choose collect by "Normal" payment
+      When finish promissory Normal collecting process with amount "200" PaymentMethod "Cash"
       When go to "Receipt" Vouchers Page
       Then Check "receipt" Voucher with state "Collected" edit mode
 

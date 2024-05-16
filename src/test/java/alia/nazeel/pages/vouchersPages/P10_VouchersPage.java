@@ -46,7 +46,7 @@ public class P10_VouchersPage {
     public List<WebElement> paymentMethods;
 
     @FindBy(xpath = "//td[@data-kendo-grid-column-index=\"8\"]")
-    public List<WebElement> receitRelatedDrafts;
+    public List<WebElement> receitRelatedpromissories;
 
 
     public WebElement digialPaymentButton() {
@@ -59,7 +59,7 @@ public class P10_VouchersPage {
     //Grid //
 public WebElement voucherOwner (WebElement voucher,String voucherType){
     WebElement owner;
-    if (voucherType.equalsIgnoreCase(Vouchers.Draft.toString())) {
+    if (voucherType.equalsIgnoreCase(Vouchers.promissory.toString())) {
         owner = voucher.findElement(By.xpath("..//td[@data-kendo-grid-column-index=\"5\"]"));
     } else  {
         owner = voucher.findElement(By.xpath("..//td[@data-kendo-grid-column-index=\"4\"]"));
@@ -69,7 +69,7 @@ public WebElement voucherOwner (WebElement voucher,String voucherType){
     //FIXME : dont forget the error
     public List<WebElement> moreActions(WebElement voucherAmount, String voucherType) {
         WebElement moreMenu = null;
-        if (voucherType.equalsIgnoreCase(Vouchers.Draft.toString())) {
+        if (voucherType.equalsIgnoreCase(Vouchers.promissory.toString())) {
             moreMenu = voucherAmount.findElement(By.xpath("..//td[@data-kendo-grid-column-index=\"11\"]//div/div"));
         } else if (voucherType.equalsIgnoreCase(Vouchers.Receipt.toString()) || voucherType.equalsIgnoreCase(Vouchers.Expenses.toString()) || voucherType.equalsIgnoreCase(Vouchers.Refund.toString()) || voucherType.equalsIgnoreCase(Vouchers.SAReceipt.toString()) || voucherType.equalsIgnoreCase(Vouchers.SD.toString()) || voucherType.equalsIgnoreCase(Vouchers.SDRefund.toString()) || voucherType.equalsIgnoreCase(Vouchers.GenReceipt.toString())) {
             moreMenu = voucherAmount.findElement(By.xpath("..//td[@data-kendo-grid-column-index=\"10\"]//div/div"));
@@ -79,7 +79,7 @@ public WebElement voucherOwner (WebElement voucher,String voucherType){
         return moreMenu.findElements(By.xpath("//div[@class=\"popup__content\"]/div"));
     }
 
-    public List<WebElement> draftsRemainigAmounts() {
+    public List<WebElement> promissoriesRemainigAmounts() {
         wait.until(ExpectedConditions.urlContains("draft-vouchers"));
         return driver.findElements(By.xpath("//td[@data-kendo-grid-column-index=\"3\"]"));
     }
@@ -87,7 +87,7 @@ public WebElement voucherOwner (WebElement voucher,String voucherType){
     public WebElement editButton(WebElement voucherAmount, String voucherType) {
         WebElement button = null;
 
-        if (voucherType.equalsIgnoreCase(Vouchers.Draft.toString())) {
+        if (voucherType.equalsIgnoreCase(Vouchers.promissory.toString())) {
             button = voucherAmount.findElement(By.xpath("..//td[@data-kendo-grid-column-index=\"11\"]//div/button[1]"));
         } else if (voucherType.equalsIgnoreCase(Vouchers.Receipt.toString()) || voucherType.equalsIgnoreCase(Vouchers.Expenses.toString()) || voucherType.equalsIgnoreCase(Vouchers.Refund.toString()) || voucherType.equalsIgnoreCase(Vouchers.SAReceipt.toString()) || voucherType.equalsIgnoreCase(Vouchers.SD.toString()) || voucherType.equalsIgnoreCase(Vouchers.SDRefund.toString()) || voucherType.equalsIgnoreCase(Vouchers.GenReceipt.toString())) {
             button = voucherAmount.findElement(By.xpath("..//td[@data-kendo-grid-column-index=\"10\"]//div/button[1]"));

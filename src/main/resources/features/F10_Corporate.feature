@@ -1,4 +1,4 @@
-@CorporateSetup
+@CorporateSetup @group3
 Feature: corporates Feature
 
   Background:

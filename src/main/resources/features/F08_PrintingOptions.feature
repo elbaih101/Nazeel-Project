@@ -1,4 +1,4 @@
-@Regression @Sprint38 @PrintingOptions
+@Regression @Sprint38 @PrintingOptions @group3
 
 Feature: printing options page
 

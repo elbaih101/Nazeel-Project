@@ -1,5 +1,6 @@
 package alia.nazeel.pages.setuppages.unit_setup_pages;
 
+import alia.nazeel.stepDefs.Hooks;
 import org.apache.commons.lang3.StringUtils;
 
 import org.openqa.selenium.By;
@@ -34,7 +35,7 @@ public class P07_UnitTypeCustomization {
     }
     //////////  /////////////////       ///////////////////     /////////////////////////////
     //new type page
-    public final String newTypeUrl = "http://staging.nazeel.net:9002/units-management/unit-type-customization/add";
+    public final String newTypeUrl = Hooks.stageUrl+ "units-management/unit-type-customization/add";
     @FindBy(xpath = "//kendo-combobox[@name=\"unitType\"]/span/span")
     WebElement unitTypeSelectionBox;
     @FindBy(xpath = "//textarea[1]")

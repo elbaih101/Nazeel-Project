@@ -19,8 +19,7 @@ import java.time.Duration;
 public class Hooks {
     public WebDriver driver;
     private Scenario scenario;
-    private static int numberofUsers = 0;
-     final String stageUrl ="https://staging.nazeel.net:9002/";
+   public  final static String stageUrl ="https://staging.nazeel.net:9002/";
 
     @Before
     public void start(Scenario scenario) {
@@ -38,7 +37,7 @@ public class Hooks {
     public void end() throws Exception {
         Utils.screenShotOnFailure(scenario, driver);
         try {
-            Thread.sleep(5000);
+            Thread.sleep(800);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

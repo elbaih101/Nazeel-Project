@@ -125,8 +125,8 @@ public class D08_Vouchers {
     public void selectVoucherTab(String tab) {
         WebElement selectedTab = null;
         wait.until(ExpectedConditions.visibilityOf(vouchersPopUp.popupTitle));
-        if (tab.equalsIgnoreCase(Vouchers.Draft.toString())) {
-            selectedTab = vouchersPopUp.draftTab();
+        if (tab.equalsIgnoreCase(Vouchers.promissory.toString())) {
+            selectedTab = vouchersPopUp.promissoryTab();
         } else if (tab.equalsIgnoreCase(Vouchers.Receipt.toString())) {
             selectedTab = vouchersPopUp.receiptTab();
         } else if (tab.equalsIgnoreCase(Vouchers.SD.toString())) {
@@ -145,8 +145,8 @@ public class D08_Vouchers {
     @And("enter maturity Date {string} and amount {string}")
     public void enterMaturityDate(String date, String amount) {
         multiPurposes.waitLoading();
-        Utils.setDate(vouchersPopUp.draftMaturityDate(), date);
-        Utils.setAttribute(js, vouchersPopUp.draftMaturityDate(), "value", date);
+        Utils.setDate(vouchersPopUp.PromissoryMaturityDate(), date);
+        Utils.setAttribute(js, vouchersPopUp.PromissoryMaturityDate(), "value", date);
         vouchersPopUp.amountField().clear();
         vouchersPopUp.amountField().sendKeys(amount);
     }
@@ -169,6 +169,7 @@ public class D08_Vouchers {
                 asrt.assertTrue(true);
                 asrt.assertAll();
             } else {
+                asrt.assertFalse(false);
                 System.out.println(e.getMessage() + "\nActual : " + multiPurposes.toastMsgs.getFirst().getText() + "\nExpected : " + prefix + voucherNums + postfix);
                 Reporter.log(e.getMessage() + "\nActual : " + multiPurposes.toastMsgs.getFirst().getText() + "\nExpected : " + prefix + voucherNums + postfix);
             }
@@ -200,23 +201,23 @@ public class D08_Vouchers {
         String prefix = "";
         //Receipt Number. 000057 generated successfully
         String Postfix = " Generated successfully";
-        prefix = switch (voucherType) {
-            case "Receipt", "SAReceipt" -> "Receipt Number. ";
-            case "SD" -> "Security Deposit Receipt Voucher Number. ";
-            case "Refund" -> "Refund Voucher Number. ";
-            case "SDRefund" -> "Security Deposit Refund Voucher Number. ";
-            case "Draft", "SADraft" -> "Draft Voucher Number. ";
+        prefix = switch (voucherType.toLowerCase()) {
+            case "receipt", "sareceipt" -> "Receipt Number. ";
+            case "sd" -> "Security Deposit Receipt Voucher Number. ";
+            case "refund" -> "Refund Voucher Number. ";
+            case "sdrefund" -> "Security Deposit Refund Voucher Number. ";
+            case "promissory", "sapromissory" -> "Promissory note Number. ";
             default -> prefix;
         };
         String url = voucherType.toLowerCase().contains("sa") ? "/api/Financial/Voucher/create" : "api/Reservation/create";
         multiPurposes.waitLoading();
-        if (!voucherType.contains("SA")) {
+        if (!voucherType.toLowerCase().contains("sa")) {
             reservationVouchersInitialize(voucherType);
         } else {
             standAloneVouchersInitialize(voucherType, guestType);
         }
 
-        if (voucherType.contains("Draft")) {
+        if (voucherType.contains("promissory")) {
             if (amount.toLowerCase().contains("less")) {
                 enterMaturityDate(maturityDate, String.valueOf(new Random().nextDouble(reservationFinancialPage.reservationBalance())));
             } else if (amount.toLowerCase().contains("more")) {
@@ -244,13 +245,13 @@ public class D08_Vouchers {
 
     private void standAloneVouchersInitialize(String voucherType, String guestType) {
         wait.until(ExpectedConditions.not(ExpectedConditions.urlContains("/dashboard")));
-        if (voucherType.equalsIgnoreCase(Vouchers.SADraft.toString())) {
+        if (voucherType.equalsIgnoreCase(Vouchers.SAPromissory.toString())) {
             wait.until(ExpectedConditions.elementToBeClickable(vouchersPage.newVoucherButton));
             vouchersPage.newVoucherButton.click();
             wait.until(ExpectedConditions.elementToBeClickable(vouchersPopUp.selctGuestButton()));
             vouchersPopUp.selctGuestButton().click();
             new D06_DigitalPayment().selectGuest("RANDOM", "", "");
-            vouchersPopUp.purposeField().sendKeys("testing automation SADraft");
+            vouchersPopUp.purposeField().sendKeys("testing automation SAPromissory");
 
         }
         if (voucherType.equalsIgnoreCase(Vouchers.SAReceipt.toString())) {
@@ -288,7 +289,7 @@ public class D08_Vouchers {
 
         }
 
-        if (voucherType.equalsIgnoreCase(Vouchers.Draft.toString())) {
+        if (voucherType.equalsIgnoreCase(Vouchers.promissory.toString())) {
             reservationFinancialPage.receiptsTap.click();
             clickOnTheAddVoucherButton();
             selectVoucherTab(voucherType);
@@ -303,7 +304,7 @@ public class D08_Vouchers {
             vouchersPage.editButton(vouchersPage.vouchersNums.stream().filter(num -> num.getText().equalsIgnoreCase(vNumber)).toList().get(0), voucherType).click();
 
         } else if (voucherState.equalsIgnoreCase("Collected")) {
-            vouchersPage.editButton(vouchersPage.receitRelatedDrafts.stream().filter(num -> num.getText().equalsIgnoreCase(vNumber)).toList().get(0), voucherType).click();
+            vouchersPage.editButton(vouchersPage.receitRelatedpromissories.stream().filter(num -> num.getText().equalsIgnoreCase(vNumber)).toList().get(0), voucherType).click();
 
         } else if (voucherState.equalsIgnoreCase("Generated")) {
             //TODO : Check the Voucher number from the paytabs Report and use it
@@ -314,7 +315,7 @@ public class D08_Vouchers {
 
     @Given("create all vouchers Types")
     public void createVouchers() {
-        successfullyCreateAVoucherOfTypeAmountPaymentMethodMaturityDate("Draft", "200", "Cash", "15/12/2025", "", "guest");
+        successfullyCreateAVoucherOfTypeAmountPaymentMethodMaturityDate("promissory", "200", "Cash", "15/12/2025", "", "guest");
         successfullyCreateAVoucherOfTypeAmountPaymentMethodMaturityDate("Receipt", "200", "Cash", "", "", "guest");
         successfullyCreateAVoucherOfTypeAmountPaymentMethodMaturityDate("SD", "200", "Cash", "", "", "guest");
         openRefundVouchersTab();
@@ -327,7 +328,7 @@ public class D08_Vouchers {
     public void checkVouchersAndEditPaymentMethods(String method, String msg) {
         for (VouchersMap v : vouchersMaps) {
             checkVoucher(v);
-            if (!(v.getvType().equalsIgnoreCase(Vouchers.Draft.toString()) || v.getvType().equalsIgnoreCase(Vouchers.GenReceipt.toString())))
+            if (!(v.getvType().equalsIgnoreCase(Vouchers.promissory.toString()) || v.getvType().equalsIgnoreCase(Vouchers.GenReceipt.toString())))
                 editVoucherPaymentMethod(method, msg);
             else
                 vouchersPopUp.discardButton().click();
@@ -347,7 +348,7 @@ public class D08_Vouchers {
         String actualColor;
 
 
-        if (voucherType.equalsIgnoreCase(Vouchers.Draft.toString())) {
+        if (voucherType.equalsIgnoreCase(Vouchers.promissory.toString())) {
             actualColor = (vouchersPopUp.amountField().findElement(By.xpath("..")).getCssValue("background-color"));
             actualColor = Color.fromString(actualColor).asHex();
             asrt.assertEquals(actualColor, expectedColor);
@@ -404,7 +405,7 @@ public class D08_Vouchers {
         String actualColor;
 
 
-        if (voucherType.equalsIgnoreCase(Vouchers.Draft.toString())) {
+        if (voucherType.equalsIgnoreCase(Vouchers.promissory.toString())) {
             actualColor = (vouchersPopUp.amountField().findElement(By.xpath("..")).getCssValue("background-color"));
             actualColor = Color.fromString(actualColor).asHex();
             asrt.assertEquals(actualColor, expectedColor);
@@ -453,22 +454,22 @@ public class D08_Vouchers {
     }
 
 
-    @And("click on draft more menu and choose collect by {string} payment")
-    public void clickOnDraftMoreMenuAndChooseCollectByPayment(String paymentMethod) {
+    @And("click on Promissory more menu and choose collect by {string} payment")
+    public void clickOnPromissoryMoreMenuAndChooseCollectByPayment(String paymentMethod) {
 
         if (paymentMethod.equalsIgnoreCase(PaymentMethods.Digital.toString())) {
-            List<WebElement> amountsOfDraftNotFullyPaid = vouchersPage.draftsRemainigAmounts().stream().filter(element -> element.getText().trim().charAt(0) != '0').toList();
-            WebElement selectedDraftAmount = amountsOfDraftNotFullyPaid.get(new Random().nextInt(amountsOfDraftNotFullyPaid.size()));
-            vouchersPage.moreActions(selectedDraftAmount, "draft").stream().filter(element -> element.getText().trim().contains("Collect Via Digital Payment")).toList().get(0).click();
-            D06_DigitalPayment.draftNo = digitalPaymentPage.draftNumber().getText();
+            List<WebElement> amountsOfPromissoryNotFullyPaid = vouchersPage.promissoriesRemainigAmounts().stream().filter(element -> element.getText().trim().charAt(0) != '0').toList();
+            WebElement selectedPromissoryAmount = amountsOfPromissoryNotFullyPaid.get(new Random().nextInt(amountsOfPromissoryNotFullyPaid.size()));
+            vouchersPage.moreActions(selectedPromissoryAmount, "promissory").stream().filter(element -> element.getText().trim().contains("Collect Via Digital Payment")).toList().get(0).click();
+            D06_DigitalPayment.promissoryNo = digitalPaymentPage.promissoryNumber().getText();
         } else {
-            vouchersPage.moreActions(vouchersPage.vouchersNums.stream().filter(num -> num.getText().equalsIgnoreCase(vMap.getvNumber())).toList().get(0), Vouchers.Draft.toString()).stream().filter(action -> action.getText().equalsIgnoreCase("Collect")).toList().get(0).click();
+            vouchersPage.moreActions(vouchersPage.vouchersNums.stream().filter(num -> num.getText().equalsIgnoreCase(vMap.getvNumber())).toList().get(0), Vouchers.promissory.toString()).stream().filter(action -> action.getText().equalsIgnoreCase("Collect")).toList().get(0).click();
         }
 
     }
 
-    @When("finish Draft Normal collecting process with amount {string} PaymentMethod {string}")
-    public void finishDraftNormalCollectingProcess(String amount, String paymentMethod) {
+    @When("finish promissory Normal collecting process with amount {string} PaymentMethod {string}")
+    public void finishpromissoryNormalCollectingProcess(String amount, String paymentMethod) {
         vouchersPopUp.paymentMethods().stream().filter(method -> method.getText().contains(paymentMethod)).toList().get(0).click();
         multiPurposes.waitLoading();
         vouchersPopUp.amountField().clear();
@@ -515,8 +516,8 @@ public class D08_Vouchers {
             vouchersPopUp.paymentMethods().stream().filter(method -> method.getText().equalsIgnoreCase(payMethod)).toList().get(0).click();
         }
         if (!maturityDate.isEmpty()) {
-            vouchersPopUp.draftMaturityDate().clear();
-            Utils.setDate(vouchersPopUp.draftMaturityDate(), maturityDate);
+            vouchersPopUp.PromissoryMaturityDate().clear();
+            Utils.setDate(vouchersPopUp.PromissoryMaturityDate(), maturityDate);
         }
         wait.until(ExpectedConditions.elementToBeClickable(vouchersPopUp.submitButton()));
         vouchersPopUp.submitButton().click();
@@ -536,7 +537,7 @@ public class D08_Vouchers {
 
     @And("edit {string} Voucher with state {string} Payment method to {string} and check msg {string}")
     public void editVoucherPaymentMethodTo(String voucherType, String voucherState, String newMethod, String msg) {
-        if (!voucherType.equalsIgnoreCase(Vouchers.Draft.toString())) {
+        if (!voucherType.equalsIgnoreCase(Vouchers.promissory.toString())) {
             multiPurposes.waitLoading();
             openEditModeForVoucher(voucherType, voucherState, voucherNums);
             wait.withTimeout(Duration.ofSeconds(1));

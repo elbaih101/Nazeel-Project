@@ -1,4 +1,4 @@
-@Outlets
+@Outlets @Group4
 Feature: Outlets Feature
 
   Background:  login and choose property

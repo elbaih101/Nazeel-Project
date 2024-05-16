@@ -10,7 +10,7 @@ import org.testng.annotations.DataProvider;
 
                 features = "src/main/resources/features",
                 glue = {"alia.nazeel.stepDefs"},
-                tags = "@Group1",//"not @Reservation_Rules and not @DigitalPayment and not @Property and not @Blocks_Floors",
+                tags = "@Group1 and not @Property",//"not @Reservation_Rules and not @DigitalPayment and not @Property and not @Blocks_Floors",
                 plugin = {
                         "pretty",
                         "html:target/cucumberBae/cucumber1.html",
@@ -25,7 +25,7 @@ import org.testng.annotations.DataProvider;
         )
 
 
-public class Runners extends AbstractTestNGCucumberTests {
+public class Group1Runners extends AbstractTestNGCucumberTests {
 //   to run in parallel
     @SuppressWarnings({"DefaultAnnotationParam", "EmptyMethod"})
     @Override

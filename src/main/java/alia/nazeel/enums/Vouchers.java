@@ -18,17 +18,17 @@ public enum Vouchers {
      */
     SDRefund,
     /*
-    Draft :: For Drafts Generated on a reservation from Reservation Page or Linked to Reservation
+    promissory :: For Drafts Generated on a reservation from Reservation Page or Linked to Reservation
      */
-    Draft,
+    promissory,
     /*
     Expenses :: For Expenses Vouchers Generated From The Cash Drawer Balance Page and Payment Vouchers Page
      */
     Expenses,
     /*
-    SADraft :: For StandAlone Drafts Generated From Draft Vouchers Page
+    SAPromissory :: For StandAlone Drafts Generated From Draft Vouchers Page
      */
-    SADraft,
+    SAPromissory,
     /*
     SAReceipt :: For StandAlone Receipts Generated From Receipt Vouchers page
      */

@@ -1,3 +1,4 @@
+@Group3
 Feature: subscriptions
 
   Background: go to subscription price page

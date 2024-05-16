@@ -1,4 +1,4 @@
-@FinancialSettings
+@FinancialSettings @Group3
 Feature: Property Financials settings
 
   Background:  login and choose property

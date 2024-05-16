@@ -3,7 +3,7 @@ Feature: PayTabs integration
 
   Background:
     Given Logging in with superuser
-    And Select Property "P01384"
+    And Select Property "P01404"
 
 
   Rule: Receipt Vouchers
@@ -82,16 +82,16 @@ Feature: PayTabs integration
       When open the log tab and select "paytabs"
       Then check the generated link is present in the grid with state "pending" and Voucher type "Receipt Voucher"
 
-  Rule: Drafts
+  Rule: Promissory
     Background:
-      Given go to Draft Vouchers Page
-      And click on draft more menu and choose collect by "digital" payment
+      Given go to Promissory Vouchers Page
+      And click on Promissory more menu and choose collect by "digital" payment
 
-    Scenario:succefully create a paytabs draftcollection link with amount less than remaining amount
-      When succefully create a paytabs draftcollection link with amount "less than" remaining amount
-      Then Check purpose field contains "Collection of draft voucher no"
+    Scenario:succefully create a paytabs Promissory collection link with amount less than remaining amount
+      When succefully create a paytabs Promissory collection link with amount "less than" remaining amount
+      Then Check purpose field contains "Collection of Promissory voucher no"
       And open the log tab and select "paytabs"
-      And check the generated link is present in the grid with state "pending" and Voucher type "Draft"
+      And check the generated link is present in the grid with state "pending" and Voucher type "promissory"
 
   ##TODO :: report actions
 

@@ -45,7 +45,7 @@ public class P16_VouchersPopUp {
         return voucherPopUp.findElement(By.xpath(".//div[contains(text(),\"Res. No\")]/following-sibling::div[1]"));
     }
 
-    public WebElement draftCollectedAmount() {
+    public WebElement promissoryCollectedAmount() {
         return voucherPopUp.findElement(By.xpath(".//div[contains(text(),\"Collected\")]/following-sibling::div[1]"));
     }
 
@@ -62,8 +62,8 @@ public class P16_VouchersPopUp {
         return voucherPopUp.findElement(By.xpath("(.//kendo-tabstrip//li//span[contains(text(),\"Receipt\")])[2]"));
     }
 
-    public WebElement draftTab() {
-        return voucherPopUp.findElement(By.xpath(".//kendo-tabstrip//li//span[contains(text(),\"Draft\")]"));
+    public WebElement promissoryTab() {
+        return voucherPopUp.findElement(By.xpath(".//kendo-tabstrip//li//span[contains(text(),\"Promissory\")]"));
     }
 
     public WebElement refundTab() {
@@ -79,7 +79,7 @@ public class P16_VouchersPopUp {
         return voucherPopUp.findElement(By.xpath(".//kendo-datepicker//input"));
     }
 
-    public WebElement draftMaturityDate() {
+    public WebElement PromissoryMaturityDate() {
         return voucherPopUp.findElement(By.xpath("(.//kendo-datepicker//input)[2]"));
     }
 

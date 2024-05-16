@@ -11,7 +11,7 @@ import org.testng.annotations.DataProvider;
 
                 features = "src/main/resources/features",
                 glue = {"org.example.stepDefs"},
-                tags = "@corporate_vouchers,orders",//"not @Reservation_Rules and not @DigitalPayment and not @Property and not @Blocks_Floors",
+                tags = "@Group2",//"not @Reservation_Rules and not @DigitalPayment and not @Property and not @Blocks_Floors",
                 plugin = {
                         "pretty",
                         "html:target/cucumberBae/cucumber2.html",
@@ -26,7 +26,7 @@ import org.testng.annotations.DataProvider;
         )
 
 
-public class Second_Runners extends AbstractTestNGCucumberTests {
+public class Group2Runners extends AbstractTestNGCucumberTests {
 //   to run in parallel
     @Override
     @DataProvider(parallel = false)
