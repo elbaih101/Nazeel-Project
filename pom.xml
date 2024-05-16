@@ -16,7 +16,7 @@
 
 
     <dependencies>
-
+<!--this dependencies are for cucumber and selenium-->
         <dependency>
             <groupId>io.cucumber</groupId>
             <artifactId>cucumber-testng</artifactId>
@@ -32,37 +32,31 @@
             <artifactId>selenium-java</artifactId>
             <version>4.20.0</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/net.masterthought/maven-cucumber-reporting -->
-        <dependency>
-            <groupId>net.masterthought</groupId>
-            <artifactId>maven-cucumber-reporting</artifactId>
-            <version>5.8.1</version>
-        </dependency>
         <dependency>
             <groupId>io.github.bonigarcia</groupId>
             <artifactId>webdrivermanager</artifactId>
             <version>5.8.0</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/com.microsoft.edge/msedge-selenium-tools-java -->
-        <!--        <dependency>-->
-        <!--            <groupId>com.microsoft.edge</groupId>-->
-        <!--            <artifactId>msedge-selenium-tools-java</artifactId>-->
-        <!--            <version>3.141.1</version>-->
-        <!--        </dependency>-->
-
-        <!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
-        <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-core -->
+<!--       -->
+        <!-- those dependencies for reporting  -->
+        <dependency>
+            <groupId>net.masterthought</groupId>
+            <artifactId>maven-cucumber-reporting</artifactId>
+            <version>5.8.1</version>
+        </dependency>
+<!--        json manbulation and extraction-->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-core</artifactId>
             <version>2.17.1</version>
         </dependency>
+<!--        Excution and test mangement-->
         <dependency>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-surefire-plugin</artifactId>
             <version>3.2.5</version>
         </dependency>
-
+<!--faker-->
         <dependency>
             <groupId>com.github.javafaker</groupId>
             <artifactId>javafaker</artifactId>
@@ -70,7 +64,7 @@
         </dependency>
 
 
-        <!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-simple -->
+<!--      logging-->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-simple</artifactId>
@@ -83,8 +77,7 @@
     <build>
         <plugins>
             <plugin>
-                <!-- https://maven.apache.org/surefire/maven-surefire-plugin/plugins.html
-                Using this plug in to contorol the excution of the runners classes-->
+                <!--Using this plug in to contorol the excution of the runners classes-->
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.2.5</version>
@@ -94,6 +87,7 @@
                     <threadCount>4</threadCount>
                     <testFailureIgnore>true</testFailureIgnore>
                     <runOrder>Alphabetical</runOrder>
+<!-- this section defines the runners Classes  Literals to run them as the main functions-->
                     <includes>
                         <include>**/*Runners.java</include> <!-- this should be the name of your runner class -->
                     </includes>
@@ -110,7 +104,7 @@
                 </executions>
             </plugin>
             <plugin>
-                <!-- https://repo.maven.apache.org/maven2/net/masterthought/cucumber-reporting/ -->
+                <!--reporting  -->
                 <groupId>net.masterthought</groupId>
                 <artifactId>maven-cucumber-reporting</artifactId>
                 <version>5.8.1</version>
