@@ -100,5 +100,5 @@ build/
 /hs_err_pid35744.log
 /src/test/java/org/example/pages/mutlipurposes/P00_4_Grids.java
 /src/test/java/alia/nazeel/pages/mutlipurposes/P00_4_Grids.java
-src/test/java/alia/nazeel/testRunner/Depuging.java
+/src/test/java/alia/nazeel/testRunner/Depuging.java
 /qodana.yaml
