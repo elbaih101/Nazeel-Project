@@ -14,10 +14,10 @@ import org.testng.annotations.DataProvider;
                 tags = "@Group2",//"not @Reservation_Rules and not @DigitalPayment and not @Property and not @Blocks_Floors",
                 plugin = {
                         "pretty",
-                        "html:target/cucumberBae/cucumber2.html",
-                        "json:target/cucumberBae/cucumber2.json",
-                        "junit:target/cucumberBae/cucumber2.xml",
-                        "rerun:target/cucumberBae/cucumber2.txt",
+                        "html:target/cucumberBaseReport/cucumber2.html",
+                        "json:target/cucumberBaseReport/cucumber2.json",
+                        "junit:target/cucumberBaseReport/cucumber2.xml",
+                        "rerun:target/cucumberBaseReport/cucumber2.txt",
 
 
                 }
