@@ -13,7 +13,11 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
+/**
+ * Class containing various utility methods for WebDriver operations.
+ *
+ * @author Moustafa Elbaih
+ */
 public class Utils {
 
     /**

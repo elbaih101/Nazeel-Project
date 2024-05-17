@@ -12,7 +12,7 @@ import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
- * Handling APi Requests and Responses senta nd receaved from the driver to ease th elive of the auto generated vuchers and invoices to insure the created voucher number is the same from the responses as the front end
+ * Handling APi Requests and Responses sent and receaved from the driver to ease th elive of the auto generated vuchers and invoices to insure the created voucher number is the same from the responses as the front end
  */
 public class API {
     final AtomicReference<Network.GetResponseBodyResponse> asyncResponse = new AtomicReference<>(null);
@@ -31,20 +31,25 @@ public class API {
     }
 
 
-    // return body of the request
-    public Network.GetResponseBodyResponse await() {
-        int timeout = 30;
-        while (asyncResponse.get() == null && timeout > 0) {
-            Utils.sleep(1000);
-            timeout--;
-        }
-
-        if (asyncResponse.get() == null)
-            throw new RuntimeException("no body found");
-        devTools.disconnectSession();
-        devTools.close();
-        return asyncResponse.get();
+    /**
+ * Awaits the response body after an asynchronous request.
+ *
+ * @return The response body as a {@link Network.GetResponseBodyResponse} object.
+ * @throws RuntimeException if no response body is found within the specified timeout.
+ */
+public Network.GetResponseBodyResponse await() {
+    int timeout = 30;
+    while (asyncResponse.get() == null && timeout > 0) {
+        Utils.sleep(1000);
+        timeout--;
     }
+
+    if (asyncResponse.get() == null)
+        throw new RuntimeException("no body found");
+    devTools.disconnectSession();
+    devTools.close();
+    return asyncResponse.get();
+}
 
     /**
      * starts a devTools session using provided WebDriver then adding a listener on responses associated with a provided request url
