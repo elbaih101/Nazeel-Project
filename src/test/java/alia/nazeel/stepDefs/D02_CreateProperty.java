@@ -8,12 +8,11 @@ import alia.nazeel.pages.setuppages.properties_pages.*;
 import alia.nazeel.pojos.JsonDataTools;
 import alia.nazeel.tools.DriverManager;
 import com.github.javafaker.Faker;
+
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-
-import alia.nazeel.pages.setuppages.properties_pages.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -25,7 +24,7 @@ import java.util.Locale;
 
 public class D02_CreateProperty {
 
-    final Locale locale = new Locale("SA");
+    final Locale locale = Locale.forLanguageTag("ar-SA");
     final Faker faker = new Faker(locale);
     final WebDriver driver = DriverManager.getDriver();
     final SoftAssert asrt = new SoftAssert();
@@ -144,23 +143,23 @@ public class D02_CreateProperty {
     public void fillPropertyData() {
         wait.until(ExpectedConditions.visibilityOf(propeertyDataPage.reportNameField));
         propeertyDataPage.propertyNameField.sendKeys(propertyName);
-        propeertyDataPage.propertyType().get(0).click();
-        propeertyDataPage.unitClass().get(0).click();
+        propeertyDataPage.propertyType().getFirst().click();
+        propeertyDataPage.unitClass().getFirst().click();
 
 
-        propeertyDataPage.propertyClass().get(0).click();
-        subscriptionPage.salesman().get(0).click();
+        propeertyDataPage.propertyClass().getFirst().click();
+        subscriptionPage.salesman().getFirst().click();
         propeertyDataPage.nextButton.click();
     }
 
     @And("fill Location Data")
     public void fillLocationData() {
         wait.until(ExpectedConditions.visibilityOf(locationDataPage.buildingNumberField));
-        locationDataPage.country().get(0).click();
-        locationDataPage.region().get(0).click();
-        locationDataPage.city().get(0).click();
-        locationDataPage.district().get(0).click();
-        locationDataPage.street().get(0).click();
+        locationDataPage.country().getFirst().click();
+        locationDataPage.region().getFirst().click();
+        locationDataPage.city().getFirst().click();
+        locationDataPage.district().getFirst().click();
+        locationDataPage.street().getFirst().click();
         locationDataPage.buildingNumberField.sendKeys(String.valueOf(faker.number().numberBetween(1, 99)));
         locationDataPage.additionalNoField.sendKeys(String.valueOf(faker.number().numberBetween(1, 99)));
         locationDataPage.addressField.sendKeys(String.valueOf(faker.address()));
@@ -180,8 +179,8 @@ public class D02_CreateProperty {
     @And("fill sms Data")
     public void fillSmsData() {
         wait.until(ExpectedConditions.visibilityOf(smsPage.smsBalanceField));
-        smsPage.smsprovider().get(0).click();
-        WebElement selection = smsPage.smsSender().get(0);
+        smsPage.smsprovider().getFirst().click();
+        WebElement selection = smsPage.smsSender().getFirst();
         wait.until(ExpectedConditions.elementToBeClickable(selection));
         selection.click();
         smsPage.smsBalanceField.sendKeys("80");
@@ -197,7 +196,7 @@ public class D02_CreateProperty {
         subscriptionPage.startingAmountField.sendKeys("8000");
         subscriptionPage.startingAmountTaxField.sendKeys("800");
         subscriptionPage.annualRenewalPriceField.sendKeys("18");
-        WebElement selection = propeertyDataPage.propertyAccount().get(0);
+        WebElement selection = propeertyDataPage.propertyAccount().getFirst();
         wait.until(ExpectedConditions.elementToBeClickable(selection));
         selection.click();
         propeertyDataPage.numberOfUnitsField.sendKeys("80");

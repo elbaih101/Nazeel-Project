@@ -333,19 +333,16 @@ public class Utils {
     }
 
 
-    public static void KendoSelectByValue(WebDriver driver, WebElement select, String value)
-    {
-        var selectElement = new Select(select);
-        List<WebElement> options = selectElement.getOptions();
-        for (int i = 0; i < options.size(); i++)
-        {
-            WebElement element = options.get(i);
-            if (element.getAttribute("value").equals(value) || element.getAttribute("text").equals(value))
-            {
-                var id = select.getAttribute("id");
-                ((JavascriptExecutor) driver).executeScript(String.format("$('#{0}').data('kendoDropDownList').select({1});", id, i));
-                break;
-            }
+   public static void KendoSelectByValue(WebDriver driver, WebElement select, String value) {
+    var selectElement = new Select(select);
+    List<WebElement> options = selectElement.getOptions();
+    for (int i = 0; i < options.size(); i++) {
+        WebElement element = options.get(i);
+        if (element.getAttribute("value").equals(value) || element.getAttribute("text").equals(value)) {
+            var id = select.getAttribute("id");
+            ((JavascriptExecutor) driver).executeScript(String.format("$('#%s').data('kendoDropDownList').select(%d);", id, i));
+            break;
         }
     }
+}
 }
