@@ -177,7 +177,7 @@ public class D05_UnitsSetup {
         WebElement card;
         new P00_multiPurposes(driver).waitLoading();
         if (!unitNum.equalsIgnoreCase("RANDOM")) {
-            card = unitsSetupPage.unitsCards.stream().filter(element -> unitsSetupPage.unitNum(element).getText().contains(unitNum)).toList().get(0);
+            card = unitsSetupPage.unitsCards.stream().filter(element -> unitsSetupPage.unitNum(element).getText().contains(unitNum)).toList().getFirst();
         } else {
             card = unitsSetupPage.unitsCards.get(new Random().nextInt(unitsSetupPage.unitsCards.size()));
         }
@@ -231,7 +231,7 @@ public class D05_UnitsSetup {
             if (block.equalsIgnoreCase("RANDOM")) {
                 selectedBlock = blocks.get(new Random().nextInt(blocks.size()));
             } else {
-                selectedBlock = blocks.stream().filter(element -> element.getText().contains(block)).toList().get(0);
+                selectedBlock = blocks.stream().filter(element -> element.getText().contains(block)).toList().getFirst();
             }
 
             wait.until(ExpectedConditions.elementToBeClickable(selectedBlock));
@@ -254,13 +254,13 @@ public class D05_UnitsSetup {
         if (type.equalsIgnoreCase("RANDOM")) {
             selectedType = types.get(new Random().nextInt(types.size()));
         } else {
-            selectedType = types.stream().filter(element -> element.getText().contains(type)).toList().get(0);
+            selectedType = types.stream().filter(element -> element.getText().contains(type)).toList().getFirst();
         }
         wait.until(ExpectedConditions.elementToBeClickable(selectedType));
         selectedType.click();
 
         List<WebElement> formats = groupOfUnitsPopUp.formats();
-        WebElement selectedFormat = formats.get(0);
+        WebElement selectedFormat = formats.getFirst();
         wait.until(ExpectedConditions.elementToBeClickable(selectedFormat));
         selectedFormat.click();
 
@@ -316,7 +316,7 @@ public class D05_UnitsSetup {
         if (unitNum.equals("RANDOM")) {
             deletedCard = unitsSetupPage.unitsCards.get(new Random().nextInt(unitsSetupPage.unitsCards.size()));
         } else {
-            deletedCard = unitsSetupPage.unitsCards.stream().filter(element -> unitsSetupPage.unitNum(element).getText().contains(unitNum)).toList().get(0);
+            deletedCard = unitsSetupPage.unitsCards.stream().filter(element -> unitsSetupPage.unitNum(element).getText().contains(unitNum)).toList().getFirst();
 
         }
         actions.moveToElement(deletedCard);
@@ -484,7 +484,7 @@ public class D05_UnitsSetup {
             selecetdStatus = statusList.get(new Random().nextInt(statusList.size()));
             selectedState = selecetdStatus.getText();
         } else {
-            selecetdStatus = statusList.stream().filter(element -> element.getText().contains(state)).toList().get(0);
+            selecetdStatus = statusList.stream().filter(element -> element.getText().contains(state)).toList().getFirst();
             selectedState = selecetdStatus.getText();
         }
         wait.until(ExpectedConditions.elementToBeClickable(selecetdStatus));
@@ -535,7 +535,7 @@ public class D05_UnitsSetup {
             selecetdType = typesList.get(new Random().nextInt(typesList.size()));
             selectedUnitTypeName = selecetdType.getText().trim();
         } else {
-            selecetdType = typesList.stream().filter(element -> element.getText().trim().contains(unitType.trim())).toList().get(0);
+            selecetdType = typesList.stream().filter(element -> element.getText().trim().contains(unitType.trim())).toList().getFirst();
             selectedUnitTypeName = selecetdType.getText();
         }
         wait.until(ExpectedConditions.elementToBeClickable(selecetdType));
@@ -570,7 +570,7 @@ public class D05_UnitsSetup {
             selecetdblock = blocksList.get(new Random().nextInt(blocksList.size()));
             selectedBlockName = selecetdblock.getText().trim();
         } else {
-            selecetdblock = blocksList.stream().filter(element -> element.getText().trim().contains(block.trim())).toList().get(0);
+            selecetdblock = blocksList.stream().filter(element -> element.getText().trim().contains(block.trim())).toList().getFirst();
             selectedBlockName = selecetdblock.getText();
         }
         wait.until(ExpectedConditions.elementToBeClickable(selecetdblock));
@@ -582,7 +582,7 @@ public class D05_UnitsSetup {
             selectedFloor = floorsList.get(new Random().nextInt(floorsList.size()));
             selectedFloorName = selectedFloor.getText().trim();
         } else {
-            selectedFloor = floorsList.stream().filter(element -> element.getText().trim().contains(floor.trim())).toList().get(0);
+            selectedFloor = floorsList.stream().filter(element -> element.getText().trim().contains(floor.trim())).toList().getFirst();
             selectedFloorName = selectedFloor.getText();
         }
         wait.until(ExpectedConditions.elementToBeClickable(selectedFloor));
@@ -631,14 +631,14 @@ public class D05_UnitsSetup {
     public void createNewMergeRuleBetweenTheTwoCreatedUnits(String uClass, String unitA, String unitB) {
         gotoMergeSettingsPage();
         mergeSettings.newMergeButton.click();
-        mergeSettings.blocksList().get(0).click();
-        mergeSettings.floorsList().get(0).click();
+        mergeSettings.blocksList().getFirst().click();
+        mergeSettings.floorsList().getFirst().click();
         if (!uClass.isEmpty()) {
             mergeSettings.classesList().stream().filter(uC -> uC.getText().equalsIgnoreCase(uClass)).findAny().orElseThrow().click();
         }
         switch (unitA) {
             case "generated" ->
-                    mergeSettings.unitA().stream().filter(unit -> unit.getText().contains(tobemergedUnits.get(0))).findAny().orElseThrow().click();
+                    mergeSettings.unitA().stream().filter(unit -> unit.getText().contains(tobemergedUnits.getFirst())).findAny().orElseThrow().click();
 
             case "Random" -> mergeSettings.unitA().getFirst().click();
 
@@ -682,7 +682,7 @@ public class D05_UnitsSetup {
 
     @And("the merge setting bet the two numbers is visible on the grid with class {string}")
     public void theMergeSettingBetTheTwoNumbersIsVisibleOnTheGrid(String uClass) {
-        WebElement createdMergeSetting = mergeSettings.unitsNumbers.stream().filter(m -> m.getText().contains(tobemergedUnits.get(0)) && m.getText().contains(tobemergedUnits.get(1))).findFirst().orElseThrow();
+        WebElement createdMergeSetting = mergeSettings.unitsNumbers.stream().filter(m -> m.getText().contains(tobemergedUnits.getFirst()) && m.getText().contains(tobemergedUnits.get(1))).findFirst().orElseThrow();
         asrt.assertTrue(createdMergeSetting.isDisplayed());
         asrt.assertTrue(mergeSettings.mergeRecordUnitsClasses(createdMergeSetting).getText().contains(uClass));
         goToUnitSetupPage();
@@ -691,7 +691,7 @@ public class D05_UnitsSetup {
             enterTheUnitNumberAndFilter(unitNum);
             new P00_multiPurposes(driver).waitLoading();
             WebElement unitCard = unitsSetupPage.unitsCards.stream().filter(card -> unitsSetupPage.unitNum(card).getText().equalsIgnoreCase(unitNum)).findFirst().orElseThrow();
-            asrt.assertTrue(unitsSetupPage.unitMergeIcon(unitCard).get(0).isDisplayed(), "unit:" + unitNum + "is not merged");
+            asrt.assertTrue(unitsSetupPage.unitMergeIcon(unitCard).getFirst().isDisplayed(), "unit:" + unitNum + "is not merged");
         }
         asrt.assertAll();
     }
@@ -701,7 +701,7 @@ public class D05_UnitsSetup {
     @Given("delete any merge setting and note the related units")
     public void deleteAnyMergeSettingAndNoteTheRelatedUnits() {
         gotoMergeSettingsPage();
-        WebElement mergRecord = mergeSettings.unitsNumbers.get(0);
+        WebElement mergRecord = mergeSettings.unitsNumbers.getFirst();
         String mergedUnits = mergRecord.getText();
         retreavedMergeUnits.add(StringUtils.substringAfter(mergedUnits, "- "));
         retreavedMergeUnits.add(StringUtils.substringBefore(mergedUnits, " -"));
@@ -732,8 +732,8 @@ public class D05_UnitsSetup {
         if (!uNum.equalsIgnoreCase("Random")) {
             mergeSettings.unitSearchField.sendKeys(uNum);
         } else {
-            retreavedMergeUnits.add(StringUtils.substringAfter(mergeSettings.unitsNumbers.get(0).getText(), "- "));
-            mergeSettings.unitSearchField.sendKeys(retreavedMergeUnits.get(0));
+            retreavedMergeUnits.add(StringUtils.substringAfter(mergeSettings.unitsNumbers.getFirst().getText(), "- "));
+            mergeSettings.unitSearchField.sendKeys(retreavedMergeUnits.getFirst());
         }
         mergeSettings.searchButton.click();
     }
@@ -743,9 +743,9 @@ public class D05_UnitsSetup {
         new P00_multiPurposes(driver).waitLoading();
         asrt.assertTrue(mergeSettings.unitsNumbers.size() == 1);
         if (!uNum.equalsIgnoreCase("Random")) {
-            asrt.assertTrue(mergeSettings.unitsNumbers.get(0).getText().contains(uNum));
+            asrt.assertTrue(mergeSettings.unitsNumbers.getFirst().getText().contains(uNum));
         } else {
-            asrt.assertTrue(mergeSettings.unitsNumbers.get(0).getText().contains(retreavedMergeUnits.get(0)));
+            asrt.assertTrue(mergeSettings.unitsNumbers.getFirst().getText().contains(retreavedMergeUnits.getFirst()));
         }
         asrt.assertAll();
 
@@ -773,10 +773,10 @@ public class D05_UnitsSetup {
 
     @And("Check the newly added amenity is added")
     public void checkTheNewlyAddedAmenityIsAdded() {
-        asrt.assertTrue(amenities.names.stream().anyMatch(am -> am.getText().contains(retreavedAmenities.get(0))));
+        asrt.assertTrue(amenities.names.stream().anyMatch(am -> am.getText().contains(retreavedAmenities.getFirst())));
         goToUnitSetupPage();
         openTheNewUnitPage();
-        asrt.assertTrue(newUnitPage.amenities().stream().anyMatch(am -> am.getText().contains(retreavedAmenities.get(0))));
+        asrt.assertTrue(newUnitPage.amenities().stream().anyMatch(am -> am.getText().contains(retreavedAmenities.getFirst())));
     }
 
     @Given("edit unit amenity description {string} and state {string}")
@@ -814,7 +814,7 @@ public class D05_UnitsSetup {
         } else {
             seectedAmenity = amenities.names.stream().filter(am -> am.getText().equalsIgnoreCase(amenity)).findAny().orElseThrow();
         }
-        retreavedAmenities.add(0, seectedAmenity.getText());
+        retreavedAmenities.addFirst(seectedAmenity.getText());
         amenities.applyButton(seectedAmenity).click();
         amenities.submitButton.click();
     }
@@ -823,7 +823,7 @@ public class D05_UnitsSetup {
     public void checkTheAmenityIsAppliedForAnyUnit() {
         goToUnitSetupPage();
         openTheViewModeForAUnit("Random");
-        asrt.assertTrue(newUnitPage.amenities().stream().anyMatch(am -> am.getText().contains(retreavedAmenities.get(0))));
+        asrt.assertTrue(newUnitPage.amenities().stream().anyMatch(am -> am.getText().contains(retreavedAmenities.getFirst())));
     }
 
     @Given("delete amenity {string}")
@@ -837,7 +837,7 @@ public class D05_UnitsSetup {
         } else {
             seectedAmenity = amenities.names.stream().filter(am -> am.getText().equalsIgnoreCase(amenity)).findAny().orElseThrow();
         }
-        retreavedAmenities.add(0, seectedAmenity.getText());
+        retreavedAmenities.addFirst(seectedAmenity.getText());
         amenities.deleteButton(seectedAmenity).click();
         amenities.confirmDeleteButton.click();
     }
@@ -849,7 +849,7 @@ public class D05_UnitsSetup {
         if (msg.contains("successfully")) {
             goToUnitSetupPage();
             openTheNewUnitPage();
-            asrt.assertFalse(newUnitPage.amenities().stream().anyMatch(am -> am.getText().contains(retreavedAmenities.get(0))));
+            asrt.assertFalse(newUnitPage.amenities().stream().anyMatch(am -> am.getText().contains(retreavedAmenities.getFirst())));
             asrt.assertAll();
         }
 

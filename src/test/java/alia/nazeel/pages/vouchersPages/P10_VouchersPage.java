@@ -16,6 +16,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 import java.util.List;
+import java.util.Objects;
 
 @SuppressWarnings("unused")
 public class P10_VouchersPage {
@@ -44,7 +45,6 @@ public class P10_VouchersPage {
     public List<WebElement> vouchersNums;
     @FindBy(xpath = "//td[@data-kendo-grid-column-index=\"3\"]")
     public List<WebElement> paymentMethods;
-
     @FindBy(xpath = "//td[@data-kendo-grid-column-index=\"8\"]")
     public List<WebElement> receitRelatedpromissories;
 
@@ -75,7 +75,7 @@ public WebElement voucherOwner (WebElement voucher,String voucherType){
             moreMenu = voucherAmount.findElement(By.xpath("..//td[@data-kendo-grid-column-index=\"10\"]//div/div"));
         }
         wait.until(ExpectedConditions.elementToBeClickable(moreMenu));
-        moreMenu.click();
+        Objects.requireNonNull(moreMenu).click();
         return moreMenu.findElements(By.xpath("//div[@class=\"popup__content\"]/div"));
     }
 
