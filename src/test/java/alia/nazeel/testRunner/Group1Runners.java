@@ -1,6 +1,7 @@
 package alia.nazeel.testRunner;
 
-import io.cucumber.testng.AbstractTestNGCucumberTests;
+import alia.nazeel.BaseTestNGCucumberRunner;
+import alia.nazeel.pojos.UserDataReader;
 import io.cucumber.testng.CucumberOptions;
 import org.testng.annotations.DataProvider;
 
@@ -25,7 +26,9 @@ import org.testng.annotations.DataProvider;
         )
 
 
-public class Group1Runners extends AbstractTestNGCucumberTests {
+public class Group1Runners extends BaseTestNGCucumberRunner {
+    static {
+        setUser(UserDataReader.getNextUser());}
 //   to run in parallel
     @SuppressWarnings({"DefaultAnnotationParam", "EmptyMethod"})
     @Override

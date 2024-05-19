@@ -1,5 +1,6 @@
 package alia.nazeel.stepDefs;
 
+import alia.nazeel.BaseTestNGCucumberRunner;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
 import io.cucumber.java.Scenario;
@@ -19,10 +20,13 @@ import java.time.Duration;
 public class Hooks {
     public WebDriver driver;
     private Scenario scenario;
-   public  final static String stageUrl ="https://staging.nazeel.net:9002/";
+    public final static String stageUrl = "https://staging.nazeel.net:9002/";
+
+
 
     @Before
     public void start(Scenario scenario) {
+
         this.scenario = scenario;
         DriverManager.initializeDriver(Drivers.Chrome, Driver_Mode.UI);
         this.driver = DriverManager.getDriver();
@@ -58,7 +62,7 @@ public class Hooks {
     }
 
     public static void superUserLogin(WebDriver driver, String username, String password) {
-        User user = UserDataReader.getNextUser();
+        User user = BaseTestNGCucumberRunner.getUSer();
         //initiating Waits and Pages
         P01_LoginPage loginPage = new P01_LoginPage(driver);
         if (user != null) {

@@ -28,6 +28,7 @@ public class UserDataReader {
             currentIndex = (currentIndex + 1) % users.length;
             return users[currentIndex];
         }
+
         return null;
     }
 

@@ -1,5 +1,7 @@
 package alia.nazeel.testRunner;
 
+import alia.nazeel.BaseTestNGCucumberRunner;
+import alia.nazeel.pojos.UserDataReader;
 import io.cucumber.testng.AbstractTestNGCucumberTests;
 import io.cucumber.testng.CucumberOptions;
 import org.testng.annotations.DataProvider;
@@ -10,7 +12,7 @@ import org.testng.annotations.DataProvider;
         (
 
                 features = "src/main/resources/features",
-                glue = {"org.example.stepDefs"},
+                glue = {"alia.nazeel.stepDefs"},
                 tags = "@Group2",//"not @Reservation_Rules and not @DigitalPayment and not @Property and not @Blocks_Floors",
                 plugin = {
                         "pretty",
@@ -26,8 +28,10 @@ import org.testng.annotations.DataProvider;
         )
 
 
-public class Group2Runners extends AbstractTestNGCucumberTests {
+public class Group2Runners extends BaseTestNGCucumberRunner {
 //   to run in parallel
+static {
+    setUser(UserDataReader.getNextUser());}
     @Override
     @DataProvider(parallel = false)
     public Object[][] scenarios(){
