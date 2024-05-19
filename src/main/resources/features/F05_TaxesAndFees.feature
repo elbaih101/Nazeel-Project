@@ -3,7 +3,7 @@ Feature: Property Taxes and Fees setup
 
   Background:  login and choose property
     Given Logging in with superuser
-    And Select Property "P01404"
+    And Select Property "created"
 
   Rule:Taxes and Fees
     Background: go to taxes page

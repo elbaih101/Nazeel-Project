@@ -2,7 +2,7 @@
 Feature: Blocks And Floors
   Background: selecting property
     Given Logging in with superuser
-    And Select Property "P01404"
+    And Select Property "created"
   Rule: blocks
     Background: going to blocks Page
       And go to Blocks Page

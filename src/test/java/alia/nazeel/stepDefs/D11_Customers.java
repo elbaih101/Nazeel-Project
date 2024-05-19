@@ -87,11 +87,11 @@ public class D11_Customers {
             } else {
                 corporates.postalCodeField.sendKeys((Keys.chord(Keys.CONTROL, "a", Keys.BACK_SPACE)));
             }
-            if (!ignoredFields.equalsIgnoreCase("cRNumber")) {
+            if (!ignoredFields.toLowerCase().contains("crnumber")) {
                 corporates.cRNumberField.clear();
                 corporates.cRNumberField.sendKeys("987654");
             }
-            if (!ignoredFields.equalsIgnoreCase("city")) {
+            if (!ignoredFields.toLowerCase().contains("city")) {
                 corporates.cityFieldEn.clear();
                 corporates.cityFieldEn.click();
                 corporates.cityFieldEn.sendKeys(Faker.instance().address().city());
@@ -99,45 +99,45 @@ public class D11_Customers {
                 corporates.cityFieldEn.sendKeys((Keys.chord(Keys.CONTROL, "a", Keys.BACK_SPACE)));
                 corporates.arField(corporates.cityFieldEn).sendKeys((Keys.chord(Keys.CONTROL, "a", Keys.BACK_SPACE)));
             }
-            if (!ignoredFields.equalsIgnoreCase("district")) {
+            if (!ignoredFields.toLowerCase().contains("district")) {
                 corporates.districtFieldEn.clear();
                 corporates.districtFieldEn.sendKeys(Faker.instance().address().state());
             } else {
                 corporates.districtFieldEn.sendKeys((Keys.chord(Keys.CONTROL, "a", Keys.BACK_SPACE)));
                 corporates.arField(corporates.districtFieldEn).sendKeys((Keys.chord(Keys.CONTROL, "a", Keys.BACK_SPACE)));
             }
-            if (!ignoredFields.equalsIgnoreCase("street")) {
+            if (!ignoredFields.toLowerCase().contains("street")) {
                 corporates.streetFieldEn.clear();
                 corporates.streetFieldEn.sendKeys(Faker.instance().address().streetName());
             } else {
                 corporates.streetFieldEn.sendKeys((Keys.chord(Keys.CONTROL, "a", Keys.BACK_SPACE)));
                 corporates.arField(corporates.streetFieldEn).sendKeys((Keys.chord(Keys.CONTROL, "a", Keys.BACK_SPACE)));
             }
-            if (!ignoredFields.equalsIgnoreCase("bNumber")) {
+            if (!ignoredFields.toLowerCase().contains("bnumber")) {
                 corporates.bNoField.clear();
                 corporates.bNoField.sendKeys(bNumb);
             }
-            if (!ignoredFields.equalsIgnoreCase("secNumber")) {
+            if (!ignoredFields.toLowerCase().contains("secnumber")) {
                 corporates.secNoField.clear();
                 corporates.secNoField.sendKeys(secBNumb);
             }
-            if (!ignoredFields.equalsIgnoreCase("address")) {
+            if (!ignoredFields.toLowerCase().contains("address")) {
                 corporates.addressField.clear();
                 corporates.addressField.sendKeys(Faker.instance().address().fullAddress());
             }
-            if (!ignoredFields.equalsIgnoreCase("email")) {
+            if (!ignoredFields.toLowerCase().contains("email")) {
                 corporates.emaiField.clear();
                 corporates.emaiField.sendKeys(Faker.instance().internet().emailAddress());
             }
-            if (!ignoredFields.equalsIgnoreCase("phone")) {
+            if (!ignoredFields.toLowerCase().contains("phone")) {
                 corporates.corPhoneField.clear();
                 corporates.corPhoneField.sendKeys(Faker.instance().number().digits(9));
             }
-            if (!ignoredFields.equalsIgnoreCase("cPerson")) {
+            if (!ignoredFields.toLowerCase().contains("cperson")) {
                 corporates.cPersonNameFied.clear();
                 corporates.cPersonNameFied.sendKeys(Faker.instance().funnyName().name());
             }
-            if (!ignoredFields.equalsIgnoreCase("cPersonNumber")) {
+            if (!ignoredFields.toLowerCase().contains("coersonnumber")) {
                 corporates.cPersonPhoneFied.clear();
                 corporates.cPersonPhoneFied.sendKeys(Faker.instance().number().digits(9));
             }

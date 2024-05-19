@@ -56,7 +56,7 @@ public class Utils {
      * this function stes the time in time fields with
      *
      * @param timeInput the time field
-     * @param time      the time in the form HH:mm
+     * @param time      the time in the form (HH:mm AM/PM)
      */
     public static void setTime(WebElement timeInput, String time) {
         timeInput.click();

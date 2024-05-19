@@ -3,19 +3,18 @@ Feature: Guest Feature
 
   Background:  login and choose property
     Given Logging in with superuser
-    And Select Property "P01385"
+    And Select Property "P01404"
     And go to Guests page
 
   Scenario Outline: Create a Guest
     When create Guest firstname "<fName>" last name "<lName>"  phone "<phone>" nationality "<nat>" Guest Type "<gType>" id type "<idType>" id number "<idNumber>" ignored Fields "<ign>" invailed Fields "<inv>"
     Then Check msg "<msg>" and Guest is "added"
     Examples:
-      | fName | lName | phone     | nat   | gType | idType      | idNumber | ign                   | inv | msg                                                                                                                                                                                                                                                                     |
-      |       |       |           |       |       |             |          | bDate,Gender,idSerial |     | Please select guest ID type\nId number is required\nFirst name is required\nLast name is required\nNationality is required\nInvalid mobile number\nDate of birth is required\ngender is missing\nThe mobile number must be a maximum of 9 digits without the first zero |
-      |       |       | non       |       |       |             |          | bDate,Gender,idSerial |     | Please select guest ID type\nId number is required\nFirst name is required\nLast name is required\nNationality is required\nCountry dial code is required\nInvalid mobile number\nDate of birth is required\ngender is missing                                          |
-      | zaky  | zeko2 | 236548795 | Egypt | any   | National Id | 5565872  |                       |     | Guest added successfully                                                                                                                                                                                                                                                |
-      | Zaky  | Zeko2 | 236548795 | Egypt | any   | National Id | 5565872  |                       |     | Inserted Id was used before for other guest number                                                                                                                                                                                                                      |
-      | Zaky  | Zeko3 | 236548795 | Egypt | any   | National Id | 5565873  |                       |     | Guest added successfully                                                                                                                                                                                                                                                |
+      | fName | lName | phone     | nat     | gType | idType      | idNumber | ign                   | inv | msg                                                                                                                                                                                                                                                                     |
+      |       |       |           |         |       |             |          | bDate,Gender,idSerial |     | Please select guest ID type\nId number is required\nFirst name is required\nLast name is required\nNationality is required\nInvalid mobile number\nDate of birth is required\ngender is missing\nThe mobile number must be a maximum of 9 digits without the first zero |
+      |       |       | non       |         |       |             |          | bDate,Gender,idSerial |     | Please select guest ID type\nId number is required\nFirst name is required\nLast name is required\nNationality is required\nCountry dial code is required\nInvalid mobile number\nDate of birth is required\ngender is missing                                          |
+      | zaky  | new   | 236548795 | Egypt   | any   | National Id | 5565872  |                       |     | Guest added successfully                                                                                                                                                                                                                                                |
+      | Zaky  | new   | 236548795 | Unknown | any   | National Id | 65549    |                       |     | Inserted Id was used before for other guest number                                                                                                                                                                                                                      |
 
 
   Scenario Outline: edit  guest details
@@ -23,10 +22,10 @@ Feature: Guest Feature
     Then Check msg "<msg>" and Guest is "added"
     Examples:
       | oIdNum  | fName | lName | phone     | nat     | gType | idType      | nIdNum  | state    | ign | inv                   | msg                                                                                                                                                                                                                                                                                 |
-      | 5565873 | non   | non   | dialOnly  | non     | non   | non         | non     |          |     | bDate,Gender,idSerial | Please select guest ID type\nId number is required\nFirst name is required\nLast name is required\nNationality is required\nInvalid mobile number\ndate of birth must be less than today\ngender is missing\nThe mobile number must be a maximum of 9 digits without the first zero |
-      | 5565873 | non   | non   | non       | non     | non   | non         | non     |          |     | bDate,Gender,idSerial | Please select guest ID type\nId number is required\nFirst name is required\nLast name is required\nNationality is required\nCountry dial code is required\nInvalid mobile number\ndate of birth must be less than today\ngender is missing                                          |
-      | 5565873 | Zaky  | Zeko2 | 236548795 | Unknown | any   | National Id | 5565872 |          |     |                       | Inserted Id was used before for other guest number                                                                                                                                                                                                                                  |
-      | 5565873 | zaky  | zeko3 | 236548795 | Unknown | any   | Family Id   | 5565878 | inActive |     |                       | Guest Updated Successfully                                                                                                                                                                                                                                                          |
+      | 5565872 | non   | non   | dialOnly  | non     | non   | non         | non     |          |     | bDate,Gender,idSerial | Please select guest ID type\nId number is required\nFirst name is required\nLast name is required\nNationality is required\nInvalid mobile number\ndate of birth must be less than today\ngender is missing\nThe mobile number must be a maximum of 9 digits without the first zero |
+      | 5565872 | non   | non   | non       | non     | non   | non         | non     |          |     | bDate,Gender,idSerial | Please select guest ID type\nId number is required\nFirst name is required\nLast name is required\nNationality is required\nCountry dial code is required\nInvalid mobile number\ndate of birth must be less than today\ngender is missing                                          |
+      | 5565872 | Zaky  | Zeko2 | 236548795 | Unknown | any   | National Id | 5565872 |          |     |                       | Inserted Id was used before for other guest number                                                                                                                                                                                                                                  |
+      | 5565872 | zaky  | zeko3 | 236548795 | Unknown | any   | Family Id   | 5565878 | inActive |     |                       | Guest Updated Successfully                                                                                                                                                                                                                                                          |
 
   Scenario: add guest Notes
     When adding a company note "guest is a naughty" and property ote "the guest is fantastic" to guest with id "5565878"
@@ -56,10 +55,10 @@ Feature: Guest Feature
     When Filtering guest "<filter>" as "<value>"
     Then Check all guests shown "<filter>" as "<value>"
     Examples:
-      | filter      | value       |
-      | status      | inactive    |
-      | name        | zaky        |
-      | nationality | Egypt       |
-      | class       | Golden      |
-      | idtype      | National ID |
-      | idnum       | 5565872     |
+      | filter      | value        |
+      | status      | inactive     |
+      | name        | auto         |
+      | nationality | Egypt        |
+      | class       | auto class 1 |
+      | idtype      | National ID  |
+      | idnum       | 65549      |

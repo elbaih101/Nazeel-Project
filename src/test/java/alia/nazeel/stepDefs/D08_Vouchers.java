@@ -8,6 +8,7 @@ import alia.nazeel.pages.mutlipurposes.P00_multiPurposes;
 import alia.nazeel.pages.reservations.P03_2_ReservationFinancialPage;
 import alia.nazeel.pages.vouchersPages.P10_VouchersPage;
 import alia.nazeel.pages.vouchersPages.P11_DigitalPaymentPage;
+import alia.nazeel.pojos.JsonDataTools;
 import alia.nazeel.tools.Utils;
 import io.cucumber.cienvironment.internal.com.eclipsesource.json.Json;
 import io.cucumber.cienvironment.internal.com.eclipsesource.json.JsonObject;
@@ -19,6 +20,9 @@ import io.cucumber.java.en.When;
 import alia.nazeel.tools.API;
 import alia.nazeel.tools.DriverManager;
 import alia.nazeel.pages.vouchersPages.P16_VouchersPopUp;
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
@@ -64,7 +68,7 @@ public class D08_Vouchers {
     }
 
 
-    public class VouchersMap {
+    public static class VouchersMap {
         String vType;
         String vState;
         String vNumber;
@@ -157,8 +161,8 @@ public class D08_Vouchers {
 
     @Then("submit the voucher and check success message prefix {string} postfix {string}")
     public void submitTheVoucherAndCheckSuccessMessage(String prefix, String postfix) {
-     //   wait.until(ExpectedConditions.elementToBeClickable(vouchersPopUp.submitButton()));
-      //  voucherNums = StringUtils.substringBetween(multiPurposes.toastMsgs.getFirst().getText().toLowerCase(), prefix.toLowerCase(), postfix.toLowerCase());
+        //   wait.until(ExpectedConditions.elementToBeClickable(vouchersPopUp.submitButton()));
+        //  voucherNums = StringUtils.substringBetween(multiPurposes.toastMsgs.getFirst().getText().toLowerCase(), prefix.toLowerCase(), postfix.toLowerCase());
         try {
 
             new D03_BlocksAndFloors().checkToastMesageContainsText(prefix + voucherNums + postfix);
@@ -181,7 +185,7 @@ public class D08_Vouchers {
         List<WebElement> methods = vouchersPopUp.paymentMethods();
 
         wait.until(ExpectedConditions.visibilityOfAllElements(methods));
-        methods.stream().filter(method -> method.getText().contains(paymentMethod)).toList().get(0).click();
+        methods.stream().filter(method -> method.getText().contains(paymentMethod)).toList().getFirst().click();
         multiPurposes.waitLoading();
         if (!paymentMethod.equalsIgnoreCase(PaymentMethods.Cash.toString()) && !paymentMethod.equalsIgnoreCase(PaymentMethods.PayTabs.toString())) {
             vouchersPopUp.banks().get(new Random().nextInt(vouchersPopUp.banks().size())).click();
@@ -234,7 +238,7 @@ public class D08_Vouchers {
             Utils.setDate(vouchersPopUp.dateField(), creatianDate);
         }
         API api = new API();
-        JsonObject json = Json.parse(api.getResponseBody( driver, url, () -> vouchersPopUp.submitButton().click())).asObject();
+        JsonObject json = Json.parse(api.getResponseBody(driver, url, () -> vouchersPopUp.submitButton().click())).asObject();
         voucherNums = json.getString("data", null);
         submitTheVoucherAndCheckSuccessMessage(prefix, Postfix);
         createdVoucherType = voucherType;
@@ -301,14 +305,14 @@ public class D08_Vouchers {
 
         multiPurposes.waitLoading();
         if (voucherState.equalsIgnoreCase("Ended") || voucherState.equalsIgnoreCase("CashDrop") || voucherState.equalsIgnoreCase("Created")) {
-            vouchersPage.editButton(vouchersPage.vouchersNums.stream().filter(num -> num.getText().equalsIgnoreCase(vNumber)).toList().get(0), voucherType).click();
+            vouchersPage.editButton(vouchersPage.vouchersNums.stream().filter(num -> num.getText().equalsIgnoreCase(vNumber)).toList().getFirst(), voucherType).click();
 
         } else if (voucherState.equalsIgnoreCase("Collected")) {
-            vouchersPage.editButton(vouchersPage.receitRelatedpromissories.stream().filter(num -> num.getText().equalsIgnoreCase(vNumber)).toList().get(0), voucherType).click();
+            vouchersPage.editButton(vouchersPage.receitRelatedpromissories.stream().filter(num -> num.getText().equalsIgnoreCase(vNumber)).toList().getFirst(), voucherType).click();
 
         } else if (voucherState.equalsIgnoreCase("Generated")) {
             //TODO : Check the Voucher number from the paytabs Report and use it
-            vouchersPage.editButton(vouchersPage.paymentMethods.stream().filter(method -> method.getText().equalsIgnoreCase("PayTabs")).toList().get(0), voucherType).click();
+            vouchersPage.editButton(vouchersPage.paymentMethods.stream().filter(method -> method.getText().equalsIgnoreCase("PayTabs")).toList().getFirst(), voucherType).click();
         }
 
     }
@@ -460,17 +464,17 @@ public class D08_Vouchers {
         if (paymentMethod.equalsIgnoreCase(PaymentMethods.Digital.toString())) {
             List<WebElement> amountsOfPromissoryNotFullyPaid = vouchersPage.promissoriesRemainigAmounts().stream().filter(element -> element.getText().trim().charAt(0) != '0').toList();
             WebElement selectedPromissoryAmount = amountsOfPromissoryNotFullyPaid.get(new Random().nextInt(amountsOfPromissoryNotFullyPaid.size()));
-            vouchersPage.moreActions(selectedPromissoryAmount, "promissory").stream().filter(element -> element.getText().trim().contains("Collect Via Digital Payment")).toList().get(0).click();
+            vouchersPage.moreActions(selectedPromissoryAmount, "promissory").stream().filter(element -> element.getText().trim().contains("Collect Via Digital Payment")).toList().getFirst().click();
             D06_DigitalPayment.promissoryNo = digitalPaymentPage.promissoryNumber().getText();
         } else {
-            vouchersPage.moreActions(vouchersPage.vouchersNums.stream().filter(num -> num.getText().equalsIgnoreCase(vMap.getvNumber())).toList().get(0), Vouchers.promissory.toString()).stream().filter(action -> action.getText().equalsIgnoreCase("Collect")).toList().get(0).click();
+            vouchersPage.moreActions(vouchersPage.vouchersNums.stream().filter(num -> num.getText().equalsIgnoreCase(vMap.getvNumber())).toList().getFirst(), Vouchers.promissory.toString()).stream().filter(action -> action.getText().equalsIgnoreCase("Collect")).toList().getFirst().click();
         }
 
     }
 
     @When("finish promissory Normal collecting process with amount {string} PaymentMethod {string}")
     public void finishpromissoryNormalCollectingProcess(String amount, String paymentMethod) {
-        vouchersPopUp.paymentMethods().stream().filter(method -> method.getText().contains(paymentMethod)).toList().get(0).click();
+        vouchersPopUp.paymentMethods().stream().filter(method -> method.getText().contains(paymentMethod)).toList().getFirst().click();
         multiPurposes.waitLoading();
         vouchersPopUp.amountField().clear();
         vouchersPopUp.amountField().sendKeys(amount);
@@ -485,8 +489,13 @@ public class D08_Vouchers {
         wait.until(ExpectedConditions.urlContains("cash-drawer-balance"));
         multiPurposes.waitLoading();
         cashDrawerPage.dropCashButton().click();
-        cashDrawerPage.dateto().clear();
-        Utils.setDate(cashDrawerPage.dateto(), toDate);
+        cashDrawerPage.dateTo().clear();
+        Utils.setDate(cashDrawerPage.dateTo(), toDate);
+        cashDrawerPage.timeTo().clear();
+        String dropCashTime = JsonDataTools.getValueFromJsonFile("src/main/resources/testdata/VouchersRelatedData.json", "dropCashTime");
+        Utils.setTime(cashDrawerPage.timeTo(), dropCashTime);
+        DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern("HH:mm a");
+        JsonDataTools.writeValueToJsonFile("src/main/resources/testdata/VouchersRelatedData.json","dropCashTime", DateTime.parse(dropCashTime,dateTimeFormatter).plusMinutes(1).toString(dateTimeFormatter));
         cashDrawerPage.checkButton().click();
         cashDrawerPage.customAmountRadioButton().click();
         cashDrawerPage.customAmountField().clear();
@@ -513,7 +522,7 @@ public class D08_Vouchers {
             vouchersPopUp.amountField().sendKeys(amount);
         }
         if (!payMethod.isEmpty()) {
-            vouchersPopUp.paymentMethods().stream().filter(method -> method.getText().equalsIgnoreCase(payMethod)).toList().get(0).click();
+            vouchersPopUp.paymentMethods().stream().filter(method -> method.getText().equalsIgnoreCase(payMethod)).toList().getFirst().click();
         }
         if (!maturityDate.isEmpty()) {
             vouchersPopUp.PromissoryMaturityDate().clear();
@@ -528,7 +537,7 @@ public class D08_Vouchers {
         PaymentMethods p = Arrays.stream(PaymentMethods.values()).filter(pM -> pM.toString().toLowerCase().contains(newMethod.toLowerCase())).findFirst().orElseThrow();
         vouchersPopUp.paymentMethods().stream().filter(pM -> pM.getText().equals(p.toString())).findFirst().orElseThrow().click();
         if (!p.equals(PaymentMethods.Cash)) {
-            vouchersPopUp.banks().get(0).click();
+            vouchersPopUp.banks().getFirst().click();
         }
         vouchersPopUp.submitButton().click();
         new D03_BlocksAndFloors().checkToastMesageContainsText(msg);
@@ -544,7 +553,7 @@ public class D08_Vouchers {
             PaymentMethods p = Arrays.stream(PaymentMethods.values()).filter(pM -> pM.toString().toLowerCase().contains(newMethod.toLowerCase())).findFirst().orElseThrow();
             vouchersPopUp.paymentMethods().stream().filter(pM -> pM.getText().equals(p.toString())).findFirst().orElseThrow().click();
             if (!p.equals(PaymentMethods.Cash)) {
-                vouchersPopUp.banks().get(0).click();
+                vouchersPopUp.banks().getFirst().click();
             }
             vouchersPopUp.submitButton().click();
             new D03_BlocksAndFloors().checkToastMesageContainsText(msg);

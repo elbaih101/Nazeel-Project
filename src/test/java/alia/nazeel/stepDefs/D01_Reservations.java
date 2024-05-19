@@ -64,9 +64,9 @@ public class D01_Reservations {
         List<WebElement> reservationSources = reservationMainDataPage.reservationSources();
         WebElement selectedSource;
         if (source.equalsIgnoreCase("RANDOM")) {
-            selectedSource = reservationSources.get(0);
+            selectedSource = reservationSources.getFirst();
         } else {
-            selectedSource = reservationSources.stream().filter(element -> element.getText().contains(source)).toList().get(0);
+            selectedSource = reservationSources.stream().filter(element -> element.getText().contains(source)).toList().getFirst();
         }
         wait.until(ExpectedConditions.visibilityOf(selectedSource));
         selectedSource.click();
@@ -98,7 +98,7 @@ public class D01_Reservations {
         WebElement confirmBtn = unitSelectionPopup.confirmBtn;
 //        wait.until(ExpectedConditions.attributeToBe(confirmBtn,"disabled","null"));
         if (!unitSelectionPopup.checkInConflictionConfirmBtn.isEmpty()) {
-            unitSelectionPopup.checkInConflictionConfirmBtn.get(0).click();
+            unitSelectionPopup.checkInConflictionConfirmBtn.getFirst().click();
         }
         confirmBtn.click();
         wait.until(ExpectedConditions.invisibilityOf(unitCard));
@@ -201,12 +201,12 @@ public class D01_Reservations {
                 if (!endReservationPopUp.skipButton().isEmpty()) {
                     wait.until(ExpectedConditions.refreshed(ExpectedConditions.elementToBeClickable(endReservationPopUp.skipButton().getFirst())));
                     new P00_multiPurposes(driver).waitLoading();
-                    endReservationPopUp.skipButton().get(0).click();
+                    endReservationPopUp.skipButton().getFirst().click();
                 } else {
 
                     List<WebElement> methods = endReservationPopUp.paymentMethods();
                     wait.until(ExpectedConditions.visibilityOfAllElements(methods));
-                    methods.stream().filter(method -> method.getText().contains("Cash")).toList().get(0).click();
+                    methods.stream().filter(method -> method.getText().contains("Cash")).toList().getFirst().click();
                     new P00_multiPurposes(driver).waitLoading();
                     endReservationPopUp.confirmationButton().click();
                     new P00_multiPurposes(driver).waitLoading();
@@ -220,7 +220,7 @@ public class D01_Reservations {
                     new P00_multiPurposes(driver).waitLoading();
                     endReservationPopUp.skipButton().getFirst().click();
                 } else {
-                    endReservationPopUp.reasons().get(0).click();
+                    endReservationPopUp.reasons().getFirst().click();
                     endReservationPopUp.confirmationButton().click();
                     if (!endReservationPopUp.skipButton().isEmpty()) {
                         wait.until(ExpectedConditions.refreshed(ExpectedConditions.elementToBeClickable(endReservationPopUp.skipButton().getFirst())));
@@ -229,7 +229,7 @@ public class D01_Reservations {
                     } else {
                         List<WebElement> methods = endReservationPopUp.paymentMethods();
                         wait.until(ExpectedConditions.visibilityOfAllElements(methods));
-                        methods.stream().filter(method -> method.getText().contains("Cash")).toList().get(0).click();
+                        methods.stream().filter(method -> method.getText().contains("Cash")).toList().getFirst().click();
                         new P00_multiPurposes(driver).waitLoading();
                         endReservationPopUp.confirmationButton().click();
                         wait.until(ExpectedConditions.refreshed(ExpectedConditions.visibilityOf(endReservationPopUp.amountField())));
@@ -279,7 +279,7 @@ public class D01_Reservations {
         unitSelectionPopup.loadMoreLink.click();
         new P00_multiPurposes(driver).waitLoading();
         asrt.assertTrue(unitSelectionPopup.unitCards.size() == 24);
-        //  unitSelectionPopup.floorsPanels.forEach(f-> asrt.assertTrue(Utils.isSorted(unitSelectionPopup.unitNums(f))));
+        unitSelectionPopup.floorsPanels.forEach(f -> asrt.assertTrue(Utils.isSorted(unitSelectionPopup.unitNums(f))));
         asrt.assertAll();
 
     }
@@ -296,8 +296,7 @@ public class D01_Reservations {
                     reservationsPage.filterRentType().stream().filter(t -> t.getText().equalsIgnoreCase(value)).findAny().orElseThrow().click();
             case "unitType" ->
                     reservationsPage.filterUnitTypes().stream().filter(t -> t.getText().equalsIgnoreCase(value)).findAny().orElseThrow().click();
-            case "corporate" ->
-                reservationsPage.selectCorp(value).click();
+            case "corporate" -> reservationsPage.selectCorp(value).click();
 
         }
         reservationsPage.searchButton.click();

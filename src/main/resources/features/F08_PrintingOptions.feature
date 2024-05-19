@@ -1,10 +1,10 @@
-@Regression @Sprint38 @PrintingOptions @group3
+@Regression @Sprint38 @PrintingOptions @Group3
 
 Feature: printing options page
 
   Background:
     Given Logging in with superuser
-    And Select Property "P01385"
+    And Select Property "P01405"
     And go to printing options page
 
   Scenario: Check the default options

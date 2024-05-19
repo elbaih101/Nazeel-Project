@@ -652,7 +652,7 @@ public class D14_Outlets {
             new P00_multiPurposes(driver).waitLoading();
             if (ownerType.equalsIgnoreCase("corporate")) {
                 outlets.selctCorporateButton.click();
-                new D11_Customers().selectCorporate("RANDOM", "", "", "");
+                new D11_Customers().selectCorporate("corp data related", "", "", "");
             } else {
                 outlets.selctGuestButton.click();
                 new D06_DigitalPayment().selectGuest("Random", "", "");
@@ -706,7 +706,7 @@ public class D14_Outlets {
             asrt.AssertContains(toastMessages, invoiceNo);
             asrt.AssertContains(toastMessages, receiptNo);
             asrt.assertEquals(outlets.orderInvoiceNumber.getText(), invoiceNo);
-            asrt.assertEquals(outlets.receiptVouchersNums.get(0).getText(), receiptNo);
+            asrt.assertEquals(outlets.receiptVouchersNums.getFirst().getText(), receiptNo);
 
         }
         asrt.assertAll();

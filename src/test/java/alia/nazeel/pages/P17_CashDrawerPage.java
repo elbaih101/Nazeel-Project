@@ -18,7 +18,6 @@ public class P17_CashDrawerPage {
     final Actions actions;
 
 
-
     public P17_CashDrawerPage(WebDriver driver) {
         PageFactory.initElements(driver, this);
         this.driver = driver;
@@ -37,11 +36,15 @@ public class P17_CashDrawerPage {
         return driver.findElement(By.xpath("//span[contains(text(),\"Drop Cash\")]"));
     }
 
-    @FindBy(xpath = "//div[@role=\"dialog\"]")
+    @FindBy(xpath = "//drop-cash-form")
     WebElement popup;
 
-    public WebElement dateto() {
+    public WebElement dateTo() {
         return popup.findElement(By.xpath(".//kendo-datepicker//input"));
+    }
+
+    public WebElement timeTo() {
+        return popup.findElement(By.xpath(".//kendo-timepicker//input"));
     }
 
     public WebElement checkButton() {
@@ -63,8 +66,6 @@ public class P17_CashDrawerPage {
     public WebElement nextButton() {
         return popup.findElement(By.xpath(".//button[contains(text(),\"Next\")]"));
     }
-
-
 
 
 }

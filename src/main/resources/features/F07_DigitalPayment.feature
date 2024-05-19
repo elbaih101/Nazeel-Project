@@ -1,9 +1,9 @@
-@Sprint38 @Regression @DigitalPayment
+@Sprint38 @Regression @DigitalPayment @Group3
 Feature: PayTabs integration
 
   Background:
     Given Logging in with superuser
-    And Select Property "P01404"
+    And Select Property "P01406"
 
 
   Rule: Receipt Vouchers

@@ -3,7 +3,7 @@ Feature: Unit Setup
 
   Background: selecting property
     Given Logging in with superuser
-    And Select Property "P01404"
+    And Select Property "created"
 # masterdata unit Type Customization ##
   @masterDataUnitType
   Rule:masterdata unit Type Customization
@@ -56,6 +56,7 @@ Feature: Unit Setup
   @PropertyUnitType
   Rule: property unit type customization
 
+  #noinspection GherkinMisplacedBackground
   Background: going to the customization page
     And go to unit type customization page
 
@@ -107,6 +108,7 @@ Feature: Unit Setup
   @Property_unit_Creation_and_merge
   Rule: property unit creation and merge settings
 
+  #noinspection GherkinMisplacedBackground
   Background: going to the Unit setup page
     Given go to unit Setup page
 ## units setup settings ##
@@ -235,6 +237,7 @@ Feature: Unit Setup
   @Rates
   Rule:seasonal Rate Customization
 
+  #noinspection GherkinMisplacedBackground
   Background:go to Seasonal Rate Page
     Given open "Seasonal" Rate Page
 
@@ -253,6 +256,7 @@ Feature: Unit Setup
   @Rates
   Rule:Special Rate Customization
 
+  #noinspection GherkinMisplacedBackground
   Background:go to Special Rate Page
     Given open "Special" Rate Page
 
@@ -291,6 +295,7 @@ Feature: Unit Setup
   @Amenities
   Rule:unit amenities settings
 
+  #noinspection GherkinMisplacedBackground
   Background:navigating to amenities settings
     Given go to amenities Page
 

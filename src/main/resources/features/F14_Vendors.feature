@@ -3,7 +3,7 @@ Feature: Vendors Feature
 
   Background:  login and choose property
     Given Logging in with superuser
-    And Select Property "P01385"
+    And Select Property "P01404 "
     And go to Vendors page
 
   Scenario: Check default vendor
@@ -13,15 +13,15 @@ Feature: Vendors Feature
     When create vendor name "<name>" phone "<phone>" email "<email>" VAT "<vat>" CRNo "<cR>" PostalCode "<pCode>" description "<desc>" address "<address>"
     Then Check msg "<msg>" and vendor is "added"
     Examples:
-      | name  | phone    | email           | vat             | cR     | pCode  | desc                 | address | msg                                                                 |
-      |       |          |                 |                 |        |        | no name              |         | Name Is Requird                                                     |
-      | manga |          | manga           |                 |        |        | invalid email Format |         | Not Valid Email                                                     |
-      | manga | dialonly |                 |                 |        |        | dial only            | Random  | Phone Number required                                               |
-      | manga | nodial   |                 |                 |        |        | no dial code         | Random  | Country dial code required                                          |
-      | manga |          |                 | 323             |        |        | wrong vat count      |         | VAT Regestration No Should be 15 Digits That Begins and Ends With 3 |
-      | manga | Random   | Random          | 654987256489752 | Random | Random | wrong vat format     | Random  | VAT Regestration No Should be 15 Digits That Begins and Ends With 3 |
-      | zekwa | 3265415  | any.any@any.com | 369852147854123 | 6541   | 9874   | valid Random entries | Random  | Saved Successfully                                                  |
-      | zekwa |          |                 |                 |        |        |                      |         | Name exist before                                                   |
+      | name           | phone    | email           | vat             | cR     | pCode  | desc                 | address | msg                                                                 |
+      |                |          |                 |                 |        |        | no name              |         | Name Is Requird                                                     |
+      | manga          |          | manga           |                 |        |        | invalid email Format |         | Not Valid Email                                                     |
+      | manga          | dialonly |                 |                 |        |        | dial only            | Random  | Phone Number required                                               |
+      | manga          | nodial   |                 |                 |        |        | no dial code         | Random  | Country dial code required                                          |
+      | manga          |          |                 | 323             |        |        | wrong vat count      |         | VAT Regestration No Should be 15 Digits That Begins and Ends With 3 |
+      | manga          | Random   | Random          | 654987256489752 | Random | Random | wrong vat format     | Random  | VAT Regestration No Should be 15 Digits That Begins and Ends With 3 |
+      | Default vendor |          |                 |                 |        |        |                      |         | Name exist before                                                   |
+      | zekwa          | 3265415  | any.any@any.com | 369852147854123 | 6541   | 9874   | valid Random entries | Random  | Saved Successfully                                                  |
 
 
   Scenario Outline: edit vendor

@@ -1,4 +1,4 @@
-@CorporateSetup @group3
+@CorporateSetup @Group4
 Feature: corporates Feature
 
   Background:
@@ -7,7 +7,7 @@ Feature: corporates Feature
 
   Rule:Non Zatca Subscribed
     Background:
-      Given Select Property "P01384"
+      Given Select Property "P01404"
       And go to corporates page
 # FIXME the AZTCA LOGO
 #    Scenario: Check Zatca Logo on Requiered Fields
@@ -18,17 +18,17 @@ Feature: corporates Feature
       When Creating a Corporate with name "<name>" and Country "<country>" ignoredFields "<ignored>" vat "<vat>" bNumber "<bNum>" secBNumber "<secBNum>"
       Then Check toast mesage contains text "<msg>"
       Examples:
-        | name   | country | ignored | vat             | bNum | secBNum | msg                                                                  |
-        |        | Saudi   | all     |                 |      |         | Name Is Requird                                                      |
-        | zeko   |         | all     |                 |      |         | Country is required                                                  |
-        | shenga | Saudi   |         | 332166498745613 | 6541 | 5236    | Corporate Added Successfully                                         |
-        | shenga | Saudi   |         | 332166498745613 | 6541 | 5236    | Name exist before                                                    |
-        | ghaly  | Saudi   | all     | 564             |      |         | VAT Number Should be 15 Digits\nVAT Number Should Begin And End By 3 |
-        | ghaly  | Saudi   | all     | 987654123654987 |      |         | VAT Number Should Begin And End By 3                                 |
+        | name              | country     | ignored | vat             | bNum | secBNum | msg                                                                  |
+        |                   | Saudi       | all     |                 |      |         | Name Is Requird                                                      |
+        | corp data related |             |         | 332166498745613 | 6541 | 5236    | Name exist before                                                    |
+        | zeko              |             | all     |                 |      |         | Country is required                                                  |
+        | ghaly             | Saudi       | all     | 564             |      |         | VAT Number Should be 15 Digits\nVAT Number Should Begin And End By 3 |
+        | ghaly             | Saudi       | all     | 987654123654987 |      |         | VAT Number Should Begin And End By 3                                 |
+        | shenga            | Afghanistan |         | 654             | 6541 | 5236    | Corporate Added Successfully                                         |
 
   Rule:Non Zatca Subscribed Reservation Popup
     Background:
-      Given Select Property "P01384"
+      Given Select Property "P01404"
       And open reservations Page
       And Click on Add new Reservation
       And click on select corporate
@@ -38,15 +38,20 @@ Feature: corporates Feature
       When Creating a Corporate with name "<name>" and Country "<country>" ignoredFields "<ignored>" vat "<vat>" bNumber "<bNum>" secBNumber "<secBNum>"
       Then Check toast mesage contains text "<msg>"
       Examples:
-        | name  | country | ignored | vat             | bNum | secBNum | msg                                                                  |
-        |       | Saudi   | all     |                 |      |         | Name Is Requird                                                      |
-        | zeko  |         | all     |                 |      |         | Country is required                                                  |
-        | manga | Saudi   |         | 332166498745613 | 6541 | 5236    | Corporate Added Successfully                                         |
-        | manga | Saudi   |         | 332166498745613 | 6541 | 5236    | Name exist before                                                    |
-        | ghaly | Saudi   | all     | 564             |      |         | VAT Number Should be 15 Digits\nVAT Number Should Begin And End By 3 |
-        | ghaly | Saudi   | all     | 987654123654987 |      |         | VAT Number Should Begin And End By 3                                 |
+        | name              | country | ignored | vat             | bNum | secBNum | msg                                                                  |
+        |                   | Saudi   | all     |                 |      |         | Name Is Requird                                                      |
+        | zeko              |         | all     |                 |      |         | Country is required                                                  |
+        | corp data related | Saudi   |         | 332166498745613 | 6541 | 5236    | Name exist before                                                    |
+        | ghaly             | Saudi   | all     | 564             |      |         | VAT Number Should be 15 Digits\nVAT Number Should Begin And End By 3 |
+        | ghaly             | Saudi   | all     | 987654123654987 |      |         | VAT Number Should Begin And End By 3                                 |
 
-
+    Scenario Outline: delete corporate
+      Given delete corporate "<name>"
+      Then Check toast mesage contains text "<msg>"
+      Examples:
+        | name              | msg                                                      |
+        | corp data related | Sorry, this item has related data and can not be deleted |
+        | shenga            | Deleted Successfully                                     |
 
   Rule: Zatca Subscribed
     Background:
@@ -87,16 +92,6 @@ Feature: corporates Feature
         | Zanga     | Saudi   |            |     |      |         | Building Number Is Required\nAdditional Building Number Is Required                       |
         | Zutomoto2 | Saudi   |            |     | 6548 | 8456    | Updated Successfully                                                                      |
         | Zest new  | Saudi   |            |     | 6548 | 8456    | Name exist before                                                                         |
-
-    Scenario Outline: delete corporate
-      Given delete corporate "<name>"
-      Then Check toast mesage contains text "<msg>"
-      Examples:
-        | name              | msg                                                      |
-        | My high corporate | Sorry, this item has related data and can not be deleted |
-        | automoto2         | Deleted Successfully                                     |
-
-
 
 
 

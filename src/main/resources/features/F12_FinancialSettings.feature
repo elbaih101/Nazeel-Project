@@ -3,7 +3,7 @@ Feature: Property Financials settings
 
   Background:  login and choose property
     Given Logging in with superuser
-    And Select Property "P01384"
+    And Select Property "P01405"
   Rule: cost Centers
     Background:go to cost Centers Page
       Given open cost Centers Page
@@ -87,8 +87,8 @@ Feature: Property Financials settings
       Examples:
         | curr | isDef | exRate | msg                                       |
         | EUR  | false |        | Exchange rate is required                 |
-        | Eur  | false | 0.6    | Added Successfully                        |
-        | Eur  | false | 5.3    | Currency already exists for that property |
+        | SAR  | false | 5.3    | Currency already exists for that property |
+        | EuR  | true  | 0.6    | Added Successfully                        |
 
 
     Scenario Outline: edit currencies
