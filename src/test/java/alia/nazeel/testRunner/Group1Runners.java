@@ -15,7 +15,7 @@ import org.testng.annotations.DataProvider;
                         "html:target/cucumberBaseReport/cucumber1.html",
                         "json:target/cucumberBaseReport/cucumber1.json",
                         "junit:target/cucumberBaseReport/cucumber1.xml",
-                        "rerun:target/cucumberBaseReport/cucumber.1txt",
+                        "rerun:target/cucumberBaseReport/cucumber1.txt",
 
 
                 }
