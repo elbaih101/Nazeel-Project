@@ -3,6 +3,7 @@ package alia.nazeel.tools;
 import io.cucumber.java.Scenario;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.joda.time.DateTime;
 import org.openqa.selenium.*;
 import org.openqa.selenium.edge.EdgeOptions;
 import org.openqa.selenium.interactions.Action;
@@ -27,11 +28,60 @@ public class Utils {
     public static void setDate(WebElement dateInput, String date) {
         dateInput.click();
         date = StringUtils.remove(date, '/');
-        dateInput.sendKeys(Keys.ARROW_LEFT);
-        dateInput.sendKeys(Keys.ARROW_LEFT);
+        dateInput.sendKeys(Keys.HOME);
         dateInput.sendKeys(date);
     }
 
+    /**
+     * setes a given date time string into a date time field web element
+     * consider the date time format it only removes  the '/' and ':' and '' and append strings in the place
+     * @param dateInput the input date time WebElement
+     * @param dateTime String on form of (YYYY/MM/DD HH:MM AM) or (DD/MM/YYYY HH:mm AM)
+     */
+    public static void setDateTime(WebElement dateInput, String dateTime) {
+        dateInput.click();
+        dateTime = StringUtils.remove(dateTime, '/');
+        dateTime = StringUtils.remove(dateTime, ':');
+        dateTime = StringUtils.remove(dateTime, ' ');
+        dateTime = StringUtils.remove(dateTime, '-');
+        dateInput.sendKeys(Keys.HOME);
+        dateInput.sendKeys(dateTime);
+    }
+
+
+    /**
+     * this function stes the time in time fields with
+     *
+     * @param timeInput the time field
+     * @param time      the time in the form (HH:mm AM/PM)
+     */
+    public static void setTime(WebElement timeInput, String time) {
+        timeInput.click();
+        time = StringUtils.remove(time, ':');
+        time = StringUtils.remove(time, ' ');
+        timeInput.sendKeys(Keys.ARROW_LEFT);
+        timeInput.sendKeys(Keys.ARROW_LEFT);
+        timeInput.sendKeys(time);
+
+    }
+    /**
+     * Checks if a given time falls between two times.
+     *
+     * @param timeToCheck the time to check
+     * @param startTime the start time of the range
+     * @param endTime the end time of the range
+     * @return true if the timeToCheck is within the range, false otherwise
+     */
+    public static boolean isTimeWithinRange(DateTime timeToCheck, DateTime startTime, DateTime   endTime) {
+
+
+        // Check if the time falls between the start and end time
+        if (startTime.isBefore(endTime)) {
+            return timeToCheck.isAfter(startTime) && timeToCheck.isBefore(endTime);
+        } else { // Handle cases where the time range wraps around midnight
+            return timeToCheck.isAfter(startTime) || timeToCheck.isBefore(endTime);
+        }
+    }
     /**
      * function to click on an element and move it to another desired element location
      *
@@ -50,22 +100,6 @@ public class Utils {
                 .moveByOffset(1, 0)
                 .pause(Duration.ofSeconds(1))
                 .release().perform();
-    }
-
-    /**
-     * this function stes the time in time fields with
-     *
-     * @param timeInput the time field
-     * @param time      the time in the form (HH:mm AM/PM)
-     */
-    public static void setTime(WebElement timeInput, String time) {
-        timeInput.click();
-        time = StringUtils.remove(time, ':');
-        time = StringUtils.remove(time, ' ');
-        timeInput.sendKeys(Keys.ARROW_LEFT);
-        timeInput.sendKeys(Keys.ARROW_LEFT);
-        timeInput.sendKeys(time);
-
     }
 
     /**
