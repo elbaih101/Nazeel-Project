@@ -67,7 +67,6 @@ public class D08_Vouchers {
         asrt.assertAll();
     }
 
-
     public static class VouchersMap {
         String vType;
         String vState;
@@ -236,6 +235,7 @@ public class D08_Vouchers {
         if (!creatianDate.equalsIgnoreCase("")) {
             vouchersPopUp.dateField().clear();
             Utils.setDate(vouchersPopUp.dateField(), creatianDate);
+            Utils.setTime(vouchersPopUp.timeField(),JsonDataTools.getValueFromJsonFile("src/main/resources/testdata/VouchersRelatedData.json","dropCashTime"));
         }
         API api = new API();
         JsonObject json = Json.parse(api.getResponseBody(driver, url, () -> vouchersPopUp.submitButton().click())).asObject();
@@ -312,7 +312,7 @@ public class D08_Vouchers {
 
         } else if (voucherState.equalsIgnoreCase("Generated")) {
             //TODO : Check the Voucher number from the paytabs Report and use it
-            vouchersPage.editButton(vouchersPage.paymentMethods.stream().filter(method -> method.getText().equalsIgnoreCase("PayTabs")).toList().getFirst(), voucherType).click();
+            vouchersPage.editButton(vouchersPage.methods.stream().filter(method -> method.getText().equalsIgnoreCase("PayTabs")).toList().getFirst(), voucherType).click();
         }
 
     }
@@ -495,7 +495,7 @@ public class D08_Vouchers {
         String dropCashTime = JsonDataTools.getValueFromJsonFile("src/main/resources/testdata/VouchersRelatedData.json", "dropCashTime");
         Utils.setTime(cashDrawerPage.timeTo(), dropCashTime);
         DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern("HH:mm a");
-        JsonDataTools.writeValueToJsonFile("src/main/resources/testdata/VouchersRelatedData.json","dropCashTime", DateTime.parse(dropCashTime,dateTimeFormatter).plusMinutes(1).toString(dateTimeFormatter));
+        JsonDataTools.writeValueToJsonFile("src/main/resources/testdata/VouchersRelatedData.json", "dropCashTime", DateTime.parse(dropCashTime, dateTimeFormatter).plusMinutes(1).toString(dateTimeFormatter));
         cashDrawerPage.checkButton().click();
         cashDrawerPage.customAmountRadioButton().click();
         cashDrawerPage.customAmountField().clear();
@@ -560,4 +560,42 @@ public class D08_Vouchers {
         }
 
     }
+
+    @Given("open Drop Cash Vouchers Page")
+    public void openDropCashVouchersPage() {
+        new P00_multiPurposes(driver).waitLoading();
+        dashBoardPage.vouchersDropList.click();
+        dashBoardPage.dropCashVoucherssLink.click();
+    }
+
+    DateTimeFormatter formatter = DateTimeFormat.forPattern("DD/MM/YYYY hh:mm a");
+    DateTime startFrom;
+    DateTime startTo;
+    DateTime endFrom;
+    DateTime endTo;
+
+    @When("filtering the start period of the drop cash from {string} to {string} and the end Period from {string} to {string}")
+    public void filteringTheStartPeriodOfTheDropCashFromToAndTheEndPeriodFromTo(String startFrom, String startTo, String endFrom, String endTo) {
+        vouchersPage.filterButton.click();
+        Utils.setDateTime(vouchersPage.startPeriodFromDateField, startFrom);
+        Utils.setDateTime(vouchersPage.startPeriodToDateField, startTo);
+        Utils.setDateTime(vouchersPage.endPeriodFromDateField, endFrom);
+        Utils.setDateTime(vouchersPage.endPeriodToDateField, endTo);
+        vouchersPage.searchButton.click();
+
+        this.startTo = DateTime.parse(startTo, formatter);
+        this.startFrom = DateTime.parse(startFrom, formatter);
+        this.endFrom = DateTime.parse(endFrom, formatter);
+        this.endTo = DateTime.parse(endTo, formatter);
+    }
+    //todo containue the drop csh filter
+
+    @Then("Check all records shown match the searched dates")
+    public void checkAllRecordsShownMatchTheSearchedDates() {
+        new P00_multiPurposes(driver).waitLoading();
+        asrt.assertTrue(vouchersPage.dropCashDateTimeFroms.stream().allMatch(t -> Utils.isTimeWithinRange(DateTime.parse(t.getText(), formatter), startFrom, startTo)));
+        asrt.assertTrue(vouchersPage.dropCashDateTimeTos.stream().allMatch(t -> Utils.isTimeWithinRange(DateTime.parse(t.getText(), formatter), endFrom, endTo)));
+        asrt.assertAll();
+    }
+
 }

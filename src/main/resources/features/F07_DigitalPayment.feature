@@ -1,4 +1,4 @@
-@Sprint38 @Regression @DigitalPayment @Group3
+@Sprint38 @Regression @DigitalPayment @Group2
 Feature: PayTabs integration
 
   Background:
@@ -43,7 +43,7 @@ Feature: PayTabs integration
   Rule:Reservations
     Background:
       Given open reservations Page
-      Given create a successfull reservation Source "RANDOM" purpose "RANDOM" Unit "RANDOM" Guest "RANDOM" state "confirmed"
+      Given  Create "Checked-In" Reservation withSource "RANDOM" purpose "RANDOM" Unit "RANDOM" Guest "RANDOM" startDate "" endDate ""
       And go to Reservation Financial Page
       And open the digital payment popup
     Scenario: create PayTabs link for receipt Voucher

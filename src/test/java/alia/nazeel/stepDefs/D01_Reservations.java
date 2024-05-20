@@ -139,25 +139,10 @@ public class D01_Reservations {
     }
 
 
-    public void fillReservationData(String source, String purpose, String unit, String guest) {
-        selectReservationSourceAndPurpose(source, purpose);
-        openUnitSelectionPopup();
-        selectAUnit(unit);
-        clickOnSelectguestNowButton();
-        new D06_DigitalPayment().selectGuest(guest, "", "");
-    }
 
-    @Given("create a successfull reservation Source {string} purpose {string} Unit {string} Guest {string} state {string}")
-    public void createASuccessfullReservation(String source, String purpose, String unit, String guest, String state) {
 
-        clickOnAddNewReservation();
-        fillReservationData(source, purpose, unit, guest);
-        if (state.equalsIgnoreCase("confirmed"))
-            clickOnSaveReservationButton();
-        else if (state.toLowerCase().contains("in"))
-            reservationMainDataPage.checkInButton.click();
-        whenReservationSummaryDialougeAppearsClickOnSaveReservatuonButton();
-    }
+
+
 
     @And("Choose Reservation Status as {string}")
     public void chooseReservationStatusAs(String status) {
@@ -239,10 +224,10 @@ public class D01_Reservations {
 
     }
 
-    @Given("Create {string} Reservation withSource {string} purpose {string} Unit {string} Guest {string}")
-    public void createReservationWithSourcePurposeUnitGuest(String reservationState, String source, String purpose, String unit, String guest) {
-        createASuccessfullReservation(source, purpose, unit, guest, reservationState);
-        String reservationStatus = "";
+    @Given("Create {string} Reservation withSource {string} purpose {string} Unit {string} Guest {string} startDate {string} endDate {string}")
+    public void createReservationWithSourcePurposeUnitGuest(String reservationState, String source, String purpose, String unit, String guest,String sDate,String eDate) {
+        createASuccessfullReservation(source, purpose, unit, guest, reservationState,sDate,eDate);
+        String reservationStatus = "Confirmed";
         if (reservationState.contains("In")) {
             reservationStatus = "Checked In";
         } else if (reservationState.contains("Out")) {
@@ -252,13 +237,31 @@ public class D01_Reservations {
         }
         verifyToastMessageAppearsWithTextAndTheReservationStatusToBe("Saved Successfully", reservationStatus);
     }
+    public void createASuccessfullReservation(String source, String purpose, String unit, String guest, String state, String sDate, String eDate) {
 
-
+        clickOnAddNewReservation();
+        fillReservationData(source, purpose, unit, guest, sDate, eDate);
+        if (state.equalsIgnoreCase("confirmed"))
+            clickOnSaveReservationButton();
+        else if (state.toLowerCase().contains("in"))
+            reservationMainDataPage.checkInButton.click();
+        whenReservationSummaryDialougeAppearsClickOnSaveReservatuonButton();
+    }
+    public void fillReservationData(String source, String purpose, String unit, String guest, String sDate, String eDate) {
+        selectReservationSourceAndPurpose(source, purpose);
+        selectStartDateAndEndDate(sDate, eDate);
+        openUnitSelectionPopup();
+        selectAUnit(unit);
+        clickOnSelectguestNowButton();
+        new D06_DigitalPayment().selectGuest(guest, "", "");
+    }
     @And("elect start date {string} and end Date {string}")
     public void selectStartDateAndEndDate(String sDate, String eDate) {
         new P00_multiPurposes(driver).waitLoading();
-        Utils.setDate(reservationMainDataPage.startDateField, sDate);
-        Utils.setDate(reservationMainDataPage.endDateField, eDate);
+        if (!sDate.isEmpty())
+            Utils.setDate(reservationMainDataPage.startDateField, sDate);
+        if (!eDate.isEmpty())
+            Utils.setDate(reservationMainDataPage.endDateField, eDate);
     }
 
     @Then("Check the rent to equal {string}")
@@ -354,9 +357,9 @@ public class D01_Reservations {
         asrt.assertAll();
     }
 
-    @And("fill Reservation Data with Source {string} purpose {string} Unit {string} Guest {string}")
-    public void fillReservationDataWithSourcePurposeUnitGuest(String source, String purpose, String unit, String guest) {
-        fillReservationData(source, purpose, unit, guest);
+    @And("fill Reservation Data with Source {string} purpose {string} Unit {string} Guest {string} startDate {string} endDate {string}")
+    public void fillReservationDataWithSourcePurposeUnitGuest(String source, String purpose, String unit, String guest,String sDate,String eDate) {
+        fillReservationData(source, purpose, unit, guest,sDate,eDate);
     }
 
     @Then("Check all Discounts types against Taxes Calculations and Balnce")

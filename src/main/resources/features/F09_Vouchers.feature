@@ -9,23 +9,24 @@ Feature: Vouchers
   Rule:Stand corporate Vouchers
     #noinspection GherkinMisplacedBackground
   Background: going to receipt vouchers page
-      Given go to "Receipt" Vouchers Page
-    Scenario: create SA receipt Voucher for a corporate
-      And successfully create a voucher of type "SAReceipt" amount "200" payment Method "Cash" maturity Date "" and Creatian Date "" for a "corporate"
-      Then check the created voucher owner to be the selected corporate
+    Given go to "Receipt" Vouchers Page
+
+  Scenario: create SA receipt Voucher for a corporate
+    And successfully create a voucher of type "SAReceipt" amount "200" payment Method "Cash" maturity Date "" and Creatian Date "" for a "corporate"
+    Then check the created voucher owner to be the selected corporate
 
 
 
   Rule:ended Reservations Vouchers
     Background: creating checked in reservation
       Given open reservations Page
-      And  Create "Checked-In" Reservation withSource "RANDOM" purpose "RANDOM" Unit "RANDOM" Guest "RANDOM"
+      And  Create "confirmed" Reservation withSource "RANDOM" purpose "RANDOM" Unit "RANDOM" Guest "RANDOM" startDate "02/01/2021" endDate "03/01/2021"
       And go to Reservation Financial Page
 
     Scenario: check the voucers edit mode after drop cash actions
-      Given successfully create a voucher of type "SD" amount "200" payment Method "Cash" maturity Date "" and Creatian Date "28/11/2023" for a "guest"
-      Given successfully create a voucher of type "Receipt" amount "200" payment Method "Cash" maturity Date "" and Creatian Date "28/11/2023" for a "guest"
-      And create a drop cash action to date "28/11/2024"
+      Given successfully create a voucher of type "SD" amount "200" payment Method "Cash" maturity Date "" and Creatian Date "02/01/2021" for a "guest"
+      Given successfully create a voucher of type "Receipt" amount "200" payment Method "Cash" maturity Date "" and Creatian Date "02/01/2021" for a "guest"
+      And create a drop cash action to date "02/01/2021"
       And go to "Receipt" Vouchers Page
       Then Check "receipt" Voucher with state "CashDrop" edit mode
 
@@ -120,19 +121,27 @@ Feature: Vouchers
 
 
   Rule: Drop Cash Actions
-    Background:
-      Given create a drop cash action to date "28/11/2023"
+    Background: create drop cash
+      Given create a drop cash action to date "02/01/2021"
 
     Scenario: Can't Create a Cash Voucher with Date Before Last DropCash Date
       Given go to "Receipt" Vouchers Page
-      Then successfully create a voucher of type "SAReceipt" amount "200" payment Method "Cash" maturity Date "" and Creatian Date "28/11/2023" for a "guest"
+      Then successfully create a voucher of type "SAReceipt" amount "200" payment Method "Cash" maturity Date "" and Creatian Date "03/01/2021" for a "guest"
 
     Scenario: Can't edit a cash voucher to a date before last drop cash Date
       Given go to "Receipt" Vouchers Page
       And successfully create a voucher of type "SAReceipt" amount "200" payment Method "Cash" maturity Date "" and Creatian Date "" for a "guest"
-      When editing the Created Voucher's  amount "" payment Method "" maturity Date "" and Creatian Date "28/11/2023"
+      When editing the Created Voucher's  amount "" payment Method "" maturity Date "" and Creatian Date "01/01/2021"
       Then Check toast mesage contains text "issue date/ time of cash vouchers could not be changed"
 
 
+
+  Rule:  DropCash Vouchers
+    Background: open drop cash vouchers page
+      Given open Drop Cash Vouchers Page
+
+    Scenario: check the drop cash period filter criteria
+      When filtering the start period of the drop cash from "01/01/2021 02:59 AM" to "01/01/2021 03:01 AM" and the end Period from "02/01/2021 12:00 AM" to "02/01/2021 01:01 AM"
+      Then Check all records shown match the searched dates
 
 
