@@ -26,7 +26,6 @@ public class P10_VouchersPage {
     final Actions actions;
 
 
-
     public P10_VouchersPage(WebDriver driver) {
         PageFactory.initElements(driver, this);
         this.driver = driver;
@@ -44,7 +43,7 @@ public class P10_VouchersPage {
     @FindBy(xpath = "//td[@data-kendo-grid-column-index=\"0\"]")
     public List<WebElement> vouchersNums;
     @FindBy(xpath = "//td[@data-kendo-grid-column-index=\"3\"]")
-    public List<WebElement> paymentMethods;
+    public List<WebElement> methods;
     @FindBy(xpath = "//td[@data-kendo-grid-column-index=\"8\"]")
     public List<WebElement> receitRelatedpromissories;
 
@@ -57,15 +56,15 @@ public class P10_VouchersPage {
     }
 
     //Grid //
-public WebElement voucherOwner (WebElement voucher,String voucherType){
-    WebElement owner;
-    if (voucherType.equalsIgnoreCase(Vouchers.promissory.toString())) {
-        owner = voucher.findElement(By.xpath("..//td[@data-kendo-grid-column-index=\"5\"]"));
-    } else  {
-        owner = voucher.findElement(By.xpath("..//td[@data-kendo-grid-column-index=\"4\"]"));
+    public WebElement voucherOwner(WebElement voucher, String voucherType) {
+        WebElement owner;
+        if (voucherType.equalsIgnoreCase(Vouchers.promissory.toString())) {
+            owner = voucher.findElement(By.xpath("..//td[@data-kendo-grid-column-index=\"5\"]"));
+        } else {
+            owner = voucher.findElement(By.xpath("..//td[@data-kendo-grid-column-index=\"4\"]"));
+        }
+        return owner;
     }
-    return owner;
-}
     //FIXME : dont forget the error
     public List<WebElement> moreActions(WebElement voucherAmount, String voucherType) {
         WebElement moreMenu = null;
@@ -92,11 +91,27 @@ public WebElement voucherOwner (WebElement voucher,String voucherType){
         } else if (voucherType.equalsIgnoreCase(Vouchers.Receipt.toString()) || voucherType.equalsIgnoreCase(Vouchers.Expenses.toString()) || voucherType.equalsIgnoreCase(Vouchers.Refund.toString()) || voucherType.equalsIgnoreCase(Vouchers.SAReceipt.toString()) || voucherType.equalsIgnoreCase(Vouchers.SD.toString()) || voucherType.equalsIgnoreCase(Vouchers.SDRefund.toString()) || voucherType.equalsIgnoreCase(Vouchers.GenReceipt.toString())) {
             button = voucherAmount.findElement(By.xpath("..//td[@data-kendo-grid-column-index=\"10\"]//div/button[1]"));
         }
-        if (button==null) {
+        if (button == null) {
             throw new RuntimeException("the edit button wasn't retreaved");
         }
         return button;
     }
+    @FindBy(xpath = "//button[@class=\"n-button n-button--primary\" and contains(text(),\"Filter\")]")
+    public WebElement filterButton;
+    @FindBy(xpath = "//div[contains(@class,\"filter-form\")]//button")
+    public WebElement searchButton;
 
+    @FindBy(xpath = "//kendo-datetimepicker[@name=\"start-period-from\"]//input")
+    public WebElement startPeriodFromDateField;
+    @FindBy(xpath = "//kendo-datetimepicker[@name=\"start-period-to\"]//input")
+    public WebElement startPeriodToDateField;
+    @FindBy(xpath = "//kendo-datetimepicker[@name=\"end-period-from\"]//input")
+    public WebElement endPeriodFromDateField;
+    @FindBy(xpath = "//kendo-datetimepicker[@name=\"end-period-to\"]//input")
+    public WebElement endPeriodToDateField;
 
+    @FindBy(xpath = "//td[@data-kendo-grid-column-index=\"2\"]")
+    public List<WebElement> dropCashDateTimeFroms;
+    @FindBy(xpath = "//td[@data-kendo-grid-column-index=\"3\"]")
+    public List<WebElement> dropCashDateTimeTos;
 }
