@@ -1,4 +1,4 @@
-package alia.nazeel;
+package alia.nazeel.templates;
 import alia.nazeel.pojos.User;
 import io.cucumber.testng.AbstractTestNGCucumberTests;
 

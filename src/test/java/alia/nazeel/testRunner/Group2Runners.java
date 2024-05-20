@@ -1,12 +1,8 @@
 package alia.nazeel.testRunner;
-
-import alia.nazeel.BaseTestNGCucumberRunner;
+import alia.nazeel.templates.BaseTestNGCucumberRunner;
 import alia.nazeel.pojos.UserDataReader;
-import io.cucumber.testng.AbstractTestNGCucumberTests;
 import io.cucumber.testng.CucumberOptions;
 import org.testng.annotations.DataProvider;
-
-
 @SuppressWarnings("EmptyMethod")
 @CucumberOptions
         (
@@ -26,8 +22,6 @@ import org.testng.annotations.DataProvider;
 
 
         )
-
-
 public class Group2Runners extends BaseTestNGCucumberRunner {
 //   to run in parallel
 static {

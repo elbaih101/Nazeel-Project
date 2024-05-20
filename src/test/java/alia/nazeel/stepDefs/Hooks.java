@@ -1,6 +1,6 @@
 package alia.nazeel.stepDefs;
 
-import alia.nazeel.BaseTestNGCucumberRunner;
+import alia.nazeel.templates.BaseTestNGCucumberRunner;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
 import io.cucumber.java.Scenario;
@@ -62,7 +62,8 @@ public class Hooks {
     }
 
     public static void superUserLogin(WebDriver driver, String username, String password) {
-        User user = BaseTestNGCucumberRunner.getUSer();
+        User user = BaseTestNGCucumberRunner.getUSer() == null ?UserDataReader.getNextUser():BaseTestNGCucumberRunner.getUSer();
+
         //initiating Waits and Pages
         P01_LoginPage loginPage = new P01_LoginPage(driver);
         if (user != null) {

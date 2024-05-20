@@ -1,11 +1,9 @@
 package alia.nazeel.testRunner;
 
-import alia.nazeel.BaseTestNGCucumberRunner;
+import alia.nazeel.templates.BaseTestNGCucumberRunner;
 import alia.nazeel.pojos.UserDataReader;
 import io.cucumber.testng.CucumberOptions;
 import org.testng.annotations.DataProvider;
-
-
 @CucumberOptions
         (
 
@@ -24,8 +22,6 @@ import org.testng.annotations.DataProvider;
 
 
         )
-
-
 public class Group1Runners extends BaseTestNGCucumberRunner {
     static {
         setUser(UserDataReader.getNextUser());}
