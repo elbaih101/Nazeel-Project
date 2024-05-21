@@ -235,7 +235,7 @@ public class D08_Vouchers {
         if (!creatianDate.equalsIgnoreCase("")) {
             vouchersPopUp.dateField().clear();
             Utils.setDate(vouchersPopUp.dateField(), creatianDate);
-            Utils.setTime(vouchersPopUp.timeField(),JsonDataTools.getValueFromJsonFile("src/main/resources/testdata/VouchersRelatedData.json","dropCashTime"));
+            Utils.setTime(vouchersPopUp.timeField(), JsonDataTools.getValueFromJsonFile("src/main/resources/testdata/VouchersRelatedData.json", "dropCashTime"));
         }
         API api = new API();
         JsonObject json = Json.parse(api.getResponseBody(driver, url, () -> vouchersPopUp.submitButton().click())).asObject();
@@ -490,12 +490,23 @@ public class D08_Vouchers {
         multiPurposes.waitLoading();
         cashDrawerPage.dropCashButton().click();
         cashDrawerPage.dateTo().clear();
-        Utils.setDate(cashDrawerPage.dateTo(), toDate);
-        cashDrawerPage.timeTo().clear();
         String dropCashTime = JsonDataTools.getValueFromJsonFile("src/main/resources/testdata/VouchersRelatedData.json", "dropCashTime");
+        String dropCashDate = JsonDataTools.getValueFromJsonFile("src/main/resources/testdata/VouchersRelatedData.json", "dropCashDate");
+        DateTimeFormatter timeFormatter = DateTimeFormat.forPattern("HH:mm a");
+        DateTimeFormatter dateFormmater = DateTimeFormat.forPattern("DD/MM/YYYY");
+        DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern("DD/MM/YYYY HH:mm a");
+        DateTime newDateTime = DateTime.parse(dropCashDate + " " + dropCashTime, dateTimeFormatter).plusMinutes(1);
+
+        if (!toDate.equalsIgnoreCase("dropdate")) {
+            Utils.setDate(cashDrawerPage.dateTo(), toDate);
+        } else {
+            Utils.setDate(cashDrawerPage.dateTo(), toDate);
+        }
+        cashDrawerPage.timeTo().clear();
+
         Utils.setTime(cashDrawerPage.timeTo(), dropCashTime);
-        DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern("HH:mm a");
-        JsonDataTools.writeValueToJsonFile("src/main/resources/testdata/VouchersRelatedData.json", "dropCashTime", DateTime.parse(dropCashTime, dateTimeFormatter).plusMinutes(1).toString(dateTimeFormatter));
+        JsonDataTools.writeValueToJsonFile("src/main/resources/testdata/VouchersRelatedData.json", "dropCashTime", newDateTime.toString(timeFormatter));
+        JsonDataTools.writeValueToJsonFile("src/main/resources/testdata/VouchersRelatedData.json", "dropCashDate", newDateTime.toString(dateFormmater));
         cashDrawerPage.checkButton().click();
         cashDrawerPage.customAmountRadioButton().click();
         cashDrawerPage.customAmountField().clear();

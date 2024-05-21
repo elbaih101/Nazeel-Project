@@ -26,7 +26,7 @@ Feature: Vouchers
     Scenario: check the voucers edit mode after drop cash actions
       Given successfully create a voucher of type "SD" amount "200" payment Method "Cash" maturity Date "" and Creatian Date "02/01/2021" for a "guest"
       Given successfully create a voucher of type "Receipt" amount "200" payment Method "Cash" maturity Date "" and Creatian Date "02/01/2021" for a "guest"
-      And create a drop cash action to date "02/01/2021"
+      And create a drop cash action to date "dropdate"
       And go to "Receipt" Vouchers Page
       Then Check "receipt" Voucher with state "CashDrop" edit mode
 
@@ -122,7 +122,7 @@ Feature: Vouchers
 
   Rule: Drop Cash Actions
     Background: create drop cash
-      Given create a drop cash action to date "02/01/2021"
+      Given create a drop cash action to date "dropdate"
 
     Scenario: Can't Create a Cash Voucher with Date Before Last DropCash Date
       Given go to "Receipt" Vouchers Page
