@@ -113,7 +113,7 @@ public class P03_ReservationsPage {
 
     @FindBy(xpath = "//label[contains(text(),\"Reservation Status\")]/../following-sibling::kendo-multiselect")
     public WebElement customStatusField;
-    @FindBy(xpath = "//label[contains(text(),\"Reservation Status\")]/../following-sibling::kendo-combobox")
+    @FindBy(xpath = "//label[contains(text(),\"Reservation Status\")]/../following-sibling::div/kendo-combobox")
     public WebElement predefinedStatusComboBox;
 
     public List<WebElement> filterCustomStatuses() {
