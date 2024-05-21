@@ -11,7 +11,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
-import java.util.ArrayList;
+
 import java.util.List;
 
 public class P00_multiPurposes {
@@ -108,11 +108,11 @@ public class P00_multiPurposes {
             wait.withTimeout(Duration.ofSeconds(20))
                     .ignoring(NoSuchElementException.class, StaleElementReferenceException.class)
                     .until(ExpectedConditions.invisibilityOf(loadingAnimation));
-            driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
         } catch (Exception e) {
             // Handle any exceptions or logging here
             e.printStackTrace();
         }
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
     }
 
     public void assertToastMessageContains(String msg) {
@@ -147,6 +147,6 @@ public class P00_multiPurposes {
         }
 
 
-        return buttons.get(0);
+        return buttons.getFirst();
     }
 }

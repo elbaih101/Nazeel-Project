@@ -395,7 +395,7 @@ public class D01_Reservations {
             }
             case "On Departure Reservations (All)" ->
                 assertDatesAreToday(reservationsPage.reservationsCheckOutDates, dateTimeFormatter);
-            
+
             case "Checked-Out Reservations" ->
                     assertReservationsStatus(reservationsPage.reservationsStatuses, "CheckedOut", "status not filtered right");
             case "Cancelled Reservations" ->
