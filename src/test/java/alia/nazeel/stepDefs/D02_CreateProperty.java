@@ -77,41 +77,28 @@ public class D02_CreateProperty {
         } catch (NoSuchElementException e) {
             System.out.println("property not found");
         }
-        try {
-            wait.until(ExpectedConditions.visibilityOf(dashBoardPage.setupPageLink));
-        } catch (TimeoutException e) {
-            wait.until(ExpectedConditions.visibilityOf(dashBoardPage.setupPageLink));
-        }
+        new P00_multiPurposes(driver).waitLoading();
         //close the announcement
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(2));
         try {
-            if (dashBoardPage.closeAnnouncementButton.isDisplayed()) {
-                new P00_multiPurposes(driver).waitLoading();
-                dashBoardPage.closeAnnouncementButton.click();
-            }
+
+            dashBoardPage.closeAnnouncementButton.click();
         } catch (NoSuchElementException e) {
             System.out.println("no announcements to close");
         }
         try {
-            if (dashBoardPage.closeSubscriptionsAlertButton.isDisplayed()) {
-                wait.until(ExpectedConditions.elementToBeClickable(dashBoardPage.closeSubscriptionsAlertButton));
-                dashBoardPage.closeSubscriptionsAlertButton.click();
-            }
+            dashBoardPage.closeSubscriptionsAlertButton.click();
+
         } catch (NoSuchElementException e) {
             System.out.println("no subscriptions alert");
         }
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
         //clicking on later to bypass user verification
         if (dashBoardPage.masterDataLink.isEmpty()) {
             try {
-                JavascriptExecutor js = (JavascriptExecutor) driver;
-
-                wait.until(ExpectedConditions.urlMatches("http://staging.nazeel.net:9002/dashboard"));
-                wait.until(ExpectedConditions.visibilityOf(loginPage.verificationButton));
-                wait.until(ExpectedConditions.elementToBeClickable(loginPage.verificationButton));
-                js.executeScript("arguments[0].click();", loginPage.verificationButton);
-
-            } catch (TimeoutException e) {
-
-                System.out.println("logged in as super user");
+                loginPage.verificationButton.click();
+            } catch (NoSuchElementException e) {
+                System.out.println("User is verified");
             }
             try {
                 dashBoardPage.contractAgreementButton.click();
