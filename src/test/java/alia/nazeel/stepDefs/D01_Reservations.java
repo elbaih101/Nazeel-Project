@@ -13,6 +13,9 @@ import alia.nazeel.tools.Utils;
 import alia.nazeel.pages.P02_DashBoardPage;
 import alia.nazeel.pages.mutlipurposes.P00_multiPurposes;
 
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -139,11 +142,6 @@ public class D01_Reservations {
     }
 
 
-
-
-
-
-
     @And("Choose Reservation Status as {string}")
     public void chooseReservationStatusAs(String status) {
         WebElement actionButton;
@@ -225,8 +223,8 @@ public class D01_Reservations {
     }
 
     @Given("Create {string} Reservation withSource {string} purpose {string} Unit {string} Guest {string} startDate {string} endDate {string}")
-    public void createReservationWithSourcePurposeUnitGuest(String reservationState, String source, String purpose, String unit, String guest,String sDate,String eDate) {
-        createASuccessfullReservation(source, purpose, unit, guest, reservationState,sDate,eDate);
+    public void createReservationWithSourcePurposeUnitGuest(String reservationState, String source, String purpose, String unit, String guest, String sDate, String eDate) {
+        createASuccessfullReservation(source, purpose, unit, guest, reservationState, sDate, eDate);
         String reservationStatus = "Confirmed";
         if (reservationState.contains("In")) {
             reservationStatus = "Checked In";
@@ -237,6 +235,7 @@ public class D01_Reservations {
         }
         verifyToastMessageAppearsWithTextAndTheReservationStatusToBe("Saved Successfully", reservationStatus);
     }
+
     public void createASuccessfullReservation(String source, String purpose, String unit, String guest, String state, String sDate, String eDate) {
 
         clickOnAddNewReservation();
@@ -247,6 +246,7 @@ public class D01_Reservations {
             reservationMainDataPage.checkInButton.click();
         whenReservationSummaryDialougeAppearsClickOnSaveReservatuonButton();
     }
+
     public void fillReservationData(String source, String purpose, String unit, String guest, String sDate, String eDate) {
         selectReservationSourceAndPurpose(source, purpose);
         selectStartDateAndEndDate(sDate, eDate);
@@ -255,6 +255,7 @@ public class D01_Reservations {
         clickOnSelectguestNowButton();
         new D06_DigitalPayment().selectGuest(guest, "", "");
     }
+
     @And("elect start date {string} and end Date {string}")
     public void selectStartDateAndEndDate(String sDate, String eDate) {
         new P00_multiPurposes(driver).waitLoading();
@@ -300,17 +301,41 @@ public class D01_Reservations {
             case "unitType" ->
                     reservationsPage.filterUnitTypes().stream().filter(t -> t.getText().equalsIgnoreCase(value)).findAny().orElseThrow().click();
             case "corporate" -> reservationsPage.selectCorp(value).click();
+            case "resState" -> reservationStateFiltering(value);
+
 
         }
         reservationsPage.searchButton.click();
     }
 
-    @And("open a reservation and return to reservations page")
-    public void openAReservationAndReturnToReservationsPage() {
-        reservationsPage.reservationsNumbers.getFirst().click();
-        driver.navigate().back();
+    private void reservationStateFiltering(String value) {
+        switch (value) {
+            case "Confirmed", "Checked-In", "" -> reservationsPage.filterCustomStatuses().forEach(s -> {
+                WebElement checkBox = s.findElement(By.xpath("./input"));
+                if (checkBox.isSelected() && !s.getText().equals(value))
+                    s.click();
+                else if (s.getText().equals(value) && !checkBox.isSelected())
+                    s.click();
+            });
+            case "All Reservations", "Open Reservations", "In-House Guests", "Pending Reservations",
+                 "On Arrival Reservations (Not Checked-In)", "On Arrival Reservations (Checked-In)",
+                 "On Arrival Reservations (All)", "On Departure Reservations (Not Checked-Out)",
+                 "On Departure Reservations (Checked-Out)", "On Departure Reservations (All)",
+                 "Checked-Out Reservations", "Cancelled Reservations" ->
+                    reservationsPage.filterPreDefinedStatuses().stream().filter(s -> s.getText().equals(value)).findFirst().orElseThrow().click();
+        }
+
     }
 
+    @And("open a reservation and return to reservations page")
+    public void openAReservationAndReturnToReservationsPage() {
+        if (!reservationsPage.reservationsNumbers.isEmpty()) {
+            reservationsPage.reservationsNumbers.getFirst().click();
+            driver.navigate().back();
+        }
+    }
+
+    //Todo add assertion over res State
     @Then("check all reservations records {string} as {string}")
     public void checkAllReservationsRecordsAs(String filter, String value) {
         new P00_multiPurposes(driver).waitLoading();
@@ -324,10 +349,67 @@ public class D01_Reservations {
             case "rentType" ->
                     asrt.assertFalse(reservationsPage.reservationsNights.stream().anyMatch(n -> !n.getText().toLowerCase().contains(value.toLowerCase())));
             case "corporate" ->
-                    asrt.AssertNonMatch(reservationsPage.reservationsGuests_Corps, i -> !i.getText().contains(value), "the corporate is not fifltered right");
+                    assertReservationsStatus(reservationsPage.reservationsGuests_Corps, value, "the corporate is not fifltered right");
 
+            case "resState" -> assertReservationsStstuses(value);
         }
         asrt.assertAll();
+    }
+
+    private void assertReservationsStstuses(String value) {
+        DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern("YYYY-MM-DD");
+        switch (value) {
+
+            case "Confirmed", "CheckedIn", "" ->
+                    assertReservationsStatus(reservationsPage.reservationsStatuses, value, "status not filtered right");
+            case "All Reservations" -> {
+            }
+
+            case "Open Reservations" ->
+                    assertReservationsStatus(reservationsPage.reservationsStatuses, "CheckedIn", "status not filtered right");
+
+            case "In-House Guests" -> {
+                assertReservationsStatus(reservationsPage.reservationsStatuses, "CheckedIn", "status not filtered right");
+                asrt.AssertNonMatch(reservationsPage.reservationsCheckInDates, i -> !Utils.isTimeWithinRange(DateTime.now(dateTimeFormatter.getZone()), DateTime.parse(i.getText(), dateTimeFormatter), DateTime.parse(reservationsPage.reservationCheckOutDate(i).getText(), dateTimeFormatter)));
+            }
+
+            case "Pending Reservations" ->
+                    asrt.AssertNonMatch(reservationsPage.reservationsStatuses, i -> !(i.getText().contains("UnConfirmed") || i.getText().contains("Confirmed")), "status not filtered right");
+            case "On Arrival Reservations (Not Checked-In)" -> {
+                asrt.AssertNonMatch(reservationsPage.reservationsStatuses, i -> !(i.getText().contains("UnConfirmed") || i.getText().contains("Confirmed")), "status not filtered right");
+                assertDatesAreToday(reservationsPage.reservationsCheckInDates, dateTimeFormatter);
+            }
+            case "On Arrival Reservations (Checked-In)" -> {
+                assertReservationsStatus(reservationsPage.reservationsStatuses, "CheckedIn", "status not filtered right");
+                assertDatesAreToday(reservationsPage.reservationsCheckInDates, dateTimeFormatter);
+            }
+            case "On Arrival Reservations (All)" ->
+                    assertDatesAreToday(reservationsPage.reservationsCheckInDates, dateTimeFormatter);
+            case "On Departure Reservations (Not Checked-Out)" -> {
+                assertReservationsStatus(reservationsPage.reservationsStatuses, "CheckedIn", "status not filtered right");
+                assertDatesAreToday(reservationsPage.reservationsCheckOutDates, dateTimeFormatter);
+            }
+            case "On Departure Reservations (Checked-Out)" -> {
+                assertReservationsStatus(reservationsPage.reservationsStatuses, "CheckedOut", "status not filtered right");
+                assertDatesAreToday(reservationsPage.reservationsCheckOutDates, dateTimeFormatter);
+            }
+            case "On Departure Reservations (All)" ->
+                assertDatesAreToday(reservationsPage.reservationsCheckOutDates, dateTimeFormatter);
+            
+            case "Checked-Out Reservations" ->
+                    assertReservationsStatus(reservationsPage.reservationsStatuses, "CheckedOut", "status not filtered right");
+            case "Cancelled Reservations" ->
+                    asrt.AssertNonMatch(reservationsPage.reservationsStatuses, i -> !(i.getText().contains("Canceled") || i.getText().contains("Expired")), "status not filtered right");
+
+        }
+    }
+
+    private void assertReservationsStatus(List<WebElement> reservationsPage, String statuses, String assertionMessage) {
+        asrt.AssertNonMatch(reservationsPage, i -> !i.getText().contains(statuses), assertionMessage);
+    }
+
+    private void assertDatesAreToday(List<WebElement> DatesElements, DateTimeFormatter dateTimeFormatter) {
+        asrt.AssertNonMatch(DatesElements, i -> !DateTime.now(dateTimeFormatter.getZone()).equals(DateTime.parse(i.getText())));
     }
 
     @And("choose page size as {string}")
@@ -358,8 +440,8 @@ public class D01_Reservations {
     }
 
     @And("fill Reservation Data with Source {string} purpose {string} Unit {string} Guest {string} startDate {string} endDate {string}")
-    public void fillReservationDataWithSourcePurposeUnitGuest(String source, String purpose, String unit, String guest,String sDate,String eDate) {
-        fillReservationData(source, purpose, unit, guest,sDate,eDate);
+    public void fillReservationDataWithSourcePurposeUnitGuest(String source, String purpose, String unit, String guest, String sDate, String eDate) {
+        fillReservationData(source, purpose, unit, guest, sDate, eDate);
     }
 
     @Then("Check all Discounts types against Taxes Calculations and Balnce")

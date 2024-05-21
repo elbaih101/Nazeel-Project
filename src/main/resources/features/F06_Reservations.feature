@@ -47,9 +47,14 @@ Feature: Making Reservation with Nazeel PMS (web application)
     When refresh page
     Then check the search criteria is reset
     Examples:
-      | filter   | value   |
-      | resType  | Single  |
-      | rentType | Monthly |
+      | filter   | value                                       |
+      | resType  | Single                                      |
+      | rentType | Monthly                                     |
+      | resState | Confirmed                                   |
+      | resState | In-House Guests                             |
+      | resState | On Arrival Reservations (Not Checked-In)    |
+      | resState | On Departure Reservations (Not Checked-Out) |
+
 
   @filter_Reservation_by_corporate @28509
   Scenario: Check Search With Corporate feature

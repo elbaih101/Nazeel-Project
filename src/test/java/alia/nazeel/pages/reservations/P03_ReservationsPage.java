@@ -1,5 +1,6 @@
 package alia.nazeel.pages.reservations;
 
+import alia.nazeel.pages.mutlipurposes.P00_multiPurposes;
 import alia.nazeel.tools.Utils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
@@ -37,7 +38,7 @@ public class P03_ReservationsPage {
     @FindBy(xpath = "//kendo-grid-list//td[@data-kendo-grid-column-index=\"1\"]")
     public List<WebElement> reservationsNumbers;
     @FindBy(xpath = "//kendo-grid-list//td[@data-kendo-grid-column-index=\"2\"]")
-    public List<WebElement> reservationsStatueses;
+    public List<WebElement> reservationsStatuses;
     @FindBy(xpath = "//kendo-grid-list//td[@data-kendo-grid-column-index=\"3\"]")
     public List<WebElement> reservationsGuests_Corps;
     @FindBy(xpath = "//kendo-grid-list//td[@data-kendo-grid-column-index=\"4\"]")
@@ -64,6 +65,12 @@ public class P03_ReservationsPage {
     public List<WebElement> reservationsBalances;
     @FindBy(xpath = "//kendo-grid-list//td[@data-kendo-grid-column-index=\"15\"]")
     List<WebElement> moreActions;
+
+
+
+    public WebElement reservationCheckOutDate(WebElement reservation){
+        return reservation.findElement(By.xpath("../td[@data-kendo-grid-column-index=\"6\"]"));
+    }
 // end Grid //
 
     // filter //
@@ -104,21 +111,32 @@ public class P03_ReservationsPage {
     @FindBy(id = "unit-number")
     public WebElement filterUnitNumField;
 
-    @FindBy(xpath = "//label[contains(text(),\"Reservation Status\")]/../following-sibling::kendo-multiselect//input")
+    @FindBy(xpath = "//label[contains(text(),\"Reservation Status\")]/../following-sibling::kendo-multiselect")
     public WebElement customStatusField;
+    @FindBy(xpath = "//label[contains(text(),\"Reservation Status\")]/../following-sibling::kendo-combobox")
+    public WebElement predefinedStatusComboBox;
+
     public List<WebElement> filterCustomStatuses() {
+        driver.findElement(By.name("resStatusCustomId")).click();
         customStatusField.click();
+        Utils.sleep(300);
         return listItems;
+
+    }
+
+    public List<WebElement> filterPreDefinedStatuses() {
+        driver.findElement(By.name("resStatusId")).click();
+        return  new P00_multiPurposes(driver).getListItems(predefinedStatusComboBox);
     }
 
     @FindBy(xpath = "//app-corporate-auto-complete//input")
     WebElement corporateFilterField;
 
     public WebElement selectCorp(String corpName) {
-        corporateFilterField.sendKeys(Keys.chord(Keys.CONTROL,"a",Keys.BACK_SPACE));
+        corporateFilterField.sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.BACK_SPACE));
         corporateFilterField.sendKeys(corpName);
         Utils.sleep(600);
-        return listItems.get(0);
+        return listItems.getFirst();
     }
 
     //TODO Containue the reservation page filters
