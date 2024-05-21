@@ -63,7 +63,7 @@
           <elementProp name="Stage_URL" elementType="Argument">
             <stringProp name="Argument.name">Stage_URL</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
-            <stringProp name="Argument.value">193.122.79.103</stringProp>
+            <stringProp name="Argument.value">staging.nazeel.net</stringProp>
           </elementProp>
           <elementProp name="Demo_URL" elementType="Argument">
             <stringProp name="Argument.name">Demo_URL</stringProp>
@@ -230,7 +230,7 @@
                 </elementProp>
                 <elementProp name="Protocol" elementType="Argument">
                   <stringProp name="Argument.name">Protocol</stringProp>
-                  <stringProp name="Argument.value">http</stringProp>
+                  <stringProp name="Argument.value">https</stringProp>
                   <stringProp name="Argument.metadata">=</stringProp>
                 </elementProp>
                 <elementProp name="port" elementType="Argument">

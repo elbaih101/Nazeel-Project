@@ -31,7 +31,7 @@
           </elementProp>
           <elementProp name="User-Agent" elementType="Header">
             <stringProp name="Header.name">User-Agent</stringProp>
-            <stringProp name="Header.value">Mozilla/5.0 (iPad; CPU OS 6_0 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/6.0 Mobile/10A5355d Safari/8536.25</stringProp>
+            <stringProp name="Header.value">Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36 Edg/124.0.0.0</stringProp>
           </elementProp>
           <elementProp name="Authorization" elementType="Header">
             <stringProp name="Header.name">Authorization</stringProp>
@@ -44,6 +44,10 @@
           <elementProp name="SelectedProperty" elementType="Header">
             <stringProp name="Header.name">SelectedProperty</stringProp>
             <stringProp name="Header.value">${Property_ID}</stringProp>
+          </elementProp>
+          <elementProp name="" elementType="Header">
+            <stringProp name="Header.name">scheme</stringProp>
+            <stringProp name="Header.value">${Protocol}</stringProp>
           </elementProp>
         </collectionProp>
       </HeaderManager>
@@ -63,7 +67,7 @@
           <elementProp name="Stage_URL" elementType="Argument">
             <stringProp name="Argument.name">Stage_URL</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
-            <stringProp name="Argument.value">193.122.79.103</stringProp>
+            <stringProp name="Argument.value">staging.nazeel.net</stringProp>
           </elementProp>
           <elementProp name="Demo_URL" elementType="Argument">
             <stringProp name="Argument.name">Demo_URL</stringProp>
@@ -85,7 +89,7 @@
           <elementProp name="Property_Code" elementType="Argument">
             <stringProp name="Argument.name">Property_Code</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
-            <stringProp name="Argument.value">&quot;P00997&quot;</stringProp>
+            <stringProp name="Argument.value">&quot;P00166&quot;</stringProp>
           </elementProp>
         </collectionProp>
       </Arguments>
@@ -239,8 +243,8 @@
           <stringProp name="LoopController.loops">1</stringProp>
           <boolProp name="LoopController.continue_forever">false</boolProp>
         </elementProp>
-        <stringProp name="ThreadGroup.num_threads">60</stringProp>
-        <stringProp name="ThreadGroup.ramp_time">5</stringProp>
+        <stringProp name="ThreadGroup.num_threads">1</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">1</stringProp>
         <boolProp name="ThreadGroup.delayedStart">false</boolProp>
         <boolProp name="ThreadGroup.scheduler">false</boolProp>
         <stringProp name="ThreadGroup.duration"></stringProp>
@@ -264,7 +268,7 @@
                 </elementProp>
                 <elementProp name="Protocol" elementType="Argument">
                   <stringProp name="Argument.name">Protocol</stringProp>
-                  <stringProp name="Argument.value">http</stringProp>
+                  <stringProp name="Argument.value">https</stringProp>
                   <stringProp name="Argument.metadata">=</stringProp>
                 </elementProp>
                 <elementProp name="port" elementType="Argument">
@@ -299,7 +303,7 @@
                 <stringProp name="764597751">Test Plan</stringProp>
                 <stringProp name="-1735288294">full plan</stringProp>
                 <stringProp name="-233982402">logging in and choosing property</stringProp>
-                <stringProp name="-1564234843">Vouchers</stringProp>
+                <stringProp name="-1046574521">Reservations</stringProp>
               </collectionProp>
             </ModuleController>
             <hashTree/>
@@ -420,13 +424,13 @@
             <boolProp name="TransactionController.parent">true</boolProp>
           </TransactionController>
           <hashTree>
-            <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="https://app.nazeel.net:4443/api/Account/LogIn" enabled="true">
+            <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="api/Account/LogIn" enabled="true">
               <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
               <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
                 <collectionProp name="Arguments.arguments">
                   <elementProp name="" elementType="HTTPArgument">
                     <boolProp name="HTTPArgument.always_encode">false</boolProp>
-                    <stringProp name="Argument.value">{&quot;userName&quot;:&quot;elbaih&quot;,&quot;password&quot;:&quot;Aa@123456&quot;}</stringProp>
+                    <stringProp name="Argument.value">{&quot;userName&quot;:&quot;baih&quot;,&quot;password&quot;:&quot;Aa@123456&quot;}</stringProp>
                     <stringProp name="Argument.metadata">=</stringProp>
                   </elementProp>
                 </collectionProp>
@@ -467,7 +471,7 @@
               </JSONPostProcessor>
               <hashTree/>
             </hashTree>
-            <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="https://app.nazeel.net:4443/api/Setting/Property/SearchMasterMenu" enabled="true">
+            <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="api/Setting/Property/SearchMasterMenu" enabled="true">
               <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
               <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
                 <collectionProp name="Arguments.arguments">
@@ -521,7 +525,7 @@
               </JSONPostProcessor>
               <hashTree/>
             </hashTree>
-            <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="https://app.nazeel.net:4443/api/Setting/Property/ValidatePropertyStatus" enabled="true">
+            <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="api/Setting/Property/ValidatePropertyStatus" enabled="true">
               <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
               <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
                 <collectionProp name="Arguments.arguments">
@@ -559,7 +563,7 @@
               </HeaderManager>
               <hashTree/>
             </hashTree>
-            <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="https://app.nazeel.net:4443/api/Setting/Property/GetMasterMenuSelectedProperty/Property_ID" enabled="true">
+            <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="api/Setting/Property/GetMasterMenuSelectedProperty/Property_ID" enabled="true">
               <boolProp name="HTTPSampler.postBodyRaw">false</boolProp>
               <elementProp name="HTTPsampler.Arguments" elementType="Arguments" guiclass="HTTPArgumentsPanel" testclass="Arguments" enabled="true">
                 <collectionProp name="Arguments.arguments"/>
@@ -1250,7 +1254,7 @@
             </hashTree>
             <TransactionController guiclass="TransactionControllerGui" testclass="TransactionController" testname="select unit by type" enabled="true">
               <boolProp name="TransactionController.includeTimers">false</boolProp>
-              <boolProp name="TransactionController.parent">false</boolProp>
+              <boolProp name="TransactionController.parent">true</boolProp>
             </TransactionController>
             <hashTree>
               <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="/api/Availability/get-available-unit-by-type" enabled="true">
@@ -1499,7 +1503,7 @@ vars.put(&quot;units&quot;,units)
             </hashTree>
             <TransactionController guiclass="TransactionControllerGui" testclass="TransactionController" testname="tax and rate calculations" enabled="true">
               <boolProp name="TransactionController.includeTimers">false</boolProp>
-              <boolProp name="TransactionController.parent">false</boolProp>
+              <boolProp name="TransactionController.parent">true</boolProp>
             </TransactionController>
             <hashTree>
               <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="/api/financial/rate-calculator/get-reservation-units-rates" enabled="true">
@@ -1722,7 +1726,7 @@ vars.put(&quot;reservationTaxes&quot;,newJson)</stringProp>
             </hashTree>
             <TransactionController guiclass="TransactionControllerGui" testclass="TransactionController" testname="select guest by guest class" enabled="true">
               <boolProp name="TransactionController.includeTimers">false</boolProp>
-              <boolProp name="TransactionController.parent">false</boolProp>
+              <boolProp name="TransactionController.parent">true</boolProp>
             </TransactionController>
             <hashTree>
               <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="/api/Setting/GuestClass/GetLite?companyid={company_id}" enabled="true">
