@@ -1,5 +1,6 @@
 package alia.nazeel.stepDefs;
 
+import io.cucumber.datatable.DataTable;
 import alia.nazeel.pages.reservations.*;
 import alia.nazeel.pojos.Tax;
 import alia.nazeel.tools.Nazeel_Calculations;
@@ -14,10 +15,12 @@ import alia.nazeel.pages.P02_DashBoardPage;
 import alia.nazeel.pages.mutlipurposes.P00_multiPurposes;
 
 import org.joda.time.DateTime;
+import org.joda.time.LocalTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.Color;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -145,13 +148,6 @@ public class D01_Reservations {
     @And("Choose Reservation Status as {string}")
     public void chooseReservationStatusAs(String status) {
         WebElement actionButton;
-        wait.until(ExpectedConditions.elementToBeClickable(reservationMainDataPage.reservatinMoreActionsMenu));
-        try {
-            Thread.sleep(300);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        new P00_multiPurposes(driver).waitLoading();
         new P00_multiPurposes(driver).waitLoading();
         reservationMainDataPage.reservatinMoreActionsMenu.click();
         if (status.contains("In")) {
@@ -162,6 +158,7 @@ public class D01_Reservations {
             actionButton = reservationMainDataPage.checkoutMenuButton;
             wait.until(ExpectedConditions.elementToBeClickable(actionButton));
             actionButton.click();
+            endReservationPopUp.checkoutTodayButton.click();
             endReservation(status);
         } else if (status.contains("Canceled")) {
             actionButton = reservationMainDataPage.cancelReservationButton;
@@ -176,9 +173,8 @@ public class D01_Reservations {
     }
 
     void endReservation(String status) {
-        if (status.toLowerCase().contains("Out".toLowerCase())) {
-            endReservationPopUp.confirmCheckOutButton.click();
-
+        if (status.toLowerCase().contains("out")) {
+            endReservationPopUp.confirmEndButton.click();
             while (!endReservationPopUp.header().isEmpty())
 
                 if (!endReservationPopUp.skipButton().isEmpty()) {
@@ -194,7 +190,7 @@ public class D01_Reservations {
                     endReservationPopUp.confirmationButton().click();
                     new P00_multiPurposes(driver).waitLoading();
                 }
-        } else if (status.toLowerCase().contains("Canceled".toLowerCase())) {
+        } else if (status.toLowerCase().contains("canceled")) {
             endReservationPopUp.confirmCancelButton().click();
             while (!endReservationPopUp.header().isEmpty())
 
@@ -240,6 +236,11 @@ public class D01_Reservations {
 
         clickOnAddNewReservation();
         fillReservationData(source, purpose, unit, guest, sDate, eDate);
+        saveReservationAs(state);
+    }
+
+    @And("Save reservation as {string}")
+    public void saveReservationAs(String state) {
         if (state.equalsIgnoreCase("confirmed"))
             clickOnSaveReservationButton();
         else if (state.toLowerCase().contains("in"))
@@ -293,15 +294,15 @@ public class D01_Reservations {
         new P00_multiPurposes(driver).waitLoading();
         if (!driver.findElement(By.xpath("//div[contains(@class,\"filter-form__container\")]")).getAttribute("class").contains("is-open"))
             reservationsPage.filterButton.click();
-        switch (filter) {
-            case "resType" ->
+        switch (filter.toLowerCase()) {
+            case "restype" ->
                     reservationsPage.filterResType().stream().filter(t -> t.getText().equalsIgnoreCase(value)).findAny().orElseThrow().click();
-            case "rentType" ->
+            case "renttype" ->
                     reservationsPage.filterRentType().stream().filter(t -> t.getText().equalsIgnoreCase(value)).findAny().orElseThrow().click();
-            case "unitType" ->
+            case "unittype" ->
                     reservationsPage.filterUnitTypes().stream().filter(t -> t.getText().equalsIgnoreCase(value)).findAny().orElseThrow().click();
             case "corporate" -> reservationsPage.selectCorp(value).click();
-            case "resState" -> reservationStateFiltering(value);
+            case "resstate" -> reservationStateFiltering(value);
 
 
         }
@@ -310,7 +311,7 @@ public class D01_Reservations {
 
     private void reservationStateFiltering(String value) {
         switch (value) {
-            case "Confirmed", "Checked-In", "" -> reservationsPage.filterCustomStatuses().forEach(s -> {
+            case "Confirmed", "Checked In", "" -> reservationsPage.filterCustomStatuses().forEach(s -> {
                 WebElement checkBox = s.findElement(By.xpath("./input"));
                 if (checkBox.isSelected() && !s.getText().equals(value))
                     s.click();
@@ -394,7 +395,7 @@ public class D01_Reservations {
                 assertDatesAreToday(reservationsPage.reservationsCheckOutDates, dateTimeFormatter);
             }
             case "On Departure Reservations (All)" ->
-                assertDatesAreToday(reservationsPage.reservationsCheckOutDates, dateTimeFormatter);
+                    assertDatesAreToday(reservationsPage.reservationsCheckOutDates, dateTimeFormatter);
 
             case "Checked-Out Reservations" ->
                     assertReservationsStatus(reservationsPage.reservationsStatuses, "CheckedOut", "status not filtered right");
@@ -476,11 +477,96 @@ public class D01_Reservations {
 
     List<Tax> appliedTaxes;
 
-    @And("ge applied Taxes on reservation")
-    public void geAppliedTaxesOnReservation() {
+    @And("get applied Taxes on reservation")
+    public void getAppliedTaxesOnReservation() {
         reservationMainDataPage.veiwTaxesButton.click();
         P03_7_TaxesPopUp TaxesPopUp = new P03_7_TaxesPopUp(driver);
         appliedTaxes = TaxesPopUp.appliedTaxes();
         TaxesPopUp.closeButton.click();
+    }
+
+
+    @When("Change Rate of the reservation to {string}")
+    public void changeRateOfTheReservationTo(String rate) {
+        reservationMainDataPage.diffrentRatesInput.sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.BACK_SPACE));
+        reservationMainDataPage.diffrentRatesInput.sendKeys(rate);
+
+
+    }
+
+    List<String> expectedToasts;
+
+    @Then("check toast messages from the list and the reservation notcreatd")
+    public void checkToastMessagesFromTheListAndTheReservation(DataTable table) {
+        expectedToasts = table.asList(String.class);
+        new P00_multiPurposes(driver).waitLoading();
+        List<WebElement> actualToasts = new P00_multiPurposes(driver).toastMsgs;
+        asrt.assertEquals(reservationMainDataPage.reservationNumber.getText(), "New reservation");
+        for (String t : expectedToasts) {
+            asrt.AssertAnyMatch(actualToasts, i -> i.getText().contains(t));
+        }
+        asrt.assertAll();
+    }
+
+    @Then("Check the failedPopUp with msg {string}")
+    public void checkTheFailedPopUpWithMsg(String msg) {
+        asrt.AssertContains(reservationMainDataPage.resFailedPopUp.getText(), msg);
+        asrt.assertAll();
+    }
+
+
+    @Given("open a reservation of state {string}")
+    public void openAReservationOfstate(String state) {
+        filteringWithAs("resstate", state);
+        new P00_multiPurposes(driver).waitLoading();
+        if (!reservationsPage.reservationsNumbers.isEmpty()) {
+            reservationsPage.reservationsNumbers.getFirst().click();
+        }
+
+    }
+
+    @Then("Check the disabled date time fields to be {string}")
+    public void checkTheDisabledDateTimeFieldsToBe(String disabledFields) {
+        if (disabledFields.toLowerCase().contains("checkin")) {
+            asrt.assertTrue(!Utils.isEnabled(reservationMainDataPage.startDateField));
+        }
+        if (disabledFields.toLowerCase().contains("checkout")) {
+            asrt.assertTrue(!Utils.isEnabled(reservationMainDataPage.endDateField));
+        }
+
+    }
+
+    @When("editing check in date to be tomorrow and saving")
+    public void editingCheckInDateToBeTomorrowAndSaving() {
+        new P00_multiPurposes(driver).waitLoading();
+        selectStartDateAndEndDate(DateTime.now().plusDays(1).toString(DateTimeFormat.forPattern("dd/MM/YYYY")), "");
+        new P00_multiPurposes(driver).waitLoading();
+        clickOnSaveReservationButton();
+    }
+
+    @And("Change the checkout Time to now and save")
+    public void changeTheCheckoutTimeToNowAndSave() {
+
+        reservationMainDataPage.endtimeButton.click();
+        LocalTime now = DateTime.now().toLocalTime();
+        wait.until(ExpectedConditions.visibilityOf(reservationMainDataPage.HoursField));
+        reservationMainDataPage.HoursField.sendKeys(now.toString(DateTimeFormat.forPattern("HH")));
+        if (!now.toString(DateTimeFormat.forPattern("a")).equalsIgnoreCase(reservationMainDataPage.dayNightButton.getText())) {
+            reservationMainDataPage.dayNightButton.click();
+            reservationMainDataPage.setTimeButton.click();
+        }
+        clickOnSaveReservationButton();
+    }
+
+    @Then("checking out with today should not emerge the penalty tab")
+    public void checkingOutWithTodayShouldNotEmergeThePenaltyTab() {
+        reservationMainDataPage.reservatinMoreActionsMenu.click();
+        WebElement actionButton = reservationMainDataPage.checkoutMenuButton;
+        wait.until(ExpectedConditions.elementToBeClickable(actionButton));
+        actionButton.click();
+        endReservationPopUp.checkoutTodayButton.click();
+        asrt.assertTrue(Color.fromString(endReservationPopUp.penaltyTabHeader.getCssValue("color")).asHex().equals("#dfe6ee"));
+        endReservation("checkout");
+        asrt.assertAll();
     }
 }

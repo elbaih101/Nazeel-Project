@@ -92,9 +92,8 @@ public class D02_CreateProperty {
         } catch (NoSuchElementException e) {
             System.out.println("no subscriptions alert");
         }
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+
         //clicking on later to bypass user verification
-        if (dashBoardPage.masterDataLink.isEmpty()) {
             try {
                 loginPage.verificationButton.click();
             } catch (NoSuchElementException e) {
@@ -105,7 +104,7 @@ public class D02_CreateProperty {
             } catch (NoSuchElementException e) {
                 System.out.println("no agreement contract");
             }
-        }
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
     }
 
     @And("Go to Properties Page")

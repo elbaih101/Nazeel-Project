@@ -493,8 +493,8 @@ public class D08_Vouchers {
         String dropCashTime = JsonDataTools.getValueFromJsonFile("src/main/resources/testdata/VouchersRelatedData.json", "dropCashTime");
         String dropCashDate = JsonDataTools.getValueFromJsonFile("src/main/resources/testdata/VouchersRelatedData.json", "dropCashDate");
         DateTimeFormatter timeFormatter = DateTimeFormat.forPattern("HH:mm a");
-        DateTimeFormatter dateFormmater = DateTimeFormat.forPattern("DD/MM/YYYY");
-        DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern("DD/MM/YYYY HH:mm a");
+        DateTimeFormatter dateFormmater = DateTimeFormat.forPattern("dd/MM/YYYY");
+        DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern("dd/MM/YYYY HH:mm a");
         DateTime newDateTime = DateTime.parse(dropCashDate + " " + dropCashTime, dateTimeFormatter).plusMinutes(1);
 
         if (!toDate.equalsIgnoreCase("dropdate")) {
@@ -579,7 +579,7 @@ public class D08_Vouchers {
         dashBoardPage.dropCashVoucherssLink.click();
     }
 
-    DateTimeFormatter formatter = DateTimeFormat.forPattern("DD/MM/YYYY hh:mm a");
+    DateTimeFormatter formatter = DateTimeFormat.forPattern("dd/MM/YYYY hh:mm a");
     DateTime startFrom;
     DateTime startTo;
     DateTime endFrom;

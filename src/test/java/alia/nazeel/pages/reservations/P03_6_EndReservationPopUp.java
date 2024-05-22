@@ -30,13 +30,16 @@ public class P03_6_EndReservationPopUp {
     @FindBy(xpath = "//div[@role=\"dialog\"]")
     WebElement endReservationPopup;
 
-    public List<WebElement> header(){
+    public List<WebElement> header() {
         return driver.findElements(By.xpath("//kendo-dialog-titlebar"));
     }
 
+    @FindBy(xpath = "//div[@role=\"dialog\"]//button[contains(text(),\"Today\")]")
+    public WebElement checkoutTodayButton;
+    @FindBy(xpath = "//div[@role=\"dialog\"]//button[contains(text(),\"Reservation\")]")
+    public WebElement checkoutReservationDateButton;
     @FindBy(xpath = "//div[@role=\"dialog\"]//button[contains(@class,\"button--primary\")]")
-    public WebElement confirmCheckOutButton;
-
+    public WebElement confirmEndButton;
 
     public WebElement amountField() {
         return endReservationPopup.findElement(By.xpath(".//input[@id=\"amount\"]"));
@@ -55,12 +58,15 @@ public class P03_6_EndReservationPopUp {
         return endReservationPopup.findElements(By.xpath(".//div[contains(@class,\"skip\")]"));
     }
 
-    public WebElement confirmCancelButton(){
+    public WebElement confirmCancelButton() {
         return endReservationPopup.findElement(By.xpath(".//button[contains(@class,\"n-button--danger\")]"));
     }
 
-    public List<WebElement> reasons(){
+    public List<WebElement> reasons() {
         endReservationPopup.findElement(By.xpath(".//label[contains(text(),\"reason\")]/following-sibling::kendo-combobox//span/span/span")).click();
         return genralListBox.findElements(By.xpath("//li[@role=\"option\"]"));
     }
+
+    @FindBy(xpath = "//checkout-wizard//div[contains(text(),\"Penalty\")]")
+    public WebElement penaltyTabHeader;
 }
