@@ -1,23 +1,10 @@
 package org.example.testRunner;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
-import org.bouncycastle.jcajce.provider.digest.GOST3411;
-import org.example.TestData;
-import org.example.Utils;
-import org.example.pages.P17_CashDrawerPage;
-import org.example.pages.mutlipurposes.P00_multiPurposes;
-import org.example.pages.reservations.P03_1_ReservationMainDataPage;
-import org.example.pages.reservations.P03_6_EndReservationPopUp;
-import org.example.pages.vouchersPages.P10_VouchersPage;
-import org.example.pages.vouchersPages.P16_VouchersPopUp;
-import org.example.stepDefs.D01_MakingReservation;
 import org.openqa.selenium.*;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.edge.EdgeOptions;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import org.testng.asserts.SoftAssert;
-
 import java.time.Duration;
 import java.util.Map;
 
@@ -28,7 +15,7 @@ public class Depuging {
         EdgeDriver driver;
      //   initiateDepuggingBrowser();
         driver = attatchDepugger();
-        JavascriptExecutor js = (JavascriptExecutor) driver;
+        JavascriptExecutor js = driver;
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(3));
        //  driver.get(TestData.stageUrl);
         //new D01_MakingReservation().chooseReservationStatusAs("out");
