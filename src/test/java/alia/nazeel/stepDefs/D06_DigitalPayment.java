@@ -159,12 +159,20 @@ public class D06_DigitalPayment {
         selecetdGuest.click();
         selectedguestName = selecetdGuest.getText();
 
-        wait.until(ExpectedConditions.elementToBeClickable(guestSelectionPopUp.confirmButton()));
-        guestSelectionPopUp.confirmButton().click();
+        new P00_multiPurposes(driver).waitLoading();
+        try {
+
+            guestSelectionPopUp.confirmButton().click();
+        }catch (ElementClickInterceptedException e){
+            if (!e.getMessage().contains("kendo-dialog-actions class=\"k-dialog-buttongroup")) {
+                e.printStackTrace();
+            }
+        }
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(1));
         if (!guestSelectionPopUp.ignoreDiscountButton.isEmpty()) {
             guestSelectionPopUp.ignoreDiscountButton.getFirst().click();
         }
-
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
     }
 
     final D03_BlocksAndFloors blocksAndFloors = new D03_BlocksAndFloors();

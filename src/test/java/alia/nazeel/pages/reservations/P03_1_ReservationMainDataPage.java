@@ -1,5 +1,7 @@
 package alia.nazeel.pages.reservations;
 
+import alia.nazeel.kendoelements.Grid;
+import alia.nazeel.kendoelements.KendoDropDownList;
 import alia.nazeel.pages.mutlipurposes.P00_multiPurposes;
 
 import org.openqa.selenium.By;
@@ -37,8 +39,10 @@ public class P03_1_ReservationMainDataPage {
     WebElement genralListBox;
     @FindBy(xpath = "//div[contains(text(),\"Financial & Payments\")]")
     public WebElement financialAndPaymentsPage;
-    @FindBy(css = "button[class=\"n-button n-button--green ng-star-inserted\"]")
-    public WebElement newReservationButton;
+    @FindBy(xpath = "//label[contains(text(),\"Reservation type\")]/following-sibling::div/kendo-buttongroup/button")
+    public List<WebElement> resTypesButtons;
+
+    ///more actions menue ///
     @FindBy(xpath = "//div[contains(@class,\"popup__btn\")]")
     public WebElement reservatinMoreActionsMenu;
 
@@ -48,12 +52,7 @@ public class P03_1_ReservationMainDataPage {
     public WebElement checkoutMenuButton;
     @FindBy(xpath = "//kendo-popup//div[contains(text(),\"Cancel reservation\")]")
     public WebElement cancelReservationButton;
-    @FindBy(xpath = "//label[contains(text(),\"Check-in\")]/following-sibling::div//kendo-datepicker//input")
-    public WebElement startDateField;
-
-    @FindBy(xpath = "//label[contains(text(),\"Check-out\")]/following-sibling::div//kendo-datepicker//input")
-    public WebElement endDateField;
-
+    /////end actions menu///
     @FindBy(xpath = "//div[@class=\"financial-summary__title\"][contains(text(),\"Rent\")]/following-sibling::div")
     public WebElement renttotal;
 
@@ -81,16 +80,14 @@ public class P03_1_ReservationMainDataPage {
     @FindBy(xpath = "//kendo-popup//li[contains(text(),\"Family or friends\")]")
     public WebElement familyOrFriendsSelection;
 
-    @FindBy(xpath = "//span[contains(text(),\"Select unit now\")]")
-    public WebElement selectUnitNowSpan;
-
-
-    @FindBy(xpath = "//kendo-dialog//kendo-panelbar-item")
-    public WebElement panelBar;
+    ////Reservation Guest List Wizard /////
+    @FindBy(xpath = "//reservation-guest-list-wizard//button[contains(@class,\"green-border\")]")
+    public WebElement addDependentButton;
 
     @FindBy(xpath = "//span[contains(text(),\"Select guest now\")]/..")
     public WebElement selectGestButton;
-
+    @FindBy(xpath = "//app-guests-step//span[contains(text(),\"Dependents\")]")
+    public WebElement dpendentsButton;
     @FindBy(id = "guestFormDialogContainer")
     public WebElement guestFormDialogContainer;
     @FindBy(xpath = "//button[contains(text(),\"Save reservation\")]")
@@ -119,7 +116,11 @@ public class P03_1_ReservationMainDataPage {
     @FindBy(tagName = "app-reservation-failed-popup")
     public WebElement resFailedPopUp;
 
-
+    ///REservation periods bar ///
+    @FindBy(xpath = "//label[contains(text(),\"Check-in\")]/following-sibling::div//kendo-datepicker//input")
+    public WebElement startDateField;
+    @FindBy(xpath = "//label[contains(text(),\"Check-out\")]/following-sibling::div//kendo-datepicker//input")
+    public WebElement endDateField;
     @FindBy(xpath = "//label[contains(text(),\"Check-out\")]/following-sibling::div/div[@class=\"input-group\"]/span")
     public WebElement endtimeButton;
     @FindBy(xpath = "//app-reservation-time-picker//input[@placeholder=\"HH\"]")
@@ -130,6 +131,49 @@ public class P03_1_ReservationMainDataPage {
     public WebElement dayNightButton;
     @FindBy(xpath = "//app-reservation-time-picker//a")
     public WebElement setTimeButton;
+    @FindBy(xpath = "//span[contains(text(),\"Rental type\")]/../../following-sibling::div//kendo-dropdownlist")
+    WebElement rentalPeriodDropList;
 
+    public KendoDropDownList rentalPeriodDropList() {
+        return new KendoDropDownList(rentalPeriodDropList);
+    }
 
+    @FindBy(xpath = "//label[contains(text(),\"Period \")]/../following-sibling::div//input")
+    public WebElement rentalPeriodField;
+
+    ///Reservation Units Grid //
+    @FindBy(xpath = "//select-units-wizard//th[8]//div[contains(@class,\"header-action\")]//*[name()=\"use\" and contains(@*,\"icon-add\") ]")
+    public WebElement addUnitButton;
+
+    @FindBy(xpath = "//label[contains(text(),\"Unit(s) \")]/../following-sibling::kendo-grid//kendo-grid-list")
+    WebElement unitsGrid;
+
+    Grid getResUnitsGrid() {
+        return new Grid(unitsGrid);
+    }
+
+    public List<WebElement> resUnits() {
+        return getResUnitsGrid().getGridCells(0);
+    }
+
+    public List<WebElement> unitsTypes() {
+        return getResUnitsGrid().getGridCells(1);
+    }
+
+    public WebElement unitChangeButton(WebElement unit) {
+        return getResUnitsGrid().getGridCell(unit, 7).findElement(By.xpath(".//button//*[name()=\"use\" and contains(@*,\"icon-change-unit\")]/.."));
+    }
+/////end units ///////
+
+    ///unit change confirmation popup ///
+    @FindBy(xpath = "//div[contains(@class,\"swal2-container\")]//button[contains(text(),\"OK\")]")
+    public WebElement confirmChangeUnitButton;
+    @FindBy(id = "swal2-content")
+    public WebElement confirmChangeUnitMessage;
+    ///////end popup //////
+
+    //unitsRates page popup////
+    @FindBy(xpath = "//div[@class=\"form__action-icon u-pointer-events-all\"]")
+    public WebElement unitsRatesPopUpButton;
+///end popup ///
 }

@@ -29,6 +29,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 public class D01_Reservations {
 
@@ -45,6 +46,7 @@ public class D01_Reservations {
     final CustomAssert asrt = new CustomAssert();
     final Actions action = new Actions(driver);
 
+    final P03_8_UnitsRatesPopUp unitsRatesPopUp = new P03_8_UnitsRatesPopUp(driver);
 
     @And("open reservations Page")
     public void openReservationsPage() {
@@ -61,7 +63,8 @@ public class D01_Reservations {
     public void clickOnAddNewReservation() {
         new P00_multiPurposes(driver).waitLoading();
 //        reservationPage.newReservationButton.click();
-        js.executeScript("arguments[0].click();", reservationMainDataPage.newReservationButton);
+        js.executeScript("arguments[0].click();", reservationsPage.newReservationButton);
+        new P00_multiPurposes(driver).waitLoading();
     }
 
     @And("Select Reservation source {string} and visit purpose {string}")
@@ -85,29 +88,40 @@ public class D01_Reservations {
     @And("open unit selection Popup")
     public void openUnitSelectionPopup() {
         new P00_multiPurposes(driver).waitLoading();
-        reservationMainDataPage.selectUnitNowSpan.click();
+        reservationMainDataPage.addUnitButton.click();
     }
 
     @And("select a unit {string}")
     public void selectAUnit(String unit) {
 
-        wait.until(ExpectedConditions.visibilityOf(reservationMainDataPage.panelBar));
+        if (unit.equalsIgnoreCase("bytype")) {
+            unitSelectionPopup.unitTypeButton.click();
+            new P00_multiPurposes(driver).waitLoading();
 
-        WebElement unitCard;
-        if (unit.equalsIgnoreCase("RANDOM")) {
-            unitCard = unitSelectionPopup.availableUnits();
+                unitSelectionPopup.addUnitOfTypeButtton(unitSelectionPopup.unitTypes.getFirst()).click();
+
+
         } else {
-            unitCard = unitSelectionPopup.availableUnits();
+
+            wait.until(ExpectedConditions.visibilityOf(unitSelectionPopup.unitsselectionpanel));
+            new P00_multiPurposes(driver).waitLoading();
+            WebElement unitCard;
+            if (unit.equalsIgnoreCase("RANDOM")) {
+                unitCard = unitSelectionPopup.availableUnits();
+            } else {
+                unitCard = unitSelectionPopup.availableUnits();
+            }
+            action.moveToElement(unitCard).perform();
+            unitCard.click();
         }
-        action.moveToElement(unitCard).perform();
-        unitCard.click();
         WebElement confirmBtn = unitSelectionPopup.confirmBtn;
 //        wait.until(ExpectedConditions.attributeToBe(confirmBtn,"disabled","null"));
         if (!unitSelectionPopup.checkInConflictionConfirmBtn.isEmpty()) {
             unitSelectionPopup.checkInConflictionConfirmBtn.getFirst().click();
         }
         confirmBtn.click();
-        wait.until(ExpectedConditions.invisibilityOf(unitCard));
+        new P00_multiPurposes(driver).waitLoading();
+//        wait.until(ExpectedConditions.invisibilityOf(unitCard));
     }
 
 
@@ -154,13 +168,13 @@ public class D01_Reservations {
             actionButton = reservationMainDataPage.checkInMenuButton;
             wait.until(ExpectedConditions.elementToBeClickable(actionButton));
             actionButton.click();
-        } else if (status.contains("Out")) {
+        } else if (status.toLowerCase().contains("out")) {
             actionButton = reservationMainDataPage.checkoutMenuButton;
             wait.until(ExpectedConditions.elementToBeClickable(actionButton));
             actionButton.click();
             endReservationPopUp.checkoutTodayButton.click();
             endReservation(status);
-        } else if (status.contains("Canceled")) {
+        } else if (status.toLowerCase().contains("cancel")) {
             actionButton = reservationMainDataPage.cancelReservationButton;
             wait.until(ExpectedConditions.elementToBeClickable(actionButton));
             actionButton.click();
@@ -218,9 +232,9 @@ public class D01_Reservations {
 
     }
 
-    @Given("Create {string} Reservation withSource {string} purpose {string} Unit {string} Guest {string} startDate {string} endDate {string}")
-    public void createReservationWithSourcePurposeUnitGuest(String reservationState, String source, String purpose, String unit, String guest, String sDate, String eDate) {
-        createASuccessfullReservation(source, purpose, unit, guest, reservationState, sDate, eDate);
+    @Given("Create {string} {string} Reservation withSource {string} purpose {string} Unit {string} Guest {string} startDate {string} endDate {string}")
+    public void createSingleReservationWithSourcePurposeUnitGuest(String type, String reservationState, String source, String purpose, String unit, String guest, String sDate, String eDate) {
+        createASuccessfullSingleReservation(type, source, purpose, unit, guest, reservationState, sDate, eDate);
         String reservationStatus = "Confirmed";
         if (reservationState.contains("In")) {
             reservationStatus = "Checked In";
@@ -232,10 +246,10 @@ public class D01_Reservations {
         verifyToastMessageAppearsWithTextAndTheReservationStatusToBe("Saved Successfully", reservationStatus);
     }
 
-    public void createASuccessfullReservation(String source, String purpose, String unit, String guest, String state, String sDate, String eDate) {
+    public void createASuccessfullSingleReservation(String type, String source, String purpose, String unit, String guest, String state, String sDate, String eDate) {
 
         clickOnAddNewReservation();
-        fillReservationData(source, purpose, unit, guest, sDate, eDate);
+        fillReservationData(type, source, purpose, unit, guest, sDate, eDate);
         saveReservationAs(state);
     }
 
@@ -248,13 +262,21 @@ public class D01_Reservations {
         whenReservationSummaryDialougeAppearsClickOnSaveReservatuonButton();
     }
 
-    public void fillReservationData(String source, String purpose, String unit, String guest, String sDate, String eDate) {
+    public void fillReservationData(String type, String source, String purpose, String unit, String guest, String sDate, String eDate) {
+        selectresType(type);
         selectReservationSourceAndPurpose(source, purpose);
         selectStartDateAndEndDate(sDate, eDate);
         openUnitSelectionPopup();
         selectAUnit(unit);
-        clickOnSelectguestNowButton();
-        new D06_DigitalPayment().selectGuest(guest, "", "");
+        if (!guest.isEmpty()) {
+            clickOnSelectguestNowButton();
+            new D06_DigitalPayment().selectGuest(guest, "", "");
+        }
+    }
+
+    private void selectresType(String type) {
+        wait.until(ExpectedConditions.visibilityOfAllElements(reservationMainDataPage.resTypesButtons));
+        reservationMainDataPage.resTypesButtons.stream().filter(b -> b.getText().equalsIgnoreCase(type)).findFirst().orElseThrow().click();
     }
 
     @And("elect start date {string} and end Date {string}")
@@ -440,9 +462,9 @@ public class D01_Reservations {
         asrt.assertAll();
     }
 
-    @And("fill Reservation Data with Source {string} purpose {string} Unit {string} Guest {string} startDate {string} endDate {string}")
-    public void fillReservationDataWithSourcePurposeUnitGuest(String source, String purpose, String unit, String guest, String sDate, String eDate) {
-        fillReservationData(source, purpose, unit, guest, sDate, eDate);
+    @And("fill {string} Reservation Data with Source {string} purpose {string} Unit {string} Guest {string} startDate {string} endDate {string}")
+    public void fillReservationDataWithSourcePurposeUnitGuest(String type, String source, String purpose, String unit, String guest, String sDate, String eDate) {
+        fillReservationData(type, source, purpose, unit, guest, sDate, eDate);
     }
 
     @Then("Check all Discounts types against Taxes Calculations and Balnce")
@@ -527,13 +549,18 @@ public class D01_Reservations {
 
     @Then("Check the disabled date time fields to be {string}")
     public void checkTheDisabledDateTimeFieldsToBe(String disabledFields) {
+        checkDatesDisabled(disabledFields);
+        asrt.assertAll();
+
+    }
+
+    private void checkDatesDisabled(String disabledFields) {
         if (disabledFields.toLowerCase().contains("checkin")) {
             asrt.assertTrue(!Utils.isEnabled(reservationMainDataPage.startDateField));
         }
         if (disabledFields.toLowerCase().contains("checkout")) {
             asrt.assertTrue(!Utils.isEnabled(reservationMainDataPage.endDateField));
         }
-
     }
 
     @When("editing check in date to be tomorrow and saving")
@@ -566,7 +593,77 @@ public class D01_Reservations {
         actionButton.click();
         endReservationPopUp.checkoutTodayButton.click();
         asrt.assertTrue(Color.fromString(endReservationPopUp.penaltyTabHeader.getCssValue("color")).asHex().equals("#dfe6ee"));
-        endReservation("checkout");
+        endReservation("Check Out");
+        asrt.assertAll();
+    }
+
+    @Given("Create a {string} monthly Reservation from {string} for {string} months")
+    public void createAMonthlyReservationFromForMonths(String resState, String sDate, String rentPeriod) {
+        if (sDate.equalsIgnoreCase("lastmonth"))
+            sDate = DateTime.now().minusMonths(1).toString(DateTimeFormat.forPattern("dd/MM/YYYY"));
+        clickOnAddNewReservation();
+        reservationMainDataPage.rentalPeriodDropList().selectByText("Monthly");
+        new P00_multiPurposes(driver).waitLoading();
+        fillReservationData("single", "Random", "Random", "Random", "Random", sDate, "");
+        reservationMainDataPage.rentalPeriodField.sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.BACK_SPACE));
+        reservationMainDataPage.rentalPeriodField.sendKeys(rentPeriod);
+        new P00_multiPurposes(driver).waitLoading();
+        saveReservationAs(resState);
+        new P00_multiPurposes(driver).waitLoading();
+    }
+
+    @And("Change the unit on the reservation")
+    public void changeTheUnitOnTheReservation() {
+        reservationMainDataPage.unitChangeButton(reservationMainDataPage.resUnits().getFirst()).click();
+        wait.until(ExpectedConditions.visibilityOf(reservationMainDataPage.confirmChangeUnitMessage));
+        String firstsegment = "Are you sure you want to change this unit";
+        String secondSement = "Guests assigned to this unit will be moved to the new one\nYou will no longer be able to change calender view for this reservation";
+        asrt.assertTrue(Pattern.matches(Pattern.quote(firstsegment) + ".*" + Pattern.quote(secondSement), reservationMainDataPage.confirmChangeUnitMessage.getText()));
+        reservationMainDataPage.confirmChangeUnitButton.click();
+        selectAUnit("Random");
+        wait.until(ExpectedConditions.visibilityOf(unitSelectionPopup.applyChangeUnitButton));
+        unitSelectionPopup.applyChangeUnitButton.click();
+        new P00_multiPurposes(driver).waitLoading();
+        clickOnSaveReservationButton();
+        new P00_multiPurposes(driver).waitLoading();
+    }
+
+    @Then("Check cant change callender type and start date is disabled")
+    public void checkCantChangeCallenderType() {
+        asrt.assertTrue(!reservationMainDataPage.unitsTypes().getFirst().findElements(By.xpath("//div[contains(@class,\"replace-info-icon \")]")).isEmpty());
+        openRatesPopUp();
+        for (int i = 1; i < unitsRatesPopUp.calender().getGridRows().size(); i++) {
+            int j = 2;
+            if (unitsRatesPopUp.calender().getTableCell(i, j).getAttribute("class").contains("calendar__disabled-cell")) {
+                asrt.assertFalse(unitsRatesPopUp.calender().getTableCell(i, 3).getAttribute("class").contains("calendar__disabled-cell"));
+                asrt.assertFalse(unitsRatesPopUp.calender().getTableCell(i, 4).getAttribute("class").contains("calendar__disabled-cell"));
+            } else {
+                asrt.assertTrue(unitsRatesPopUp.calender().getTableCell(i, 3).getAttribute("class").contains("calendar__disabled-cell"));
+                asrt.assertTrue(unitsRatesPopUp.calender().getTableCell(i, 4).getAttribute("class").contains("calendar__disabled-cell"));
+            }
+            checkDatesDisabled("check in");
+        }
+        unitsRatesPopUp.confirmRatesButton.click();
+        new P00_multiPurposes(driver).waitLoading();
+        chooseReservationStatusAs("canceled");
+        asrt.assertAll();
+    }
+
+
+    public void openRatesPopUp() {
+        reservationMainDataPage.unitsRatesPopUpButton.click();
+    }
+
+    @Then("add dependent to single reservtion {string}")
+    public void addDependentToSingleReservtion(String depName) {
+        reservationMainDataPage.dpendentsButton.click();
+        reservationMainDataPage.addDependentButton.click();
+        new D06_DigitalPayment().selectGuest(depName, "", "");
+    }
+
+    @Then("Check all selectedunits are by type")
+    public void checkAllSelectedunitsAreByType() {
+        asrt.AssertNonMatch(reservationMainDataPage.resUnits(), i -> !i.getText().equals("---"));
         asrt.assertAll();
     }
 }

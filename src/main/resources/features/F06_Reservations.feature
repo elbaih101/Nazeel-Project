@@ -23,12 +23,12 @@ Feature: Making Reservation with Nazeel PMS (web application)
       And verify toast message appears with text "Saved Successfully" and the reservation status to be "Confirmed"
 
     Scenario: single Checked in Reservation
-      Given  Create "confirmed" Reservation withSource "RANDOM" purpose "RANDOM" Unit "RANDOM" Guest "RANDOM" startDate "" endDate ""
+      Given  Create "single" "confirmed" Reservation withSource "RANDOM" purpose "RANDOM" Unit "RANDOM" Guest "RANDOM" startDate "" endDate ""
       And Choose Reservation Status as "Checked-In"
       And verify toast message appears with text "Saved Successfully" and the reservation status to be "Checked In"
 
     Scenario: Check out a reservation
-      Given  Create "Checked-In" Reservation withSource "RANDOM" purpose "RANDOM" Unit "RANDOM" Guest "RANDOM" startDate "" endDate ""
+      Given  Create "single" "Checked-In" Reservation withSource "RANDOM" purpose "RANDOM" Unit "RANDOM" Guest "RANDOM" startDate "" endDate ""
       Then Choose Reservation Status as "Checked-Out"
 
     @LoadMoreAction @Sprint40
@@ -66,7 +66,7 @@ Feature: Making Reservation with Nazeel PMS (web application)
 
     Scenario: Check Discount and Tax Calculations on reservtion
       When Click on Add new Reservation
-      And fill Reservation Data with Source "RANDOM" purpose "RANDOM" Unit "RANDOM" Guest "RANDOM" startDate "" endDate ""
+      And fill "single" Reservation Data with Source "RANDOM" purpose "RANDOM" Unit "RANDOM" Guest "RANDOM" startDate "" endDate ""
       And get applied Taxes on reservation
       And go to Reservation Financial Page
       Then Check all Discounts types against Taxes Calculations and Balnce
