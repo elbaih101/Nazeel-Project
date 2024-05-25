@@ -12,7 +12,7 @@
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <cucumber.version>7.17.0</cucumber.version>
+        <cucumber.version>7.18.0</cucumber.version>
         <selenium.version>4.20.0</selenium.version>
         <webdrivermanager.version>5.8.0</webdrivermanager.version>
         <reporting.version>5.8.1</reporting.version>
@@ -139,10 +139,12 @@
                             </goals>
                             <configuration>
                                 <projectName>Nazeel-Project</projectName>
-                                <outputDirectory>${project.build.directory}/cucumber-reports</outputDirectory>
+                                <inputDirectory>${project.build.directory}/cucumber-reports</inputDirectory>
+                                <skipEmptyJSONFiles>true</skipEmptyJSONFiles>
                                 <jsonFiles>
-                                    <param>${project.build.directory}/cucumberBaseReport/cucumber*.json</param>
+                                    <param>**/*.json</param>
                                 </jsonFiles>
+                                <outputDirectory>${project.build.directory}/cucumber-reports</outputDirectory>
                             </configuration>
                         </execution>
                     </executions>
@@ -150,4 +152,46 @@
             </plugins>
         </pluginManagement>
     </build>
+
+    <profiles>
+        <profile>
+            <id>cucumber-report-only</id>
+            <properties>
+                <skipTests>true</skipTests>
+            </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <configuration>
+                            <skipTests>true</skipTests>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>net.masterthought</groupId>
+                        <artifactId>maven-cucumber-reporting</artifactId>
+                        <executions>
+                            <execution>
+                                <id>generate-cucumber-reports</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>generate</goal>
+                                </goals>
+                                <configuration>
+                                    <projectName>Nazeel-Project</projectName>
+                                    <inputDirectory>${project.build.directory}/cucumber-reports</inputDirectory>
+                                    <skipEmptyJSONFiles>true</skipEmptyJSONFiles>
+                                    <jsonFiles>
+                                        <param>**/*.json</param>
+                                    </jsonFiles>
+                                    <outputDirectory>${project.build.directory}/cucumber-reports</outputDirectory>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>
