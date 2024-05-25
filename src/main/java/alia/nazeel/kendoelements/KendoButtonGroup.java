@@ -4,70 +4,73 @@ import org.openqa.selenium.*;
 
 import java.util.List;
 
-public class Grid implements WebElement
+public class KendoButtonGroup implements WebElement
 {
-    final WebElement grid;
+    WebElement buttonGroup;
+    By buttonGroupBy = new By.ByTagName("kendo-buttongroup");
+    final By buttonsBy = By.xpath(".//button");
 
-    public Grid(WebElement grid)
-    {
-        this.grid = grid;
-    }
 
-    public List<WebElement> getGridRows()
+    public void selectButtonByName(String name)
     {
-        return grid.findElements(By.cssSelector("tr")); // Assuming each row is a <tr> element
-    }
-
-    public List<WebElement> getGridCells(int columnIndex)
-    {
-        return grid.findElements(By.xpath("//td[@data-kendo-grid-column-index='" + columnIndex + "']")); // Assuming each column is a <td> element
-    }
-
-    public WebElement getGridCell(int rowIndex, int columnIndex)
-    {
-        List<WebElement> rows = getGridRows();
-        if (rowIndex >= rows.size())
+        List<WebElement> buttons = buttonGroup.findElements(buttonsBy);
+        for (WebElement button : buttons)
         {
-            throw new IndexOutOfBoundsException("Row index out of bounds");
+            if (button.getText().equals(name))
+            {
+                button.click();
+                break;
+            }
         }
-        // Locate the cell using data-kendo-grid-column-index attribute
-        return rows.get(rowIndex).findElement(By.xpath(".//td[@data-kendo-grid-column-index='" + columnIndex + "']"));
     }
 
-    public WebElement getTableCell(int rowIndex, int columnnumber)
+    public void selectButtonByNameIgnoreCase(String name)
     {
-        List<WebElement> rows = getGridRows();
-        if (rowIndex >= rows.size())
+        List<WebElement> buttons = buttonGroup.findElements(buttonsBy);
+        for (WebElement button : buttons)
         {
-            throw new IndexOutOfBoundsException("Row index out of bounds");
+            if (button.getText().equalsIgnoreCase(name))
+            {
+                button.click();
+                break;
+            }
         }
-        // Locate the cell using data-kendo-grid-column-index attribute
-        return rows.get(rowIndex).findElement(By.xpath(".//td[" + columnnumber + "]"));
     }
 
-    public WebElement getGridCell(WebElement baseCell, int columnIndex)
+    public void selectButtonByNameContainsIgnoreCase(String name)
     {
-        // Locate the cell using data-kendo-grid-column-index attribute
-        return baseCell.findElement(By.xpath("..//td[@data-kendo-grid-column-index='" + columnIndex + "']"));
+        List<WebElement> buttons = buttonGroup.findElements(buttonsBy);
+        for (WebElement button : buttons)
+        {
+            if (button.getText().toLowerCase().contains(name.toLowerCase()))
+            {
+                button.click();
+                break;
+            }
+        }
     }
 
-    public void clickGridCell(int rowIndex, int columnIndex)
+    public void selectButtonByIndex(int index)
     {
-        WebElement cell = getGridCell(rowIndex, columnIndex);
-        cell.click();
+        List<WebElement> buttons = buttonGroup.findElements(buttonsBy);
+        if (index < buttons.size())
+        {
+            buttons.get(index).click();
+        }
     }
 
-    public void setGridCellValue(int rowIndex, int columnIndex, String value)
+    public WebElement getActiveButton()
     {
-        WebElement cell = getGridCell(rowIndex, columnIndex);
-        cell.clear();
-        cell.sendKeys(value);
-    }
-
-    @Override
-    public <X> X getScreenshotAs(OutputType<X> target) throws WebDriverException
-    {
+        List<WebElement> buttons = buttonGroup.findElements(buttonsBy);
+        for (WebElement button : buttons)
+        {
+            if (button.getAttribute("class").contains("k-state-active"))
+            {
+                return button;
+            }
+        }
         return null;
+
     }
 
     @Override
@@ -194,5 +197,11 @@ public class Grid implements WebElement
     public String getCssValue(String propertyName)
     {
         return "";
+    }
+
+    @Override
+    public <X> X getScreenshotAs(OutputType<X> target) throws WebDriverException
+    {
+        return null;
     }
 }

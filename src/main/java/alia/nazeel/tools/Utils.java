@@ -5,24 +5,25 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.openqa.selenium.*;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.edge.EdgeOptions;
 import org.openqa.selenium.interactions.Action;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.Select;
 import java.io.File;
 import java.time.Duration;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
+
 /**
  * Class containing various utility methods for WebDriver operations.
  *
  * @author Moustafa Elbaih
  */
+@SuppressWarnings("GrazieInspection")
 public class Utils {
 
     /**
-     * @param dateInput Webelement input
+     * @param dateInput Web element input
      * @param date      date on format DD/MM/YYYY
      */
     public static void setDate(WebElement dateInput, String date) {
@@ -33,7 +34,7 @@ public class Utils {
     }
 
     /**
-     * setes a given date time string into a date time field web element
+     * sets a given date time string into a date time field web element
      * consider the date time format it only removes  the '/' and ':' and '' and append strings in the place
      * @param dateInput the input date time WebElement
      * @param dateTime String on form of (YYYY/MM/DD HH:MM AM) or (DD/MM/YYYY HH:mm AM)
@@ -50,7 +51,7 @@ public class Utils {
 
 
     /**
-     * this function stes the time in time fields with
+     * this function sets the time in time fields with
      *
      * @param timeInput the time field
      * @param time      the time in the form (HH:mm AM/PM)
@@ -89,7 +90,7 @@ public class Utils {
      * @param moveTo the element to move to
      * @param driver WebDriver
      */
-    public static void moveelement(WebElement toMove, WebElement moveTo, WebDriver driver) {
+    public static void moveElement(WebElement toMove, WebElement moveTo, WebDriver driver) {
         new Actions(driver)
                 .moveToElement(toMove)
                 .pause(Duration.ofSeconds(1))
@@ -124,7 +125,7 @@ public class Utils {
      * this function uses the actions to draw a simple outline to check signature and free draw fields
      *
      * @param driver  WebDriver
-     * @param element the free draw fied
+     * @param element the free draw filed
      */
     public static void draw(WebDriver driver, WebElement element) {
         Actions builder = new Actions(driver);
@@ -165,9 +166,9 @@ public class Utils {
             "return s;";
 
     /**
-     * it setes an attribute  for a web element using java script
+     * it sets an attribute  for a web element using java script
      *
-     * @param js       the java script excuter
+     * @param js       the java script executer
      * @param element  the element to be changed its attribute
      * @param attName  the attribute name
      * @param attValue the attribute value to be changed to
@@ -180,7 +181,7 @@ public class Utils {
     /**
      * returns if an element is enabled or not
      *
-     * @param element WebElemnet to be checked if enabled or not
+     * @param element WebElement to be checked if enabled or not
      * @return boolean enabled or not
      */
     public static boolean isEnabled(WebElement element) {
@@ -269,7 +270,7 @@ public class Utils {
     /**
      * Check whether a file is downloaded by searching a path for the file name
      *
-     * @param downloadPath pathfor wich the file may exist
+     * @param downloadPath path for where the file may exist
      * @param fileName     name of the file
      * @return boolean ensuring file is downloaded or not
      */
@@ -291,7 +292,7 @@ public class Utils {
     /**
      * using java script to opn a new empty tab in browser
      *
-     * @param driver driver initiated to handle the tab oppening
+     * @param driver driver initiated to handle the tab opening
      * @throws InterruptedException Exception
      */
     public void openNewTab(WebDriver driver) throws InterruptedException {
@@ -314,9 +315,9 @@ public class Utils {
     }
 
     /**
-     * Rounds the given double to the int pklaces
+     * Rounds the given double to the int places
      *
-     * @param value  double value of number to be roundedto be rounded to
+     * @param value  double value of number to be rounded to be rounded to
      * @param places int number of places
      * @return double rounded number
      */
@@ -383,4 +384,35 @@ public class Utils {
         }
     }
 }
+    public static boolean isIndexInArray(int[] indicesArray, int index) {
+        Set<Integer> indicesSet = new HashSet<>();
+        for (int i : indicesArray) {
+            indicesSet.add(i);
+        }
+        return indicesSet.contains(index);
+    }
+    public static boolean containsString(String[] arr, String target) {
+        for (String str : arr) {
+            if (str.equals(target)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    public static boolean containsStringIgnoreCase(String[] arr, String target) {
+        for (String str : arr) {
+            if (str.equalsIgnoreCase(target)) {
+                return true;
+            }
+        }
+        return false;
+    } public static boolean containsStringThatContainsIgnoreCase(String[] arr, String target) {
+        target=target.toLowerCase();
+        for (String str : arr) {
+            if (str.toLowerCase().contains(target)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

@@ -211,7 +211,7 @@ public class D12_Financials {
         taxMap.put("stat", stat);
         taxesAndFees.submitButon.click();
         if (!taxesAndFees.popUpConfirmButton.isEmpty())
-            taxesAndFees.popUpConfirmButton.get(0).click();
+            taxesAndFees.popUpConfirmButton.getFirst().click();
     }
 
     @Given("delete the customizatiin {string}")
@@ -543,7 +543,7 @@ public class D12_Financials {
     @When("replacing the order of the first record with the last")
     public void replacingTheOrderOfTheFirstRecordWithTheLast() {
         discountTypes.types.forEach(d -> discountsListNames.add(d.getText()));
-        Utils.moveelement(discountTypes.discountMoveHandle(discountTypes.types.getFirst()), discountTypes.discountMoveHandle(discountTypes.types.getLast()), driver);
+        Utils.moveElement(discountTypes.discountMoveHandle(discountTypes.types.getFirst()), discountTypes.discountMoveHandle(discountTypes.types.getLast()), driver);
 
     }
 
