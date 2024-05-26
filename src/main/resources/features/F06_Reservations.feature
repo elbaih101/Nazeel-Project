@@ -64,6 +64,9 @@ Feature: Making Reservation with Nazeel PMS (web application)
       Then check all reservations records "corporate" as "corp data related"
       When filtering with "corporate" as "شركة متعلقة ببيانات"
       Then check all reservations records "corporate" as "corp data related"
+      When filtering with "corporate" as ""
+      Then check all reservations records "corporate" as ""
+
  ## Discount and Taxes Calc
 
     Scenario: Check Discount and Tax Calculations on reservtion

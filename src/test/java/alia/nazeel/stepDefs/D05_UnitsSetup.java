@@ -797,12 +797,15 @@ public class D05_UnitsSetup {
     public void checkTheEditedAmenityDdescriptioonAndState(String description, String state) {
         new P00_multiPurposes(driver).waitLoading();
         amenities.viewButton(amenities.names.getFirst()).click();
+        asrt.assertEquals(amenities.descriptionField.getText(), description);
         if (state.equalsIgnoreCase("inactive")) {
             asrt.assertTrue(amenities.amenityStatus.getText().contains(state));
+            goToUnitSetupPage();
+            openTheNewUnitPage();
+            asrt.assertFalse(newUnitPage.amenities().stream().anyMatch(am -> am.getText().contains(retreavedAmenities.getFirst())));
         } else if (state.equalsIgnoreCase("active")) {
             asrt.assertTrue(amenities.amenityStatus.getText().contains(state));
         }
-        asrt.assertEquals(amenities.descriptionField.getText(), description);
         asrt.assertAll();
     }
 

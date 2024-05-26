@@ -47,9 +47,6 @@ public class D01_Reservations {
     final P03_9_GuestList guestList = new P03_9_GuestList(driver);
     final CustomAssert asrt = new CustomAssert();
     final Actions action = new Actions(driver);
-
-    final P03_8_UnitsRatesPopUp unitsRatesPopUp = new P03_8_UnitsRatesPopUp(driver);
-
     @And("open reservations Page")
     public void openReservationsPage() {
 
@@ -102,7 +99,6 @@ public class D01_Reservations {
 
 
             unitSelectionPopup.addUnitOfTypeButtton(unitSelectionPopup.unitTypes.getFirst()).click();
-
 
 
         } else {
@@ -264,7 +260,7 @@ public class D01_Reservations {
             clickOnSaveReservationButton();
         else if (state.toLowerCase().contains("in"))
             new P00_multiPurposes(driver).waitLoading();
-            reservationMainDataPage.checkInButton.click();
+        reservationMainDataPage.checkInButton.click();
         whenReservationSummaryDialougeAppearsClickOnSaveReservatuonButton();
     }
 
@@ -364,7 +360,6 @@ public class D01_Reservations {
         }
     }
 
-    //Todo add assertion over res State
     @Then("check all reservations records {string} as {string}")
     public void checkAllReservationsRecordsAs(String filter, String value) {
         new P00_multiPurposes(driver).waitLoading();
@@ -377,9 +372,11 @@ public class D01_Reservations {
             }
             case "rentType" ->
                     asrt.assertFalse(reservationsPage.reservationsNights.stream().anyMatch(n -> !n.getText().toLowerCase().contains(value.toLowerCase())));
-            case "corporate" ->
-                    assertReservationsStatus(reservationsPage.reservationsGuests_Corps, value, "the corporate is not fifltered right");
-
+            case "corporate" -> {
+                if (value.isEmpty())
+                    asrt.AssertAnyMatch(reservationsPage.reservationsGuests_Corps, c -> c.findElements(By.xpath("./span[2]")).isEmpty());
+                assertReservationsFilters(reservationsPage.reservationsGuests_Corps, value, "the corporate is not fifltered right");
+            }
             case "resState" -> assertReservationsStstuses(value);
         }
         asrt.assertAll();
@@ -388,17 +385,16 @@ public class D01_Reservations {
     private void assertReservationsStstuses(String value) {
         DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern("dd/MM/YYYY");
         switch (value) {
-            //fixme add more status
-            case "Confirmed", "CheckedIn", "" ->
-                    assertReservationsStatus(reservationsPage.reservationsStatuses, value, "status not filtered right");
+            case "Confirmed", "Checked In", "Checked Out", "Expired", "Cancelled" ->
+                    assertReservationsFilters(reservationsPage.reservationsStatuses, value, "status not filtered right");
             case "All Reservations" -> {
             }
 
             case "Open Reservations" ->
-                    assertReservationsStatus(reservationsPage.reservationsStatuses, "CheckedIn", "status not filtered right");
+                    assertReservationsFilters(reservationsPage.reservationsStatuses, "CheckedIn", "status not filtered right");
 
             case "In-House Guests" -> {
-                assertReservationsStatus(reservationsPage.reservationsStatuses, "CheckedIn", "status not filtered right");
+                assertReservationsFilters(reservationsPage.reservationsStatuses, "CheckedIn", "status not filtered right");
                 asrt.AssertNonMatch(reservationsPage.reservationsCheckInDates, i -> !Utils.isTimeWithinRange(DateTime.now(dateTimeFormatter.getZone()), DateTime.parse(i.getText(), dateTimeFormatter), DateTime.parse(reservationsPage.reservationCheckOutDate(i).getText(), dateTimeFormatter)));
             }
 
@@ -409,32 +405,32 @@ public class D01_Reservations {
                 assertDatesAreToday(reservationsPage.reservationsCheckInDates, dateTimeFormatter);
             }
             case "On Arrival Reservations (Checked-In)" -> {
-                assertReservationsStatus(reservationsPage.reservationsStatuses, "CheckedIn", "status not filtered right");
+                assertReservationsFilters(reservationsPage.reservationsStatuses, "CheckedIn", "status not filtered right");
                 assertDatesAreToday(reservationsPage.reservationsCheckInDates, dateTimeFormatter);
             }
             case "On Arrival Reservations (All)" ->
                     assertDatesAreToday(reservationsPage.reservationsCheckInDates, dateTimeFormatter);
             case "On Departure Reservations (Not Checked-Out)" -> {
-                assertReservationsStatus(reservationsPage.reservationsStatuses, "CheckedIn", "status not filtered right");
+                assertReservationsFilters(reservationsPage.reservationsStatuses, "CheckedIn", "status not filtered right");
                 assertDatesAreToday(reservationsPage.reservationsCheckOutDates, dateTimeFormatter);
             }
             case "On Departure Reservations (Checked-Out)" -> {
-                assertReservationsStatus(reservationsPage.reservationsStatuses, "CheckedOut", "status not filtered right");
+                assertReservationsFilters(reservationsPage.reservationsStatuses, "CheckedOut", "status not filtered right");
                 assertDatesAreToday(reservationsPage.reservationsCheckOutDates, dateTimeFormatter);
             }
             case "On Departure Reservations (All)" ->
                     assertDatesAreToday(reservationsPage.reservationsCheckOutDates, dateTimeFormatter);
 
             case "Checked-Out Reservations" ->
-                    assertReservationsStatus(reservationsPage.reservationsStatuses, "CheckedOut", "status not filtered right");
+                    assertReservationsFilters(reservationsPage.reservationsStatuses, "CheckedOut", "status not filtered right");
             case "Cancelled Reservations" ->
                     asrt.AssertNonMatch(reservationsPage.reservationsStatuses, i -> !(i.getText().contains("Canceled") || i.getText().contains("Expired")), "status not filtered right");
 
         }
     }
 
-    private void assertReservationsStatus(List<WebElement> reservationsPage, String statuses, String assertionMessage) {
-        asrt.AssertNonMatch(reservationsPage, i -> !i.getText().contains(statuses), assertionMessage);
+    private void assertReservationsFilters(List<WebElement> reservationsFilters, String value, String assertionMessage) {
+        asrt.AssertNonMatch(reservationsFilters, i -> !i.getText().contains(value), assertionMessage);
     }
 
     private void assertDatesAreToday(List<WebElement> DatesElements, DateTimeFormatter dateTimeFormatter) {
@@ -707,7 +703,7 @@ public class D01_Reservations {
     }
 
     @Then("adding dependent {string} again Check toast message {string} and the dependet has undo chek out button")
-    public void addingTheSameDependentAgainCheckToastMessageAndTheDependetHasUndoChekOutButton(String depName,String msg) {
+    public void addingTheSameDependentAgainCheckToastMessageAndTheDependetHasUndoChekOutButton(String depName, String msg) {
         reservationMainDataPage.dpendentsButton.click();
         WebElement guest = guestList.guestsGrid().getGridCells(2).stream().filter(c -> c.getText().equalsIgnoreCase(depName.equalsIgnoreCase("random") ? "depndent guest" : depName)).findFirst().orElseThrow();
         selectDependent("random");

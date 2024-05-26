@@ -304,7 +304,6 @@ Feature: Unit Setup
     Then Check toast mesage contains text "Amenity added successfully"
     And Check the newly added amenity is added
 
-    #Todo Check amenity removed from rooms when inactive
   Scenario: edit unit amenity
     Given edit unit amenity description "the newly added description" and state "inactive"
     Then  Check toast mesage contains text "Amenity updated successfully"
