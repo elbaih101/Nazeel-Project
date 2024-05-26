@@ -11,7 +11,7 @@ public class Grid implements WebElement
     final WebElement grid;
     WebElement list;
     WebElement header;
-    WebElement Pager;
+    WebElement pager;
 
     public Grid(WebElement grid)
     {
@@ -27,7 +27,7 @@ public class Grid implements WebElement
 
     WebElement getPager()
     {
-        return grid.findElement(By.cssSelector("kendo-pager"));
+        return pager = grid.findElement(By.cssSelector("kendo-pager"));
     }
 
     public List<WebElement> getGridCells(int columnIndex)
@@ -59,7 +59,7 @@ public class Grid implements WebElement
         return Integer.parseInt(getPager().findElement(By.cssSelector(".n-pager__sizes kendo-pager-page-sizes select")).getAttribute("value"));
     }
     public int getCurrentPage(){
-        return (int) Math.ceil( (double) Integer.parseInt(getPager().findElement(By.cssSelector(".n-pager__info>span:first-of-type")).getText().replace(" of ", "")) /(double) getPageSize());
+        return (int) Math.ceil( (double) Integer.parseInt(getPager().findElement(By.cssSelector("span.pagedir2")).getText().replace(" of ", "")) /(double) getPageSize());
     }
 
     public WebElement getGridCell(int rowIndex, int columnIndex)
