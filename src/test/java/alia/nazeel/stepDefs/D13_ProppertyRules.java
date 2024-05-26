@@ -1,7 +1,7 @@
 package alia.nazeel.stepDefs;
 
 import alia.nazeel.pages.P02_DashBoardPage;
-import alia.nazeel.pages.mutlipurposes.P00_multiPurposes;
+
 import alia.nazeel.pages.setuppages.rules_pages.P27_ReservationRules;
 import alia.nazeel.tools.CustomAssert;
 import alia.nazeel.tools.CustomWebDriverWait;

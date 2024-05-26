@@ -1,7 +1,7 @@
 package alia.nazeel.stepDefs;
 
 import alia.nazeel.pages.P02_DashBoardPage;
-import alia.nazeel.pages.mutlipurposes.P00_multiPurposes;
+
 import alia.nazeel.pages.setuppages.P13_PrintingOptionsPage;
 import alia.nazeel.tools.CustomWebDriverWait;
 import alia.nazeel.tools.DriverManager;
@@ -72,7 +72,7 @@ public class D07_PrintingOptions {
 
     @When("select {string} paper for {string} and check the box is selected")
     public void selectPaperForAndCheckTheBoxIsSelected(String paperType, String report) {
-        WebElement reportName = printingOptionsPage.reportsNames.stream().filter(name -> name.getText().toLowerCase().contains(report.toLowerCase())).toList().get(0);
+        WebElement reportName = printingOptionsPage.reportsNames.stream().filter(name -> name.getText().toLowerCase().contains(report.toLowerCase())).toList().getFirst();
         WebElement theCheckBox = null;
         if (paperType.contains("cashier")) {
             theCheckBox= printingOptionsPage.cashierCheckBox(reportName);

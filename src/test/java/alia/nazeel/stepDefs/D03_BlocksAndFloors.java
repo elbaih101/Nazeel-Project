@@ -12,7 +12,7 @@ import alia.nazeel.pages.setuppages.P05_SetupPage;
 import alia.nazeel.pages.setuppages.P06_FloorsPage;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
+
 import org.testng.asserts.SoftAssert;
 
 import java.time.Duration;
@@ -52,9 +52,9 @@ final JavascriptExecutor js =(JavascriptExecutor) driver;
 
     @Then("Check Default Block name to be {string} and Description to be {string}")
     public void checkDefaultBlockNameToBeAndDescriptionToBe(String blockName, String blockDescripion) {
-        wait.until(ExpectedConditions.visibilityOf(blocksPage.blocksNames.get(0)));
-        asrt.assertTrue(blocksPage.blocksNames.get(0).getText().contains(blockName));
-        asrt.assertTrue(blocksPage.blocksDescriptions.get(0).getText().contains(blockDescripion));
+        wait.until(ExpectedConditions.visibilityOf(blocksPage.blocksNames.getFirst()));
+        asrt.assertTrue(blocksPage.blocksNames.getFirst().getText().contains(blockName));
+        asrt.assertTrue(blocksPage.blocksDescriptions.getFirst().getText().contains(blockDescripion));
         asrt.assertAll();
     }
 

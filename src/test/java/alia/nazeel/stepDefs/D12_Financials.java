@@ -1,7 +1,7 @@
 package alia.nazeel.stepDefs;
 
 import alia.nazeel.pages.P02_DashBoardPage;
-import alia.nazeel.pages.mutlipurposes.P00_multiPurposes;
+
 import alia.nazeel.pages.reservations.P03_1_ReservationMainDataPage;
 import alia.nazeel.pages.reservations.P03_7_TaxesPopUp;
 import alia.nazeel.pages.setuppages.financialpages.P25_TaxesAndFees;

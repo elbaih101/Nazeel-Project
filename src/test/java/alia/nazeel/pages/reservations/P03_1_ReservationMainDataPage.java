@@ -2,7 +2,7 @@ package alia.nazeel.pages.reservations;
 
 import alia.nazeel.kendoelements.Grid;
 import alia.nazeel.kendoelements.KendoDropDownList;
-import alia.nazeel.pages.mutlipurposes.P00_multiPurposes;
+
 
 import alia.nazeel.tools.CustomWebDriverWait;
 import org.openqa.selenium.By;

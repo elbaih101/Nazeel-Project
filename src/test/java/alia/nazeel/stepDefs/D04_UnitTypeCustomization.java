@@ -1,7 +1,7 @@
 package alia.nazeel.stepDefs;
 
 import alia.nazeel.pages.P02_DashBoardPage;
-import alia.nazeel.pages.mutlipurposes.P00_multiPurposes;
+
 import alia.nazeel.pages.setuppages.unit_setup_pages.P07_UnitTypeCustomization;
 import alia.nazeel.tools.CustomWebDriverWait;
 import alia.nazeel.tools.Utils;
@@ -77,7 +77,7 @@ public class D04_UnitTypeCustomization {
             roomTypeNme = roomType;
         }
 
-        typeCustomization.selectUnitTypes().stream().filter(element -> element.getText().contains(roomTypeNme)).toList().get(0).click();
+        typeCustomization.selectUnitTypes().stream().filter(element -> element.getText().contains(roomTypeNme)).toList().getFirst().click();
         typeCustomization.unitDescription.clear();
         typeCustomization.unitDescription.sendKeys(description);
     }
@@ -148,8 +148,8 @@ public class D04_UnitTypeCustomization {
 
     @Given("go to units master Data")
     public void goToUnitsMasterData() {
-        wait.until(ExpectedConditions.elementToBeClickable(dashBoardPage.masterDataLink.get(0)));
-        dashBoardPage.masterDataLink.get(0).click();
+        wait.until(ExpectedConditions.elementToBeClickable(dashBoardPage.masterDataLink.getFirst()));
+        dashBoardPage.masterDataLink.getFirst().click();
         wait.until(ExpectedConditions.elementToBeClickable(masterData.unitsDropList));
         masterData.unitsDropList.click();
         wait.until(ExpectedConditions.elementToBeClickable(masterData.unitsTypesLink));
@@ -166,7 +166,7 @@ public class D04_UnitTypeCustomization {
             masterUnitsTypes.nameSearchField.sendKeys(typeName);
         }
         if (!status.isEmpty()) {
-            masterUnitsTypes.statuses().stream().filter(element -> element.getText().equalsIgnoreCase(status)).toList().get(0).click();
+            masterUnitsTypes.statuses().stream().filter(element -> element.getText().equalsIgnoreCase(status)).toList().getFirst().click();
         }
         masterUnitsTypes.searchButton.click();
         wait.waitLoading();
@@ -220,7 +220,7 @@ public class D04_UnitTypeCustomization {
     @Given("click on delete button for unit type associated with units")
     public void clickOnDeleteButtonForUnitTypeAssociatedWithUnits() {
         wait.waitLoading();
-        masterUnitsTypes.moreActions(masterUnitsTypes.typesNames.get(0)).stream().filter(element -> element.getText().trim().equalsIgnoreCase("delete")).toList().get(0).click();
+        masterUnitsTypes.moreActions(masterUnitsTypes.typesNames.getFirst()).stream().filter(element -> element.getText().trim().equalsIgnoreCase("delete")).toList().getFirst().click();
         wait.until(ExpectedConditions.elementToBeClickable(masterUnitsTypes.confirmDeleteButton()));
         masterUnitsTypes.confirmDeleteButton().click();
 

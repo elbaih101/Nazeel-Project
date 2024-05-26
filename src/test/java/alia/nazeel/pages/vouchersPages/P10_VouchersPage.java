@@ -2,7 +2,7 @@ package alia.nazeel.pages.vouchersPages;
 
 
 import alia.nazeel.enums.Vouchers;
-import alia.nazeel.pages.mutlipurposes.P00_multiPurposes;
+
 
 import alia.nazeel.tools.CustomWebDriverWait;
 import org.openqa.selenium.By;

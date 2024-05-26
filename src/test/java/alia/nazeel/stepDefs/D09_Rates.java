@@ -8,7 +8,7 @@ import io.cucumber.java.en.When;
 import alia.nazeel.tools.DriverManager;
 import alia.nazeel.tools.Utils;
 import alia.nazeel.pages.P02_DashBoardPage;
-import alia.nazeel.pages.mutlipurposes.P00_multiPurposes;
+
 import alia.nazeel.pages.setuppages.P05_SetupPage;
 import alia.nazeel.pages.setuppages.unit_setup_pages.P09_RatesPages;
 

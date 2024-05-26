@@ -2,7 +2,7 @@ package alia.nazeel.stepDefs;
 
 import alia.nazeel.pages.P01_LoginPage;
 import alia.nazeel.pages.P02_DashBoardPage;
-import alia.nazeel.pages.mutlipurposes.P00_multiPurposes;
+
 import alia.nazeel.pages.setuppages.P05_SetupPage;
 import alia.nazeel.pages.setuppages.properties_pages.*;
 import alia.nazeel.pojos.JsonDataTools;

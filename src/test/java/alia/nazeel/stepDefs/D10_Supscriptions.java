@@ -3,7 +3,7 @@ package alia.nazeel.stepDefs;
 import alia.nazeel.enums.Services;
 import alia.nazeel.pages.P02_DashBoardPage;
 import alia.nazeel.pages.masterdata_pages.P21_SubscriptionPrices;
-import alia.nazeel.pages.mutlipurposes.P00_multiPurposes;
+
 import alia.nazeel.tools.CustomWebDriverWait;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
@@ -34,7 +34,7 @@ public class D10_Supscriptions {
 
     @And("go to subscriptions prices page")
     public void goToSubscriptionsPricesPage() {
-        dashBoardPage.masterDataLink.get(0).click();
+        dashBoardPage.masterDataLink.getFirst().click();
         masterData.servicesDropList.click();
         masterData.subscriptionsPricesLink.click();
     }
@@ -43,7 +43,7 @@ public class D10_Supscriptions {
     public void addingPriceForWithSubscriptionPeriodAndPrice(String type, String service, String period, String price) {
         wait.waitLoading();
         subscriptionPrices.newPriceButton.click();
-        subscriptionPrices.popUpServicesList().stream().filter(serv -> serv.getText().toLowerCase().contains(service.toLowerCase())).toList().get(0).click();
+        subscriptionPrices.popUpServicesList().stream().filter(serv -> serv.getText().toLowerCase().contains(service.toLowerCase())).toList().getFirst().click();
 
         if (!service.equalsIgnoreCase(Services.Nazeel.toString())) {
             subscriptionPrices.subscriptionType(type).click();
@@ -129,13 +129,13 @@ public class D10_Supscriptions {
     public void filterRecordsWithTypeAndAndPeriodAndStatus(String type, String service, String period, String status) {
         subscriptionPrices.filterButton.click();
         if (!type.isEmpty()) {
-            subscriptionPrices.filterTypesList().stream().filter(t -> t.getText().toLowerCase().equalsIgnoreCase(type)).toList().get(0).click();
+            subscriptionPrices.filterTypesList().stream().filter(t -> t.getText().toLowerCase().equalsIgnoreCase(type)).toList().getFirst().click();
         }
         if (!service.isEmpty()) {
-            subscriptionPrices.filterServicesList().stream().filter(t -> t.getText().toLowerCase().equalsIgnoreCase(service)).toList().get(0).click();
+            subscriptionPrices.filterServicesList().stream().filter(t -> t.getText().toLowerCase().equalsIgnoreCase(service)).toList().getFirst().click();
         }
         if (!status.isEmpty()) {
-            subscriptionPrices.filterStatusesList().stream().filter(t -> t.getText().toLowerCase().equalsIgnoreCase(status)).toList().get(0).click();
+            subscriptionPrices.filterStatusesList().stream().filter(t -> t.getText().toLowerCase().equalsIgnoreCase(status)).toList().getFirst().click();
         }
         if (!period.isEmpty()) {
             subscriptionPrices.filterPeriodField.clear();

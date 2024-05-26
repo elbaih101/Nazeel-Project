@@ -1,7 +1,7 @@
 package alia.nazeel.stepDefs;
 
 import alia.nazeel.pages.P02_DashBoardPage;
-import alia.nazeel.pages.mutlipurposes.P00_multiPurposes;
+
 import alia.nazeel.pages.setuppages.unit_setup_pages.*;
 import alia.nazeel.tools.CustomWebDriverWait;
 import alia.nazeel.tools.DriverManager;
