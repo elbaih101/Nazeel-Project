@@ -16,6 +16,7 @@ Feature: subscriptions
       | new   | Shomoos | 18     | 500   | Saved Successfully                  |
       | renew | Shomoos | 18     | 300   | Saved Successfully                  |
       | renew | nazeel  | 18     | 200   | Error ,Duplicate subscription Price |
+      | new   | Shomoos | 18     | 21    | Error ,Duplicate subscription Price |
 
 
   Scenario: delete a created price
@@ -45,4 +46,6 @@ Feature: subscriptions
       | Renew | Nazeel  |        |          |
 
 
-#  todo :: containue the subscription from end user
+  # Todo with new subscriptions for admin check on the relation
+  #Todo delete the created records
+  #  todo :: containue the subscription from end user

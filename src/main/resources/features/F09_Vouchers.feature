@@ -5,8 +5,10 @@ Feature: Vouchers
     Given Logging in with superuser
     And Select Property "P01406"
     # TODO NO show Scenario
+
+
   @corporate_vouchers,orders
-  Rule:Stand corporate Vouchers
+  Rule:Stand alone corporate Vouchers
     #noinspection GherkinMisplacedBackground
   Background: going to receipt vouchers page
     Given go to "Receipt" Vouchers Page
@@ -14,13 +16,14 @@ Feature: Vouchers
   Scenario: create SA receipt Voucher for a corporate
     And successfully create a voucher of type "SAReceipt" amount "200" payment Method "Cash" maturity Date "" and Creatian Date "" for a "corporate"
     Then check the created voucher owner to be the selected corporate
+    #todo filter search criteria for vouchers
 
 
 
   Rule:ended Reservations Vouchers
     Background: creating checked in reservation
       Given open reservations Page
-      And  Create "confirmed" Reservation withSource "RANDOM" purpose "RANDOM" Unit "RANDOM" Guest "RANDOM" startDate "02/01/2021" endDate "03/01/2021"
+      And  Create "single" "confirmed" Reservation withSource "RANDOM" purpose "RANDOM" Unit "RANDOM" Guest "RANDOM" startDate "02/01/2021" endDate "03/01/2021"
       And go to Reservation Financial Page
 
     Scenario: check the voucers edit mode after drop cash actions
@@ -143,5 +146,6 @@ Feature: Vouchers
     Scenario: check the drop cash period filter criteria
       When filtering the start period of the drop cash from "01/01/2021 02:59 AM" to "01/01/2021 03:01 AM" and the end Period from "02/01/2021 12:00 AM" to "02/01/2021 01:01 AM"
       Then Check all records shown match the searched dates
+
 
 

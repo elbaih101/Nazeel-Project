@@ -61,4 +61,6 @@ Feature: Guest Feature
       | nationality | Egypt        |
       | class       | auto class 1 |
       | idtype      | National ID  |
-      | idnum       | 65549      |
+      | idnum       | 65549        |
+
+    #Todo Guest Statistics
