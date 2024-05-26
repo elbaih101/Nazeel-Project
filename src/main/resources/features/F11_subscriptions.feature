@@ -18,12 +18,6 @@ Feature: subscriptions
       | renew | nazeel  | 18     | 200   | Error ,Duplicate subscription Price |
       | new   | Shomoos | 18     | 21    | Error ,Duplicate subscription Price |
 
-
-  Scenario: delete a created price
-    Given  adding "new" price for "NTMP" with subscription Period "90" and price "200"
-    When delete "new" price for "NTMP" with subscription Period "90"
-    Then Check toast mesage contains text "Saved Successfully"
-
   Scenario Outline: edit a created price
     Given   adding "<type>" price for "<service>" with subscription Period "<period>" and price "<price>"
     When edit "<type>" price for "<service>" with subscription Period "<period>" to new status "<newStatus>" new period "<newPeriod>" and new Price "<newPrice>"
@@ -45,7 +39,14 @@ Feature: subscriptions
       |       |         |        | Inactive |
       | Renew | Nazeel  |        |          |
 
+  Scenario Outline: delete a created price
+    When delete "<type>" price for "<service>" with subscription Period "<period>"
+    Then Check toast mesage contains text "Saved Successfully"
+    Examples:
+      | type  | service | period |
+      | renew | nazeel  | 18     |
+      | new   | Shomoos | 18     |
+      | renew | Shomoos | 18     |
 
   # Todo with new subscriptions for admin check on the relation
-  #Todo delete the created records
   #  todo :: containue the subscription from end user
