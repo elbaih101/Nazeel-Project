@@ -81,9 +81,11 @@ public class P03_1_ReservationMainDataPage {
     public WebElement familyOrFriendsSelection;
 
 
+
     @FindBy(xpath = "//span[contains(text(),\"Select guest now\")]/..")
     public WebElement selectGestButton;
     @FindBy(xpath = "//app-guests-step//div[contains(@class,\"primary-link\")]/span")
+
     public WebElement dpendentsButton;
     @FindBy(id = "guestFormDialogContainer")
     public WebElement guestFormDialogContainer;

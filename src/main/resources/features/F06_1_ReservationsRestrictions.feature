@@ -71,3 +71,4 @@ Scenario: can't add dpenedent on a room when the dependent is checkedout but can
   Then adding dependent "Random" again Check toast message "This user is selected already as dependent" and the dependet has undo chek out button
   And Choose Reservation Status as "Cancelled"
 
+

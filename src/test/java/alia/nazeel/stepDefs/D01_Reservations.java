@@ -48,6 +48,7 @@ public class D01_Reservations {
     final CustomAssert asrt = new CustomAssert();
     final Actions action = new Actions(driver);
 
+    final P03_8_UnitsRatesPopUp unitsRatesPopUp = new P03_8_UnitsRatesPopUp(driver);
 
     @And("open reservations Page")
     public void openReservationsPage() {
@@ -99,7 +100,9 @@ public class D01_Reservations {
             unitSelectionPopup.unitTypeButton.click();
             new P00_multiPurposes(driver).waitLoading();
 
+
             unitSelectionPopup.addUnitOfTypeButtton(unitSelectionPopup.unitTypes.getFirst()).click();
+
 
 
         } else {
@@ -660,7 +663,9 @@ public class D01_Reservations {
     @Then("add dependent to single reservtion {string}")
     public void addDependentToSingleReservtion(String depName) {
         reservationMainDataPage.dpendentsButton.click();
+
         guestList.addDependentButton.click();
+
         new D06_DigitalPayment().selectGuest(depName, "", "");
     }
 
@@ -708,6 +713,7 @@ public class D01_Reservations {
         selectDependent("random");
         new D03_BlocksAndFloors().checkToastMesageContainsText(msg);
         asrt.assertTrue(guestList.guestsGrid().getGridCell(guest, 7).findElement(By.xpath(".//button[contains(@class,\"button--green\")]")).isDisplayed());
+
         asrt.assertAll();
         guestList.confirmDependentsButton.click();
     }

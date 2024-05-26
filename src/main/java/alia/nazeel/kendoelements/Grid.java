@@ -4,6 +4,7 @@ import org.openqa.selenium.*;
 
 import java.util.List;
 
+
 public class Grid implements WebElement {
     final WebElement grid;
     WebElement list;
@@ -26,30 +27,39 @@ public class Grid implements WebElement {
     public WebElement getGridCell(int rowIndex, int columnIndex) {
         List<WebElement> rows = getGridRows();
         if (rowIndex >= rows.size()) {
+
             throw new IndexOutOfBoundsException("Row index out of bounds");
         }
         // Locate the cell using data-kendo-grid-column-index attribute
         return rows.get(rowIndex).findElement(By.xpath(".//td[@data-kendo-grid-column-index='" + columnIndex + "']"));
     }
 
+
     public WebElement getTableCell(int rowIndex, int columnnumber) {
         List<WebElement> rows = getGridRows();
         if (rowIndex >= rows.size()) {
+
+
             throw new IndexOutOfBoundsException("Row index out of bounds");
         }
         // Locate the cell using data-kendo-grid-column-index attribute
         return rows.get(rowIndex).findElement(By.xpath(".//td[" + columnnumber + "]"));
     }
 
+
     public WebElement getGridCell(WebElement baseCell, int columnIndex) {
+
+   
         // Locate the cell using data-kendo-grid-column-index attribute
         return baseCell.findElement(By.xpath("..//td[@data-kendo-grid-column-index='" + columnIndex + "']"));
     }
+
 
     public void clickGridCell(int rowIndex, int columnIndex) {
         WebElement cell = getGridCell(rowIndex, columnIndex);
         cell.click();
     }
+
 
     public void setGridCellValue(int rowIndex, int columnIndex, String value) {
         WebElement cell = getGridCell(rowIndex, columnIndex);
@@ -64,22 +74,18 @@ public class Grid implements WebElement {
 
     @Override
     public void click() {
-
     }
 
     @Override
     public void submit() {
-
     }
 
     @Override
     public void sendKeys(CharSequence... keysToSend) {
-
     }
 
     @Override
     public void clear() {
-
     }
 
     @Override
@@ -94,7 +100,7 @@ public class Grid implements WebElement {
 
     @Override
     public String getDomAttribute(String name) {
-        return WebElement.super.getDomAttribute(name);
+      return WebElement.super.getDomAttribute(name);
     }
 
     @Override
