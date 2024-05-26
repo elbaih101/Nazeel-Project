@@ -1,23 +1,24 @@
 package alia.nazeel.pages.setuppages.properties_pages;
 
 
+import alia.nazeel.tools.CustomWebDriverWait;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
+
 
 import java.time.Duration;
 import java.util.List;
 
 
 public class P06_2_LocationDataPage {
-    final WebDriverWait wait;
+    final CustomWebDriverWait wait;
     public P06_2_LocationDataPage(WebDriver driver){
         PageFactory.initElements(driver,this);
-        wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        wait = new CustomWebDriverWait(driver, Duration.ofSeconds(10));
     }
     @FindBy(xpath = "//ul[@role=\"listbox\"]")
     public WebElement genralListBox;

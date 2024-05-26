@@ -3,6 +3,7 @@ package alia.nazeel.stepDefs;
 import alia.nazeel.pages.P02_DashBoardPage;
 import alia.nazeel.pages.mutlipurposes.P00_multiPurposes;
 import alia.nazeel.pages.setuppages.unit_setup_pages.P07_UnitTypeCustomization;
+import alia.nazeel.tools.CustomWebDriverWait;
 import alia.nazeel.tools.Utils;
 import com.github.javafaker.Faker;
 import io.cucumber.java.en.And;
@@ -17,7 +18,7 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
+
 import org.testng.asserts.SoftAssert;
 
 import java.time.Duration;
@@ -27,7 +28,7 @@ public class D04_UnitTypeCustomization {
 
     final WebDriver driver = DriverManager.getDriver();
     final SoftAssert asrt = new SoftAssert();
-    final WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+    final CustomWebDriverWait wait = new CustomWebDriverWait(driver, Duration.ofSeconds(20));
     final P02_DashBoardPage dashBoardPage = new P02_DashBoardPage(driver);
     final P05_SetupPage setupPagec = new P05_SetupPage(driver);
     final P07_UnitTypeCustomization typeCustomization = new P07_UnitTypeCustomization(driver);
@@ -116,7 +117,7 @@ public class D04_UnitTypeCustomization {
         delteUnitTyeName = unitTypeName;
         delteUnitTyeDescription = typeCustomization.unitTypeDescription(unitTypeName).getText();
         wait.until(ExpectedConditions.elementToBeClickable(typeCustomization.moreMenuButton(unitTypeName)));
-        new P00_multiPurposes(driver).waitLoading();
+        wait.waitLoading();
         typeCustomization.moreMenuButton(unitTypeName).click();
         typeCustomization.unitTypeDeleteButton.click();
     }
@@ -158,7 +159,7 @@ public class D04_UnitTypeCustomization {
     @Given("click on filter button and enter name of type {string} and status {string} and click search")
     public void clickOnFilterButtonAndEnterNameOfTypeAndStatusAndClickSearch(String typeName, String status) {
         wait.until(ExpectedConditions.elementToBeClickable(masterUnitsTypes.filterButton));
-        new P00_multiPurposes(driver).waitLoading();
+        wait.waitLoading();
         masterUnitsTypes.filterButton.click();
         if (!typeName.isEmpty()) {
             masterUnitsTypes.nameSearchField.clear();
@@ -168,13 +169,13 @@ public class D04_UnitTypeCustomization {
             masterUnitsTypes.statuses().stream().filter(element -> element.getText().equalsIgnoreCase(status)).toList().get(0).click();
         }
         masterUnitsTypes.searchButton.click();
-        new P00_multiPurposes(driver).waitLoading();
+        wait.waitLoading();
         wait.until(ExpectedConditions.refreshed(ExpectedConditions.visibilityOfAllElements(masterUnitsTypes.typesNames)));
     }
 
     @Then("Check the grid contains only types with names {string} and statues {string}")
     public void checkTheGridContainsOnlyTypesWithNamesAndStatues(String typeName, String status) {
-        new P00_multiPurposes(driver).waitLoading();
+        wait.waitLoading();
         if (!typeName.isEmpty())
 
             asrt.assertFalse(masterUnitsTypes.typesNames.stream().anyMatch(element -> !element.getText().toLowerCase().contains(typeName.toLowerCase())), "wrong type name");
@@ -186,7 +187,7 @@ public class D04_UnitTypeCustomization {
 
     @When("add anew unit type with name {string}")
     public void addAnewUnitTypeWithName(String typeName) {
-        new P00_multiPurposes(driver).waitLoading();
+        wait.waitLoading();
         wait.until(ExpectedConditions.elementToBeClickable(masterUnitsTypes.newUnitTypeButton));
         masterUnitsTypes.newUnitTypeButton.click();
         masterUnitsTypes.typeNameField().clear();
@@ -205,7 +206,7 @@ public class D04_UnitTypeCustomization {
     public void clickOnEditButtonForTypeAndChangeNameTo(String oldName, String newName) {
         clickOnFilterButtonAndEnterNameOfTypeAndStatusAndClickSearch(oldName, "");
         WebElement type = masterUnitsTypes.typesNames.stream().findAny().orElseThrow();
-        new P00_multiPurposes(driver).waitLoading();
+        wait.waitLoading();
         js.executeScript("arguments[0].click();", masterUnitsTypes.editButton(type));
         //  masterUnitsTypes.editButton(type).click();
         wait.until(ExpectedConditions.visibilityOf(masterUnitsTypes.typeNameField()));
@@ -218,7 +219,7 @@ public class D04_UnitTypeCustomization {
 
     @Given("click on delete button for unit type associated with units")
     public void clickOnDeleteButtonForUnitTypeAssociatedWithUnits() {
-        new P00_multiPurposes(driver).waitLoading();
+        wait.waitLoading();
         masterUnitsTypes.moreActions(masterUnitsTypes.typesNames.get(0)).stream().filter(element -> element.getText().trim().equalsIgnoreCase("delete")).toList().get(0).click();
         wait.until(ExpectedConditions.elementToBeClickable(masterUnitsTypes.confirmDeleteButton()));
         masterUnitsTypes.confirmDeleteButton().click();
@@ -244,7 +245,7 @@ public class D04_UnitTypeCustomization {
 
         clickOnFilterButtonAndEnterNameOfTypeAndStatusAndClickSearch(name, "");
         WebElement type = masterUnitsTypes.typesNames.stream().findAny().orElseThrow();
-        new P00_multiPurposes(driver).waitLoading();
+        wait.waitLoading();
         js.executeScript("arguments[0].click();", masterUnitsTypes.editButton(type));
         if (status.equalsIgnoreCase("inactive")) {
             if (masterUnitsTypes.statusButton().getAttribute("aria-checked").contains("true")) {

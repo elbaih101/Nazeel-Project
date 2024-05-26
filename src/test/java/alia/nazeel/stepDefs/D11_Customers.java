@@ -4,6 +4,7 @@ import alia.nazeel.pages.P02_DashBoardPage;
 import alia.nazeel.pages.mutlipurposes.P00_multiPurposes;
 import alia.nazeel.pages.vouchersPages.P10_VouchersPage;
 import alia.nazeel.pages.vouchersPages.P16_VouchersPopUp;
+import alia.nazeel.tools.CustomWebDriverWait;
 import alia.nazeel.tools.Utils;
 import com.github.javafaker.Faker;
 import io.cucumber.java.en.And;
@@ -20,7 +21,7 @@ import org.joda.time.format.DateTimeFormat;
 import org.openqa.selenium.*;
 
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
+
 import org.testng.asserts.SoftAssert;
 
 import java.time.Duration;
@@ -35,7 +36,7 @@ public class D11_Customers {
 
 
     final SoftAssert asrt = new SoftAssert();
-    final WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+    final CustomWebDriverWait wait = new CustomWebDriverWait(driver, Duration.ofSeconds(20));
     final P02_DashBoardPage dashBoardPage = new P02_DashBoardPage(driver);
     final P22_Corporates corporates = new P22_Corporates(driver);
     final P34_Vendors vendors = new P34_Vendors(driver);
@@ -45,14 +46,14 @@ public class D11_Customers {
 
     @And("go to corporates page")
     public void goToCorporatesPage() {
-        new P00_multiPurposes(driver).waitLoading();
+        wait.waitLoading();
         dashBoardPage.customersDropList.click();
         dashBoardPage.corporatesLink.click();
     }
 
     @When("Creating a Corporate with name {string} and Country {string} ignoredFields {string} vat {string} bNumber {string} secBNumber {string}")
     public void creatingACorporateWithNameAndCountryWithout(String name, String country, String ignoredFields, String vat, String bNumb, String secBNumb) {
-        new P00_multiPurposes(driver).waitLoading();
+        wait.waitLoading();
         corporates.newCorporateButton.click();
         corporatedata(name, country, ignoredFields, vat, bNumb, secBNumb);
 
@@ -156,7 +157,7 @@ public class D11_Customers {
 
     @And("open edit mode for corporate {string}")
     public void openEditModeForCorporate(String name) {
-        new P00_multiPurposes(driver).waitLoading();
+        wait.waitLoading();
         corporates.corporateEditButton(corporates.corporates.stream().filter(cor -> cor.getText().contains(name)).findFirst().orElseThrow()).click();
 
 
@@ -164,32 +165,32 @@ public class D11_Customers {
 
     @And("Edit Corporate name {string} and Country {string} ignoredFields {string} vat {string} bNumber {string} secBNumber {string}")
     public void editCorporateNameAndCountryIgnoredFieldsVatBNumberSecBNumber(String name, String country, String ignoredFields, String vat, String bNumb, String secBNumb) {
-        new P00_multiPurposes(driver).waitLoading();
+        wait.waitLoading();
         corporatedata(name, country, ignoredFields, vat, bNumb, secBNumb);
-        new P00_multiPurposes(driver).waitLoading();
+        wait.waitLoading();
         corporates.saveButton.click();
     }
 
     @Given("delete corporate {string}")
     public void deleteCorporate(String name) {
-        new P00_multiPurposes(driver).waitLoading();
+        wait.waitLoading();
         corporates.deleteButton(corporates.corporates.stream().filter(cor -> cor.getText().contains(name)).findFirst().orElseThrow()).click();
         driver.findElement(By.xpath("//div[@role=\"dialog\"]//button[contains(@class,\"n-button--danger\")][2]")).click();
     }
 
     @And("Remove postal-code")
     public void removePostalCode() {
-        new P00_multiPurposes(driver).waitLoading();
+        wait.waitLoading();
 
         corporates.postalCodeField.sendKeys((Keys.chord(Keys.CONTROL, "a", Keys.BACK_SPACE)));
 
         corporates.saveButton.click();
-        new P00_multiPurposes(driver).waitLoading();
+        wait.waitLoading();
     }
 
     @And("go to Vendors page")
     public void goToVendorsPage() {
-        new P00_multiPurposes(driver).waitLoading();
+        wait.waitLoading();
         dashBoardPage.customersDropList.click();
         dashBoardPage.vendorssLink.click();
     }
@@ -295,7 +296,7 @@ public class D11_Customers {
         new D03_BlocksAndFloors().checkToastMesageContainsText(msg);
         if (msg.contains("successfully")) {
             if (existance.equalsIgnoreCase("added")) {
-                new P00_multiPurposes(driver).waitLoading();
+                wait.waitLoading();
                 WebElement selectedVendor = vendors.vendorsNames.stream().filter(c -> c.getText().equalsIgnoreCase(vendorMap.get("name"))).findAny().orElseThrow();
                 asrt.assertTrue(vendors.vendorPhone(selectedVendor).getText().contains(vendorMap.get("phone")), "Expected: " + vendorMap.get("phone") + " ,Actual: " + vendors.vendorPhone(selectedVendor).getText());
                 asrt.assertTrue(vendors.vendorEmail(selectedVendor).getText().equalsIgnoreCase(vendorMap.get("email")), "Expected: " + vendorMap.get("email") + " ,Actual: " + vendors.vendorEmail(selectedVendor).getText());
@@ -303,17 +304,17 @@ public class D11_Customers {
                 asrt.assertTrue(vendors.vendorCRNo(selectedVendor).getText().equalsIgnoreCase(vendorMap.get("cR")), "Expected: " + vendorMap.get("cR") + " ,Actual: " + vendors.vendorCRNo(selectedVendor).getText());
                 asrt.assertTrue(vendors.vendorStatus(selectedVendor).getText().equalsIgnoreCase(vendorMap.get("state")), "Expected: " + vendorMap.get("state") + " ,Actual: " + vendors.vendorStatus(selectedVendor).getText());
                 new D06_DigitalPayment().goToDesiredVouchersPage("Expenses");
-                new P00_multiPurposes(driver).waitLoading();
+                wait.waitLoading();
                 new P10_VouchersPage(driver).newVoucherButton.click();
                 if (vendorMap.get("state").equalsIgnoreCase("active"))
                     asrt.assertTrue(new P16_VouchersPopUp(driver).vendorsList().stream().anyMatch(v -> v.getText().equalsIgnoreCase(vendorMap.get("name"))));
                 else
                     asrt.assertFalse(new P16_VouchersPopUp(driver).vendorsList().stream().anyMatch(v -> v.getText().equalsIgnoreCase(vendorMap.get("name"))));
             } else if (existance.equalsIgnoreCase("deleted")) {
-                new P00_multiPurposes(driver).waitLoading();
+                wait.waitLoading();
                 asrt.assertFalse(vendors.vendorsNames.stream().anyMatch(c -> c.getText().equalsIgnoreCase(vendorMap.get("name"))));
                 new D06_DigitalPayment().goToDesiredVouchersPage("Expenses");
-                new P00_multiPurposes(driver).waitLoading();
+                wait.waitLoading();
                 new P10_VouchersPage(driver).newVoucherButton.click();
                 asrt.assertFalse(new P16_VouchersPopUp(driver).vendorsList().stream().anyMatch(v -> v.getText().equalsIgnoreCase(vendorMap.get("name"))));
             }
@@ -323,18 +324,18 @@ public class D11_Customers {
 
     @When("eidting vendor {string}  name {string} phone {string} email {string} VAT {string} status {string}")
     public void eidtingVendorNamePhoneEmailVATStatus(String oName, String nName, String phone, String email, String vat, String status) {
-        new P00_multiPurposes(driver).waitLoading();
+        wait.waitLoading();
         WebElement selectedVendor = vendors.vendorsNames.stream().filter(c -> c.getText().equalsIgnoreCase(oName)).findAny().orElseThrow();
         setVendorMap(vendors.vendorName(selectedVendor).getText(), vendors.vendorPhone(selectedVendor).getText(), vendors.vendorEmail(selectedVendor).getText(), vendors.vendorVAT(selectedVendor).getText(), vendors.vendorCRNo(selectedVendor).getText(), "", "", "", vendors.vendorStatus(selectedVendor).getText());
         vendors.vendorEditButton(selectedVendor).click();
-        new P00_multiPurposes(driver).waitLoading();
+        wait.waitLoading();
         fillVendorData(nName, phone, email, vat, "", "", "", "", status);
         vendors.submitButton.click();
     }
 
     @When("deleting vendor {string}")
     public void deletingVendor(String name) {
-        new P00_multiPurposes(driver).waitLoading();
+        wait.waitLoading();
         WebElement selectedVendor = vendors.vendorsNames.stream().filter(c -> c.getText().equalsIgnoreCase(name)).findAny().orElseThrow();
         setVendorMap(vendors.vendorName(selectedVendor).getText(), vendors.vendorPhone(selectedVendor).getText(), vendors.vendorEmail(selectedVendor).getText(), vendors.vendorVAT(selectedVendor).getText(), vendors.vendorCRNo(selectedVendor).getText(), "", "", "", vendors.vendorStatus(selectedVendor).getText());
         vendors.vendorDeleteButton(selectedVendor).click();
@@ -343,7 +344,7 @@ public class D11_Customers {
 
     @Then("check default vendor in the grid")
     public void checkDefaultVendorInTheGrid() {
-        new P00_multiPurposes(driver).waitLoading();
+        wait.waitLoading();
         asrt.assertTrue(vendors.vendorsNames.stream().anyMatch(c -> c.getText().equalsIgnoreCase("Default vendor")));
         asrt.assertAll();
     }
@@ -363,7 +364,7 @@ public class D11_Customers {
 
     @Then("Check Records shown {string} as {string}")
     public void checkRecordsShownAs(String filter, String value) {
-        new P00_multiPurposes(driver).waitLoading();
+        wait.waitLoading();
         switch (filter.toLowerCase()) {
             case "name" -> asrt.assertTrue(vendors.vendorsNames.stream().anyMatch(vn -> !vn.getText().contains(value)));
             case "status" -> asrt.assertTrue(vendors.statuses.stream().anyMatch(vn -> !vn.getText().contains(value)));
@@ -375,7 +376,7 @@ public class D11_Customers {
 
     @And("go to Guests page")
     public void goToGuestsPage() {
-        new P00_multiPurposes(driver).waitLoading();
+        wait.waitLoading();
         dashBoardPage.customersDropList.click();
         dashBoardPage.guestsLink.click();
     }
@@ -496,9 +497,9 @@ public class D11_Customers {
     @When("create Guest firstname {string} last name {string}  phone {string} nationality {string} Guest Type {string} id type {string} id number {string} ignored Fields {string} invailed Fields {string}")
     public void createGuestFirstnameLastNamePhoneIdTypeIdNumberIgnoredFieldsInvailedFields(String fName, String
             lName, String phone, String nat, String gType, String idType, String idNumb, String ign, String inv) {
-        new P00_multiPurposes(driver).waitLoading();
+        wait.waitLoading();
         guests.newGuestButton.click();
-        new P00_multiPurposes(driver).waitLoading();
+        wait.waitLoading();
         fillGuestData(fName, lName, phone, nat, gType, idType, idNumb, "new", ign, inv);
         guests.submitButton.click();
     }
@@ -508,7 +509,7 @@ public class D11_Customers {
         new D03_BlocksAndFloors().checkToastMesageContainsText(msg);
         if (msg.contains("successfully")) {
             if (existance.equalsIgnoreCase("added")) {
-                new P00_multiPurposes(driver).waitLoading();
+                wait.waitLoading();
                 WebElement selectedGuest = guests.idNumbers.stream().filter(c -> c.getText().equalsIgnoreCase(guestMap.get("idNum"))).findAny().orElseThrow();
                 asrt.assertTrue(guests.guestNationality(selectedGuest).getText().equalsIgnoreCase(guestMap.get("nat"))
                         , "Expected: " + guestMap.get("nat") + " ,Actual: " + guests.guestNationality(selectedGuest).getText());
@@ -517,7 +518,7 @@ public class D11_Customers {
                 asrt.assertTrue(guests.guestIDType(selectedGuest).getText().equalsIgnoreCase(guestMap.get("idType")), "Expected: " + guestMap.get("idType") + " ,Actual: " + guests.guestIDType(selectedGuest).getText());
                 asrt.assertTrue(guests.guestName(selectedGuest).getText().contains(guestMap.get("name")), "Expected: " + guestMap.get("name") + " ,Actual: " + guests.guestName(selectedGuest).getText());
             } else if (existance.equalsIgnoreCase("deleted")) {
-                new P00_multiPurposes(driver).waitLoading();
+                wait.waitLoading();
                 asrt.assertFalse(guests.guestsNames.stream().anyMatch(c -> c.getText().equalsIgnoreCase(guestMap.get("idNum"))));
             }
             asrt.assertAll();
@@ -529,14 +530,14 @@ public class D11_Customers {
 
         WebElement selectedGuest = getGuestData(oId);
         guests.guestEditButton(selectedGuest).click();
-        new P00_multiPurposes(driver).waitLoading();
+        wait.waitLoading();
         fillGuestData(fName, lName, phone, nat, gType, idType, nId, state, ign, inv);
         guests.submitButton.click();
 
     }
 
     private WebElement getGuestData(String id) {
-        new P00_multiPurposes(driver).waitLoading();
+        wait.waitLoading();
         WebElement selectedGuest;
         if (id.equalsIgnoreCase("random"))
             selectedGuest = guests.idNumbers.getFirst();
@@ -559,10 +560,10 @@ public class D11_Customers {
 
     @When("adding a company note {string} and property ote {string} to guest with id {string}")
     public void addingACompanyNoteAndPropertyOteToGuestWithId(String compNote, String propNote, String guestId) {
-        new P00_multiPurposes(driver).waitLoading();
+        wait.waitLoading();
         WebElement selectedGuest = guests.idNumbers.stream().filter(c -> c.getText().equalsIgnoreCase(guestId)).findAny().orElseThrow();
         guests.guestEditButton(selectedGuest).click();
-        new P00_multiPurposes(driver).waitLoading();
+        wait.waitLoading();
         guests.guestNotesTab.click();
         guests.companyNotesField.sendKeys(compNote);
         guests.addCompanyNoteButton.click();
@@ -584,7 +585,7 @@ public class D11_Customers {
 
     @Then("check the note is added with the name of the user who created it and the property")
     public void checkTheNoteIsAddedWithTheNameOfTheUserWhoCreatedItAndTheProperty() {
-        new P00_multiPurposes(driver).waitLoading();
+        wait.waitLoading();
         asseertGuestNote(compNote).forEach(asrt::assertTrue);
         asseertGuestNote(propNote).forEach(asrt::assertTrue);
         asrt.assertAll();
@@ -606,19 +607,19 @@ public class D11_Customers {
     @Then("Check the Edited Note")
     public void checkTheEditedNote() {
         new D03_BlocksAndFloors().checkToastMesageContainsText("Saved Successed");
-        new P00_multiPurposes(driver).waitLoading();
+        wait.waitLoading();
         asseertGuestNote(editedNote).forEach(asrt::assertTrue);
         asrt.assertAll();
 
     }
 
     private WebElement selectNoteFromGuest(String oldNote, String guestId) {
-        new P00_multiPurposes(driver).waitLoading();
+        wait.waitLoading();
         WebElement selectedGuest = guests.idNumbers.stream().filter(c -> c.getText().equalsIgnoreCase(guestId)).findAny().orElseThrow();
         guests.guestEditButton(selectedGuest).click();
-        new P00_multiPurposes(driver).waitLoading();
+        wait.waitLoading();
         guests.guestNotesTab.click();
-        new P00_multiPurposes(driver).waitLoading();
+        wait.waitLoading();
         return guests.notesContentes.stream().filter(c -> c.getText().contains(oldNote)).findAny().orElseThrow();
     }
 
@@ -635,7 +636,7 @@ public class D11_Customers {
     @Then("Check the success msg and the note is deleted")
     public void checkTheSuccessMsgAndTheNoteIsDeleted() {
         new D03_BlocksAndFloors().checkToastMesageContainsText("Deleted Successfully");
-        new P00_multiPurposes(driver).waitLoading();
+        wait.waitLoading();
         asrt.assertFalse(guests.notesContentes.stream().anyMatch(c -> c.getText().contains(deltetdNote)));
     }
 
@@ -643,10 +644,10 @@ public class D11_Customers {
 
     @When("adding a Document to guest with id {string} naming it {string}")
     public void addingADocumentToGuestWithIdNamingIt(String guestId, String docName) {
-        new P00_multiPurposes(driver).waitLoading();
+        wait.waitLoading();
         WebElement selectedGuest = guests.idNumbers.stream().filter(c -> c.getText().equalsIgnoreCase(guestId)).findAny().orElseThrow();
         guests.guestEditButton(selectedGuest).click();
-        new P00_multiPurposes(driver).waitLoading();
+        wait.waitLoading();
         guests.guestDocumentsTab.click();
         guests.addDocumentButton.click();
         Utils.fileUpload(guests.documentUploadField, "src/main/resources/Images", 1);
@@ -670,12 +671,12 @@ public class D11_Customers {
     }
 
     private WebElement selectDocumentFromGuest(String docName, String guestId) {
-        new P00_multiPurposes(driver).waitLoading();
+        wait.waitLoading();
         WebElement selectedGuest = guests.idNumbers.stream().filter(c -> c.getText().equalsIgnoreCase(guestId)).findAny().orElseThrow();
         guests.guestEditButton(selectedGuest).click();
-        new P00_multiPurposes(driver).waitLoading();
+        wait.waitLoading();
         guests.guestDocumentsTab.click();
-        new P00_multiPurposes(driver).waitLoading();
+        wait.waitLoading();
         return guests.documentNames.stream().filter(c -> c.getText().contains(docName)).findAny().orElse(null);
     }
 
@@ -697,7 +698,7 @@ public class D11_Customers {
 
     @When("Filtering guest {string} as {string}")
     public void filteringGuestAs(String filter, String value) {
-        new P00_multiPurposes(driver).waitLoading();
+        wait.waitLoading();
         guests.filterButton.click();
         switch (filter.toLowerCase()) {
             case "status" ->
@@ -717,7 +718,7 @@ public class D11_Customers {
 
     @Then("Check all guests shown {string} as {string}")
     public void checkAllGuestsShownAs(String filter, String value) {
-        new P00_multiPurposes(driver).waitLoading();
+        wait.waitLoading();
         List<WebElement> theList ;
         switch (filter.toLowerCase()) {
             case "status" -> {

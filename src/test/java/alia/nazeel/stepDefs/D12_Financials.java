@@ -10,6 +10,7 @@ import alia.nazeel.pages.setuppages.financialpages.P28_DiscountTypes;
 import alia.nazeel.pages.setuppages.financialpages.P29_Currencies;
 import alia.nazeel.pages.vouchersPages.P10_VouchersPage;
 import alia.nazeel.pages.vouchersPages.P16_VouchersPopUp;
+import alia.nazeel.tools.CustomWebDriverWait;
 import alia.nazeel.tools.Utils;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
@@ -25,7 +26,7 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
+
 import org.testng.asserts.SoftAssert;
 
 import java.time.Duration;
@@ -39,7 +40,7 @@ public class D12_Financials {
 
     // JavascriptExecutor js = (JavascriptExecutor) driver;
     final SoftAssert asrt = new SoftAssert();
-    final WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+    final CustomWebDriverWait wait = new CustomWebDriverWait(driver, Duration.ofSeconds(20));
     final P02_DashBoardPage dashBoardPage = new P02_DashBoardPage(driver);
     final P05_SetupPage setupPage = new P05_SetupPage(driver);
     final P25_TaxesAndFees taxesAndFees = new P25_TaxesAndFees(driver);
@@ -50,7 +51,7 @@ public class D12_Financials {
 
     @Given("open Taxes and Fees Page")
     public void openTaxesAndFeesPage() {
-        new P00_multiPurposes(driver).waitLoading();
+        wait.waitLoading();
         dashBoardPage.setupPageLink.click();
         setupPage.financialDropList.click();
         setupPage.taxesAndFeesLink.click();
@@ -58,7 +59,7 @@ public class D12_Financials {
 
     @Given("create new type {string} with name {string} and method {string} and amount {string} applied on {string} and start date {string} end date {string} Charged on {string}")
     public void createNewTypeWithNameAndMethodAndAmountAppliedOnAndStartDateEndDateChargedOn(String type, String name, String method, String amount, String aplOn, String sDate, String eDate, String chrgOn) {
-        new P00_multiPurposes(driver).waitLoading();
+        wait.waitLoading();
         taxesAndFees.newTax_FeeButton.click();
         fillTaxData(type, name, method, amount, aplOn, sDate, eDate, chrgOn);
         taxesAndFees.submitButon.click();
@@ -67,7 +68,7 @@ public class D12_Financials {
     final HashMap<String, String> taxMap = new HashMap<>();
 
     public void fillTaxData(String type, String name, String method, String amount, String aplOn, String sDate, String eDate, String chrgOn) {
-        new P00_multiPurposes(driver).waitLoading();
+        wait.waitLoading();
         switch (type) {
             case "Fee" -> taxesAndFees.feesButton.click();
             case "Tax" -> taxesAndFees.taxesButton.click();
@@ -257,7 +258,7 @@ public class D12_Financials {
         new D01_Reservations().selectStartDateAndEndDate(startDate, endDate);
         new D01_Reservations().openUnitSelectionPopup();
         new D01_Reservations().selectAUnit("RANDOM");
-        new P00_multiPurposes(driver).waitLoading();
+        wait.waitLoading();
         new P03_1_ReservationMainDataPage(driver).veiwTaxesButton.click();
     }
 
@@ -274,7 +275,7 @@ public class D12_Financials {
 
     @Then("Check the taxes are with the {string} type")
     public void checkTheTaxesAreWithTheType(String calcType) {
-        new P00_multiPurposes(driver).waitLoading();
+        wait.waitLoading();
         asrt.assertTrue(taxesAndFees.calcstate.getText().contains(calcType), "Expected: " + calcType + "\nActual: " + taxesAndFees.calcstate.getText());
 //        WebElement sDate = taxesAndFees.startDates.get(0);
 //        WebElement eDate = taxesAndFees.taxEndDate(sDate);
@@ -290,7 +291,7 @@ public class D12_Financials {
 
     @Given("open cost Centers Page")
     public void openCostCentersPage() {
-        new P00_multiPurposes(driver).waitLoading();
+        wait.waitLoading();
         dashBoardPage.setupPageLink.click();
         setupPage.financialDropList.click();
         setupPage.costCentersLink.click();
@@ -308,7 +309,7 @@ public class D12_Financials {
     private void fillCostCenterData(String name, String categ, String stat) {
         WebElement selecetd;
         if (!categ.isEmpty()) {
-            new P00_multiPurposes(driver).waitLoading();
+            wait.waitLoading();
             if (categ.equalsIgnoreCase("random")) {
                 selecetd = costCenter.categoriesList().getFirst();
                 costMap.put("categ", selecetd.getText());
@@ -347,11 +348,11 @@ public class D12_Financials {
     }
 
     private void checkTheLastChangedCostCenter() {
-        new P00_multiPurposes(driver).waitLoading();
+        wait.waitLoading();
         asrt.assertTrue(costCenter.costNames.stream().anyMatch(am -> am.getText().contains(costMap.get("name"))), "Expected: " + costMap.get("name") + " to be present in the grid");
         P10_VouchersPage vouchersPage = new P10_VouchersPage(driver);
         new D06_DigitalPayment().goToDesiredVouchersPage("Payment");
-        new P00_multiPurposes(driver).waitLoading();
+        wait.waitLoading();
         vouchersPage.newVoucherButton.click();
         P16_VouchersPopUp vouchersPopUp = new P16_VouchersPopUp(driver);
         if (!costMap.get("stat").equalsIgnoreCase("Inactive"))
@@ -407,7 +408,7 @@ public class D12_Financials {
     public void checkMessageAndTheCostCenterAfterDeleteAction(String msg) {
         new D03_BlocksAndFloors().checkToastMesageContainsText(msg);
         if (!msg.contains("can not be deleted")) {
-            new P00_multiPurposes(driver).waitLoading();
+            wait.waitLoading();
             asrt.assertFalse(costCenter.costNames.stream().anyMatch(t -> t.getText().contains(costMap.get("name"))));
             asrt.assertAll();
         }
@@ -428,7 +429,7 @@ public class D12_Financials {
 
     @Then("Check the shown records {string} to contains {string}")
     public void checkTheShownRecordsToContains(String field, String data) {
-        new P00_multiPurposes(driver).waitLoading();
+        wait.waitLoading();
         switch (field) {
             case "name" -> asrt.assertFalse(costCenter.costNames.stream().anyMatch(n -> !n.getText().contains(data)));
             case "categ" -> asrt.assertFalse(costCenter.categories.stream().anyMatch(c -> !c.getText().contains(data)));
@@ -448,11 +449,11 @@ public class D12_Financials {
 
     @Given("go to discount Types page")
     public void goToDiscountTypesPage() {
-        new P00_multiPurposes(driver).waitLoading();
+        wait.waitLoading();
         dashBoardPage.setupPageLink.click();
         setupPage.financialDropList.click();
         setupPage.discountTypesLink.click();
-        new P00_multiPurposes(driver).waitLoading();
+        wait.waitLoading();
     }
 
     String discountDescription;
@@ -474,7 +475,7 @@ public class D12_Financials {
 
     @And("Check the Discount {string} in the grid with state {string} is {string}")
     public void checkTheDiscountInTheGrid(String type, String state, String recState) {
-        new P00_multiPurposes(driver).waitLoading();
+        wait.waitLoading();
         WebElement tocheck;
         switch (recState) {
             case "present" -> {
@@ -549,7 +550,7 @@ public class D12_Financials {
 
     @And("check the order is changed")
     public void checkTheOrderIsChanged() {
-        new P00_multiPurposes(driver).waitLoading();
+        wait.waitLoading();
         asrt.assertFalse(discountsListNames.getFirst().equalsIgnoreCase(discountTypes.types.getFirst().getText()), "Expected: " + discountsListNames.getFirst() +
                 "\n Actual: " + discountTypes.types.getFirst().getText());
         asrt.assertAll();
@@ -626,7 +627,7 @@ public class D12_Financials {
             } else
                 asrt.assertTrue(currencies.currencyExchangeRate(createdCurr).getText().equalsIgnoreCase(currencyMap.get("exRate")), "exRate not right");
             new D06_DigitalPayment().goToDesiredVouchersPage("Receipt");
-            new P00_multiPurposes(driver).waitLoading();
+            wait.waitLoading();
             new P10_VouchersPage(driver).newVoucherButton.click();
             List<WebElement> currencies = new P16_VouchersPopUp(driver).currenciesList();
             asrt.assertTrue(currencies.stream().anyMatch(c -> c.getText().equalsIgnoreCase(currencyMap.get("symbol"))));
@@ -640,7 +641,7 @@ public class D12_Financials {
         WebElement selectedCurr = currencies.symbols.stream().filter(c -> c.getText().equalsIgnoreCase(oCurr)).findAny().orElseThrow();
         setCurrency(currencies.currencyName(selectedCurr).getText(), currencies.currencySymbol(selectedCurr).getText(), currencies.currencyExchangeRate(selectedCurr).getText(), currencies.currencySetting(selectedCurr).getText(), currencies.currencyStatus(selectedCurr).getText());
         currencies.currencyEditButton(selectedCurr).click();
-        new P00_multiPurposes(driver).waitLoading();
+        wait.waitLoading();
         fillCurrencyData(nCurr, exRate, isDef, state);
         currencies.submit_EditButton.click();
     }

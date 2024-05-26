@@ -1,6 +1,7 @@
 package alia.nazeel.pages.mutlipurposes;
 
 import alia.nazeel.kendoelements.SwalPopUp;
+import alia.nazeel.tools.CustomWebDriverWait;
 import org.apache.commons.lang3.StringUtils;
 import alia.nazeel.tools.CustomAssert;
 import alia.nazeel.tools.Utils;
@@ -9,7 +10,7 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
+
 
 import java.time.Duration;
 
@@ -17,7 +18,7 @@ import java.util.List;
 
 public class P00_multiPurposes {
     final WebDriver driver;
-    final WebDriverWait wait;
+    final CustomWebDriverWait wait;
     final Actions actions;
     final JavascriptExecutor js;
     final CustomAssert asrt;
@@ -25,7 +26,7 @@ public class P00_multiPurposes {
     public P00_multiPurposes(WebDriver driver) {
         PageFactory.initElements(driver, this);
         this.driver = driver;
-        wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        wait = new CustomWebDriverWait(driver, Duration.ofSeconds(10));
         actions = new Actions(driver);
         js = (JavascriptExecutor) driver;
         asrt = new CustomAssert();

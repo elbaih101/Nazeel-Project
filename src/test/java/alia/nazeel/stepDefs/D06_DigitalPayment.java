@@ -4,6 +4,7 @@ import alia.nazeel.pages.P02_DashBoardPage;
 import alia.nazeel.pages.mutlipurposes.P00_2_GuestSelectionPopUp;
 import alia.nazeel.pages.reservations.P03_1_ReservationMainDataPage;
 import alia.nazeel.pages.reservations.P03_2_ReservationFinancialPage;
+import alia.nazeel.tools.CustomWebDriverWait;
 import com.github.javafaker.Faker;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
@@ -23,7 +24,7 @@ import org.joda.time.format.DateTimeFormatter;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
+
 import org.testng.asserts.SoftAssert;
 
 import java.time.Duration;
@@ -35,7 +36,7 @@ public class D06_DigitalPayment {
 
     final WebDriver driver = DriverManager.getDriver();
     final SoftAssert asrt = new SoftAssert();
-    final WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+    final CustomWebDriverWait wait = new CustomWebDriverWait(driver, Duration.ofSeconds(20));
     final P02_DashBoardPage dashBoardPage = new P02_DashBoardPage(driver);
     final P10_VouchersPage vouchersPage = new P10_VouchersPage(driver);
     final P11_DigitalPaymentPage digitalPaymentPage = new P11_DigitalPaymentPage(driver);
@@ -58,16 +59,16 @@ public class D06_DigitalPayment {
             dashBoardPage.PromissoryLink.click();
         } else if (vType.equalsIgnoreCase(Vouchers.Receipt.toString()) || vType.equalsIgnoreCase(Vouchers.SD.toString())) {
 //            if (!dashBoardPage.receiptsLink.isDisplayed()) {
-//                multiPurposes.waitLoading();
+//                wait.waitLoading();
 //                dashBoardPage.dashBoardLink.click();
-//                multiPurposes.waitLoading();
+//                wait.waitLoading();
 //                dashBoardPage.vouchersDropList.click();
 //            }
            js.executeScript("arguments[0].click();",dashBoardPage.receiptsLink);
 //            dashBoardPage.receiptsLink.click();
         } else if (vType.equalsIgnoreCase("payment") || vType.equalsIgnoreCase(Vouchers.Refund.toString()) || vType.equalsIgnoreCase(Vouchers.SDRefund.toString()) || vType.equalsIgnoreCase(Vouchers.Expenses.toString())) {
             dashBoardPage.dashBoardLink.click();
-            new P00_multiPurposes(driver).waitLoading();
+            wait.waitLoading();
             dashBoardPage.vouchersDropList.click();
             wait.until(ExpectedConditions.elementToBeClickable(dashBoardPage.paymentsLink));
             dashBoardPage.paymentsLink.click();
@@ -159,7 +160,7 @@ public class D06_DigitalPayment {
         selecetdGuest.click();
         selectedguestName = selecetdGuest.getText();
 
-        new P00_multiPurposes(driver).waitLoading();
+        wait.waitLoading();
         try {
 
             guestSelectionPopUp.confirmButton().click();
@@ -270,7 +271,7 @@ public class D06_DigitalPayment {
         smsLogPage.viewButton.click();
 
         DateTimeFormatter dateFormater = DateTimeFormat.forPattern("dd/MM/yyyy hh:mm a");
-        multiPurposes.waitLoading();
+        wait.waitLoading();
         List<WebElement> sentMsg = smsLogPage.paytabsMessages().stream().filter(msg -> smsLogPage.msgRecepient(msg).getText().equalsIgnoreCase(selectedguestName) && sendDate.isBefore(dateFormater.parseDateTime(smsLogPage.msgSendDate(msg).getText().trim()))
         ).toList();
         System.out.println(smsLogPage.msgBody(sentMsg.getFirst()).getText().trim());

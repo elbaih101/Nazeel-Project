@@ -1,6 +1,7 @@
 package alia.nazeel.pages.mutlipurposes;
 
 
+import alia.nazeel.tools.CustomWebDriverWait;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -13,7 +14,7 @@ import java.time.Duration;
 
 public class P00_1_PaytabsExternalPage {
     final WebDriver driver;
-    final WebDriverWait wait;
+    final CustomWebDriverWait wait;
     final Actions actions;
 
 
@@ -21,7 +22,7 @@ public class P00_1_PaytabsExternalPage {
     public P00_1_PaytabsExternalPage(WebDriver driver) {
         PageFactory.initElements(driver, this);
         this.driver = driver;
-        wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        wait = new CustomWebDriverWait(driver, Duration.ofSeconds(10));
         actions = new Actions(driver);
     }
 

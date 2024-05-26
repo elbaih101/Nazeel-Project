@@ -1,5 +1,6 @@
 package alia.nazeel.stepDefs;
 
+import alia.nazeel.tools.CustomWebDriverWait;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -23,7 +24,7 @@ public class D03_BlocksAndFloors {
 
     final WebDriver driver = DriverManager.getDriver();
     final SoftAssert asrt = new SoftAssert();
-    final WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+    final CustomWebDriverWait wait = new CustomWebDriverWait(driver, Duration.ofSeconds(20));
     final P02_DashBoardPage dashBoardPage = new P02_DashBoardPage(driver);
     final P05_SetupPage setupPagec = new P05_SetupPage(driver);
     final P04_BlocksPage blocksPage = new P04_BlocksPage(driver);
@@ -153,7 +154,7 @@ final JavascriptExecutor js =(JavascriptExecutor) driver;
 
     @Then("check filtered blocks cotains name {string}")
     public void checkFilteredBlocksCotainsName(String name) {
-        new P00_multiPurposes(driver).waitLoading();
+        wait.waitLoading();
         asrt.assertFalse(blocksPage.blocksNames.stream().anyMatch(element -> !element.getText().contains(name)));
         asrt.assertAll();
     }
@@ -183,7 +184,7 @@ final JavascriptExecutor js =(JavascriptExecutor) driver;
 
     @And("click on block's delete button")
     public void clickOnBlockSDeleteButton() {
-        new P00_multiPurposes(driver).waitLoading();
+        wait.waitLoading();
         blocksPage.blockDeleteButton.click();
         wait.until(ExpectedConditions.visibilityOf(blocksPage.confirmationPopUp));
     }

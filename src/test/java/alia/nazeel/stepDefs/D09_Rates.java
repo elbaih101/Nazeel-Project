@@ -1,5 +1,6 @@
 package alia.nazeel.stepDefs;
 
+import alia.nazeel.tools.CustomWebDriverWait;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -14,7 +15,7 @@ import alia.nazeel.pages.setuppages.unit_setup_pages.P09_RatesPages;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
-import org.openqa.selenium.support.ui.WebDriverWait;
+
 import org.testng.asserts.SoftAssert;
 
 import java.time.Duration;
@@ -27,7 +28,7 @@ public class D09_Rates {
 
 
     final SoftAssert asrt = new SoftAssert();
-    final WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+    final CustomWebDriverWait wait = new CustomWebDriverWait(driver, Duration.ofSeconds(20));
     final P02_DashBoardPage dashBoardPage = new P02_DashBoardPage(driver);
     final P05_SetupPage setupPage = new P05_SetupPage(driver);
     final P09_RatesPages ratesPages = new P09_RatesPages(driver);
@@ -43,7 +44,7 @@ public class D09_Rates {
 
     @Given("open baseRate edit mode")
     public void openBaseRateEditMode() {
-        new P00_multiPurposes(driver).waitLoading();
+        wait.waitLoading();
         ratesPages.editBaseRateButton.click();
     }
 
@@ -59,7 +60,7 @@ public class D09_Rates {
 
     @When("fill rates {string} with low {string} high {string} min {string} mon {string} monmin {string}")
     public void fillRatesWithLowHighMinMonMonmin(String typeName, String low, String high, String min, String mon, String monMin) {
-       new P00_multiPurposes(driver).waitLoading();
+       wait.waitLoading();
         if (typeName.equalsIgnoreCase("all")) {
             ratesPages.lowWeekDaysRates.forEach(WebElement::clear);
             ratesPages.lowWeekDaysRates.forEach(rate -> rate.sendKeys(low));
@@ -97,7 +98,7 @@ public class D09_Rates {
     @When("selecting week day {string}")
     public void selectingWeekDay(String day) {
         ratesPages.highWeekDaysButton.click();
-        new P00_multiPurposes(driver).waitLoading();
+        wait.waitLoading();
         WebElement selectedDay = ratesPages.highWeekDays().get(week.get(day));
         selectedDay.click();
     }
@@ -124,7 +125,7 @@ public class D09_Rates {
 
     @Given("open new rate page")
     public void openNewRatePage() {
-        new P00_multiPurposes(driver).waitLoading();
+        wait.waitLoading();
         ratesPages.addNewRateButton.click();
     }
 

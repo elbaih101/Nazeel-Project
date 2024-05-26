@@ -9,6 +9,7 @@ import alia.nazeel.pages.reservations.P03_2_ReservationFinancialPage;
 import alia.nazeel.pages.vouchersPages.P10_VouchersPage;
 import alia.nazeel.pages.vouchersPages.P11_DigitalPaymentPage;
 import alia.nazeel.pojos.JsonDataTools;
+import alia.nazeel.tools.CustomWebDriverWait;
 import alia.nazeel.tools.Utils;
 import io.cucumber.cienvironment.internal.com.eclipsesource.json.Json;
 import io.cucumber.cienvironment.internal.com.eclipsesource.json.JsonObject;
@@ -30,7 +31,7 @@ import org.openqa.selenium.WebElement;
 
 import org.openqa.selenium.support.Color;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
+
 import org.testng.Reporter;
 import org.testng.asserts.SoftAssert;
 
@@ -45,7 +46,7 @@ public class D08_Vouchers {
 
 
     final SoftAssert asrt = new SoftAssert();
-    final WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+    final CustomWebDriverWait wait = new CustomWebDriverWait(driver, Duration.ofSeconds(20));
     final P03_2_ReservationFinancialPage reservationFinancialPage = new P03_2_ReservationFinancialPage(driver);
     final P16_VouchersPopUp vouchersPopUp = new P16_VouchersPopUp(driver);
     final P10_VouchersPage vouchersPage = new P10_VouchersPage(driver);
@@ -61,7 +62,7 @@ public class D08_Vouchers {
     @Then("check the created voucher owner to be the selected corporate")
 
     public void checkTheCreatedVoucherOwnerToBeTheSelectedCorporate() {
-        multiPurposes.waitLoading();
+        wait.waitLoading();
         WebElement createdVoucher = vouchersPage.vouchersNums.stream().filter(t -> t.getText().equalsIgnoreCase(vMap.getvNumber())).findAny().orElseThrow();
         asrt.assertEquals(selectedCorporate, vouchersPage.voucherOwner(createdVoucher, vMap.getvType()).getText());
         asrt.assertAll();
@@ -119,7 +120,7 @@ public class D08_Vouchers {
     @Given("click on the add voucher button")
     public void clickOnTheAddVoucherButton() {
         wait.until(ExpectedConditions.elementToBeClickable(reservationFinancialPage.receiptsTap));
-        multiPurposes.waitLoading();
+        wait.waitLoading();
         wait.until(ExpectedConditions.refreshed(ExpectedConditions.elementToBeClickable(reservationFinancialPage.addVoucherButton)));
         reservationFinancialPage.addVoucherButton.click();
     }
@@ -139,7 +140,7 @@ public class D08_Vouchers {
         } else if (tab.equalsIgnoreCase(Vouchers.SDRefund.toString())) {
             selectedTab = vouchersPopUp.securityDeposuteRefundTab();
         }
-        multiPurposes.waitLoading();
+        wait.waitLoading();
         wait.until(ExpectedConditions.elementToBeClickable(selectedTab));
         assert selectedTab != null;
         selectedTab.click();
@@ -147,7 +148,7 @@ public class D08_Vouchers {
 
     @And("enter maturity Date {string} and amount {string}")
     public void enterMaturityDate(String date, String amount) {
-        multiPurposes.waitLoading();
+        wait.waitLoading();
         Utils.setDate(vouchersPopUp.PromissoryMaturityDate(), date);
         Utils.setAttribute(js, vouchersPopUp.PromissoryMaturityDate(), "value", date);
         vouchersPopUp.amountField().clear();
@@ -185,7 +186,7 @@ public class D08_Vouchers {
 
         wait.until(ExpectedConditions.visibilityOfAllElements(methods));
         methods.stream().filter(method -> method.getText().contains(paymentMethod)).toList().getFirst().click();
-        multiPurposes.waitLoading();
+        wait.waitLoading();
         if (!paymentMethod.equalsIgnoreCase(PaymentMethods.Cash.toString()) && !paymentMethod.equalsIgnoreCase(PaymentMethods.PayTabs.toString())) {
             vouchersPopUp.banks().get(new Random().nextInt(vouchersPopUp.banks().size())).click();
         }
@@ -213,7 +214,7 @@ public class D08_Vouchers {
             default -> prefix;
         };
         String url = voucherType.toLowerCase().contains("sa") ? "/api/Financial/Voucher/create" : "api/Reservation/create";
-        multiPurposes.waitLoading();
+        wait.waitLoading();
         if (!voucherType.toLowerCase().contains("sa")) {
             reservationVouchersInitialize(voucherType);
         } else {
@@ -261,7 +262,7 @@ public class D08_Vouchers {
         if (voucherType.equalsIgnoreCase(Vouchers.SAReceipt.toString())) {
             vouchersPage.newVoucherButton.click();
 
-            multiPurposes.waitLoading();
+            wait.waitLoading();
             switch (guestType.toLowerCase()) {
                 case "corporate" -> {
                     vouchersPopUp.selctCorporateButton().click();
@@ -303,7 +304,7 @@ public class D08_Vouchers {
 
     void openEditModeForVoucher(String voucherType, String voucherState, String vNumber) {
 
-        multiPurposes.waitLoading();
+        wait.waitLoading();
         if (voucherState.equalsIgnoreCase("Ended") || voucherState.equalsIgnoreCase("CashDrop") || voucherState.equalsIgnoreCase("Created")) {
             vouchersPage.editButton(vouchersPage.vouchersNums.stream().filter(num -> num.getText().equalsIgnoreCase(vNumber)).toList().getFirst(), voucherType).click();
 
@@ -345,7 +346,7 @@ public class D08_Vouchers {
     }
 
     public void checkEditMode(String voucherType, String voucherState, String voucherNumber) {
-        multiPurposes.waitLoading();
+        wait.waitLoading();
         openEditModeForVoucher(voucherType, voucherState, voucherNumber);
         String expectedColor = "#fafafa";
         wait.withTimeout(Duration.ofSeconds(1));
@@ -401,7 +402,7 @@ public class D08_Vouchers {
 
     @Then("Check {string} Voucher with state {string} edit mode")
     public void checkVoucherEditMode(String voucherType, String voucherState) {
-        multiPurposes.waitLoading();
+        wait.waitLoading();
 
         openEditModeForVoucher(voucherType, voucherState, vMap.getvNumber());
         String expectedColor = "#fafafa";
@@ -475,7 +476,7 @@ public class D08_Vouchers {
     @When("finish promissory Normal collecting process with amount {string} PaymentMethod {string}")
     public void finishpromissoryNormalCollectingProcess(String amount, String paymentMethod) {
         vouchersPopUp.paymentMethods().stream().filter(method -> method.getText().contains(paymentMethod)).toList().getFirst().click();
-        multiPurposes.waitLoading();
+        wait.waitLoading();
         vouchersPopUp.amountField().clear();
         vouchersPopUp.amountField().sendKeys(amount);
         vouchersPopUp.submitButton().click();
@@ -487,7 +488,7 @@ public class D08_Vouchers {
         wait.until(ExpectedConditions.elementToBeClickable(dashBoardPage.cashDrawer));
         dashBoardPage.cashDrawer.click();
         wait.until(ExpectedConditions.urlContains("cash-drawer-balance"));
-        multiPurposes.waitLoading();
+        wait.waitLoading();
         cashDrawerPage.dropCashButton().click();
         cashDrawerPage.dateTo().clear();
         String dropCashTime = JsonDataTools.getValueFromJsonFile("src/main/resources/testdata/VouchersRelatedData.json", "dropCashTime");
@@ -522,7 +523,7 @@ public class D08_Vouchers {
 
     @When("editing the Created Voucher's  amount {string} payment Method {string} maturity Date {string} and Creatian Date {string}")
     public void editingTheCreatedVoucherSAmountPaymentMethodMaturityDateAndCreatianDate(String amount, String payMethod, String maturityDate, String creatDate) {
-        multiPurposes.waitLoading();
+        wait.waitLoading();
         openEditModeForVoucher(createdVoucherType, createdVoucherState, voucherNums);
         if (!creatDate.isEmpty()) {
             vouchersPopUp.dateField().clear();
@@ -558,7 +559,7 @@ public class D08_Vouchers {
     @And("edit {string} Voucher with state {string} Payment method to {string} and check msg {string}")
     public void editVoucherPaymentMethodTo(String voucherType, String voucherState, String newMethod, String msg) {
         if (!voucherType.equalsIgnoreCase(Vouchers.promissory.toString())) {
-            multiPurposes.waitLoading();
+            wait.waitLoading();
             openEditModeForVoucher(voucherType, voucherState, voucherNums);
             wait.withTimeout(Duration.ofSeconds(1));
             PaymentMethods p = Arrays.stream(PaymentMethods.values()).filter(pM -> pM.toString().toLowerCase().contains(newMethod.toLowerCase())).findFirst().orElseThrow();
@@ -574,7 +575,7 @@ public class D08_Vouchers {
 
     @Given("open Drop Cash Vouchers Page")
     public void openDropCashVouchersPage() {
-        new P00_multiPurposes(driver).waitLoading();
+        wait.waitLoading();
         dashBoardPage.vouchersDropList.click();
         dashBoardPage.dropCashVoucherssLink.click();
     }
@@ -603,7 +604,7 @@ public class D08_Vouchers {
 
     @Then("Check all records shown match the searched dates")
     public void checkAllRecordsShownMatchTheSearchedDates() {
-        new P00_multiPurposes(driver).waitLoading();
+        wait.waitLoading();
         asrt.assertTrue(vouchersPage.dropCashDateTimeFroms.stream().allMatch(t -> Utils.isTimeWithinRange(DateTime.parse(t.getText(), formatter), startFrom, startTo)));
         asrt.assertTrue(vouchersPage.dropCashDateTimeTos.stream().allMatch(t -> Utils.isTimeWithinRange(DateTime.parse(t.getText(), formatter), endFrom, endTo)));
         asrt.assertAll();

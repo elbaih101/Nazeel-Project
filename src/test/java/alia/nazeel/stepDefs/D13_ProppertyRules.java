@@ -4,6 +4,7 @@ import alia.nazeel.pages.P02_DashBoardPage;
 import alia.nazeel.pages.mutlipurposes.P00_multiPurposes;
 import alia.nazeel.pages.setuppages.rules_pages.P27_ReservationRules;
 import alia.nazeel.tools.CustomAssert;
+import alia.nazeel.tools.CustomWebDriverWait;
 import alia.nazeel.tools.Utils;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
@@ -18,6 +19,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
 
+import java.time.Duration;
 import java.util.HashMap;
 
 public class D13_ProppertyRules {
@@ -27,7 +29,7 @@ public class D13_ProppertyRules {
     final WebDriver driver = DriverManager.getDriver();
     final JavascriptExecutor js = (JavascriptExecutor) driver;
     final CustomAssert asrt = new CustomAssert();
-    //    final WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+     final CustomWebDriverWait wait = new CustomWebDriverWait(driver, Duration.ofSeconds(20));
     final P02_DashBoardPage dashBoardPage = new P02_DashBoardPage(driver);
     final P05_SetupPage setupPage = new P05_SetupPage(driver);
     final P27_ReservationRules reservationRules = new P27_ReservationRules(driver);
@@ -39,7 +41,7 @@ public class D13_ProppertyRules {
         dashBoardPage.setupPageLink.click();
         setupPage.rulesDropList.click();
         setupPage.reservationRulesLink.click();
-        new P00_multiPurposes(driver).waitLoading();
+        wait.waitLoading();
     }
 
     @Given("choose {string} view and save")
@@ -54,7 +56,7 @@ public class D13_ProppertyRules {
 
     @Then("check {string} view is selecetd")
     public void checkViewIsSelecetd(String view) {
-        new P00_multiPurposes(driver).waitLoading();
+        wait.waitLoading();
         WebElement button = null;
         switch (view.toLowerCase()) {
             case "list" -> button = reservationRules.listViewButton;
@@ -135,7 +137,7 @@ public class D13_ProppertyRules {
     public void saveAndCheckSwitchIs(String name, String state) {
         reservationRules.submitButton.click();
         new D03_BlocksAndFloors().checkToastMesageContainsText(sucMsg);
-        new P00_multiPurposes(driver).waitLoading();
+        wait.waitLoading();
         WebElement swit = getSwitch(name);
         switch (state.toLowerCase()) {
             case "on" -> asrt.assertTrue(swit.getAttribute("class").contains("k-switch-on"));
@@ -170,7 +172,7 @@ public class D13_ProppertyRules {
     @Then("Check the period to be {string}")
     public void checkThePeriodToBe(String allowance) {
         new D03_BlocksAndFloors().checkToastMesageContainsText(sucMsg);
-        new P00_multiPurposes(driver).waitLoading();
+        wait.waitLoading();
         asrt.assertTrue(reservationRules.unitAllowanceDropList.getText().equals(allowance));
         asrt.assertAll();
     }
@@ -334,7 +336,7 @@ public class D13_ProppertyRules {
     public void checkMsgAndThePenalty(String msg) {
         new D03_BlocksAndFloors().checkToastMesageContainsText(msg);
         if (msg.contains("Successfully")) {
-            new P00_multiPurposes(driver).waitLoading();
+            wait.waitLoading();
             WebElement createdPenalty = penalties.names.stream().filter(n -> n.getText().equalsIgnoreCase(penaltyMap.get("name"))).findAny().orElseThrow();
             asrt.AssertEqualsIgnoreCase(penalties.penaltyAmount(createdPenalty).getText(), penaltyMap.get("amount"));
             asrt.AssertEqualsIgnoreCase(penalties.penaltyCategory(createdPenalty).getText(), penaltyMap.get("categ"));
@@ -371,7 +373,7 @@ public class D13_ProppertyRules {
 
     @Then("Check all visible records {string} as {string}")
     public void checkAllVisibleRecordsAs(String filter, String value) {
-        new P00_multiPurposes(driver).waitLoading();
+        wait.waitLoading();
         switch (filter.toLowerCase()) {
             case "name" -> asrt.assertFalse(penalties.names.stream().anyMatch(n -> !n.getText().contains(value)));
             case "amount" -> asrt.assertFalse(penalties.amounts.stream().anyMatch(n -> !n.getText().contains(value)));
@@ -418,7 +420,7 @@ public class D13_ProppertyRules {
             nName, String categ, String type, String amount, String calcOF, String desc, String state) {
         WebElement selectedPenalty = extractPenalty(oName);
         penalties.penaltyEditButton(selectedPenalty).click();
-        new P00_multiPurposes(driver).waitLoading();
+        wait.waitLoading();
         fillPenaltyData(nName, categ, type, amount, calcOF, desc, state);
         penalties.submitButton.click();
     }
@@ -434,7 +436,7 @@ public class D13_ProppertyRules {
     public void checkMsgAndPenaltyDeletion(String msg) {
         new D03_BlocksAndFloors().checkToastMesageContainsText(msg);
         if (msg.contains("Successfully")) {
-            new P00_multiPurposes(driver).waitLoading();
+            wait.waitLoading();
             asrt.assertFalse(penalties.names.stream().anyMatch(n -> n.getText().equalsIgnoreCase(penaltyMap.get("name"))));
         }
     }

@@ -3,6 +3,7 @@ package alia.nazeel.stepDefs;
 import alia.nazeel.pages.P02_DashBoardPage;
 import alia.nazeel.pages.mutlipurposes.P00_multiPurposes;
 import alia.nazeel.pages.setuppages.unit_setup_pages.*;
+import alia.nazeel.tools.CustomWebDriverWait;
 import alia.nazeel.tools.DriverManager;
 import com.github.javafaker.Faker;
 import io.cucumber.java.en.And;
@@ -15,7 +16,7 @@ import alia.nazeel.pages.setuppages.P05_SetupPage;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
+
 import org.testng.asserts.SoftAssert;
 
 import java.time.Duration;
@@ -25,7 +26,7 @@ public class D05_UnitsSetup {
 
     final WebDriver driver = DriverManager.getDriver();
     final SoftAssert asrt = new SoftAssert();
-    final WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+    final CustomWebDriverWait wait = new CustomWebDriverWait(driver, Duration.ofSeconds(20));
     final P02_DashBoardPage dashBoardPage = new P02_DashBoardPage(driver);
     final P05_SetupPage setupPagec = new P05_SetupPage(driver);
     final P08_UnitsSetupPage unitsSetupPage = new P08_UnitsSetupPage(driver);
@@ -50,7 +51,7 @@ public class D05_UnitsSetup {
     @Given("open the new unit page")
     public void openTheNewUnitPage() {
 
-        new P00_multiPurposes(driver).waitLoading();
+        wait.waitLoading();
         wait.until(ExpectedConditions.elementToBeClickable(unitsSetupPage.newUnitButton));
         unitsSetupPage.newUnitButton.click();
 
@@ -175,7 +176,7 @@ public class D05_UnitsSetup {
     @When("open the view mode for a unit {string}")
     public void openTheViewModeForAUnit(String unitNum) {
         WebElement card;
-        new P00_multiPurposes(driver).waitLoading();
+        wait.waitLoading();
         if (!unitNum.equalsIgnoreCase("RANDOM")) {
             card = unitsSetupPage.unitsCards.stream().filter(element -> unitsSetupPage.unitNum(element).getText().contains(unitNum)).toList().getFirst();
         } else {
@@ -209,7 +210,7 @@ public class D05_UnitsSetup {
 
     public void openTheAddGroupOfUnitsPopup() {
         WebElement addgroupunit = unitsSetupPage.addGroupUnitsButton();
-        new P00_multiPurposes(driver).waitLoading();
+        wait.waitLoading();
         addgroupunit.click();
 
     }
@@ -371,7 +372,7 @@ public class D05_UnitsSetup {
     @Given("open the edit group of units popup")
     public void openTheEditGroupOfUnitsPopup() {
         wait.until(ExpectedConditions.elementToBeClickable(unitsSetupPage.editGroupUnitsButton));
-        new P00_multiPurposes(driver).waitLoading();
+        wait.waitLoading();
         unitsSetupPage.editGroupUnitsButton.click();
     }
 
@@ -469,7 +470,7 @@ public class D05_UnitsSetup {
 
     @Given("clicking onthe filter button to open filter menue")
     public void clickingOntheFilterButtonToOpenFilterMenue() {
-        new P00_multiPurposes(driver).waitLoading();
+        wait.waitLoading();
         wait.until(ExpectedConditions.elementToBeClickable(unitsSetupPage.filterButton));
         unitsSetupPage.filterButton.click();
     }
@@ -517,7 +518,7 @@ public class D05_UnitsSetup {
 
     @Then("check all units visible contains  number {string}")
     public void checkAllUnitsVisibleContainsNumber(String unitNumber) {
-        new P00_multiPurposes(driver).waitLoading();
+        wait.waitLoading();
         List<WebElement> filteredUnits = unitsSetupPage.unitsCards;
         wait.until(ExpectedConditions.visibilityOfAllElements(filteredUnits));
         asrt.assertTrue(filteredUnits.stream().allMatch(element -> unitsSetupPage.unitNum(element).getText().contains(unitNumber)));
@@ -546,7 +547,7 @@ public class D05_UnitsSetup {
 
     @Then("check all visible units have type {string}")
     public void checkAllVisibleUnitsHaveType(String unitType) {
-        new P00_multiPurposes(driver).waitLoading();
+        wait.waitLoading();
         List<WebElement> filteredUnits = unitsSetupPage.unitsCards;
         if (unitType.equals("RANDOM")) {
             asrt.assertTrue(filteredUnits.stream().allMatch(card -> unitsSetupPage.unitType(card).getText().trim().contains(selectedUnitTypeName.trim())));
@@ -623,7 +624,7 @@ public class D05_UnitsSetup {
             }
             tobemergedUnits.add(randomUnitNum);
 
-            new P00_multiPurposes(driver).waitLoading();
+            wait.waitLoading();
         }
     }
 
@@ -689,7 +690,7 @@ public class D05_UnitsSetup {
         clickingOntheFilterButtonToOpenFilterMenue();
         for (String unitNum : tobemergedUnits) {
             enterTheUnitNumberAndFilter(unitNum);
-            new P00_multiPurposes(driver).waitLoading();
+            wait.waitLoading();
             WebElement unitCard = unitsSetupPage.unitsCards.stream().filter(card -> unitsSetupPage.unitNum(card).getText().equalsIgnoreCase(unitNum)).findFirst().orElseThrow();
             asrt.assertTrue(unitsSetupPage.unitMergeIcon(unitCard).getFirst().isDisplayed(), "unit:" + unitNum + "is not merged");
         }
@@ -715,7 +716,7 @@ public class D05_UnitsSetup {
         clickingOntheFilterButtonToOpenFilterMenue();
         for (String unitNum : retreavedMergeUnits) {
             enterTheUnitNumberAndFilter(unitNum);
-            new P00_multiPurposes(driver).waitLoading();
+            wait.waitLoading();
             WebElement unitCard = unitsSetupPage.unitsCards.stream().filter(card -> unitsSetupPage.unitNum(card).getText().equalsIgnoreCase(unitNum)).findFirst().orElseThrow();
             asrt.assertTrue(unitsSetupPage.unitMergeIcon(unitCard).isEmpty(), "unit:" + unitNum + "is merged");
         }
@@ -740,7 +741,7 @@ public class D05_UnitsSetup {
 
     @Then("Check only one record is visible with the unit {string}")
     public void checkOnlyOneRecordIsVisibleWithTheUnit(String uNum) {
-        new P00_multiPurposes(driver).waitLoading();
+        wait.waitLoading();
         asrt.assertTrue(mergeSettings.unitsNumbers.size() == 1);
         if (!uNum.equalsIgnoreCase("Random")) {
             asrt.assertTrue(mergeSettings.unitsNumbers.getFirst().getText().contains(uNum));
@@ -782,7 +783,7 @@ public class D05_UnitsSetup {
     @Given("edit unit amenity description {string} and state {string}")
     public void editUnitAmenityDescriptionAndState(String description, String state) {
         amenities.editButton(amenities.names.getFirst()).click();
-        new P00_multiPurposes(driver).waitLoading();
+        wait.waitLoading();
         if (state.equalsIgnoreCase("inactive") && amenities.statusSwitch.getAttribute("class").contains("k-switch-on")) {
             amenities.statusSwitch.click();
         } else if (state.equalsIgnoreCase("active") && amenities.statusSwitch.getAttribute("class").contains("k-switch-of")) {
@@ -795,7 +796,7 @@ public class D05_UnitsSetup {
 
     @And("Check the edited amenity ddescriptioon {string} and state {string}")
     public void checkTheEditedAmenityDdescriptioonAndState(String description, String state) {
-        new P00_multiPurposes(driver).waitLoading();
+        wait.waitLoading();
         amenities.viewButton(amenities.names.getFirst()).click();
         asrt.assertEquals(amenities.descriptionField.getText(), description);
         if (state.equalsIgnoreCase("inactive")) {

@@ -1,5 +1,6 @@
 package alia.nazeel.pages.setuppages.outlets;
 
+import alia.nazeel.tools.CustomWebDriverWait;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -21,7 +22,7 @@ public class P30_OutletsSetup {
     public P30_OutletsSetup(WebDriver driver) {
         PageFactory.initElements(driver, this);
         this.driver = driver;
-        wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        wait = new CustomWebDriverWait(driver, Duration.ofSeconds(10));
         actions = new Actions(driver);
     }
 

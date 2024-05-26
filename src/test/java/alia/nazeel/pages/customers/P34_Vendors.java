@@ -1,5 +1,6 @@
 package alia.nazeel.pages.customers;
 
+import alia.nazeel.tools.CustomWebDriverWait;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -13,14 +14,14 @@ import java.util.List;
 
 public class P34_Vendors {
     final WebDriver driver;
-    final WebDriverWait wait;
+    final CustomWebDriverWait wait;
     final Actions actions;
 
 
     public P34_Vendors(WebDriver driver) {
         PageFactory.initElements(driver, this);
         this.driver = driver;
-        wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        wait = new CustomWebDriverWait(driver, Duration.ofSeconds(10));
         actions = new Actions(driver);
     }
 

@@ -4,6 +4,7 @@ import alia.nazeel.kendoelements.Grid;
 import alia.nazeel.kendoelements.KendoDropDownList;
 import alia.nazeel.pages.mutlipurposes.P00_multiPurposes;
 
+import alia.nazeel.tools.CustomWebDriverWait;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
@@ -12,7 +13,7 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
+
 
 import java.time.Duration;
 import java.util.List;
@@ -20,7 +21,7 @@ import java.util.List;
 @SuppressWarnings("unused")
 public class P03_1_ReservationMainDataPage {
     final WebDriver driver;
-    final WebDriverWait wait;
+    final CustomWebDriverWait wait;
     final Actions actions;
 
     final JavascriptExecutor js;
@@ -29,7 +30,7 @@ public class P03_1_ReservationMainDataPage {
     public P03_1_ReservationMainDataPage(WebDriver driver) {
         PageFactory.initElements(driver, this);
         this.driver = driver;
-        wait = new WebDriverWait(this.driver, Duration.ofSeconds(10));
+        wait = new CustomWebDriverWait(this.driver, Duration.ofSeconds(10));
         actions = new Actions(this.driver);
         js = (JavascriptExecutor) this.driver;
     }
@@ -64,7 +65,7 @@ public class P03_1_ReservationMainDataPage {
     public WebElement reservationSourceDropList;
 
     public List<WebElement> reservationSources() {
-        new P00_multiPurposes(driver).waitLoading();
+       wait.waitLoading();
         wait.until(ExpectedConditions.elementToBeClickable(reservationSourceDropList));
         reservationSourceDropList.click();
         return genralListBox.findElements(By.xpath("//li[@role=\"option\"]"));

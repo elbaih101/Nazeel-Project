@@ -6,6 +6,7 @@ import alia.nazeel.pages.mutlipurposes.P00_multiPurposes;
 import alia.nazeel.pages.setuppages.P05_SetupPage;
 import alia.nazeel.pages.setuppages.properties_pages.*;
 import alia.nazeel.pojos.JsonDataTools;
+import alia.nazeel.tools.CustomWebDriverWait;
 import alia.nazeel.tools.DriverManager;
 import com.github.javafaker.Faker;
 
@@ -16,7 +17,7 @@ import io.cucumber.java.en.When;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
+
 import org.testng.asserts.SoftAssert;
 
 import java.time.Duration;
@@ -29,7 +30,7 @@ public class D02_CreateProperty {
     final WebDriver driver = DriverManager.getDriver();
     final SoftAssert asrt = new SoftAssert();
     final Actions actions = new Actions(driver);
-    final WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+    final CustomWebDriverWait wait = new CustomWebDriverWait(driver, Duration.ofSeconds(20));
     final P01_LoginPage loginPage = new P01_LoginPage(driver);
     final P02_DashBoardPage dashBoardPage = new P02_DashBoardPage(driver);
     final P05_SetupPage setupPagec = new P05_SetupPage(driver);
@@ -77,7 +78,7 @@ public class D02_CreateProperty {
         } catch (NoSuchElementException e) {
             System.out.println("property not found");
         }
-        new P00_multiPurposes(driver).waitLoading();
+        wait.waitLoading();
         //close the announcement
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(2));
         try {
@@ -121,7 +122,7 @@ public class D02_CreateProperty {
 
     @When("click on new propery button")
     public void clickOnNewProperyButton() {
-        new P00_multiPurposes(driver).waitLoading();
+        wait.waitLoading();
         propertiesPage.newPropertyButton.click();
     }
 

@@ -1,16 +1,13 @@
 package alia.nazeel.stepDefs;
 
+import alia.nazeel.tools.*;
 import io.cucumber.datatable.DataTable;
 import alia.nazeel.pages.reservations.*;
 import alia.nazeel.pojos.Tax;
-import alia.nazeel.tools.Nazeel_Calculations;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import alia.nazeel.tools.CustomAssert;
-import alia.nazeel.tools.DriverManager;
-import alia.nazeel.tools.Utils;
 import alia.nazeel.pages.P02_DashBoardPage;
 import alia.nazeel.pages.mutlipurposes.P00_multiPurposes;
 
@@ -23,7 +20,7 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.Color;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
-import org.openqa.selenium.support.ui.WebDriverWait;
+
 
 
 import java.time.Duration;
@@ -39,7 +36,7 @@ public class D01_Reservations {
     final P02_DashBoardPage homePage = new P02_DashBoardPage(driver);
     final JavascriptExecutor js = (JavascriptExecutor) driver;
     final P03_1_ReservationMainDataPage reservationMainDataPage = new P03_1_ReservationMainDataPage(driver);
-    final WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
+    final CustomWebDriverWait wait = new CustomWebDriverWait(driver, Duration.ofSeconds(15));
     final P03_5_UnitSelectionPopup unitSelectionPopup = new P03_5_UnitSelectionPopup(driver);
     final P03_6_EndReservationPopUp endReservationPopUp = new P03_6_EndReservationPopUp(driver);
     final P03_ReservationsPage reservationsPage = new P03_ReservationsPage(driver);
@@ -51,19 +48,19 @@ public class D01_Reservations {
     public void openReservationsPage() {
 
         // homePage.homePageLink.click();
-        // new P00_multiPurposes(driver).waitLoading();
+        // wait.waitLoading();
         // wait.until(ExpectedConditions.refreshed(ExpectedConditions.elementToBeClickable(homePage.ReservationsLink)));
         //     homePage.ReservationsLink.click();
         js.executeScript("arguments[0].click();", homePage.ReservationsLink);
-        new P00_multiPurposes(driver).waitLoading();
+        wait.waitLoading();
     }
 
     @When("Click on Add new Reservation")
     public void clickOnAddNewReservation() {
-        new P00_multiPurposes(driver).waitLoading();
+        wait.waitLoading();
 //        reservationPage.newReservationButton.click();
         js.executeScript("arguments[0].click();", reservationsPage.newReservationButton);
-        new P00_multiPurposes(driver).waitLoading();
+        wait.waitLoading();
     }
 
     @And("Select Reservation source {string} and visit purpose {string}")
@@ -86,7 +83,7 @@ public class D01_Reservations {
 
     @And("open unit selection Popup")
     public void openUnitSelectionPopup() {
-        new P00_multiPurposes(driver).waitLoading();
+        wait.waitLoading();
         reservationMainDataPage.addUnitButton.click();
     }
 
@@ -95,7 +92,7 @@ public class D01_Reservations {
 
         if (unit.equalsIgnoreCase("bytype")) {
             unitSelectionPopup.unitTypeButton.click();
-            new P00_multiPurposes(driver).waitLoading();
+            wait.waitLoading();
 
 
             unitSelectionPopup.addUnitOfTypeButtton(unitSelectionPopup.unitTypes.getFirst()).click();
@@ -104,7 +101,7 @@ public class D01_Reservations {
         } else {
 
             wait.until(ExpectedConditions.visibilityOf(unitSelectionPopup.unitsselectionpanel));
-            new P00_multiPurposes(driver).waitLoading();
+            wait.waitLoading();
             WebElement unitCard;
             if (unit.equalsIgnoreCase("RANDOM")) {
                 unitCard = unitSelectionPopup.availableUnits();
@@ -120,7 +117,7 @@ public class D01_Reservations {
             unitSelectionPopup.checkInConflictionConfirmBtn.getFirst().click();
         }
         confirmBtn.click();
-        new P00_multiPurposes(driver).waitLoading();
+        wait.waitLoading();
 //        wait.until(ExpectedConditions.invisibilityOf(unitCard));
     }
 
@@ -135,7 +132,7 @@ public class D01_Reservations {
     public void clickOnSaveReservationButton() {
         WebElement saveReservationButton = reservationMainDataPage.saveReservationButton;
         wait.until(ExpectedConditions.elementToBeClickable(saveReservationButton));
-        new P00_multiPurposes(driver).waitLoading();
+        wait.waitLoading();
         saveReservationButton.click();
 
     }
@@ -152,7 +149,7 @@ public class D01_Reservations {
     public void verifyToastMessageAppearsWithTextAndTheReservationStatusToBe(String successText, String reservationState) {
         WebElement succesMessage = reservationMainDataPage.toastMessage;
         asrt.assertTrue(succesMessage.getText().contains(successText), "Expected toast: " + successText + "\n actual: " + succesMessage.getText() + "\n");
-        new P00_multiPurposes(driver).waitLoading();
+        wait.waitLoading();
         WebElement resStatus = reservationMainDataPage.reservationStatus;
         asrt.assertEquals(resStatus.getText(), reservationState);
         asrt.assertAll();
@@ -162,7 +159,7 @@ public class D01_Reservations {
     @And("Choose Reservation Status as {string}")
     public void chooseReservationStatusAs(String status) {
         WebElement actionButton;
-        new P00_multiPurposes(driver).waitLoading();
+        wait.waitLoading();
         reservationMainDataPage.reservatinMoreActionsMenu.click();
         if (status.contains("In")) {
             actionButton = reservationMainDataPage.checkInMenuButton;
@@ -193,16 +190,16 @@ public class D01_Reservations {
 
                 if (!endReservationPopUp.skipButton().isEmpty()) {
                     wait.until(ExpectedConditions.refreshed(ExpectedConditions.elementToBeClickable(endReservationPopUp.skipButton().getFirst())));
-                    new P00_multiPurposes(driver).waitLoading();
+                    wait.waitLoading();
                     endReservationPopUp.skipButton().getFirst().click();
                 } else {
 
                     List<WebElement> methods = endReservationPopUp.paymentMethods();
                     wait.until(ExpectedConditions.visibilityOfAllElements(methods));
                     methods.stream().filter(method -> method.getText().contains("Cash")).toList().getFirst().click();
-                    new P00_multiPurposes(driver).waitLoading();
+                    wait.waitLoading();
                     endReservationPopUp.confirmationButton().click();
-                    new P00_multiPurposes(driver).waitLoading();
+                    wait.waitLoading();
                 }
         } else if (status.toLowerCase().contains("canceled")) {
             endReservationPopUp.confirmCancelButton().click();
@@ -210,20 +207,20 @@ public class D01_Reservations {
 
                 if (!endReservationPopUp.skipButton().isEmpty()) {
                     wait.until(ExpectedConditions.refreshed(ExpectedConditions.elementToBeClickable(endReservationPopUp.skipButton().getFirst())));
-                    new P00_multiPurposes(driver).waitLoading();
+                    wait.waitLoading();
                     endReservationPopUp.skipButton().getFirst().click();
                 } else {
                     endReservationPopUp.reasons().getFirst().click();
                     endReservationPopUp.confirmationButton().click();
                     if (!endReservationPopUp.skipButton().isEmpty()) {
                         wait.until(ExpectedConditions.refreshed(ExpectedConditions.elementToBeClickable(endReservationPopUp.skipButton().getFirst())));
-                        new P00_multiPurposes(driver).waitLoading();
+                        wait.waitLoading();
                         endReservationPopUp.skipButton().getFirst().click();
                     } else {
                         List<WebElement> methods = endReservationPopUp.paymentMethods();
                         wait.until(ExpectedConditions.visibilityOfAllElements(methods));
                         methods.stream().filter(method -> method.getText().contains("Cash")).toList().getFirst().click();
-                        new P00_multiPurposes(driver).waitLoading();
+                        wait.waitLoading();
                         endReservationPopUp.confirmationButton().click();
                         wait.until(ExpectedConditions.refreshed(ExpectedConditions.visibilityOf(endReservationPopUp.amountField())));
                     }
@@ -244,7 +241,7 @@ public class D01_Reservations {
             reservationStatus = "Canceled";
         }
         verifyToastMessageAppearsWithTextAndTheReservationStatusToBe("Saved Successfully", reservationStatus);
-        new P00_multiPurposes(driver).waitLoading();
+        wait.waitLoading();
     }
 
     public void createASuccessfullSingleReservation(String type, String source, String purpose, String unit, String guest, String state, String sDate, String eDate) {
@@ -259,7 +256,7 @@ public class D01_Reservations {
         if (state.equalsIgnoreCase("confirmed"))
             clickOnSaveReservationButton();
         else if (state.toLowerCase().contains("in"))
-            new P00_multiPurposes(driver).waitLoading();
+            wait.waitLoading();
         reservationMainDataPage.checkInButton.click();
         whenReservationSummaryDialougeAppearsClickOnSaveReservatuonButton();
     }
@@ -283,7 +280,7 @@ public class D01_Reservations {
 
     @And("elect start date {string} and end Date {string}")
     public void selectStartDateAndEndDate(String sDate, String eDate) {
-        new P00_multiPurposes(driver).waitLoading();
+        wait.waitLoading();
         if (!sDate.isEmpty())
             Utils.setDate(reservationMainDataPage.startDateField, sDate);
         if (!eDate.isEmpty())
@@ -298,7 +295,7 @@ public class D01_Reservations {
 
     @And("click on select corporate")
     public void clickOnSelectCorporate() {
-        new P00_multiPurposes(driver).waitLoading();
+        wait.waitLoading();
         reservationMainDataPage.selectCorporateButton.click();
     }
 
@@ -306,7 +303,7 @@ public class D01_Reservations {
     public void checkTheCardsCountToBeAndByLoadingMoreEachTimeNewCardsAreDisplayed() {
         asrt.assertTrue(unitSelectionPopup.unitCards.size() == 12);
         unitSelectionPopup.loadMoreLink.click();
-        new P00_multiPurposes(driver).waitLoading();
+        wait.waitLoading();
         asrt.assertTrue(unitSelectionPopup.unitCards.size() == 24);
         unitSelectionPopup.floorsPanels.forEach(f -> asrt.assertTrue(Utils.isSorted(unitSelectionPopup.unitNums(f))));
         asrt.assertAll();
@@ -315,7 +312,7 @@ public class D01_Reservations {
 
     @When("filtering with {string} as {string}")
     public void filteringWithAs(String filter, String value) {
-        new P00_multiPurposes(driver).waitLoading();
+        wait.waitLoading();
         if (!driver.findElement(By.xpath("//div[contains(@class,\"filter-form__container\")]")).getAttribute("class").contains("is-open"))
             reservationsPage.filterButton.click();
         switch (filter.toLowerCase()) {
@@ -362,7 +359,7 @@ public class D01_Reservations {
 
     @Then("check all reservations records {string} as {string}")
     public void checkAllReservationsRecordsAs(String filter, String value) {
-        new P00_multiPurposes(driver).waitLoading();
+        wait.waitLoading();
         switch (filter) {
             case "resType" -> {
                 if (value.equalsIgnoreCase("single"))
@@ -439,7 +436,7 @@ public class D01_Reservations {
 
     @And("choose page size as {string}")
     public void choosePageSizeAs(String size) {
-        new P00_multiPurposes(driver).waitLoading();
+        wait.waitLoading();
         Select s = new Select(new P00_multiPurposes(driver).pageSize);
         s.selectByValue(size);
     }
@@ -458,7 +455,7 @@ public class D01_Reservations {
 
     @Then("check the search criteria is reset")
     public void checkTheSearchCriteriaIsReset() {
-        new P00_multiPurposes(driver).waitLoading();
+        wait.waitLoading();
         Select s = new Select(new P00_multiPurposes(driver).pageSize);
         asrt.assertTrue(s.getFirstSelectedOption().getText().contains("20"));
         asrt.assertAll();
@@ -523,7 +520,7 @@ public class D01_Reservations {
     @Then("check toast messages from the list and the reservation notcreatd")
     public void checkToastMessagesFromTheListAndTheReservation(DataTable table) {
         expectedToasts = table.asList(String.class);
-        new P00_multiPurposes(driver).waitLoading();
+        wait.waitLoading();
         List<WebElement> actualToasts = new P00_multiPurposes(driver).toastMsgs;
         asrt.assertEquals(reservationMainDataPage.reservationNumber.getText(), "New reservation");
         for (String t : expectedToasts) {
@@ -542,7 +539,7 @@ public class D01_Reservations {
     @Given("open a reservation of state {string}")
     public void openAReservationOfstate(String state) {
         filteringWithAs("resstate", state);
-        new P00_multiPurposes(driver).waitLoading();
+        wait.waitLoading();
         if (!reservationsPage.reservationsNumbers.isEmpty()) {
             reservationsPage.reservationsNumbers.getFirst().click();
         }
@@ -567,9 +564,9 @@ public class D01_Reservations {
 
     @When("editing check in date to be tomorrow and saving")
     public void editingCheckInDateToBeTomorrowAndSaving() {
-        new P00_multiPurposes(driver).waitLoading();
+        wait.waitLoading();
         selectStartDateAndEndDate(DateTime.now().plusDays(1).toString(DateTimeFormat.forPattern("dd/MM/YYYY")), "");
-        new P00_multiPurposes(driver).waitLoading();
+        wait.waitLoading();
         clickOnSaveReservationButton();
     }
 
@@ -605,13 +602,13 @@ public class D01_Reservations {
             sDate = DateTime.now().minusMonths(1).toString(DateTimeFormat.forPattern("dd/MM/YYYY"));
         clickOnAddNewReservation();
         reservationMainDataPage.rentalPeriodDropList().selectByText("Monthly");
-        new P00_multiPurposes(driver).waitLoading();
+        wait.waitLoading();
         fillReservationData("single", "Random", "Random", "Random", "Random", sDate, "");
         reservationMainDataPage.rentalPeriodField.sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.BACK_SPACE));
         reservationMainDataPage.rentalPeriodField.sendKeys(rentPeriod);
-        new P00_multiPurposes(driver).waitLoading();
+        wait.waitLoading();
         saveReservationAs(resState);
-        new P00_multiPurposes(driver).waitLoading();
+        wait.waitLoading();
     }
 
     @And("Change the unit on the reservation")
@@ -625,9 +622,9 @@ public class D01_Reservations {
         selectAUnit("Random");
         wait.until(ExpectedConditions.visibilityOf(unitSelectionPopup.applyChangeUnitButton));
         unitSelectionPopup.applyChangeUnitButton.click();
-        new P00_multiPurposes(driver).waitLoading();
+        wait.waitLoading();
         clickOnSaveReservationButton();
-        new P00_multiPurposes(driver).waitLoading();
+        wait.waitLoading();
     }
 
     @Then("Check cant change callender type and start date is disabled")
@@ -646,7 +643,7 @@ public class D01_Reservations {
             checkDatesDisabled("check in");
         }
         unitsRatesPopUp.confirmRatesButton.click();
-        new P00_multiPurposes(driver).waitLoading();
+        wait.waitLoading();
         chooseReservationStatusAs("canceled");
         asrt.assertAll();
     }
@@ -678,7 +675,7 @@ public class D01_Reservations {
         selectDependent(dep);
         asrt.AssertAnyMatch(guestList.guestsGrid().getGridCells(2), (c -> c.getText().equalsIgnoreCase(dep.equalsIgnoreCase("random") ? "depndent guest" : dep)));
         guestList.confirmDependentsButton.click();
-        new P00_multiPurposes(driver).waitLoading();
+        wait.waitLoading();
     }
 
     private void selectDependent(String dep) {
@@ -686,20 +683,20 @@ public class D01_Reservations {
         guestList.nameButton.click();
         guestList.searchField.sendKeys(dep.equalsIgnoreCase("random") ? "depndent guest" : dep);
         guestList.searchButton.click();
-        new P00_multiPurposes(driver).waitLoading();
+        wait.waitLoading();
         guestList.searchGrid().getGridCells(0).stream().filter(c -> c.getText().equalsIgnoreCase(dep.equalsIgnoreCase("random") ? "depndent guest" : dep)).findFirst().orElseThrow().click();
-        new P00_multiPurposes(driver).waitLoading();
+        wait.waitLoading();
 
     }
 
     @When("checking out dependent {string}")
     public void checkingOutHeDependent(String depName) {
         reservationMainDataPage.dpendentsButton.click();
-        new P00_multiPurposes(driver).waitLoading();
+        wait.waitLoading();
         WebElement guest = guestList.guestsGrid().getGridCells(2).stream().filter(c -> c.getText().equalsIgnoreCase(depName.equalsIgnoreCase("random") ? "depndent guest" : depName)).findFirst().orElseThrow();
         guestList.checkOutGuest(guest);
         guestList.confirmDependentsButton.click();
-        new P00_multiPurposes(driver).waitLoading();
+        wait.waitLoading();
     }
 
     @Then("adding dependent {string} again Check toast message {string} and the dependet has undo chek out button")

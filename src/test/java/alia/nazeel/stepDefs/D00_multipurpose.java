@@ -1,5 +1,6 @@
 package alia.nazeel.stepDefs;
 
+import alia.nazeel.tools.CustomWebDriverWait;
 import io.cucumber.java.en.And;
 import alia.nazeel.tools.DriverManager;
 import alia.nazeel.pages.mutlipurposes.P00_multiPurposes;
@@ -18,7 +19,7 @@ public class D00_multipurpose {
 
     JavascriptExecutor js = (JavascriptExecutor) driver;
     final SoftAssert asrt = new SoftAssert();
-    final WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+    final WebDriverWait wait = new CustomWebDriverWait(driver, Duration.ofSeconds(20));
     final P00_multiPurposes multiPurposes=new P00_multiPurposes(driver);
 
 

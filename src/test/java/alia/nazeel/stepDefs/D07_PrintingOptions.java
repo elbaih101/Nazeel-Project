@@ -3,6 +3,7 @@ package alia.nazeel.stepDefs;
 import alia.nazeel.pages.P02_DashBoardPage;
 import alia.nazeel.pages.mutlipurposes.P00_multiPurposes;
 import alia.nazeel.pages.setuppages.P13_PrintingOptionsPage;
+import alia.nazeel.tools.CustomWebDriverWait;
 import alia.nazeel.tools.DriverManager;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
@@ -11,7 +12,7 @@ import alia.nazeel.pages.setuppages.P05_SetupPage;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
+
 import org.testng.asserts.SoftAssert;
 
 import java.time.Duration;
@@ -22,7 +23,7 @@ public class D07_PrintingOptions {
 
 
     final SoftAssert asrt = new SoftAssert();
-    final WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+    final CustomWebDriverWait wait = new CustomWebDriverWait(driver, Duration.ofSeconds(20));
     final P02_DashBoardPage dashBoardPage = new P02_DashBoardPage(driver);
     final P13_PrintingOptionsPage printingOptionsPage = new P13_PrintingOptionsPage(driver);
     final P05_SetupPage setupPage = new P05_SetupPage(driver);
@@ -48,7 +49,7 @@ public class D07_PrintingOptions {
 
     @When("selcting all reports and clicking {string} button and check the checkboxes are selected")
     public void selctingAllReportsAndClickingButton(String paperType) {
-        new P00_multiPurposes(driver).waitLoading();
+        wait.waitLoading();
         if (!printingOptionsPage.selectAllCheckBox.isSelected()) {
             printingOptionsPage.selectAllCheckBox.click();
         }

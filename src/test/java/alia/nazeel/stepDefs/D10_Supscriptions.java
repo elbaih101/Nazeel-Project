@@ -4,6 +4,7 @@ import alia.nazeel.enums.Services;
 import alia.nazeel.pages.P02_DashBoardPage;
 import alia.nazeel.pages.masterdata_pages.P21_SubscriptionPrices;
 import alia.nazeel.pages.mutlipurposes.P00_multiPurposes;
+import alia.nazeel.tools.CustomWebDriverWait;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -14,7 +15,7 @@ import alia.nazeel.pages.masterdata_pages.P14_MasterData;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.WebDriverWait;
+
 import org.testng.asserts.SoftAssert;
 
 import java.time.Duration;
@@ -25,7 +26,7 @@ public class D10_Supscriptions {
     final WebDriver driver = DriverManager.getDriver();
 
     final SoftAssert asrt = new SoftAssert();
-    final WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+    final CustomWebDriverWait wait = new CustomWebDriverWait(driver, Duration.ofSeconds(20));
     final P02_DashBoardPage dashBoardPage = new P02_DashBoardPage(driver);
     final P14_MasterData masterData = new P14_MasterData(driver);
     final P21_SubscriptionPrices subscriptionPrices = new P21_SubscriptionPrices(driver);
@@ -40,7 +41,7 @@ public class D10_Supscriptions {
 
     @When("adding {string} price for {string} with subscription Period {string} and price {string}")
     public void addingPriceForWithSubscriptionPeriodAndPrice(String type, String service, String period, String price) {
-        new P00_multiPurposes(driver).waitLoading();
+        wait.waitLoading();
         subscriptionPrices.newPriceButton.click();
         subscriptionPrices.popUpServicesList().stream().filter(serv -> serv.getText().toLowerCase().contains(service.toLowerCase())).toList().get(0).click();
 
@@ -110,7 +111,7 @@ public class D10_Supscriptions {
     }
 
     private WebElement createdPrice(String type, String service, String period) {
-        new P00_multiPurposes(driver).waitLoading();
+        wait.waitLoading();
         List<WebElement> servList = subscriptionPrices.services.stream().filter(serv -> serv.getText().toLowerCase().contains(service.toLowerCase())).toList();
         WebElement createdPrice = null;
         for (WebElement serv : servList) {
@@ -145,7 +146,7 @@ public class D10_Supscriptions {
 
     @Then("all Records Visible in grid are Type {string} and Service {string} and Period {string}  and status {string}")
     public void allRecordsVisibleInGridAreTypeAndAndPeriodAndStatus(String type, String service, String period, String status) {
-        new P00_multiPurposes(driver).waitLoading();
+        wait.waitLoading();
         if (!status.isEmpty()){
         asrt.assertFalse(subscriptionPrices.statuses.stream().anyMatch(stat->!stat.getText().toLowerCase().contains(status.toLowerCase())));}
         if(!service.isEmpty()){

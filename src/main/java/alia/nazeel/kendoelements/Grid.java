@@ -30,11 +30,6 @@ public class Grid implements WebElement
         return pager = grid.findElement(By.cssSelector("kendo-pager"));
     }
 
-    public List<WebElement> getGridCells(int columnIndex)
-    {
-        return list.findElements(By.xpath(".//td[@data-kendo-grid-column-index='" + columnIndex + "']")); // Assuming each column is a <td> element
-    }
-
     public void selectPageSize(int pageSize)
     {
         Select select = new Select(getPager().findElement(By.cssSelector(".n-pager__sizes kendo-pager-page-sizes select")));
@@ -51,15 +46,33 @@ public class Grid implements WebElement
         getPager().findElement(By.cssSelector("kendo-pager-prev-buttons")).click();
     }
 
+    public void gotoPage(int page)
+    {
+        for (int i = 0; i <page ; i++)
+        {
+            gotoNextPage();
+
+        }
+    }
+
     public int getTotalReocrdsSize()
     {
         return Integer.parseInt(getPager().findElement(By.cssSelector(".n-pager__info>span:last-of-type")).getText().replace(" of ", ""));
     }
-    public int getPageSize(){
+
+    public int getPageSize()
+    {
         return Integer.parseInt(getPager().findElement(By.cssSelector(".n-pager__sizes kendo-pager-page-sizes select")).getAttribute("value"));
     }
-    public int getCurrentPage(){
-        return (int) Math.ceil( (double) Integer.parseInt(getPager().findElement(By.cssSelector("span.pagedir2")).getText().replace(" of ", "")) /(double) getPageSize());
+
+    public int getCurrentPage()
+    {
+        return (int) Math.ceil((double) Integer.parseInt(getPager().findElement(By.cssSelector("span.pagedir2")).getText().replace(" of ", "")) / (double) getPageSize());
+    }
+
+    public List<WebElement> getGridCells(int columnIndex)
+    {
+        return list.findElements(By.xpath(".//td[@data-kendo-grid-column-index='" + columnIndex + "']")); // Assuming each column is a <td> element
     }
 
     public WebElement getGridCell(int rowIndex, int columnIndex)

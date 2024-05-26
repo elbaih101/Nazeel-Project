@@ -4,6 +4,7 @@ package alia.nazeel.pages.vouchersPages;
 import alia.nazeel.enums.Vouchers;
 import alia.nazeel.pages.mutlipurposes.P00_multiPurposes;
 
+import alia.nazeel.tools.CustomWebDriverWait;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -11,7 +12,6 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 
 import java.time.Duration;
@@ -22,14 +22,14 @@ import java.util.Objects;
 public class P10_VouchersPage {
 
     final WebDriver driver;
-    final WebDriverWait wait;
+    final CustomWebDriverWait wait;
     final Actions actions;
 
 
     public P10_VouchersPage(WebDriver driver) {
         PageFactory.initElements(driver, this);
         this.driver = driver;
-        wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        wait = new CustomWebDriverWait(driver, Duration.ofSeconds(10));
         actions = new Actions(driver);
     }
 
@@ -50,7 +50,7 @@ public class P10_VouchersPage {
 
     public WebElement digialPaymentButton() {
         wait.until(ExpectedConditions.elementToBeClickable(moreAddOptionsButton));
-        new P00_multiPurposes(driver).waitLoading();
+       wait.waitLoading();
         moreAddOptionsButton.click();
         return digitalPaymentOption;
     }
