@@ -56,6 +56,8 @@ Feature: Making Reservation with Nazeel PMS (web application)
         | resState | On Departure Reservations (Not Checked-Out) |
 
 
+    # todo Resetting search filters
+
     @filter_Reservation_by_corporate @28509
     Scenario: Check Search With Corporate feature
       When filtering with "corporate" as "corp data related"

@@ -74,7 +74,7 @@ public class D09_Rates {
             ratesPages.minimumMonthlyRates.forEach(WebElement::clear);
             ratesPages.minimumMonthlyRates.forEach(rate -> rate.sendKeys(monMin));}
         } else {
-            WebElement selectedType = ratesPages.unitTypes.stream().filter(type -> type.getText().toLowerCase().contains(typeName.toLowerCase())).toList().get(0);
+            WebElement selectedType = ratesPages.unitTypes.stream().filter(type -> type.getText().toLowerCase().contains(typeName.toLowerCase())).toList().getFirst();
             ratesPages.lowRate(selectedType).clear();
             ratesPages.lowRate(selectedType).sendKeys(low);
             ratesPages.highRate(selectedType).clear();

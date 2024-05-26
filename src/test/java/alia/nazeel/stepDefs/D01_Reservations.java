@@ -43,10 +43,11 @@ public class D01_Reservations {
     final P03_5_UnitSelectionPopup unitSelectionPopup = new P03_5_UnitSelectionPopup(driver);
     final P03_6_EndReservationPopUp endReservationPopUp = new P03_6_EndReservationPopUp(driver);
     final P03_ReservationsPage reservationsPage = new P03_ReservationsPage(driver);
+    final P03_8_UnitsRatesPopUp unitsRatesPopUp = new P03_8_UnitsRatesPopUp(driver);
+    final P03_9_GuestList guestList = new P03_9_GuestList(driver);
     final CustomAssert asrt = new CustomAssert();
     final Actions action = new Actions(driver);
 
-    final P03_8_UnitsRatesPopUp unitsRatesPopUp = new P03_8_UnitsRatesPopUp(driver);
 
     @And("open reservations Page")
     public void openReservationsPage() {
@@ -98,7 +99,7 @@ public class D01_Reservations {
             unitSelectionPopup.unitTypeButton.click();
             new P00_multiPurposes(driver).waitLoading();
 
-                unitSelectionPopup.addUnitOfTypeButtton(unitSelectionPopup.unitTypes.getFirst()).click();
+            unitSelectionPopup.addUnitOfTypeButtton(unitSelectionPopup.unitTypes.getFirst()).click();
 
 
         } else {
@@ -244,6 +245,7 @@ public class D01_Reservations {
             reservationStatus = "Canceled";
         }
         verifyToastMessageAppearsWithTextAndTheReservationStatusToBe("Saved Successfully", reservationStatus);
+        new P00_multiPurposes(driver).waitLoading();
     }
 
     public void createASuccessfullSingleReservation(String type, String source, String purpose, String unit, String guest, String state, String sDate, String eDate) {
@@ -258,6 +260,7 @@ public class D01_Reservations {
         if (state.equalsIgnoreCase("confirmed"))
             clickOnSaveReservationButton();
         else if (state.toLowerCase().contains("in"))
+            new P00_multiPurposes(driver).waitLoading();
             reservationMainDataPage.checkInButton.click();
         whenReservationSummaryDialougeAppearsClickOnSaveReservatuonButton();
     }
@@ -380,9 +383,9 @@ public class D01_Reservations {
     }
 
     private void assertReservationsStstuses(String value) {
-        DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern("YYYY-MM-DD");
+        DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern("dd/MM/YYYY");
         switch (value) {
-
+            //fixme add more status
             case "Confirmed", "CheckedIn", "" ->
                     assertReservationsStatus(reservationsPage.reservationsStatuses, value, "status not filtered right");
             case "All Reservations" -> {
@@ -657,7 +660,7 @@ public class D01_Reservations {
     @Then("add dependent to single reservtion {string}")
     public void addDependentToSingleReservtion(String depName) {
         reservationMainDataPage.dpendentsButton.click();
-        reservationMainDataPage.addDependentButton.click();
+        guestList.addDependentButton.click();
         new D06_DigitalPayment().selectGuest(depName, "", "");
     }
 
@@ -665,5 +668,47 @@ public class D01_Reservations {
     public void checkAllSelectedunitsAreByType() {
         asrt.AssertNonMatch(reservationMainDataPage.resUnits(), i -> !i.getText().equals("---"));
         asrt.assertAll();
+    }
+
+    @And("add dependent {string} to the the room {string} and save")
+    public void addADependentToTheTheRoomAndSave(String dep, String roomNum) {
+        reservationMainDataPage.dpendentsButton.click();
+
+        selectDependent(dep);
+        asrt.AssertAnyMatch(guestList.guestsGrid().getGridCells(2), (c -> c.getText().equalsIgnoreCase(dep.equalsIgnoreCase("random") ? "depndent guest" : dep)));
+        guestList.confirmDependentsButton.click();
+        new P00_multiPurposes(driver).waitLoading();
+    }
+
+    private void selectDependent(String dep) {
+        guestList.reservationRooms().selectByIndex(0);
+        guestList.nameButton.click();
+        guestList.searchField.sendKeys(dep.equalsIgnoreCase("random") ? "depndent guest" : dep);
+        guestList.searchButton.click();
+        new P00_multiPurposes(driver).waitLoading();
+        guestList.searchGrid().getGridCells(0).stream().filter(c -> c.getText().equalsIgnoreCase(dep.equalsIgnoreCase("random") ? "depndent guest" : dep)).findFirst().orElseThrow().click();
+        new P00_multiPurposes(driver).waitLoading();
+
+    }
+
+    @When("checking out dependent {string}")
+    public void checkingOutHeDependent(String depName) {
+        reservationMainDataPage.dpendentsButton.click();
+        new P00_multiPurposes(driver).waitLoading();
+        WebElement guest = guestList.guestsGrid().getGridCells(2).stream().filter(c -> c.getText().equalsIgnoreCase(depName.equalsIgnoreCase("random") ? "depndent guest" : depName)).findFirst().orElseThrow();
+        guestList.checkOutGuest(guest);
+        guestList.confirmDependentsButton.click();
+        new P00_multiPurposes(driver).waitLoading();
+    }
+
+    @Then("adding dependent {string} again Check toast message {string} and the dependet has undo chek out button")
+    public void addingTheSameDependentAgainCheckToastMessageAndTheDependetHasUndoChekOutButton(String depName,String msg) {
+        reservationMainDataPage.dpendentsButton.click();
+        WebElement guest = guestList.guestsGrid().getGridCells(2).stream().filter(c -> c.getText().equalsIgnoreCase(depName.equalsIgnoreCase("random") ? "depndent guest" : depName)).findFirst().orElseThrow();
+        selectDependent("random");
+        new D03_BlocksAndFloors().checkToastMesageContainsText(msg);
+        asrt.assertTrue(guestList.guestsGrid().getGridCell(guest, 7).findElement(By.xpath(".//button[contains(@class,\"button--green\")]")).isDisplayed());
+        asrt.assertAll();
+        guestList.confirmDependentsButton.click();
     }
 }

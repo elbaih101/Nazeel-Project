@@ -1,5 +1,6 @@
 package alia.nazeel.pages.mutlipurposes;
 
+import alia.nazeel.kendoelements.SwalPopUp;
 import org.apache.commons.lang3.StringUtils;
 import alia.nazeel.tools.CustomAssert;
 import alia.nazeel.tools.Utils;
@@ -140,7 +141,7 @@ public class P00_multiPurposes {
     public WebElement popUp;
 
     public WebElement closeButton() {
-        List<WebElement> buttons ;
+        List<WebElement> buttons;
         buttons = popUp.findElements(By.xpath(".//button[contains(text(),\"Close\")]"));
         if (buttons.isEmpty()) {
             buttons = popUp.findElements(By.xpath(".//button[contains(@class,\"n-button--danger-border\")]"));
@@ -148,5 +149,11 @@ public class P00_multiPurposes {
 
 
         return buttons.getFirst();
+    }
+
+    @FindBy(xpath = "//div[contains(@class,\"swal2-container\")]")
+    WebElement swalPopUp;
+    public SwalPopUp swalPopUp(){
+        return new SwalPopUp(swalPopUp);
     }
 }

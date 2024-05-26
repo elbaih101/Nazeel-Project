@@ -80,13 +80,10 @@ public class P03_1_ReservationMainDataPage {
     @FindBy(xpath = "//kendo-popup//li[contains(text(),\"Family or friends\")]")
     public WebElement familyOrFriendsSelection;
 
-    ////Reservation Guest List Wizard /////
-    @FindBy(xpath = "//reservation-guest-list-wizard//button[contains(@class,\"green-border\")]")
-    public WebElement addDependentButton;
 
     @FindBy(xpath = "//span[contains(text(),\"Select guest now\")]/..")
     public WebElement selectGestButton;
-    @FindBy(xpath = "//app-guests-step//span[contains(text(),\"Dependents\")]")
+    @FindBy(xpath = "//app-guests-step//div[contains(@class,\"primary-link\")]/span")
     public WebElement dpendentsButton;
     @FindBy(id = "guestFormDialogContainer")
     public WebElement guestFormDialogContainer;

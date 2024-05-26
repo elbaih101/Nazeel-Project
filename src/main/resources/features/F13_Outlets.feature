@@ -171,4 +171,6 @@ Feature: Outlets Feature
     Scenario: check userDefined item Price is rewritable
       When selecting item "user defined" from outlet "1"
       Then  check item price is rewritable
+
  # TODO : REceipts and Refunds on wlakin Orders
+  #Todo Check tax exempted items doent have applied taxes

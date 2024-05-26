@@ -199,9 +199,9 @@ Feature: Unit Setup
     Given delete any merge setting and note the related units
     Then Check toast mesage contains text "Unit Merge Deleted Successfully"
     And check the units no more merged
-## end Merge Settings ##
-    ## Rates Customization ##
+    ## end Merge Settings ##
 
+    ## Rates Customization ##
   @Rates
   Rule: Base Rate Customization
     #noinspection GherkinMisplacedBackground
@@ -288,9 +288,9 @@ Feature: Unit Setup
     And select a unit "RANDOM"
     Then Check the rent to equal "<low>"
     Examples:
-      | rateType | rateName      | sDate    | eDate    | low | min | msg                |
-      | seasonal | seasonal rate | 20022024 | 21022024 | 200 | 120 | Added Successfully |
-      | special  | special rate  | 20022024 | 21022024 | 300 | 100 | Added Successfully |
+      | rateType | rateName      | sDate      | eDate      | low | min | msg                |
+      | seasonal | seasonal rate | 20/02/2024 | 21/02/2024 | 200 | 120 | Added Successfully |
+      | special  | special rate  | 20/02/2024 | 21/02/2024 | 300 | 100 | Added Successfully |
 ## end Rates Customization ##
   @Amenities
   Rule:unit amenities settings
@@ -304,6 +304,7 @@ Feature: Unit Setup
     Then Check toast mesage contains text "Amenity added successfully"
     And Check the newly added amenity is added
 
+    #Todo Check amenity removed from rooms when inactive
   Scenario: edit unit amenity
     Given edit unit amenity description "the newly added description" and state "inactive"
     Then  Check toast mesage contains text "Amenity updated successfully"
@@ -320,3 +321,4 @@ Feature: Unit Setup
       | amenity    | msg                                                      |
       | nonRelated | Amenity deleted successfully                             |
       | related    | Can not delete this amenity because it has related units |
+

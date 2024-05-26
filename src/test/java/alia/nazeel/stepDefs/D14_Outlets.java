@@ -657,6 +657,7 @@ public class D14_Outlets {
                 outlets.selctGuestButton.click();
                 new D06_DigitalPayment().selectGuest("Random", "", "");
             }
+            //Fixme fix the date format
             switch (issueDate.toLowerCase()) {
                 case "futuredate" ->
                         Utils.setDate(outlets.issueDateField, DateTimeFormat.forPattern("MM/dd/yyyy").print(DateTime.now().plusDays(1)));
