@@ -2,12 +2,13 @@ package alia.nazeel.kendoelements;
 
 import alia.nazeel.tools.Utils;
 import org.openqa.selenium.*;
+import org.openqa.selenium.interactions.Actions;
 
 import java.util.List;
 
 public class KendoDropDownList implements WebElement {
 
-    WebElement DropDownlist;
+    WebElement dropDownlist;
     final By dropDownButtonBy = By.xpath(".//span[@class=\"k-select\"]");
     final By listItemsBy = By.xpath("//ul[@role=\"listbox\"]//li[@role=\"option\"]");
     WebElement dropDownButton;
@@ -15,7 +16,7 @@ public class KendoDropDownList implements WebElement {
     WebElement selectedItem;
 
     public KendoDropDownList(WebElement list) {
-        this.DropDownlist = list;
+        this.dropDownlist = list;
     }
 
     public KendoDropDownList() {
@@ -23,7 +24,7 @@ public class KendoDropDownList implements WebElement {
     }
 
     public void getDropDownButton() {
-        dropDownButton = DropDownlist.findElement(dropDownButtonBy);
+        dropDownButton = dropDownlist.findElement(dropDownButtonBy);
     }
 
     public void open() {
@@ -33,7 +34,7 @@ public class KendoDropDownList implements WebElement {
 
     public List<WebElement> getListItems() {
         open();
-        return  listItems = DropDownlist.findElements(listItemsBy);
+        return  listItems = dropDownlist.findElements(listItemsBy);
     }
 
     public void selectByText(String text) {
@@ -60,7 +61,11 @@ public class KendoDropDownList implements WebElement {
         Utils.sleep(300);
         selectedItem.click();
     }
-
+    public void clearSelection(WebDriver driver) {
+        Actions action = (Actions) driver;
+        WebElement clear = dropDownlist.findElement(By.xpath(".//span[contains(@class,\"k-clear-value\")]"));
+        action.moveToElement(dropDownlist, 3, 4).click().perform();
+    }
     @Override
     public void click() {
 
