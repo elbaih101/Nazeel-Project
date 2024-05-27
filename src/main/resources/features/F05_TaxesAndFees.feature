@@ -13,7 +13,7 @@ Feature: Property Taxes and Fees setup
       Given create new type "<type>" with name "<name>" and method "<method>" and amount "<amount>" applied on "<aplied>" and start date "<sDate>" end date "<eDate>" Charged on "<chargedOn>"
       Then Check toast mesage contains text "<msg>"
       And Check the type "<type>"  with name "<name>" and method "<method>" and amount "<amount>" applied on "<aplied>" and start date "<sDate>" end date "<eDate>" Charged on "<chargedOn>" status "<stat>"
-      And Check the tax "<name>" is applied on the reservations
+      And Check the tax "<name>" application on the reservations
       Examples:
         | type | name    | method                 | amount | aplied | sDate      | eDate      | chargedOn | stat   | msg                                               |
         | Fee  | Lodging | Percentage             | non    |        | 20/12/2023 | 21/12/2023 |           | Active | Enter an amount                                   |
@@ -29,6 +29,7 @@ Feature: Property Taxes and Fees setup
       Given  edit customization "<name>" method "<method>" amount "<amount>" applied on "<aplied>" startDate "<sDate>" endDate "<eDate>" Charged on "<chargedOn>" status "<stat>"
       Then Check toast mesage contains text "<msg>"
       And Check the type "<type>"  with name "<name>" and method "<method>" and amount "<amount>" applied on "<aplied>" and start date "<sDate>" end date "<eDate>" Charged on "<chargedOn>" status "<stat>"
+      And Check the tax "<name>" application on the reservations
       Examples:
         | type | name    | method           | amount | aplied | sDate      | eDate      | chargedOn | stat     | msg                                               |
         |      | VAT     | non              |        |        |            |            |           |          | Select the method                                 |
@@ -66,4 +67,3 @@ Feature: Property Taxes and Fees setup
         | Inclusive |
         | Exclusive |
 
-  #Todo incase inactive not applied on reservation

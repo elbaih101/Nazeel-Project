@@ -233,7 +233,7 @@ public class D12_Financials {
         }
     }
 
-    @And("Check the tax {string} is applied on the reservations")
+    @And("Check the tax {string} application on the reservations")
     public void checkTheTaxIsAppliedOnTheReservations(String taxName) {
         if (!(taxMap.get("aplOn").equalsIgnoreCase("non") || taxMap.get("amount").equalsIgnoreCase("non") || taxMap.get("method").equalsIgnoreCase("non") || taxMap.get("sDate").equalsIgnoreCase("non") || dateFormater.parseDateTime(taxMap.get("eDate")).isBefore(dateFormater.parseDateTime(taxMap.get("sDate"))))) {
             if (taxMap.get("stat").toLowerCase().contains("active")) {
@@ -246,7 +246,6 @@ public class D12_Financials {
                 asrt.assertEquals(taxMap.get("sDate"), taxesPopUp.taxStartDate(selectedTax).getText());
                 asrt.assertEquals(taxMap.get("eDate"), taxesPopUp.taxEndDate(selectedTax).getText());
             } else {
-
                 asrt.assertFalse(taxesPopUp.taxesNames.stream().anyMatch(t -> t.getText().contains(taxMap.get("name"))));
             }
             asrt.assertAll();
