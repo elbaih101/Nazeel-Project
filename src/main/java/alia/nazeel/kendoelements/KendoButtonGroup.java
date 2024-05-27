@@ -10,6 +10,10 @@ public class KendoButtonGroup implements WebElement
     By buttonGroupBy = new By.ByTagName("kendo-buttongroup");
     final By buttonsBy = By.xpath(".//button");
 
+    public KendoButtonGroup(WebElement element) {
+        this.buttonGroup =element;
+    }
+
 
     public void selectButtonByName(String name)
     {
