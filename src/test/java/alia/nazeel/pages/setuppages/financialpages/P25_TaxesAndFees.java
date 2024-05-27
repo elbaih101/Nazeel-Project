@@ -1,5 +1,7 @@
 package alia.nazeel.pages.setuppages.financialpages;
 
+import alia.nazeel.kendoelements.KendoComboBox;
+import alia.nazeel.kendoelements.KendoMultiSelect;
 import alia.nazeel.tools.CustomWebDriverWait;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -52,8 +54,27 @@ public class P25_TaxesAndFees {
         wait.until(ExpectedConditions.visibilityOfAllElements(listItems));
         return listItems;
     }
-
     /////end controls /////
+    //filters//
+    @FindBy(id="status")
+    WebElement statusComboBox;
+    public KendoComboBox statusComboBox(){
+        return  new KendoComboBox(statusComboBox);
+    }
+    @FindBy(tagName = "kendo-multiselect")
+    WebElement appliedOnMultiSelect;
+    public KendoMultiSelect appliedOnMultiSelect(){
+        return new KendoMultiSelect(appliedOnMultiSelect);
+    }
+    @FindBy(xpath = "//label[contains(text(),\"Method\")]/following-sibling::kendo-combobox")
+    WebElement methodComboBox;
+    public KendoComboBox methodComboBox(){
+        return  new KendoComboBox(methodComboBox);
+    }
+    @FindBy(css = "input[placeholder=\"Tax Name\"]")
+    public WebElement taxNameFilterField;
+    //end filters //
+
     //// grid ////
     @FindBy(xpath = "//td[@data-kendo-grid-column-index=\"0\"]")
     public List<WebElement> names;
@@ -64,7 +85,7 @@ public class P25_TaxesAndFees {
     @FindBy(xpath = "//td[@data-kendo-grid-column-index=\"3\"]")
     public List<WebElement> appliedOns;
     @FindBy(xpath = "//td[@data-kendo-grid-column-index=\"4\"]")
-    List<WebElement> methods;
+    public List<WebElement> methods;
     @FindBy(xpath = "//td[@data-kendo-grid-column-index=\"5\"]")
     public List<WebElement> amounts;
     @FindBy(xpath = "//td[@data-kendo-grid-column-index=\"6\"]")

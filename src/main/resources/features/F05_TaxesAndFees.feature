@@ -38,6 +38,17 @@ Feature: Property Taxes and Fees setup
         |      | Tourism |                  |        |        | 22/12/2023 | 21/12/2023 |           |          | Start Date/Time must be before Than End Date/Time |
         |      | Tourism | Amount Per Night | 200    |        | 20/12/2023 | 21/12/2023 |           | inactive | Saved Successfully                                |
 
+
+    Scenario Outline: filter Taxes and Fees
+      When  filtering taxes With "<filter>" as "<value>"
+      Then  Check record's "<filter>" as "<value>"
+      Examples:
+        | filter     | value      |
+        | status     | inactive   |
+        | name       | VAT        |
+        | applied on | rent       |
+        | method     | Percentage |
+
     Scenario Outline: deleting tax customization
       Given delete the customizatiin "<tax>"
       And  Check msg "<msg>" and the tax "<tax>" is not visible on grid

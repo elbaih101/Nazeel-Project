@@ -10,6 +10,7 @@ import alia.nazeel.pages.setuppages.financialpages.P28_DiscountTypes;
 import alia.nazeel.pages.setuppages.financialpages.P29_Currencies;
 import alia.nazeel.pages.vouchersPages.P10_VouchersPage;
 import alia.nazeel.pages.vouchersPages.P16_VouchersPopUp;
+import alia.nazeel.tools.CustomAssert;
 import alia.nazeel.tools.CustomWebDriverWait;
 import alia.nazeel.tools.Utils;
 import io.cucumber.java.en.And;
@@ -27,7 +28,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
-import org.testng.asserts.SoftAssert;
+
 
 import java.time.Duration;
 import java.util.ArrayList;
@@ -39,7 +40,7 @@ public class D12_Financials {
     final WebDriver driver = DriverManager.getDriver();
 
     // JavascriptExecutor js = (JavascriptExecutor) driver;
-    final SoftAssert asrt = new SoftAssert();
+    final CustomAssert asrt = new CustomAssert();
     final CustomWebDriverWait wait = new CustomWebDriverWait(driver, Duration.ofSeconds(20));
     final P02_DashBoardPage dashBoardPage = new P02_DashBoardPage(driver);
     final P05_SetupPage setupPage = new P05_SetupPage(driver);
@@ -242,8 +243,8 @@ public class D12_Financials {
                 if (taxMap.get("method").contains("Percentage")) {
                     asrt.assertTrue(taxesPopUp.taxMethod(selectedTax).getText().contains("%"));
                 }
-                asrt.assertEquals(taxMap.get("sDate"),taxesPopUp.taxStartDate(selectedTax).getText());
-                asrt.assertEquals(taxMap.get("eDate"),taxesPopUp.taxEndDate(selectedTax).getText());
+                asrt.assertEquals(taxMap.get("sDate"), taxesPopUp.taxStartDate(selectedTax).getText());
+                asrt.assertEquals(taxMap.get("eDate"), taxesPopUp.taxEndDate(selectedTax).getText());
             } else {
 
                 asrt.assertFalse(taxesPopUp.taxesNames.stream().anyMatch(t -> t.getText().contains(taxMap.get("name"))));
@@ -680,6 +681,32 @@ public class D12_Financials {
             List<WebElement> currencies = new P16_VouchersPopUp(driver).currenciesList();
             asrt.assertFalse(currencies.stream().anyMatch(c -> c.getText().equalsIgnoreCase(currencyMap.get("symbol"))));
 
+        }
+        asrt.assertAll();
+    }
+
+    @When("filtering taxes With {string} as {string}")
+    public void filteringTaxesWithAs(String filter, String value) {
+        taxesAndFees.filterButton.click();
+
+        switch (filter.toLowerCase()) {
+            case "status" -> taxesAndFees.statusComboBox().selectByTextContainsIgnoreCase(value);
+            case "name" -> taxesAndFees.taxNameFilterField.sendKeys(value);
+            case "applied on" -> taxesAndFees.appliedOnMultiSelect().selectByTextContainsIgnoreCase(value);
+            case "method" -> taxesAndFees.methodComboBox().selectByTextContainsIgnoreCase(value);
+        }
+        taxesAndFees.searchButton.click();
+        wait.waitLoading();
+    }
+
+    @Then("Check record's {string} as {string}")
+    public void checkRecordSAs(String filter, String value) {
+
+        switch (filter.toLowerCase()) {
+            case "status" -> asrt.AssertNonMatch(taxesAndFees.statuses,s->!s.getText().toLowerCase().contains(value.toLowerCase()));
+            case "name" -> asrt.AssertNonMatch(taxesAndFees.names,n->!n.getText().toLowerCase().contains(value.toLowerCase()));
+            case "applied on" -> asrt.AssertAnyMatch(taxesAndFees.appliedOns,c->!c.getText().toLowerCase().contains("all")||!c.getText().toLowerCase().contains(value.toLowerCase()));
+            case "method" -> asrt.AssertNonMatch(taxesAndFees.methods,m->!m.getText().toLowerCase().contains(value.toLowerCase()));
         }
         asrt.assertAll();
     }

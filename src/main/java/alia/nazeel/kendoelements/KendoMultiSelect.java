@@ -9,7 +9,6 @@ import java.util.List;
 public class KendoMultiSelect implements WebElement
 {
     WebElement multiSelect;
-    @SuppressWarnings("SpellCheckingInspection")
     final By listItemsBy = By.xpath("//ul[@role=\"listbox\"]//li[@role=\"option\"]");
     final By checkbox = By.xpath("./input");
     private List<WebElement> listItems;
@@ -26,7 +25,7 @@ public class KendoMultiSelect implements WebElement
     }
 
 
-    public void open()
+     void open()
     {
         multiSelect.click();
     }
