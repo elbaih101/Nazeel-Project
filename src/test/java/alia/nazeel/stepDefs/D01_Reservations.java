@@ -22,7 +22,6 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 
 
-
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
@@ -44,6 +43,7 @@ public class D01_Reservations {
     final P03_9_GuestList guestList = new P03_9_GuestList(driver);
     final CustomAssert asrt = new CustomAssert();
     final Actions action = new Actions(driver);
+
     @And("open reservations Page")
     public void openReservationsPage() {
 
@@ -116,11 +116,13 @@ public class D01_Reservations {
         if (!unitSelectionPopup.checkInConflictionConfirmBtn.isEmpty()) {
             unitSelectionPopup.checkInConflictionConfirmBtn.getFirst().click();
         }
-        confirmBtn.click();
+        //here iam doing two steps getting tax calculation method and clicking the confirm button
+        taxCalcMethod = Nazeel_Calculations.getTaxCalculationMethod(driver, confirmBtn::click);
         wait.waitLoading();
 //        wait.until(ExpectedConditions.invisibilityOf(unitCard));
     }
 
+    int taxCalcMethod;
 
     @And("click on selectguest now button")
     public void clickOnSelectguestNowButton() {
@@ -479,7 +481,7 @@ public class D01_Reservations {
         for (String discType : discountsTypes) {
             financialPage.discountsList().stream().filter(d -> d.getText().equalsIgnoreCase(discType)).findFirst().orElseThrow().click();
             Double discountAmount = Nazeel_Calculations.getDiscountAmount(financialPage.reservationRent(), discountValue, discType);
-            Double reservationRentTaxes = Nazeel_Calculations.reservationRentTaxes(financialPage.reservationRent(), discountAmount, discType, appliedTaxes);
+            Double reservationRentTaxes = Nazeel_Calculations.reservationRentTaxes(financialPage.reservationRent(), discountAmount, discType, appliedTaxes,taxCalcMethod);
             Double subTotal = discType.contains("From Balance") ? financialPage.reservationRent() : financialPage.reservationRent() - discountAmount;
             Double total;
             asrt.assertTrue(reservationRentTaxes.equals(financialPage.reservationTaxes()), "Calculated Tax = " + reservationRentTaxes + "\n Found Taxes = " + financialPage.reservationTaxes());

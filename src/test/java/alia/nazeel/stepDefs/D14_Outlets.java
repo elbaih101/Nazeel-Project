@@ -2,10 +2,7 @@ package alia.nazeel.stepDefs;
 
 import alia.nazeel.pages.setuppages.outlets.P32_OutletItems;
 import alia.nazeel.tools.*;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import com.google.gson.*;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -33,8 +30,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-public class D14_Outlets
-{
+public class D14_Outlets {
 
     final WebDriver driver = DriverManager.getDriver();
     final JavascriptExecutor js = (JavascriptExecutor) driver;
@@ -49,16 +45,14 @@ public class D14_Outlets
     final P38_Outlets outlets = new P38_Outlets(driver);
 
     @Given("go to outlets Setup Page")
-    public void goToOutletsSetupPage()
-    {
+    public void goToOutletsSetupPage() {
         dashBoardPage.setupPageLink.click();
         setupPage.outletsDropList.click();
         setupPage.outletSetupLink.click();
     }
 
     @When("creating outlet with opState {string} and code {string} and name {string} description {string}")
-    public void creatingOutletWithOpStateAndCodeAndNameDescription(String opState, String code, String name, String desc)
-    {
+    public void creatingOutletWithOpStateAndCodeAndNameDescription(String opState, String code, String name, String desc) {
         outletsSetup.newOutletButton.click();
         fillOutletData(opState, code, name, desc, "new");
         outletsSetup.submitButton.click();
@@ -66,8 +60,7 @@ public class D14_Outlets
 
     final HashMap<String, String> outletMap = new HashMap<>();
 
-    private void setOutletMap(String opState, String code, String name, String desc, String state)
-    {
+    private void setOutletMap(String opState, String code, String name, String desc, String state) {
         if (!opState.isEmpty())
             outletMap.put("opState", opState);
         if (!code.isEmpty())
@@ -81,28 +74,24 @@ public class D14_Outlets
         //outletMap.putAll(Map.of("opState", opState, "code", code, "name", name, "desc", desc, "state", state));
     }
 
-    private void fillOutletData(String opState, String code, String name, String desc, String state)
-    {
+    private void fillOutletData(String opState, String code, String name, String desc, String state) {
         if (!opState.isEmpty())
             if (opState.equalsIgnoreCase("non"))
                 js.executeScript("arguments[0].click();", outletsSetup.clearOpStateSelection);
             else
                 outletsSetup.opStatusesList().stream().filter(o -> o.getText().equalsIgnoreCase(opState)).findFirst().orElseThrow().click();
-        if (!code.isEmpty())
-        {
+        if (!code.isEmpty()) {
             outletsSetup.outletCodeField.sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.BACK_SPACE));
             if (!code.equalsIgnoreCase("non"))
                 outletsSetup.outletCodeField.sendKeys(code);
         }
-        if (!name.isEmpty())
-        {
+        if (!name.isEmpty()) {
             outletsSetup.outletNameField.sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.BACK_SPACE));
             new P00_multiPurposes(driver).secondLanguageField(outletsSetup.outletNameField).sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.BACK_SPACE));
             if (!name.equalsIgnoreCase("non"))
                 outletsSetup.outletNameField.sendKeys(name);
         }
-        if (!desc.isEmpty())
-        {
+        if (!desc.isEmpty()) {
             outletsSetup.descriptionField.clear();
             if (!desc.equalsIgnoreCase("non"))
                 outletsSetup.descriptionField.sendKeys(desc);
@@ -117,12 +106,10 @@ public class D14_Outlets
 
 
     @Then("Check msg {string} and the outlet in the grid")
-    public void checkMsgAndTheOutletInTheGrid(String msg)
-    {
+    public void checkMsgAndTheOutletInTheGrid(String msg) {
         new D03_BlocksAndFloors().checkToastMesageContainsText(msg);
 
-        if (msg.contains("Successfully"))
-        {
+        if (msg.contains("Successfully")) {
             wait.waitLoading();
             WebElement selectedOutlet = outletsSetup.codes.stream().filter(c -> c.getText().equalsIgnoreCase(outletMap.get("code"))).findAny().orElseThrow();
             asrt.assertTrue(outletsSetup.outletOPStatus(selectedOutlet).getText().equalsIgnoreCase(outletMap.get("opState")));
@@ -139,8 +126,7 @@ public class D14_Outlets
     }
 
     @When("editing Outlet {string} opState {string} and code {string} and name {string} description {string} state {string}")
-    public void editingOutletOpStateAndCodeAndNameDescription(String oName, String opState, String code, String nName, String desc, String state)
-    {
+    public void editingOutletOpStateAndCodeAndNameDescription(String oName, String opState, String code, String nName, String desc, String state) {
         WebElement selectedOutlet = extractOutlet(oName);
         outletsSetup.outletEditButton(selectedOutlet).click();
         wait.waitLoading();
@@ -149,8 +135,7 @@ public class D14_Outlets
 
     }
 
-    private WebElement extractOutlet(String outletName)
-    {
+    private WebElement extractOutlet(String outletName) {
         WebElement selectedOutlet = outletsSetup.names.stream().filter(n -> n.getText().equalsIgnoreCase(outletName)).findAny().orElseThrow();
         String outletStat = "Active";
         if (outletsSetup.outletStatus(selectedOutlet).getAttribute("xlink:href").contains("icon-minus"))
@@ -160,15 +145,12 @@ public class D14_Outlets
     }
 
     @When("Filtering With {string} as {string}")
-    public void filteringWithAs(String filter, String value)
-    {
+    public void filteringWithAs(String filter, String value) {
         outletsSetup.filterButton.click();
-        switch (filter.toLowerCase())
-        {
+        switch (filter.toLowerCase()) {
             case "status" ->
                     outletsSetup.statusesFilterList().stream().filter(s -> s.getText().equalsIgnoreCase(value)).findAny().orElseThrow().click();
-            case "name" ->
-            {
+            case "name" -> {
                 outletsSetup.nameFilterField.click();
                 outletsSetup.nameFilterField.sendKeys(value);
             }
@@ -180,15 +162,11 @@ public class D14_Outlets
     }
 
     @Then("check all visible records {string} as {string}")
-    public void checkAllVisibleRecordsAs(String filter, String value)
-    {
+    public void checkAllVisibleRecordsAs(String filter, String value) {
         wait.waitLoading();
-        switch (filter.toLowerCase())
-        {
-            case "status" ->
-            {
-                switch (value.toLowerCase())
-                {
+        switch (filter.toLowerCase()) {
+            case "status" -> {
+                switch (value.toLowerCase()) {
                     case "active" ->
                             asrt.assertFalse(outletsSetup.statuses.stream().anyMatch(s -> !s.getAttribute("xlink:href").contains("icon-check")));
                     case "inactive" ->
@@ -206,19 +184,16 @@ public class D14_Outlets
     }
 
     @When("deleting outlet {string}")
-    public void deletingOutlet(String name)
-    {
+    public void deletingOutlet(String name) {
         WebElement selectedOutlet = extractOutlet(name);
         outletsSetup.outletDeleteButton(selectedOutlet).click();
         outletsSetup.popUpCOnfirmButton.click();
     }
 
     @Then("Check msg {string} and outlet {string} is deleted")
-    public void checkOutletIsDeleted(String msg, String name)
-    {
+    public void checkOutletIsDeleted(String msg, String name) {
         new D03_BlocksAndFloors().checkToastMesageContainsText(msg);
-        if (msg.contains("Successfully"))
-        {
+        if (msg.contains("Successfully")) {
             wait.waitLoading();
             asrt.assertFalse(outletsSetup.names.stream().anyMatch(o -> o.getText().equalsIgnoreCase(name)));
             asrt.assertAll();
@@ -226,16 +201,14 @@ public class D14_Outlets
     }
 
     @Given("go to categories Page")
-    public void goToCategoriesPage()
-    {
+    public void goToCategoriesPage() {
         dashBoardPage.setupPageLink.click();
         setupPage.outletsDropList.click();
         setupPage.categoriesLink.click();
     }
 
     @When("creating category {string} on outlet {string} with NTMP Categ as {string} and description {string}")
-    public void creatingCategoryOnOutletWithNTMPCategAsAndDescription(String name, String outlet, String nTMP, String desc)
-    {
+    public void creatingCategoryOnOutletWithNTMPCategAsAndDescription(String name, String outlet, String nTMP, String desc) {
         categories.newCategoryButton.click();
         fillCategData(outlet, nTMP, name, desc, "new");
         categories.submitButton.click();
@@ -243,8 +216,7 @@ public class D14_Outlets
 
     final HashMap<String, String> categMap = new HashMap<>();
 
-    private void setCategMap(String outlet, String ntmp, String name, String desc, String state)
-    {
+    private void setCategMap(String outlet, String ntmp, String name, String desc, String state) {
         if (!outlet.isEmpty())
             categMap.put("outlet", outlet);
         if (!ntmp.isEmpty())
@@ -258,29 +230,25 @@ public class D14_Outlets
         //outletMap.putAll(Map.of("outlet", outlet, "ntmp", ntmp, "name", name, "desc", desc, "state", state));
     }
 
-    private void fillCategData(String outlet, String ntmp, String name, String desc, String state)
-    {
+    private void fillCategData(String outlet, String ntmp, String name, String desc, String state) {
         if (!outlet.isEmpty())
             if (outlet.equalsIgnoreCase("non"))
                 js.executeScript("arguments[0].click();", categories.clearOutletSelectionButton);
             else
                 categories.outletsList().stream().filter(o -> o.getText().equalsIgnoreCase(outlet)).findFirst().orElseThrow().click();
-        if (!ntmp.isEmpty())
-        {
+        if (!ntmp.isEmpty()) {
             if (ntmp.equalsIgnoreCase("non"))
                 js.executeScript("arguments[0].click();", categories.clearNTMPSelectionButton);
             else
                 categories.nTMPCategoriesList().stream().filter(o -> o.getText().equalsIgnoreCase(ntmp)).findFirst().orElseThrow().click();
         }
-        if (!name.isEmpty())
-        {
+        if (!name.isEmpty()) {
             categories.categoryNameField.sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.BACK_SPACE));
             new P00_multiPurposes(driver).secondLanguageField(categories.categoryNameField).sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.BACK_SPACE));
             if (!name.equalsIgnoreCase("non"))
                 categories.categoryNameField.sendKeys(name);
         }
-        if (!desc.isEmpty())
-        {
+        if (!desc.isEmpty()) {
             categories.descriptionField.clear();
             if (!desc.equalsIgnoreCase("non"))
                 categories.descriptionField.sendKeys(desc);
@@ -294,12 +262,10 @@ public class D14_Outlets
     }
 
     @Then("Check msg {string} and Categorey")
-    public void checkMsgAndCategorey(String msg)
-    {
+    public void checkMsgAndCategorey(String msg) {
         new D03_BlocksAndFloors().checkToastMesageContainsText(msg);
 
-        if (msg.contains("Successfully"))
-        {
+        if (msg.contains("Successfully")) {
             wait.waitLoading();
             WebElement selectedCategory = categories.names.stream().filter(c -> c.getText().equalsIgnoreCase(categMap.get("name"))).findAny().orElseThrow();
             asrt.assertTrue(categories.categoryOutlet(selectedCategory).getText().equalsIgnoreCase(categMap.get("outlet")));
@@ -314,11 +280,9 @@ public class D14_Outlets
     }
 
     @When("Filtering categs With {string} as {string}")
-    public void filteringCategsWithAs(String filter, String value)
-    {
+    public void filteringCategsWithAs(String filter, String value) {
         categories.filterButton.click();
-        switch (filter.toLowerCase())
-        {
+        switch (filter.toLowerCase()) {
             case "status" ->
                     categories.statusesFilterList().stream().filter(s -> s.getText().equalsIgnoreCase(value)).findAny().orElseThrow().click();
             case "name" -> categories.nameFilterField.sendKeys(value);
@@ -331,15 +295,11 @@ public class D14_Outlets
     }
 
     @Then("check all visible categs records {string} as {string}")
-    public void checkAllVisibleCategsRecordsAs(String filter, String value)
-    {
+    public void checkAllVisibleCategsRecordsAs(String filter, String value) {
         wait.waitLoading();
-        switch (filter.toLowerCase())
-        {
-            case "status" ->
-            {
-                switch (value.toLowerCase())
-                {
+        switch (filter.toLowerCase()) {
+            case "status" -> {
+                switch (value.toLowerCase()) {
                     case "active" ->
                             asrt.assertFalse(categories.statuses.stream().anyMatch(s -> !s.getAttribute("xlink:href").contains("icon-check")));
                     case "inactive" ->
@@ -357,8 +317,7 @@ public class D14_Outlets
     }
 
     @When("editing Category {string} outlet {string} and ntmp {string} and name {string} description {string} state {string}")
-    public void editingCategoryOutletAndNtmpAndNameDescriptionState(String oName, String outlet, String ntmp, String name, String desc, String state)
-    {
+    public void editingCategoryOutletAndNtmpAndNameDescriptionState(String oName, String outlet, String ntmp, String name, String desc, String state) {
         WebElement selectedCategory = extractCateg(oName);
         categories.categoryEditButton(selectedCategory).click();
         wait.waitLoading();
@@ -368,8 +327,7 @@ public class D14_Outlets
 
     }
 
-    private WebElement extractCateg(String categName)
-    {
+    private WebElement extractCateg(String categName) {
         WebElement selectedCategory = categories.names.stream().filter(c -> c.getText().equalsIgnoreCase(categName)).findAny().orElseThrow();
         String catStat = "Active";
         if (categories.categoryStatus(selectedCategory).getAttribute("xlink:href").contains("icon-minus"))
@@ -379,19 +337,16 @@ public class D14_Outlets
     }
 
     @When("deleting category {string}")
-    public void deletingCategory(String name)
-    {
+    public void deletingCategory(String name) {
         WebElement selectedCategory = extractCateg(name);
         categories.categoryDeleteButton(selectedCategory).click();
         categories.popUpCOnfirmButton.click();
     }
 
     @Then("Check msg {string} and category {string}")
-    public void checkMsgAndCategory(String msg, String name)
-    {
+    public void checkMsgAndCategory(String msg, String name) {
         new D03_BlocksAndFloors().checkToastMesageContainsText(msg);
-        if (msg.contains("Successfully"))
-        {
+        if (msg.contains("Successfully")) {
             wait.waitLoading();
             asrt.assertFalse(categories.names.stream().anyMatch(o -> o.getText().equalsIgnoreCase(name)));
             asrt.assertAll();
@@ -399,8 +354,7 @@ public class D14_Outlets
     }
 
     @Given("go to items setup")
-    public void goToItemsSetup()
-    {
+    public void goToItemsSetup() {
         dashBoardPage.setupPageLink.click();
         setupPage.outletsDropList.click();
         setupPage.itemsLink.click();
@@ -408,8 +362,7 @@ public class D14_Outlets
 
     final HashMap<String, String> itemMap = new HashMap<>();
 
-    private void setItemMap(String name, String type, String outlet, String categ, String desc, String price, String tax, String state)
-    {
+    private void setItemMap(String name, String type, String outlet, String categ, String desc, String price, String tax, String state) {
         if (!outlet.isEmpty())
             itemMap.put("outlet", outlet);
         if (!type.isEmpty())
@@ -429,59 +382,50 @@ public class D14_Outlets
         //outletMap.putAll(Map.of("outlet", outlet, "ntmp", ntmp, "name", name, "desc", desc, "state", state));
     }
 
-    private void fillItemData(String name, String type, String outlet, String categ, String desc, String price, String tax, String state)
-    {
+    private void fillItemData(String name, String type, String outlet, String categ, String desc, String price, String tax, String state) {
         if (!outlet.isEmpty())
             if (outlet.equalsIgnoreCase("non"))
                 js.executeScript("arguments[0].click();", items.clearOutletSelectionButton);
             else
                 items.outletsList().stream().filter(o -> o.getText().equalsIgnoreCase(outlet)).findFirst().orElseThrow().click();
-        if (!categ.isEmpty())
-        {
+        if (!categ.isEmpty()) {
             if (categ.equalsIgnoreCase("non"))
                 js.executeScript("arguments[0].click();", items.clearCategorySelectionButton);
             else
                 items.categoriesList().stream().filter(o -> o.getText().equalsIgnoreCase(categ)).findFirst().orElseThrow().click();
         }
-        if (!type.isEmpty())
-        {
+        if (!type.isEmpty()) {
             if (type.equalsIgnoreCase("non"))
                 js.executeScript("arguments[0].click();", items.clearTypeSelectionButton);
             else
                 items.itemTypesList().stream().filter(o -> o.getText().equalsIgnoreCase(type)).findFirst().orElseThrow().click();
         }
-        if (!name.isEmpty())
-        {
+        if (!name.isEmpty()) {
             items.itemNameField.clear();
             new P00_multiPurposes(driver).secondLanguageField(items.itemNameField).sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.BACK_SPACE));
             if (!name.equalsIgnoreCase("non"))
                 items.itemNameField.sendKeys(name);
         }
-        switch (price.toLowerCase())
-        {
-            case "free" ->
-            {
+        switch (price.toLowerCase()) {
+            case "free" -> {
                 if (items.freeItemSwitch.getAttribute("class").contains("k-switch-off"))
                     items.freeItemSwitch.click();
             }
-            case "userdefined" ->
-            {
+            case "userdefined" -> {
                 if (items.userDefinedPriceSwitch.getAttribute("class").contains("k-switch-off"))
                     items.userDefinedPriceSwitch.click();
                 items.priceInput_FilterField.clear();
                 price = "100";
                 items.priceInput_FilterField.sendKeys(price);
             }
-            case "non" ->
-            {
+            case "non" -> {
                 if (items.freeItemSwitch.getAttribute("class").contains("k-switch-on"))
                     items.freeItemSwitch.click();
                 if (items.userDefinedPriceSwitch.getAttribute("class").contains("k-switch-on"))
                     items.userDefinedPriceSwitch.click();
                 items.priceInput_FilterField.clear();
             }
-            default ->
-            {
+            default -> {
                 if (items.freeItemSwitch.getAttribute("class").contains("k-switch-on"))
                     items.freeItemSwitch.click();
                 if (items.userDefinedPriceSwitch.getAttribute("class").contains("k-switch-on"))
@@ -491,21 +435,17 @@ public class D14_Outlets
             }
 
         }
-        switch (tax.toLowerCase())
-        {
-            case "applied" ->
-            {
+        switch (tax.toLowerCase()) {
+            case "applied" -> {
                 if (items.taxExemptedSwitch.getAttribute("class").contains("k-switch-on"))
                     items.taxExemptedSwitch.click();
             }
-            case "exempted" ->
-            {
+            case "exempted" -> {
                 if (items.taxExemptedSwitch.getAttribute("class").contains("k-switch-off"))
                     items.taxExemptedSwitch.click();
             }
         }
-        if (!desc.isEmpty())
-        {
+        if (!desc.isEmpty()) {
             categories.descriptionField.clear();
             if (!desc.equalsIgnoreCase("non"))
                 categories.descriptionField.sendKeys(desc);
@@ -519,8 +459,7 @@ public class D14_Outlets
     }
 
     @When("creating item with name {string} and type {string} and outlet {string} and category {string} description {string} price {string} taxstate {string}")
-    public void creatingItemWithNameAndTypeAndOutletAndCategoryDescription(String name, String type, String outlet, String categ, String desc, String price, String tax)
-    {
+    public void creatingItemWithNameAndTypeAndOutletAndCategoryDescription(String name, String type, String outlet, String categ, String desc, String price, String tax) {
         items.newItemButton.click();
         fillItemData(name, type, outlet, categ, desc, price, tax, "new");
         if (price.equalsIgnoreCase("free"))
@@ -532,19 +471,16 @@ public class D14_Outlets
     }
 
     @Then("Check msg {string} and the item")
-    public void checkMsgAndTheItem(String msg)
-    {
+    public void checkMsgAndTheItem(String msg) {
         new D03_BlocksAndFloors().checkToastMesageContainsText(msg);
 
-        if (msg.contains("Successfully"))
-        {
+        if (msg.contains("Successfully")) {
             wait.waitLoading();
             WebElement selectedItem = items.names.stream().filter(c -> c.getText().equalsIgnoreCase(itemMap.get("name"))).findAny().orElseThrow();
             asrt.assertTrue(items.itemOutlet(selectedItem).getText().equalsIgnoreCase(itemMap.get("outlet")));
             asrt.assertTrue(items.itemName(selectedItem).getText().equalsIgnoreCase(itemMap.get("name")));
             asrt.assertTrue(items.itemCategory(selectedItem).getText().equalsIgnoreCase(itemMap.get("categ")));
-            switch (itemMap.get("price"))
-            {
+            switch (itemMap.get("price")) {
                 case "free", "userdefined" ->
                         asrt.assertTrue(items.itemPrice(selectedItem).getText().equalsIgnoreCase("0"));
                 default ->
@@ -562,8 +498,7 @@ public class D14_Outlets
 
 
     @When("editing item {string} name {string} and type {string} and outlet {string} and category {string} description {string} price {string} taxstate {string} state {string}")
-    public void editingItemNameAndTypeAndOutletAndCategoryDescriptionPriceTaxstate(String oName, String nName, String type, String outlet, String categ, String desc, String price, String tax, String state)
-    {
+    public void editingItemNameAndTypeAndOutletAndCategoryDescriptionPriceTaxstate(String oName, String nName, String type, String outlet, String categ, String desc, String price, String tax, String state) {
         WebElement selectedItem = extractItem(oName);
         items.itemEditButton(selectedItem).click();
         wait.waitLoading();
@@ -571,8 +506,7 @@ public class D14_Outlets
         items.submitButton.click();
     }
 
-    private WebElement extractItem(String itemName)
-    {
+    private WebElement extractItem(String itemName) {
         WebElement selectedItem = items.names.stream().filter(i -> i.getText().equalsIgnoreCase(itemName)).findAny().orElseThrow();
         String itemStat = "Active";
         if (items.itemStatus(selectedItem).getAttribute("xlink:href").contains("icon-minus"))
@@ -582,19 +516,16 @@ public class D14_Outlets
     }
 
     @When("Filter Items With {string} as {string}")
-    public void filterItemsWithAs(String filter, String value)
-    {
+    public void filterItemsWithAs(String filter, String value) {
         items.filterButton.click();
-        switch (filter.toLowerCase())
-        {
+        switch (filter.toLowerCase()) {
             case "status" ->
                     items.statusesFilterList().stream().filter(s -> s.getText().equalsIgnoreCase(value)).findAny().orElseThrow().click();
             case "name" -> items.nameFilterField.sendKeys(value);
             case "price" -> items.priceInput_FilterField.sendKeys(value);
             case "outlet" ->
                     items.filterOutletsList().stream().filter(s -> s.getText().equalsIgnoreCase(value)).findAny().orElseThrow().click();
-            case "category" ->
-            {
+            case "category" -> {
                 items.filterOutletsList().stream().filter(s -> s.getText().equalsIgnoreCase(StringUtils.substringBefore(value, " -"))).findAny().orElseThrow().click();
                 items.categoryFilterList().stream().filter(c -> c.getText().equalsIgnoreCase(StringUtils.substringAfter(value, "- "))).findAny().orElseThrow().click();
 
@@ -604,15 +535,11 @@ public class D14_Outlets
     }
 
     @Then("Check all items records {string} as {string}")
-    public void checkAllItemsRecordsAs(String filter, String value)
-    {
+    public void checkAllItemsRecordsAs(String filter, String value) {
         wait.waitLoading();
-        switch (filter)
-        {
-            case "status" ->
-            {
-                switch (value.toLowerCase())
-                {
+        switch (filter) {
+            case "status" -> {
+                switch (value.toLowerCase()) {
                     case "active" ->
                             asrt.assertFalse(items.statuses.stream().anyMatch(s -> !s.getAttribute("xlink:href").contains("icon-minus")));
                     case "inactive" ->
@@ -623,8 +550,7 @@ public class D14_Outlets
             case "price" -> asrt.assertFalse(items.prices.stream().anyMatch(p -> !p.getText().equalsIgnoreCase(value)));
             case "outlet" ->
                     asrt.assertFalse(items.outlets.stream().anyMatch(p -> !p.getText().equalsIgnoreCase(value)));
-            case "catehory" ->
-            {
+            case "catehory" -> {
                 asrt.assertFalse(items.outlets.stream().anyMatch(p -> !p.getText().equalsIgnoreCase(StringUtils.substringBefore(value, " -"))));
                 asrt.assertFalse(items.categories.stream().anyMatch(p -> !p.getText().equalsIgnoreCase(StringUtils.substringAfter(value, "- "))));
             }
@@ -633,19 +559,16 @@ public class D14_Outlets
     }
 
     @When("deleting item {string}")
-    public void deletingItem(String item)
-    {
+    public void deletingItem(String item) {
         WebElement seletedItem = extractItem(item);
         items.itemDeleteButton(seletedItem).click();
         items.popUpCOnfirmButton.click();
     }
 
     @Then("Check msg {string} and item {string}")
-    public void checkMsgAndItem(String msg, String item)
-    {
+    public void checkMsgAndItem(String msg, String item) {
         new D03_BlocksAndFloors().checkToastMesageContainsText(msg);
-        if (msg.contains("Successfully"))
-        {
+        if (msg.contains("Successfully")) {
             wait.waitLoading();
             asrt.assertFalse(items.names.stream().anyMatch(i -> i.getText().equalsIgnoreCase(item)));
             asrt.assertAll();
@@ -653,43 +576,40 @@ public class D14_Outlets
     }
 
     @Given("navigate to outlet orders Page")
-    public void navigateToOutletOrdersPage()
-    {
+    public void navigateToOutletOrdersPage() {
         dashBoardPage.outletsDropList.click();
         dashBoardPage.outletsPageLink.click();
     }
 
+    int taxCalcMethod;
+
     @When("creating an order for item {string} from outlet {string}")
-    public void creatingAnOrderForItemFromOutlet(String itemName, String outletName)
-    {
-        selectOutlet(outletName);
-        wait.waitLoading();
-        selectItem(itemName);
+    public void creatingAnOrderForItemFromOutlet(String itemName, String outletName) {
+        selectingItemFromOutlet(itemName,outletName);
+        //here iam doing two operation sin one getting dscount before ore after taxes and clicking the next button
+        taxCalcMethod = Nazeel_Calculations.getTaxCalculationMethod(driver, () -> outlets.nextButton.click());
         outlets.nextButton.click();
         wait.waitLoading();
     }
 
-    private void selectItem(String itemName)
-    {
+
+    private void selectItem(String itemName) {
         WebElement selectedItem = outlets.outletItems.stream().filter(i -> i.getText().contains(itemName)).findFirst().orElse(outlets.outletItems.getFirst());
         selectedItem.click();
     }
 
-    private void selectOutlet(String outletName)
-    {
+    private void selectOutlet(String outletName) {
         WebElement selectedOutlet = outlets.outletsList.stream().filter(o -> outlets.outletName(o).getText().contains(outletName)).findFirst().orElse(outlets.outletsList.getFirst());
         selectedOutlet.click();
     }
 
     @Then("Check the Tax and Discount Calculations")
-    public void checkTheTaxAndDiscountCalculations()
-    {
+    public void checkTheTaxAndDiscountCalculations() {
         double discountValue = 10.0;
         String discountType;
 
         boolean inclusive = outlets.inclusive();
-        for (int i = 0; i <= 1; i++)
-        {
+        for (int i = 0; i <= 1; i++) {
             double orderSubTotal = 0.0;
             double totalbeforeTax;
             double totalAfteTax;
@@ -698,8 +618,7 @@ public class D14_Outlets
             outlets.discountValueField().sendKeys(Double.toString(discountValue));
             discountType = outlets.discountTypes().get(i).getText();
             outlets.saveDiscountButton.click();
-            for (WebElement itemPriceCell : outlets.selectedItemsPrices)
-            {
+            for (WebElement itemPriceCell : outlets.selectedItemsPrices) {
                 double itemPrice = outlets.itemPriceAmount(outlets.itemPriceField(itemPriceCell));
                 asrt.assertEquals(itemPrice, outlets.itemSubTotalAmount(itemPriceCell));
                 orderSubTotal += itemPrice;
@@ -707,7 +626,7 @@ public class D14_Outlets
             }
             double discountAmount = Nazeel_Calculations.getDiscountAmount(orderSubTotal, discountValue, discountType);
             totalbeforeTax = orderSubTotal - discountAmount;
-            double taxes = Nazeel_Calculations.outletOrderTaxes(orderSubTotal, discountAmount, inclusive);
+            double taxes = Nazeel_Calculations.outletOrderTaxes(orderSubTotal, discountAmount, inclusive, taxCalcMethod);
             if (inclusive)
                 totalAfteTax = totalbeforeTax;
             else
@@ -725,37 +644,30 @@ public class D14_Outlets
     int ExcutedOnce = 0;
 
     @And("submiting the order as {string} for a {string} issue date {string}")
-    public void submitingTheOrderAsForA(String orderType, String ownerType, String issueDate)
-    {
-        if (orderType.toLowerCase().contains("walk"))
-        {
+    public void submitingTheOrderAsForA(String orderType, String ownerType, String issueDate) {
+        if (orderType.toLowerCase().contains("walk")) {
             outlets.walkinOrderButton.click();
             wait.waitLoading();
-            if (ownerType.equalsIgnoreCase("corporate"))
-            {
+            if (ownerType.equalsIgnoreCase("corporate")) {
                 outlets.selctCorporateButton.click();
                 new D11_Customers().selectCorporate("corp data related", "", "", "");
-            } else
-            {
+            } else {
                 outlets.selctGuestButton.click();
                 new D06_DigitalPayment().selectGuest("Random", "", "");
             }
             //Fixme fix the date format
-            switch (issueDate.toLowerCase())
-            {
+            switch (issueDate.toLowerCase()) {
                 case "futuredate" ->
                         Utils.setDate(outlets.issueDateField, DateTimeFormat.forPattern("MM/dd/yyyy").print(DateTime.now().plusDays(1)));
                 case "futuretime" ->
                         Utils.setTime(outlets.issueTimeField, DateTimeFormat.forPattern("HH:mm").print(DateTime.now().plusHours(4)));
                 case "pastdate" ->
                         Utils.setDate(outlets.issueDateField, DateTimeFormat.forPattern("MM/dd/yyyy").print(DateTime.now().plusDays(-1)));
-                case "" ->
-                {
+                case "" -> {
                 }
                 default -> Utils.setDate(outlets.issueDateField, issueDate);
             }
-            if (ExcutedOnce == 0)
-            {
+            if (ExcutedOnce == 0) {
                 outlets.payMethodsList().stream().filter(t -> t.getText().equalsIgnoreCase("cash")).findFirst().orElseThrow().click();
                 wait.waitLoading();
                 outlets.addPayMethodButton.click();
@@ -765,8 +677,7 @@ public class D14_Outlets
             String body = api.getResponseBody(driver, "api/hotel-services/orders/create", () -> outlets.submitOrderButton.click());
 
             JsonObject json = JsonParser.parseString(body).getAsJsonObject();
-            if (!json.get("data").isJsonNull())
-            {
+            if (!json.get("data").isJsonNull()) {
                 invoiceNo = json.get("data").getAsJsonObject().get("invoiceNumber").getAsString();
                 receiptNo = json.get("data").getAsJsonObject().get("vouchersSequanceNumber").getAsJsonArray().get(0).getAsString();
             }
@@ -780,18 +691,15 @@ public class D14_Outlets
     String receiptNo;
 
     @Then("Check {string} order is created")
-    public void checkOrderIsCreated(String orderType)
-    {
+    public void checkOrderIsCreated(String orderType) {
         List<String> toastMessages = new ArrayList<>();
         wait.until(ExpectedConditions.visibilityOfAllElements((new P00_multiPurposes(driver).toastMsgs)));
         List<WebElement> toasts = new P00_multiPurposes(driver).toastMsgs;
-        for (WebElement msg : toasts)
-        {
+        for (WebElement msg : toasts) {
             toastMessages.add(msg.getText());
         }
         wait.waitLoading();
-        if (orderType.toLowerCase().contains("walk"))
-        {
+        if (orderType.toLowerCase().contains("walk")) {
             asrt.AssertEqualsIgnoreCase(outlets.orderStatus.getText(), "paid");
             asrt.assertFalse(outlets.receiptVouchersNums.isEmpty());
             asrt.AssertContains(toastMessages, invoiceNo);
@@ -804,17 +712,14 @@ public class D14_Outlets
     }
 
     @Then("check the issue date validation")
-    public void checkTheIssueDateValidation()
-    {
+    public void checkTheIssueDateValidation() {
         P00_multiPurposes multiPurposes = new P00_multiPurposes(driver);
         List<String> issueDates = Arrays.asList("futureDate", "futureTime", "pastDate");
-        for (String issueDate : issueDates)
-        {
+        for (String issueDate : issueDates) {
             submitingTheOrderAsForA("walkin", "corporate", issueDate);
             if (issueDate.equalsIgnoreCase("pastDate"))
                 checkOrderIsCreated("walkin");
-            else
-            {
+            else {
                 multiPurposes.assertToastMessageContains("Issue Date Must Not Exceed Today Date");
             }
         }
@@ -825,36 +730,45 @@ public class D14_Outlets
     float itemPrice;
 
     @When("selecting item {string} from outlet {string}")
-    public void selectingItemFromOutlet(String item, String outletName)
-    {
+    public void selectingItemFromOutlet(String item, String outletName) {
+
+        API api = new API();
+        JsonObject json = JsonParser.parseString(api.getResponseBody(driver, "AddOns/OutletItemSetup/GetByOutletId", () -> selectOutlet(outletName))).getAsJsonObject();
+        JsonArray items = json.getAsJsonArray("data");
+        JsonObject foundItem = null;
+        String jsonProperty = "";
+        String itemName=item;
         if (item.equalsIgnoreCase("user defined"))
-        {
-            API api = new API();
-            JsonObject json = JsonParser.parseString(api.getResponseBody(driver, "AddOns/OutletItemSetup/GetByOutletId", () -> selectOutlet(outletName))).getAsJsonObject();
-            JsonArray items = json.getAsJsonArray("data");
-            JsonObject userDefinedItem = null;
-            for (JsonElement i : items
-            )
-            {
-                if (i.getAsJsonObject().get("priceIsUserDefined").getAsBoolean())
-                {
-                    userDefinedItem = i.getAsJsonObject();
-                }
+            jsonProperty = "priceIsUserDefined";
+
+        if (item.equalsIgnoreCase("tax exempted"))
+            jsonProperty = "taxExcluded";
+        if (item.equalsIgnoreCase("user defined")||item.equalsIgnoreCase("tax exempted")){
+        for (JsonElement i : items
+        ) {
+            if (i.getAsJsonObject().get(jsonProperty).getAsBoolean()) {
+                foundItem = i.getAsJsonObject();
             }
-            asrt.assertFalse(userDefinedItem == null, "no user defined items");
-            String itemName = userDefinedItem.get("nameEn").getAsString();
-            itemPrice = userDefinedItem.get("price").getAsFloat();
-
-
-            selectItem(itemName);
         }
+        asrt.assertFalse(foundItem == null, "item Not Found");
+        itemName = foundItem.get("nameEn").getAsString();
+        itemPrice = foundItem.get("price").getAsFloat();}
+        
+        selectItem(itemName);
+
     }
 
     @Then("check item price is rewritable")
-    public void checkItemPriceIsRewritable()
-    {
+    public void checkItemPriceIsRewritable() {
         asrt.assertTrue(Utils.isEnabled(outlets.itemPriceField()));
         asrt.assertEquals(Float.parseFloat(outlets.itemPriceField().getAttribute("value")), itemPrice);
+        asrt.assertAll();
+    }
+
+
+    @Then("Check the order Tax amount to be {float}")
+    public void checkTheOrderTaxAmountToBe(float taxAmount) {
+        asrt.assertEquals( outlets.orderTaxes(),taxAmount);
         asrt.assertAll();
     }
 }

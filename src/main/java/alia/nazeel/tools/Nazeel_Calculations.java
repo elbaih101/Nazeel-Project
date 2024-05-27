@@ -1,6 +1,9 @@
 package alia.nazeel.tools;
 
 import alia.nazeel.pojos.Tax;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import org.openqa.selenium.WebDriver;
 
 import java.util.List;
 
@@ -11,13 +14,14 @@ public class Nazeel_Calculations {
     /**
      * this function calculate rent taxes Provided with the rent amount and the discount amount to be put in consideration
      * and the discount type wether its percentage or amount and a list of applied taxes
-     * @param rentAmount  double Rent amount
+     *
+     * @param rentAmount     double Rent amount
      * @param discountAmount double Discount amount
-     * @param discountType String Discount type
-     * @param appliedTaxes List<Tax>Pojos of applied taxes and its values </>
+     * @param discountType   String Discount type
+     * @param appliedTaxes   List<Tax>Pojos of applied taxes and its values </>
      * @return double of the tax value applied on the rent amount
      */
-    public static Double reservationRentTaxes(double rentAmount, double discountAmount, String discountType, List<Tax> appliedTaxes) {
+    public static Double reservationRentTaxes(double rentAmount, double discountAmount, String discountType, List<Tax> appliedTaxes,int calcMethod) {
         double taxValue = 0.0;
         double taxPercentage = 0.0;
 //        Double discountAmount = getDiscountAmount(rentAmount, discountValue, discountType);
@@ -41,8 +45,9 @@ public class Nazeel_Calculations {
             else
                 taxValue = ((rentAmount - discountAmount) * taxPercentage) / (1 + taxPercentage);
         } else {
-            //exclusive
-            taxValue = taxValue + (rentAmount * taxPercentage);
+            if (calcMethod==2)
+                discountAmount=0;
+            taxValue = taxValue + ((rentAmount-discountAmount) * taxPercentage);
         }
         taxValue = round(taxValue, 4);
         return taxValue;
@@ -50,23 +55,24 @@ public class Nazeel_Calculations {
 
     /**
      * calculates the outlet orders axes
-     * @param orderAmount double Order Amount
+     *
+     * @param orderAmount    double Order Amount
      * @param discountAmount double Discount amount
-     * @param inclusive boolean wether the taxes are inclusive or exclusive
+     * @param inclusive      boolean wether the taxes are inclusive or exclusive
      * @return double the tax value
      */
-    public static Double outletOrderTaxes(double orderAmount, double discountAmount, boolean inclusive) {
+    public static Double outletOrderTaxes(double orderAmount, double discountAmount, boolean inclusive, int calcMethod) {
         double taxValue = 0.0;
         double taxPercentage = 0.15;
-       // Double discountAmount = getDiscountAmount(orderAmount, discountValue, discountType);
+        // Double discountAmount = getDiscountAmount(orderAmount, discountValue, discountType);
 
         if (inclusive) {
             //inclusive
-
             taxValue = ((orderAmount - discountAmount) * taxPercentage) / (1 + taxPercentage);
         } else {
-            //exclusive
-            taxValue = taxValue + (orderAmount * taxPercentage);
+            if (calcMethod == 2)
+                discountAmount = 0;
+            taxValue = taxValue + ((orderAmount - discountAmount) * taxPercentage);
         }
         taxValue = round(taxValue, 4);
         return taxValue;
@@ -80,6 +86,12 @@ public class Nazeel_Calculations {
             discountAmount = discountAmount + discountValue;
         }
         return discountAmount;
+    }
+
+    public static int getTaxCalculationMethod(WebDriver driver, Runnable runnable) {
+        API api = new API();
+        JsonObject json = JsonParser.parseString(api.getResponseBody(driver, "api/financial/tax-calculator", runnable)).getAsJsonObject();
+        return json.getAsJsonArray("data").get(0).getAsJsonObject().get("calculation").getAsInt();
     }
 
 

@@ -64,11 +64,11 @@ Feature:restrictions on reservations
       Then Check all selectedunits are by type
 
 
-Scenario: can't add dpenedent on a room when the dependent is checkedout but can undo chekout
- Given  Create "group" "Checked In" Reservation withSource "RANDOM" purpose "RANDOM" Unit "RANDOM" Guest "RANDOM" startDate "01/12/2021" endDate "03/12/2021"
-  And  add dependent "Random" to the the room "Random" and save
-  When  checking out dependent "Random"
-  Then adding dependent "Random" again Check toast message "This user is selected already as dependent" and the dependet has undo chek out button
-  And Choose Reservation Status as "Cancelled"
+    Scenario: can't add dpenedent on a room when the dependent is checkedout but can undo chekout
+      Given  Create "group" "Checked In" Reservation withSource "RANDOM" purpose "RANDOM" Unit "RANDOM" Guest "RANDOM" startDate "01/12/2021" endDate "03/12/2021"
+      And  add dependent "Random" to the the room "Random" and save
+      When  checking out dependent "Random"
+      Then adding dependent "Random" again Check toast message "This user is selected already as dependent" and the dependet has undo chek out button
+      And Choose Reservation Status as "Cancelled"
 
 

@@ -55,6 +55,6 @@ Feature: Property Taxes and Fees setup
         | Inclusive |
         | Exclusive |
 
-      #Todo before Discounts and after Discounts
+
   #Todo filter
   #Todo incase inactive not applied on reservation

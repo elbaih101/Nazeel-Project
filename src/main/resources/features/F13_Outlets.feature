@@ -150,13 +150,14 @@ Feature: Outlets Feature
     Background:go to outlet Orders Page
       Given navigate to outlet orders Page
 
+  #Checks the tax discount calculations on Exclusive after discount property
     Scenario: Check the Discount and Tax Calculation
-      When creating an order for item "item 1" from outlet "1"
+      When creating an order for item "data Related Item" from outlet "data Related Outlet"
       Then Check the Tax and Discount Calculations
 
     @corporate_vouchers,orders
     Scenario: outlet order for a corporate
-      When creating an order for item "item 1" from outlet "1"
+      When creating an order for item "item 1" from outlet "data Related Outlet"
       And submiting the order as "walk in" for a "corporate" issue date ""
       Then  Check "walk in" order is created
 
@@ -164,13 +165,17 @@ Feature: Outlets Feature
 
     @Walk-inOrders_IssueDate
     Scenario: cant create a walk in order with future date
-      When creating an order for item "item 1" from outlet "1"
+      When creating an order for item "item 1" from outlet "data Related Outlet"
       Then check the issue date validation
 
     @Item_suggested_price
     Scenario: check userDefined item Price is rewritable
-      When selecting item "user defined" from outlet "1"
+      When selecting item "user defined" from outlet "data Related Outlet"
       Then  check item price is rewritable
 
+  @Tax_Exempted_Item
+  Scenario: check taxes on tax exempted item
+    When creating an order for item "tax exempted" from outlet "data Related Outlet"
+    Then Check the order Tax amount to be 0.0
+
  # TODO : REceipts and Refunds on wlakin Orders
-  #Todo Check tax exempted items doent have applied taxes
