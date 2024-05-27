@@ -246,7 +246,7 @@ public class D12_Financials {
                 asrt.assertEquals(taxMap.get("sDate"), taxesPopUp.taxStartDate(selectedTax).getText());
                 asrt.assertEquals(taxMap.get("eDate"), taxesPopUp.taxEndDate(selectedTax).getText());
             } else {
-                asrt.assertFalse(taxesPopUp.taxesNames.stream().anyMatch(t -> t.getText().contains(taxMap.get("name"))));
+                asrt.assertFalse(taxesPopUp.taxesNames.stream().anyMatch(t -> t.getText().contains(taxMap.get("name"))),"Expected Tax: "+taxName+"to be not applied");
             }
             asrt.assertAll();
         }
