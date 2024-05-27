@@ -51,11 +51,11 @@ public class D11_Customers {
         dashBoardPage.corporatesLink.click();
     }
 
-    @When("Creating a Corporate with name {string} and Country {string} ignoredFields {string} vat {string} bNumber {string} secBNumber {string}")
-    public void creatingACorporateWithNameAndCountryWithout(String name, String country, String ignoredFields, String vat, String bNumb, String secBNumb) {
+    @When("Creating a Corporate with name {string} and Country {string} ignoredFields {string} vat {string} bNumber {string} secBNumber {string} invalid {string}")
+    public void creatingACorporateWithNameAndCountryWithout(String name, String country, String ignoredFields, String vat, String bNumb, String secBNumb,String invalidFields) {
         wait.waitLoading();
         corporates.newCorporateButton.click();
-        corporatedata(name, country, ignoredFields, vat, bNumb, secBNumb);
+        fillCorporatedata(name, country, ignoredFields, vat, bNumb, secBNumb,invalidFields);
 
         try {
             wait.withTimeout(Duration.ofMillis(500));
@@ -69,7 +69,7 @@ public class D11_Customers {
 
     }
 
-    private void corporatedata(String name, String country, String ignoredFields, String vat, String bNumb, String secBNumb) {
+    private void fillCorporatedata(String name, String country, String ignoredFields, String vat, String bNumb, String secBNumb,String invalidFields) {
         if (!name.isEmpty()) {
             corporates.corpoateNameField.clear();
             corporates.corpoateNameField.sendKeys(name);
@@ -81,6 +81,27 @@ public class D11_Customers {
             corporates.vatField.clear();
             corporates.vatField.sendKeys(vat);
         }
+        ignoredFeildsMethod(ignoredFields, bNumb, secBNumb);
+        invalidCorporateFieldsMethod(invalidFields);
+    }
+
+    private void invalidCorporateFieldsMethod(String invalidFields ) {
+        if (!invalidFields.toLowerCase().contains("all")) {
+            if (invalidFields.toLowerCase().contains("postalcode")) {
+                corporates.postalCodeField.sendKeys((Keys.chord(Keys.CONTROL, "a", Keys.BACK_SPACE)));
+                corporates.postalCodeField.sendKeys("6548");
+            }
+            if (invalidFields.toLowerCase().contains("email")) {
+                corporates.emaiField.clear();
+                corporates.emaiField.sendKeys("123");
+            }
+            if (invalidFields.toLowerCase().contains("coersonnumber")) {
+                corporates.cPersonPhoneFied.clear();
+                corporates.cPersonPhoneFied.sendKeys(Faker.instance().number().digits(2));
+            }
+        }
+    }
+    private void ignoredFeildsMethod(String ignoredFields, String bNumb, String secBNumb) {
         if (!ignoredFields.toLowerCase().contains("all")) {
             if (!ignoredFields.toLowerCase().contains("postalcode")) {
                 corporates.postalCodeField.clear();
@@ -166,7 +187,7 @@ public class D11_Customers {
     @And("Edit Corporate name {string} and Country {string} ignoredFields {string} vat {string} bNumber {string} secBNumber {string}")
     public void editCorporateNameAndCountryIgnoredFieldsVatBNumberSecBNumber(String name, String country, String ignoredFields, String vat, String bNumb, String secBNumb) {
         wait.waitLoading();
-        corporatedata(name, country, ignoredFields, vat, bNumb, secBNumb);
+        fillCorporatedata(name, country, ignoredFields, vat, bNumb, secBNumb,"");
         wait.waitLoading();
         corporates.saveButton.click();
     }

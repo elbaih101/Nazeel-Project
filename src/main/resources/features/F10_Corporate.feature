@@ -15,7 +15,7 @@ Feature: corporates Feature
 #      Then Check Zatca Logo is in Required Corporate Fields
 
     Scenario Outline: create new corporate
-      When Creating a Corporate with name "<name>" and Country "<country>" ignoredFields "<ignored>" vat "<vat>" bNumber "<bNum>" secBNumber "<secBNum>"
+      When Creating a Corporate with name "<name>" and Country "<country>" ignoredFields "<ignored>" vat "<vat>" bNumber "<bNum>" secBNumber "<secBNum>" invalid ""
       Then Check toast mesage contains text "<msg>"
       Examples:
         | name              | country     | ignored | vat             | bNum | secBNum | msg                                                                  |
@@ -35,7 +35,7 @@ Feature: corporates Feature
 
 
     Scenario Outline: create new corporate reservation page
-      When Creating a Corporate with name "<name>" and Country "<country>" ignoredFields "<ignored>" vat "<vat>" bNumber "<bNum>" secBNumber "<secBNum>"
+      When Creating a Corporate with name "<name>" and Country "<country>" ignoredFields "<ignored>" vat "<vat>" bNumber "<bNum>" secBNumber "<secBNum>" invalid ""
       Then Check toast mesage contains text "<msg>"
       Examples:
         | name              | country | ignored | vat             | bNum | secBNum | msg                                                                  |
@@ -58,19 +58,19 @@ Feature: corporates Feature
       Given Select Property "P00020"
       And go to corporates page
 
-#TODO :: Postal code should be 5 digits
     Scenario Outline: create new corporate related to zatca
-      When Creating a Corporate with name "<name>" and Country "<country>" ignoredFields "<ignored>" vat "<vat>" bNumber "<bNum>" secBNumber "<secBNum>"
+      When Creating a Corporate with name "<name>" and Country "<country>" ignoredFields "<ignored>" vat "<vat>" bNumber "<bNum>" secBNumber "<secBNum>" invalid "<invalid>"
       Then Check toast mesage contains text "<msg>"
       Examples:
-        | name   | country | ignored    | vat | bNum | secBNum | msg                                                                                                                                                        |
-        | maanga | Saudi   | all        |     |      |         | Please Select City\nDistrict Is Required\nStreet Is Required\nPostal Code Is Required\nBuilding Number Is Required\nAdditional Building Number Is Required |
-        | manga  | Saudi   |            |     |      |         | Building Number Is Required\nAdditional Building Number Is Required                                                                                        |
-        | manga  | Saudi   |            |     | 654  | 13      | Building Number Max Length is 4 digits\nAdditional Building Number Max Length is 4 digits                                                                  |
-        | manga  | Saudi   | postalcode |     | 9874 | 9874    | Postal Code Is Required                                                                                                                                    |
-        | manga  | Saudi   | city       |     | 6548 | 3215    | Please Select City                                                                                                                                         |
-        | manga  | Saudi   | district   |     | 6548 | 6548    | District Is Required                                                                                                                                       |
-        | manga  | Saudi   | street     |     | 6548 | 6549    | Street Is Required                                                                                                                                         |
+        | name   | country | ignored    | invalid    | vat | bNum | secBNum | msg                                                                                                                                                        |
+        | maanga | Saudi   | all        |            |     |      |         | Please Select City\nDistrict Is Required\nStreet Is Required\nPostal Code Is Required\nBuilding Number Is Required\nAdditional Building Number Is Required |
+        | manga  | Saudi   |            |            |     |      |         | Building Number Is Required\nAdditional Building Number Is Required                                                                                        |
+        | manga  | Saudi   |            |            |     | 654  | 13      | Building Number Max Length is 4 digits\nAdditional Building Number Max Length is 4 digits                                                                  |
+        | manga  | Saudi   | postalcode |            |     | 9874 | 9874    | Postal Code Is Required                                                                                                                                    |
+        | manga  | Saudi   |            | postalcode |     | 9874 | 9874    | Postal Code Length is 5 digits                                                                                                                                    |
+        | manga  | Saudi   | city       |            |     | 6548 | 3215    | Please Select City                                                                                                                                         |
+        | manga  | Saudi   | district   |            |     | 6548 | 6548    | District Is Required                                                                                                                                       |
+        | manga  | Saudi   | street     |            |     | 6548 | 6549    | Street Is Required                                                                                                                                         |
 
     Scenario:edit corporate postal code to be null
       Given open edit mode for corporate "string"
@@ -104,7 +104,7 @@ Feature: corporates Feature
 
 
     Scenario Outline: create new corporate
-      When Creating a Corporate with name "<name>" and Country "<country>" ignoredFields "<ignored>" vat "<vat>" bNumber "<bNum>" secBNumber "<secBNum>"
+      When Creating a Corporate with name "<name>" and Country "<country>" ignoredFields "<ignored>" vat "<vat>" bNumber "<bNum>" secBNumber "<secBNum>" invalid ""
       Then Check toast mesage contains text "<msg>"
       Examples:
         | name   | country | ignored    | vat | bNum | secBNum | msg                                                                                                                                                        |
