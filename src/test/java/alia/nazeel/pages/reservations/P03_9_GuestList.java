@@ -1,7 +1,7 @@
 package alia.nazeel.pages.reservations;
 
 import alia.nazeel.kendoelements.ChipsMultiselect;
-import alia.nazeel.kendoelements.Grid;
+import alia.nazeel.kendoelements.KendoGrid;
 import alia.nazeel.pages.mutlipurposes.P00_multiPurposes;
 import alia.nazeel.tools.CustomWebDriverWait;
 import org.openqa.selenium.By;
@@ -51,15 +51,15 @@ public class P03_9_GuestList {
     @FindBy(xpath = "//app-reservation-group-guest-list-wizard//kendo-grid[@kendogridselectby]")
     WebElement searchGrid;
 
-    public Grid searchGrid() {
-        return new Grid(searchGrid);
+    public KendoGrid searchGrid() {
+        return new KendoGrid(searchGrid);
     }
 
     @FindBy(xpath = "//app-reservation-group-guest-list-wizard//kendo-grid[@kendogridtemplateediting]")
     WebElement guestsGrid;
 
-    public Grid guestsGrid() {
-        return new Grid(guestsGrid);
+    public KendoGrid guestsGrid() {
+        return new KendoGrid(guestsGrid);
     }
 
     public void checkOutGuest(WebElement guest) {

@@ -1,7 +1,7 @@
 package alia.nazeel.pages.reservations;
 
 
-import alia.nazeel.kendoelements.Grid;
+import alia.nazeel.kendoelements.KendoGrid;
 import alia.nazeel.tools.CustomWebDriverWait;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -29,7 +29,7 @@ public class P03_8_UnitsRatesPopUp {
 
     @FindBy(xpath = "//units-rates-popup-wizard//div[@class=\"calendar-container\"]")
     WebElement calenderGrid;
-   public Grid calender(){return new Grid(calenderGrid);}
+   public KendoGrid calender(){return new KendoGrid(calenderGrid);}
     @FindBy(xpath = "//units-rates-popup-wizard//kendo-dialog-actions//button[@class=\"button button--primary\"]")
     public WebElement confirmRatesButton;
 }

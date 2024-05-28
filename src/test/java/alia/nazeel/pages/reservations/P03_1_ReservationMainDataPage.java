@@ -1,6 +1,6 @@
 package alia.nazeel.pages.reservations;
 
-import alia.nazeel.kendoelements.Grid;
+import alia.nazeel.kendoelements.KendoGrid;
 import alia.nazeel.kendoelements.KendoDropDownList;
 
 
@@ -148,8 +148,8 @@ public class P03_1_ReservationMainDataPage {
     @FindBy(xpath = "//label[contains(text(),\"Unit(s) \")]/../following-sibling::kendo-grid//kendo-grid-list")
     WebElement unitsGrid;
 
-    Grid getResUnitsGrid() {
-        return new Grid(unitsGrid);
+    KendoGrid getResUnitsGrid() {
+        return new KendoGrid(unitsGrid);
     }
 
     public List<WebElement> resUnits() {

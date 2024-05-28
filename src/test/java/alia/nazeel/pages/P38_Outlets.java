@@ -1,6 +1,6 @@
 package alia.nazeel.pages;
 
-import alia.nazeel.kendoelements.Grid;
+import alia.nazeel.kendoelements.KendoGrid;
 import alia.nazeel.kendoelements.KendoMultiSelect;
 import alia.nazeel.pages.mutlipurposes.P00_multiPurposes;
 import alia.nazeel.tools.CustomWebDriverWait;
@@ -238,8 +238,8 @@ public class P38_Outlets {
     @FindBy(css = "app-transfer-order-to-reservation kendo-grid")
     WebElement resGrid;
 
-    public Grid resGrid() {
-        return new Grid(resGrid);
+    public KendoGrid resGrid() {
+        return new KendoGrid(resGrid);
     }
     @FindBy(xpath = "//app-transfer-order-to-reservation//label[contains(text(),\"Res. No.\")]//following-sibling::input")
     public WebElement reservationNumberSearchField;

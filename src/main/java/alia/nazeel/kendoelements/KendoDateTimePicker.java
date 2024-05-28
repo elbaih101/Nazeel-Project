@@ -1,22 +1,31 @@
 package alia.nazeel.kendoelements;
 
+import alia.nazeel.tools.CustomWebDriverWait;
+import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.openqa.selenium.*;
 
-import java.util.Arrays;
+import java.time.Duration;
 import java.util.List;
 
 public class KendoDateTimePicker implements WebElement {
 
 
     WebElement kendoDateTimePicker;
-    By inputBy = By.xpath(".//input");
-    By dateTimePickerButton = By.xpath(".//span[@class=\"k-select\"]");
-    By dateTimeContainorBy = By.cssSelector("div.k-datetime-container");
-    String format;
+    WebElement calender;
+    CustomWebDriverWait wait =new CustomWebDriverWait(Duration.ofSeconds(5));
+    final private By inputBy = By.xpath(".//input");
+    final private By dateTimePickerButton = By.xpath(".//span[@class=\"k-select\"]");
+    final private By calendarBy = By.xpath("//div[@class='k-datetime-container']");
+    final private By timeSelector = By.cssSelector("kendo-timeselector");
+    final private By setButton = By.cssSelector("button.k-time-accept");
+    final private By cancelButton = By.cssSelector("button.k-time-cancel");
+
+    final private   By dateTimeContainorBy = By.cssSelector("div.k-datetime-container");
+    String format = "dd/MM/YYYY HH:mm a";
     KendoButtonGroup buttonGroup;
-    WebElement container ;
+    WebElement container;
     DateTimeFormatter formatter = DateTimeFormat.forPattern(format);
 
     public KendoDateTimePicker(WebElement kendoDateTimePicker) {
@@ -36,17 +45,21 @@ public class KendoDateTimePicker implements WebElement {
     }
 
     public void selectDateTime(String dateTime) {
+        DateTime datetime1 = DateTime.parse(dateTime, formatter);
         openDateTimeContainer();
-        container =kendoDateTimePicker.findElement(dateTimeContainorBy);
-        buttonGroup =new KendoButtonGroup(container.findElement(By.cssSelector("div.k-datetime-buttongroup")));
-        List <String>spitedDateTime=Arrays.stream(dateTime.split(" ",1)).toList();
-        String date= spitedDateTime.getFirst();
-        String time = spitedDateTime.getLast();
-        
+        buttonGroup = new KendoButtonGroup(calender.findElement(By.cssSelector("div.k-datetime-buttongroup")));
+        selectYear(datetime1.toString(DateTimeFormat.forPattern("YYYY")));
+        selectMonth(datetime1.toString(DateTimeFormat.forPattern("MM")));
+        selectDate(datetime1.toString(DateTimeFormat.forPattern("dd")));
+        buttonGroup.selectButtonByName("Time");
+        selectTime(datetime1.toString(DateTimeFormat.forPattern("HH")), datetime1.toString(DateTimeFormat.forPattern("mm")), datetime1.toString(DateTimeFormat.forPattern("a")));
+        clickSetButton();
     }
 
     public void openDateTimeContainer() {
         getKendoDateTimePickerButton().click();
+        wait.waitLoading();
+        calender = kendoDateTimePicker.findElement(calendarBy);
     }
 
     private WebElement getKendoDateTimePickerButton() {
@@ -55,6 +68,50 @@ public class KendoDateTimePicker implements WebElement {
 
     private WebElement getDateTimeInput() {
         return kendoDateTimePicker.findElement(inputBy);
+    }
+
+
+    void selectYear(String year) {
+        calender.findElement(By.cssSelector("span.k-button")).click();
+        String yearXPath = String.format("//th[@scope='col' and contains(text(), '%s')]", year);
+        WebElement yearElement = kendoDateTimePicker.findElement(By.xpath(yearXPath));
+        yearElement.click();
+    }
+
+    void selectMonth(String month) {
+        String monthXPath = String.format("//td[@role='gridcell' and contains(@title, '%s')]/span", month);
+        WebElement monthElement = kendoDateTimePicker.findElement(By.xpath(monthXPath));
+        monthElement.click();
+    }
+
+    void selectDate(String date) {
+        String dateXPath = String.format("//td[@role='gridcell' and contains(@title, '%s')]/span", date);
+        WebElement dateElement = calender.findElement(By.xpath(dateXPath));
+        dateElement.click();
+    }
+
+    void selectTime(String hour, String minute, String period) {
+        // hour, minute should be in 'hh', 'mm' format, e.g., '12', '00'
+        // period should be 'AM' or 'PM'
+        String hourXPath = String.format("//kendo-timelist[@data-timelist-index='0']//li/span[text()='%s']", hour);
+        String minuteXPath = String.format("//kendo-timelist[@data-timelist-index='2']//li/span[text()='%s']", minute);
+        String periodXPath = String.format("//kendo-timelist[@data-timelist-index='4']//li/span[text()='%s']", period);
+
+        WebElement hourElement = calender.findElement(By.xpath(hourXPath));
+        WebElement minuteElement = calender.findElement(By.xpath(minuteXPath));
+        WebElement periodElement = calender.findElement(By.xpath(periodXPath));
+
+        hourElement.click();
+        minuteElement.click();
+        periodElement.click();
+    }
+
+    void clickSetButton() {
+        kendoDateTimePicker.findElement(setButton).click();
+    }
+
+    void clickCancelButton() {
+        kendoDateTimePicker.findElement(cancelButton).click();
     }
 
     @Override
