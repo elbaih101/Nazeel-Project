@@ -48,6 +48,7 @@ public class D11_Customers {
     public void goToCorporatesPage() {
         wait.waitLoading();
         dashBoardPage.customersDropList.click();
+        wait.waitLoading();
         dashBoardPage.corporatesLink.click();
     }
 
@@ -58,11 +59,11 @@ public class D11_Customers {
         fillCorporatedata(name, country, ignoredFields, vat, bNumb, secBNumb,invalidFields);
 
         try {
-            wait.withTimeout(Duration.ofMillis(500));
+            wait.waitLoading();
            selectCorpPopup.saveButton.click();
 
         } catch (NoSuchElementException e) {
-            wait.withTimeout(Duration.ofSeconds(10));
+           wait.waitLoading();
             corporates.saveButton.click();
         }
 
@@ -213,6 +214,7 @@ public class D11_Customers {
     public void goToVendorsPage() {
         wait.waitLoading();
         dashBoardPage.customersDropList.click();
+        wait.waitLoading();
         dashBoardPage.vendorssLink.click();
     }
 
@@ -734,6 +736,7 @@ public class D11_Customers {
                     guests.filterIdTypeList().stream().filter(s -> s.getText().equalsIgnoreCase(value)).findAny().orElseThrow().click();
             case "idnum" -> guests.iDFilterField.sendKeys(value);
         }
+        wait.waitLoading();
         guests.searchButton.click();
     }
 

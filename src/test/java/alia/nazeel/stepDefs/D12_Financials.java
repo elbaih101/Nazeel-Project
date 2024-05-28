@@ -29,7 +29,6 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
 
-
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -246,7 +245,7 @@ public class D12_Financials {
                 asrt.assertEquals(taxMap.get("sDate"), taxesPopUp.taxStartDate(selectedTax).getText());
                 asrt.assertEquals(taxMap.get("eDate"), taxesPopUp.taxEndDate(selectedTax).getText());
             } else {
-                asrt.assertFalse(taxesPopUp.taxesNames.stream().anyMatch(t -> t.getText().contains(taxMap.get("name"))),"Expected Tax: "+taxName+"to be not applied");
+                asrt.assertFalse(taxesPopUp.taxesNames.stream().anyMatch(t -> t.getText().contains(taxMap.get("name"))), "Expected Tax: " + taxName + "to be not applied");
             }
             asrt.assertAll();
         }
@@ -302,7 +301,7 @@ public class D12_Financials {
     @When("adding new Cost Center with name {string} category {string}")
     public void addingNewCostCenter(String name, String categ) {
         costCenter.newCostCenterButton.click();
-        fillCostCenterData(name, categ, "");
+        fillCostCenterData(name, categ, "new");
         costCenter.submitButton.click();
     }
 
@@ -339,16 +338,21 @@ public class D12_Financials {
             else if ((stat.equalsIgnoreCase("inactive") && costCenter.statusSwitch.getAttribute("class").contains("k-switch-on")))
                 costCenter.statusSwitch.click();
             costMap.put("stat", stat);
+            if (stat.equalsIgnoreCase("new"))
+                costMap.put("stat", "active");
         }
     }
 
-    @And("Check the newly added costCenter is added")
-    public void checkTheNewlyAddedCostCenterIsAdded() {
-        checkTheLastChangedCostCenter();
+    @And("Check msg {string} and the costCenter")
+    public void checkTheNewlyAddedCostCenterIsAdded(String msg) {
+        new D03_BlocksAndFloors().checkToastMesageContainsText("msg");
+        if (msg.toLowerCase().contains("successfully"))
+            checkTheLastChangedCostCenter();
     }
 
     private void checkTheLastChangedCostCenter() {
         wait.waitLoading();
+
         asrt.assertTrue(costCenter.costNames.stream().anyMatch(am -> am.getText().contains(costMap.get("name"))), "Expected: " + costMap.get("name") + " to be present in the grid");
         P10_VouchersPage vouchersPage = new P10_VouchersPage(driver);
         new D06_DigitalPayment().goToDesiredVouchersPage("Payment");
@@ -424,6 +428,7 @@ public class D12_Financials {
             case "stat" ->
                     costCenter.statusFilterList().stream().filter(c -> c.getText().contains(data)).findAny().orElseThrow().click();
         }
+        wait.waitLoading();
         costCenter.searchButton.click();
     }
 
@@ -451,7 +456,9 @@ public class D12_Financials {
     public void goToDiscountTypesPage() {
         wait.waitLoading();
         dashBoardPage.setupPageLink.click();
+        wait.waitLoading();
         setupPage.financialDropList.click();
+        wait.waitLoading();
         setupPage.discountTypesLink.click();
         wait.waitLoading();
     }
@@ -559,8 +566,11 @@ public class D12_Financials {
 
     @Given("go to Currencies Page")
     public void goToCurrenciesPage() {
+        wait.waitLoading();
         dashBoardPage.setupPageLink.click();
+        wait.waitLoading();
         setupPage.financialDropList.click();
+        wait.waitLoading();
         setupPage.currenciesLink.click();
     }
 
@@ -702,10 +712,14 @@ public class D12_Financials {
     public void checkRecordSAs(String filter, String value) {
 
         switch (filter.toLowerCase()) {
-            case "status" -> asrt.AssertNonMatch(taxesAndFees.statuses,s->!s.getText().toLowerCase().contains(value.toLowerCase()));
-            case "name" -> asrt.AssertNonMatch(taxesAndFees.names,n->!n.getText().toLowerCase().contains(value.toLowerCase()));
-            case "applied on" -> asrt.AssertAnyMatch(taxesAndFees.appliedOns,c->!c.getText().toLowerCase().contains("all")||!c.getText().toLowerCase().contains(value.toLowerCase()));
-            case "method" -> asrt.AssertNonMatch(taxesAndFees.methods,m->!m.getText().toLowerCase().contains(value.toLowerCase()));
+            case "status" ->
+                    asrt.AssertNonMatch(taxesAndFees.statuses, s -> !s.getText().toLowerCase().contains(value.toLowerCase()));
+            case "name" ->
+                    asrt.AssertNonMatch(taxesAndFees.names, n -> !n.getText().toLowerCase().contains(value.toLowerCase()));
+            case "applied on" ->
+                    asrt.AssertAnyMatch(taxesAndFees.appliedOns, c -> !c.getText().toLowerCase().contains("all") || !c.getText().toLowerCase().contains(value.toLowerCase()));
+            case "method" ->
+                    asrt.AssertNonMatch(taxesAndFees.methods, m -> !m.getText().toLowerCase().contains(value.toLowerCase()));
         }
         asrt.assertAll();
     }

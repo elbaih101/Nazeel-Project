@@ -8,16 +8,14 @@ Feature: Vouchers
 
 
   @corporate_vouchers,orders
-  Rule:Stand alone corporate Vouchers
-    #noinspection GherkinMisplacedBackground
-  Background: going to receipt vouchers page
-    Given go to "Receipt" Vouchers Page
-
   Scenario: create SA receipt Voucher for a corporate
+    Given go to "Receipt" Vouchers Page
     And successfully create a voucher of type "SAReceipt" amount "200" payment Method "Cash" maturity Date "" and Creatian Date "" for a "corporate"
     Then check the created voucher owner to be the selected corporate
     #todo filter search criteria for vouchers
-
+#  Scenario: filetr receipt Vouchers
+#    Given go to "Receipt" Vouchers Page
+#    Given filter receipt vouchers with "" as ""
 
 
   Rule:ended Reservations Vouchers

@@ -11,7 +11,7 @@ Feature: Property Financials settings
     Scenario Outline: adding cost Center
       When adding new Cost Center with name "<name>" category "<cat>"
       Then Check toast mesage contains text "<msg>"
-      And Check the newly added costCenter is added
+      And Check msg "<msg>" and the costCenter
       Examples:
         | name        | cat    | msg                               |
         |             | Random | Name is required                  |

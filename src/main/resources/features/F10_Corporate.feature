@@ -42,7 +42,7 @@ Feature: corporates Feature
         |                   | Saudi   | all     |                 |      |         | Name Is Requird                                                      |
         | zeko              |         | all     |                 |      |         | Country is required                                                  |
         | corp data related | Saudi   |         | 332166498745613 | 6541 | 5236    | Name exist before                                                    |
-        | ghaly             | Saudi   | all     | 564             |      |         | VAT Number Should be 15 Digits\nVAT Number Should Begin And End By 3 |
+        | ghaly             | Saudi   | all     | 564             |      |         | vat regestration no should be 15 digits that begins and ends with 3 |
         | ghaly             | Saudi   | all     | 987654123654987 |      |         | VAT Number Should Begin And End By 3                                 |
 
     Scenario Outline: delete corporate

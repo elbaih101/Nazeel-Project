@@ -85,6 +85,7 @@ final JavascriptExecutor js =(JavascriptExecutor) driver;
 
     @Then("Check toast mesage contains text {string}")
     public void checkToastMesageContainsText(String mesage) {
+        wait.until(ExpectedConditions.visibilityOfAllElements(multiPurposes.toastMsgs));
         asrt.assertTrue(multiPurposes.toastMsgs.getFirst().isDisplayed());
         asrt.assertTrue(multiPurposes.toastMsgs.getFirst().getText().trim().toLowerCase().contains( mesage.toLowerCase()),"actual : "+multiPurposes.toastMsgs.getFirst().getText().trim().toLowerCase()+"\nExpected : "+mesage.toLowerCase()+"\n");
         asrt.assertAll();

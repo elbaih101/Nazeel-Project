@@ -28,10 +28,10 @@ public class Hooks {
     public void start(Scenario scenario) {
 
         this.scenario = scenario;
-        DriverManager.initializeDriver(Drivers.Chrome, Driver_Mode.UI);
+        DriverManager.initializeDriver(Drivers.Chrome, Driver_Mode.Headless);
         this.driver = DriverManager.getDriver();
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
-        driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(20));
+        driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(30));
         driver.get(stageUrl);
 
     }

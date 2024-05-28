@@ -101,6 +101,7 @@ public class P32_OutletItems {
     }
 
     public List<WebElement> categoriesList() {
+        wait.waitLoading();
         driver.findElement(By.xpath("//kendo-combobox[@name=\"category\"]//span[@class=\"k-select\"]")).click();
         try {
             Thread.sleep(300);

@@ -51,6 +51,7 @@ public class D01_Reservations {
         // wait.waitLoading();
         // wait.until(ExpectedConditions.refreshed(ExpectedConditions.elementToBeClickable(homePage.ReservationsLink)));
         //     homePage.ReservationsLink.click();
+        wait.waitLoading();
         js.executeScript("arguments[0].click();", homePage.ReservationsLink);
         wait.waitLoading();
     }
@@ -255,11 +256,12 @@ public class D01_Reservations {
 
     @And("Save reservation as {string}")
     public void saveReservationAs(String state) {
+        //FixMe some error happens here causing failure
         if (state.equalsIgnoreCase("confirmed"))
             clickOnSaveReservationButton();
-        else if (state.toLowerCase().contains("in"))
+        else if (state.toLowerCase().contains("in")){
             wait.waitLoading();
-        reservationMainDataPage.checkInButton.click();
+        reservationMainDataPage.checkInButton.click();}
         whenReservationSummaryDialougeAppearsClickOnSaveReservatuonButton();
     }
 
@@ -445,8 +447,9 @@ public class D01_Reservations {
 
     @And("Check page size equal to {string}")
     public void checkPageSizeEqualTo(String size) {
+        wait.waitLoading();
         Select s = new Select(new P00_multiPurposes(driver).pageSize);
-        asrt.assertTrue(s.getFirstSelectedOption().getText().contains(size));
+        asrt.assertTrue(new P00_multiPurposes(driver).pageSize.getAttribute("value").contains(size));
         asrt.assertAll();
     }
 

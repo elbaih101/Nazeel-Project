@@ -34,6 +34,7 @@ public class D10_Supscriptions {
 
     @And("go to subscriptions prices page")
     public void goToSubscriptionsPricesPage() {
+        wait.waitLoading();
         dashBoardPage.masterDataLink.getFirst().click();
         masterData.servicesDropList.click();
         masterData.subscriptionsPricesLink.click();
@@ -46,6 +47,7 @@ public class D10_Supscriptions {
         subscriptionPrices.popUpServicesList().stream().filter(serv -> serv.getText().toLowerCase().contains(service.toLowerCase())).toList().getFirst().click();
 
         if (!service.equalsIgnoreCase(Services.Nazeel.toString())) {
+            wait.waitLoading();
             subscriptionPrices.subscriptionType(type).click();
         } else {
             asrt.assertEquals(subscriptionPrices.nazeelAnnualFactorText().getAttribute("placeholder"), "Annual renewal price	 ×");

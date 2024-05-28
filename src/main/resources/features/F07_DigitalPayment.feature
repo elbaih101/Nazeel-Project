@@ -43,7 +43,7 @@ Feature: PayTabs integration
   Rule:Reservations
     Background:
       Given open reservations Page
-      Given  Create "Checked-In" Reservation withSource "RANDOM" purpose "RANDOM" Unit "RANDOM" Guest "RANDOM" startDate "" endDate ""
+      Given  Create "single" "Checked-In" Reservation withSource "RANDOM" purpose "RANDOM" Unit "RANDOM" Guest "RANDOM" startDate "" endDate ""
       And go to Reservation Financial Page
       And open the digital payment popup
     Scenario: create PayTabs link for receipt Voucher

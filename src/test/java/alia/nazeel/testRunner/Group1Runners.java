@@ -9,7 +9,7 @@ import org.testng.annotations.DataProvider;
 
                 features = "src/main/resources/features",
                 glue = {"alia.nazeel.stepDefs"},
-                tags = /*"@Group1 and not*/" @Property",//"not @Reservation_Rules and not @DigitalPayment and not @Property and not @Blocks_Floors",
+                tags = "@Group1"/* and not@Property"*/,//"not @Reservation_Rules and not @DigitalPayment and not @Property and not @Blocks_Floors",
                 plugin = {
                         "pretty",
                         "html:target/cucumber-reports/cucumber1.html",

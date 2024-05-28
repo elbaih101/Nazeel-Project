@@ -144,7 +144,6 @@ Feature: Unit Setup
     Then  edit all the features related to the selected units and save
     Then Check toast mesage contains text "Updated Successfully"
 
-#FIXME add create a unit to be deleted
   Scenario: delete a unit
     When clicking delete button for unit "RANDOM"
     Then Check the deleted unit number matches the selected unit number

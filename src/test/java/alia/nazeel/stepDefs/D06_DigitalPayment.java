@@ -51,6 +51,7 @@ public class D06_DigitalPayment {
 
     @And("go to {string} Vouchers Page")
     public void goToDesiredVouchersPage(String vType) {
+        wait.waitLoading();
         if (vType.equalsIgnoreCase(Vouchers.promissory.toString())) {
             wait.until(ExpectedConditions.elementToBeClickable(dashBoardPage.vouchersDropList));
             dashBoardPage.dashBoardLink.click();
@@ -68,11 +69,11 @@ public class D06_DigitalPayment {
 //            dashBoardPage.receiptsLink.click();
         } else if (vType.equalsIgnoreCase("payment") || vType.equalsIgnoreCase(Vouchers.Refund.toString()) || vType.equalsIgnoreCase(Vouchers.SDRefund.toString()) || vType.equalsIgnoreCase(Vouchers.Expenses.toString())) {
             dashBoardPage.dashBoardLink.click();
-            wait.waitLoading();
             dashBoardPage.vouchersDropList.click();
             wait.until(ExpectedConditions.elementToBeClickable(dashBoardPage.paymentsLink));
             dashBoardPage.paymentsLink.click();
         }
+        wait.waitLoading();
     }
 
 
@@ -288,6 +289,7 @@ public class D06_DigitalPayment {
         wait.until(ExpectedConditions.elementToBeClickable(p031ReservationMainDataPage.financialAndPaymentsPage));
         js.executeScript("arguments[0].click();", p031ReservationMainDataPage.financialAndPaymentsPage);
 //        p031ReservationMainDataPage.financialAndPaymentsPage.click();
+        wait.waitLoading();
     }
 
     @And("Check the data matches the reservation data")
@@ -403,7 +405,7 @@ public class D06_DigitalPayment {
         clickGenerateAndCheckToastMessage("Saved Successfully");
         checkTheLinkIsGeneratedInTheLinkField();
     }
-//Todo : this statuc variable may casue issues pay attenttion
+//FixME : this statuc variable may casue issues pay attenttion
     public static String promissoryNo;
 
 

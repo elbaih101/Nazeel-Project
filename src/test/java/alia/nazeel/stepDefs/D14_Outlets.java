@@ -46,8 +46,11 @@ public class D14_Outlets {
 
     @Given("go to outlets Setup Page")
     public void goToOutletsSetupPage() {
+        wait.waitLoading();
         dashBoardPage.setupPageLink.click();
+        wait.waitLoading();
         setupPage.outletsDropList.click();
+        wait.waitLoading();
         setupPage.outletSetupLink.click();
     }
 
@@ -88,8 +91,10 @@ public class D14_Outlets {
         if (!name.isEmpty()) {
             outletsSetup.outletNameField.sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.BACK_SPACE));
             new P00_multiPurposes(driver).secondLanguageField(outletsSetup.outletNameField).sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.BACK_SPACE));
-            if (!name.equalsIgnoreCase("non"))
+            if (!name.equalsIgnoreCase("non")) {
                 outletsSetup.outletNameField.sendKeys(name);
+                new P00_multiPurposes(driver).secondLanguageField(outletsSetup.outletNameField).sendKeys(name);
+            }
         }
         if (!desc.isEmpty()) {
             outletsSetup.descriptionField.clear();
@@ -127,10 +132,12 @@ public class D14_Outlets {
 
     @When("editing Outlet {string} opState {string} and code {string} and name {string} description {string} state {string}")
     public void editingOutletOpStateAndCodeAndNameDescription(String oName, String opState, String code, String nName, String desc, String state) {
+        wait.waitLoading();
         WebElement selectedOutlet = extractOutlet(oName);
         outletsSetup.outletEditButton(selectedOutlet).click();
         wait.waitLoading();
         fillOutletData(opState, code, nName, desc, state);
+
         outletsSetup.submitButton.click();
 
     }
@@ -147,6 +154,7 @@ public class D14_Outlets {
     @When("Filtering With {string} as {string}")
     public void filteringWithAs(String filter, String value) {
         outletsSetup.filterButton.click();
+        wait.waitLoading();
         switch (filter.toLowerCase()) {
             case "status" ->
                     outletsSetup.statusesFilterList().stream().filter(s -> s.getText().equalsIgnoreCase(value)).findAny().orElseThrow().click();
@@ -231,11 +239,12 @@ public class D14_Outlets {
     }
 
     private void fillCategData(String outlet, String ntmp, String name, String desc, String state) {
-        if (!outlet.isEmpty())
+        if (!outlet.isEmpty()) {
             if (outlet.equalsIgnoreCase("non"))
                 js.executeScript("arguments[0].click();", categories.clearOutletSelectionButton);
             else
                 categories.outletsList().stream().filter(o -> o.getText().equalsIgnoreCase(outlet)).findFirst().orElseThrow().click();
+        }
         if (!ntmp.isEmpty()) {
             if (ntmp.equalsIgnoreCase("non"))
                 js.executeScript("arguments[0].click();", categories.clearNTMPSelectionButton);
@@ -355,8 +364,11 @@ public class D14_Outlets {
 
     @Given("go to items setup")
     public void goToItemsSetup() {
+        wait.waitLoading();
         dashBoardPage.setupPageLink.click();
+        wait.waitLoading();
         setupPage.outletsDropList.click();
+        wait.waitLoading();
         setupPage.itemsLink.click();
     }
 
@@ -387,6 +399,7 @@ public class D14_Outlets {
             if (outlet.equalsIgnoreCase("non"))
                 js.executeScript("arguments[0].click();", items.clearOutletSelectionButton);
             else
+                //Fixme no such element exception  java
                 items.outletsList().stream().filter(o -> o.getText().equalsIgnoreCase(outlet)).findFirst().orElseThrow().click();
         if (!categ.isEmpty()) {
             if (categ.equalsIgnoreCase("non"))
@@ -517,6 +530,7 @@ public class D14_Outlets {
 
     @When("Filter Items With {string} as {string}")
     public void filterItemsWithAs(String filter, String value) {
+        wait.waitLoading();
         items.filterButton.click();
         switch (filter.toLowerCase()) {
             case "status" ->
@@ -577,7 +591,9 @@ public class D14_Outlets {
 
     @Given("navigate to outlet orders Page")
     public void navigateToOutletOrdersPage() {
+        wait.waitLoading();
         dashBoardPage.outletsDropList.click();
+        wait.waitLoading();
         dashBoardPage.outletsPageLink.click();
     }
 
@@ -585,10 +601,9 @@ public class D14_Outlets {
 
     @When("creating an order for item {string} from outlet {string}")
     public void creatingAnOrderForItemFromOutlet(String itemName, String outletName) {
-        selectingItemFromOutlet(itemName,outletName);
+        selectingItemFromOutlet(itemName, outletName);
         //here iam doing two operation sin one getting dscount before ore after taxes and clicking the next button
         taxCalcMethod = Nazeel_Calculations.getTaxCalculationMethod(driver, () -> outlets.nextButton.click());
-        outlets.nextButton.click();
         wait.waitLoading();
     }
 
@@ -644,11 +659,11 @@ public class D14_Outlets {
     int ExcutedOnce = 0;
 
     @And("submiting the order as {string} for a {string} issue date {string}")
-    public void submitingTheOrderAsForA(String orderType, String ownerType, String issueDate) {
+    public void submitingTheOrderAsForA(String orderType, String owner, String issueDate) {
         if (orderType.toLowerCase().contains("walk")) {
             outlets.walkinOrderButton.click();
             wait.waitLoading();
-            if (ownerType.equalsIgnoreCase("corporate")) {
+            if (owner.equalsIgnoreCase("corporate")) {
                 outlets.selctCorporateButton.click();
                 new D11_Customers().selectCorporate("corp data related", "", "", "");
             } else {
@@ -673,18 +688,42 @@ public class D14_Outlets {
                 outlets.addPayMethodButton.click();
             }
 
-            API api = new API();
-            String body = api.getResponseBody(driver, "api/hotel-services/orders/create", () -> outlets.submitOrderButton.click());
+            confirmOrderAndGetInvoiceAndReceipt(outlets.submitOrderButton::click);
 
-            JsonObject json = JsonParser.parseString(body).getAsJsonObject();
-            if (!json.get("data").isJsonNull()) {
-                invoiceNo = json.get("data").getAsJsonObject().get("invoiceNumber").getAsString();
-                receiptNo = json.get("data").getAsJsonObject().get("vouchersSequanceNumber").getAsJsonArray().get(0).getAsString();
-            }
+        } else if (orderType.toLowerCase().contains("reservation")) {
+            selectResFromOrder(owner);
+            confirmOrderAndGetInvoiceAndReceipt(outlets.confirmResSelectionButton::click);
 
         }
         ExcutedOnce++;
 
+    }
+
+    private void selectResFromOrder(String owner) {
+        chooseTransfereToRes();
+        searchResinOrder(owner);
+        outlets.resGrid().getGridCell(0, 0).click();
+    }
+
+    private void confirmOrderAndGetInvoiceAndReceipt(Runnable r) {
+        API api = new API();
+        String body = api.getResponseBody(driver, "api/hotel-services/orders/create", r);
+
+        JsonObject json = JsonParser.parseString(body).getAsJsonObject();
+        if (!json.get("data").isJsonNull()) {
+            invoiceNo = json.get("data").getAsJsonObject().get("invoiceNumber").getAsString();
+            receiptNo = json.get("data").getAsJsonObject().get("vouchersSequanceNumber").getAsJsonArray().get(0).getAsString();
+        }
+    }
+
+    private void chooseTransfereToRes() {
+        outlets.transToResButton.click();
+        wait.waitLoading();
+    }
+
+    private void searchResinOrder(String owner) {
+        outlets.reservationNumberSearchField.sendKeys(owner);
+        outlets.searchReservationButton.click();
     }
 
     String invoiceNo;
@@ -737,23 +776,24 @@ public class D14_Outlets {
         JsonArray items = json.getAsJsonArray("data");
         JsonObject foundItem = null;
         String jsonProperty = "";
-        String itemName=item;
+        String itemName = item;
         if (item.equalsIgnoreCase("user defined"))
             jsonProperty = "priceIsUserDefined";
 
         if (item.equalsIgnoreCase("tax exempted"))
             jsonProperty = "taxExcluded";
-        if (item.equalsIgnoreCase("user defined")||item.equalsIgnoreCase("tax exempted")){
-        for (JsonElement i : items
-        ) {
-            if (i.getAsJsonObject().get(jsonProperty).getAsBoolean()) {
-                foundItem = i.getAsJsonObject();
+        if (item.equalsIgnoreCase("user defined") || item.equalsIgnoreCase("tax exempted")) {
+            for (JsonElement i : items
+            ) {
+                if (i.getAsJsonObject().get(jsonProperty).getAsBoolean()) {
+                    foundItem = i.getAsJsonObject();
+                }
             }
+            asrt.assertFalse(foundItem == null, "item Not Found");
+            itemName = foundItem.get("nameEn").getAsString();
+            itemPrice = foundItem.get("price").getAsFloat();
         }
-        asrt.assertFalse(foundItem == null, "item Not Found");
-        itemName = foundItem.get("nameEn").getAsString();
-        itemPrice = foundItem.get("price").getAsFloat();}
-        
+
         selectItem(itemName);
 
     }
@@ -768,7 +808,22 @@ public class D14_Outlets {
 
     @Then("Check the order Tax amount to be {float}")
     public void checkTheOrderTaxAmountToBe(float taxAmount) {
-        asrt.assertEquals( outlets.orderTaxes(),taxAmount);
+        asrt.assertEquals(outlets.orderTaxes(), taxAmount);
         asrt.assertAll();
+    }
+
+    @And("open Transfere to reservation pop up and Check can't be transfered to ended reservaion")
+    public void openTransfereToReservationPopUpAndCheckCanTBeTransferedToEndedReservaion() {
+        chooseTransfereToRes();
+        String[] ended = {"Cancelled", "Checked Out", "Expired", "No Show"};
+        asrt.AssertNonMatch(outlets.resGrid().getGridCells(3), s -> Utils.containsStringThatContainsIgnoreCase(ended, s.getText()));
+        searchResinOrder("24000001");
+        asrt.assertTrue(outlets.resGrid().getGridRows().isEmpty());
+    }
+
+    @And("open Transfere to reservation pop up and Check can't be transfered to reservation of diffrent tax type")
+    public void openTransfereToReservationPopUpAndCheckCanTBeTransferedToReservationOfDiffrentTaxType() {
+        selectResFromOrder("24000002");
+        new D03_BlocksAndFloors().checkToastMesageContainsText("Taxes & Fees customization settings of order did not match those applied for rent!");
     }
 }

@@ -31,7 +31,7 @@ public class D07_PrintingOptions {
 
     @And("go to printing options page")
     public void goToPrintingOptionsPage() {
-        wait.until(ExpectedConditions.elementToBeClickable(dashBoardPage.setupPageLink));
+        wait.waitLoading();
         dashBoardPage.setupPageLink.click();
         wait.until(ExpectedConditions.elementToBeClickable(setupPage.printingDropList));
         setupPage.printingDropList.click();

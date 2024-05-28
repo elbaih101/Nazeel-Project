@@ -1,6 +1,7 @@
 package alia.nazeel.pages.vouchersPages;
 
 
+import alia.nazeel.tools.CustomWebDriverWait;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -8,7 +9,7 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
+
 
 import java.time.Duration;
 import java.util.List;
@@ -16,7 +17,7 @@ import java.util.List;
 @SuppressWarnings("unused")
 public class P11_DigitalPaymentPage {
     final WebDriver driver;
-    final WebDriverWait wait;
+    final CustomWebDriverWait wait;
     final Actions actions;
 
 
@@ -24,7 +25,7 @@ public class P11_DigitalPaymentPage {
     public P11_DigitalPaymentPage(WebDriver driver) {
         PageFactory.initElements(driver, this);
         this.driver = driver;
-        wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        wait = new CustomWebDriverWait(driver, Duration.ofSeconds(10));
         actions = new Actions(driver);
     }
 
@@ -88,11 +89,12 @@ public class P11_DigitalPaymentPage {
     }
 
     public WebElement guestSelectionButton() {
-        return digitalPayDialog.findElement(By.xpath(".//label[contains(text(),\"Guest Name\")]/../../..//*[name()=\"svg\"]"));
+        wait.waitLoading();
+        return digitalPayDialog.findElement(By.xpath(".//label[contains(text(),\"For\")]/../../..//*[name()=\"svg\"]"));
     }
 
     public WebElement guestNameField() {
-        return digitalPayDialog.findElement(By.xpath(".//label[contains(text(),\"Guest Name\")]/..//input"));
+        return digitalPayDialog.findElement(By.xpath(".//label[contains(text(),\"For\")]/..//input"));
     }
 
     public WebElement commentField() {

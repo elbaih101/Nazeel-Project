@@ -1,5 +1,7 @@
 package alia.nazeel.pages;
 
+import alia.nazeel.kendoelements.Grid;
+import alia.nazeel.kendoelements.KendoMultiSelect;
 import alia.nazeel.pages.mutlipurposes.P00_multiPurposes;
 import alia.nazeel.tools.CustomWebDriverWait;
 import org.openqa.selenium.By;
@@ -73,6 +75,7 @@ public class P38_Outlets {
 
     /**
      * returns item price field from the order grid
+     *
      * @param item WebElement item related cell
      * @return WebElement the field of the item Span/Input
      */
@@ -85,6 +88,7 @@ public class P38_Outlets {
 
     /**
      * returns item price field from the item selection grid
+     *
      * @return WebElement the field of the item Span/Input
      */
     public WebElement itemPriceField() {
@@ -224,4 +228,23 @@ public class P38_Outlets {
     public WebElement issueTimeField;
     @FindBy(xpath = "//app-walk-in-pop-up//button[contains(text(),\"Create Order\")]")
     public WebElement submitOrderButton;
+
+    @FindBy(css = "app-transfer-order-to-reservation kendo-multiselect")
+    WebElement resStatusMultiSelect;
+
+    public KendoMultiSelect resStatusMultiSelect() {
+        return new KendoMultiSelect(resStatusMultiSelect);
+    }
+    @FindBy(css = "app-transfer-order-to-reservation kendo-grid")
+    WebElement resGrid;
+
+    public Grid resGrid() {
+        return new Grid(resGrid);
+    }
+    @FindBy(xpath = "//app-transfer-order-to-reservation//label[contains(text(),\"Res. No.\")]//following-sibling::input")
+    public WebElement reservationNumberSearchField;
+    @FindBy(css = "app-transfer-order-to-reservation button")
+    public WebElement searchReservationButton;
+    @FindBy(css = "app-add-modfiy-outlet-order-units-issue-date-popup kendo-dialog-actions button.n-button--primary")
+    public WebElement confirmResSelectionButton;
 }

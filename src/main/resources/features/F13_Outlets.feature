@@ -60,7 +60,7 @@ Feature: Outlets Feature
       Examples:
         | name               | outlet              | ntmp    | desc            | msg                       |
         |                    | data Related Outlet | Other   | added categ     | English Name Is required  |
-        | data Related Categ |                     | Laundry | dublicate categ | Name exist before         |
+        | data Related Categ | data Related Outlet | Laundry | dublicate categ | Name exist before         |
         | categ 1            |                     | Other   | added categ     | Outlet is required        |
         | categ 1            | data Related Outlet |         | added categ     | NTMP Category is required |
         | categ 1            | data Related Outlet | Other   | added categ     | Added Successfully        |
@@ -105,15 +105,15 @@ Feature: Outlets Feature
       When creating item with name "<name>" and type "<type>" and outlet "<outlet>" and category "<categ>" description "<desc>" price "<price>" taxstate "<tax>"
       Then Check msg "<msg>" and the item
       Examples:
-        | name   | type    | outlet | categ   | desc                    | price       | tax      | msg                    |
-        |        | Product | 1      | categ 1 | item 1 categ 2 outlet 2 | 15          | applied  | Name is required       |
-        | item 1 |         | 1      | categ 1 | item 1 categ 2 outlet 2 | userdefined |          | Item Type is required  |
-        | item 1 | Service |        | categ 1 | item 1 categ 2 outlet 2 | free        |          | Outlet is required     |
-        | item 1 | Service | 1      |         | item 1 categ 2 outlet 2 | free        |          | Category is required   |
-        | item 1 | Product | 1      | categ 1 | item 1 categ 2 outlet 2 |             | exempted | Item Price is required |
-        | item 1 | Service | 1      | categ 1 | item 1 categ 2 outlet 2 | 15          | applied  | Added Successfully     |
-        | item 1 | Product | 1      | categ 1 | item 1 categ 2 outlet 2 | 20          |          | Name exist before      |
-        | item 2 | Service | 1      | categ 1 | item 2 categ 2 outlet 2 | userdefined | exempted | Added Successfully     |
+        | name   | type    | outlet              | categ              | desc                    | price       | tax      | msg                    |
+        |        | Product | data Related Outlet | data Related Categ | item 1 categ 2 outlet 2 | 15          | applied  | Name is required       |
+        | item 1 |         | data Related Outlet | data Related Categ | item 1 categ 2 outlet 2 | userdefined |          | Item Type is required  |
+        | item 1 | Service |                     | data Related Categ | item 1 categ 2 outlet 2 | free        |          | Outlet is required     |
+        | item 1 | Service | data Related Outlet |                    | item 1 categ 2 outlet 2 | free        |          | Category is required   |
+        | item 1 | Product | data Related Outlet | data Related Categ | item 1 categ 2 outlet 2 |             | exempted | Item Price is required |
+        | item 1 | Service | data Related Outlet | data Related Categ | item 1 categ 2 outlet 2 | 15          | applied  | Added Successfully     |
+        | item 1 | Product | data Related Outlet | data Related Categ | item 1 categ 2 outlet 2 | 20          |          | Name exist before      |
+        | item 2 | Service | data Related Outlet | data Related Categ | item 2 categ 2 outlet 2 | userdefined | exempted | Added Successfully     |
 
 
     Scenario Outline: edit Item
@@ -133,12 +133,12 @@ Feature: Outlets Feature
       When Filter Items With "<filter>" as "<value>"
       Then Check all items records "<filter>" as "<value>"
       Examples:
-        | filter   | value       |
-        | status   | inactive    |
-        | Outlet   | 2           |
-        | name     | 3           |
-        | price    | 0           |
-        | Category | 2 - Categ 2 |
+        | filter   | value              |
+        | status   | inactive           |
+        | Outlet   | 2                  |
+        | name     | 3                  |
+        | price    | 0                  |
+        | Category | data Related Categ |
 
     Scenario: delete item
       When deleting item "item 3"
@@ -157,7 +157,7 @@ Feature: Outlets Feature
 
     @corporate_vouchers,orders
     Scenario: outlet order for a corporate
-      When creating an order for item "item 1" from outlet "data Related Outlet"
+      When creating an order for item "data Related Item" from outlet "data Related Outlet"
       And submiting the order as "walk in" for a "corporate" issue date ""
       Then  Check "walk in" order is created
 
@@ -165,7 +165,7 @@ Feature: Outlets Feature
 
     @Walk-inOrders_IssueDate
     Scenario: cant create a walk in order with future date
-      When creating an order for item "item 1" from outlet "data Related Outlet"
+      When creating an order for item "data Related Item" from outlet "data Related Outlet"
       Then check the issue date validation
 
     @Item_suggested_price
@@ -173,9 +173,18 @@ Feature: Outlets Feature
       When selecting item "user defined" from outlet "data Related Outlet"
       Then  check item price is rewritable
 
-  @Tax_Exempted_Item
-  Scenario: check taxes on tax exempted item
-    When creating an order for item "tax exempted" from outlet "data Related Outlet"
-    Then Check the order Tax amount to be 0.0
+    @Tax_Exempted_Item
+    Scenario: check taxes on tax exempted item
+      When creating an order for item "tax exempted" from outlet "data Related Outlet"
+      Then Check the order Tax amount to be 0.0
+
+    Scenario: order can only be transferred to non ended reservations
+      When creating an order for item "data Related Item" from outlet "data Related Outlet"
+      And open Transfere to reservation pop up and Check can't be transfered to ended reservaion
+
+    Scenario: can't create order for reservation without the same tax settings
+      When creating an order for item "data Related Item" from outlet "data Related Outlet"
+      And open Transfere to reservation pop up and Check can't be transfered to reservation of diffrent tax type
+
 
  # TODO : REceipts and Refunds on wlakin Orders

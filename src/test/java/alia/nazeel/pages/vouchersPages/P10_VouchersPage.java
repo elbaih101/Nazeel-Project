@@ -4,6 +4,7 @@ package alia.nazeel.pages.vouchersPages;
 import alia.nazeel.enums.Vouchers;
 
 
+import alia.nazeel.kendoelements.KendoDateTimePicker;
 import alia.nazeel.tools.CustomWebDriverWait;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -50,7 +51,7 @@ public class P10_VouchersPage {
 
     public WebElement digialPaymentButton() {
         wait.until(ExpectedConditions.elementToBeClickable(moreAddOptionsButton));
-       wait.waitLoading();
+        wait.waitLoading();
         moreAddOptionsButton.click();
         return digitalPaymentOption;
     }
@@ -65,6 +66,7 @@ public class P10_VouchersPage {
         }
         return owner;
     }
+
     //FIXME : dont forget the error
     public List<WebElement> moreActions(WebElement voucherAmount, String voucherType) {
         WebElement moreMenu = null;
@@ -96,6 +98,7 @@ public class P10_VouchersPage {
         }
         return button;
     }
+
     @FindBy(xpath = "//button[@class=\"n-button n-button--primary\" and contains(text(),\"Filter\")]")
     public WebElement filterButton;
     @FindBy(xpath = "//div[contains(@class,\"filter-form\")]//button")
@@ -114,4 +117,11 @@ public class P10_VouchersPage {
     public List<WebElement> dropCashDateTimeFroms;
     @FindBy(xpath = "//td[@data-kendo-grid-column-index=\"3\"]")
     public List<WebElement> dropCashDateTimeTos;
+
+    ////Filter ////
+    @FindBy(xpath = "//div[@class=\"filter-form\"]//kendo-datetimepicker[.//input[@placeholder=\"From\"]]")
+    WebElement fromDatePicker;
+    public KendoDateTimePicker fromDatePicker(){
+        return new KendoDateTimePicker(fromDatePicker);
+    }
 }
