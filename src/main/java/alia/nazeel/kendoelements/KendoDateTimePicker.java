@@ -17,7 +17,7 @@ public class KendoDateTimePicker implements WebElement {
     CustomWebDriverWait wait =new CustomWebDriverWait(Duration.ofSeconds(5));
     final private By inputBy = By.xpath(".//input");
     final private By dateTimePickerButton = By.xpath(".//span[@class=\"k-select\"]");
-    final private By calendarBy = By.xpath("//div[@class='k-datetime-container']");
+    final private By calendarBy = By.xpath("//div[contains(@class,\"k-datetime-container\")]");
     final private By timeSelector = By.cssSelector("kendo-timeselector");
     final private By setButton = By.cssSelector("button.k-time-accept");
     final private By cancelButton = By.cssSelector("button.k-time-cancel");
