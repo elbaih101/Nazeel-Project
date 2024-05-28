@@ -28,6 +28,9 @@ public class CustomWebDriverWait extends WebDriverWait
     {
         super(driver, timeout, sleep, clock, sleeper);
     }
+    public CustomWebDriverWait(Duration timeout){
+        super(DriverManager.getDriver(),timeout);
+    }
 
     public void waitLoading() {
         WebDriver driver =DriverManager.getDriver();
@@ -39,7 +42,7 @@ public class CustomWebDriverWait extends WebDriverWait
                     .until(ExpectedConditions.invisibilityOf( driver.findElement(By.xpath("//app-loading-page/*"))));
         } catch (Exception e) {
             // Handle any exceptions or logging here
-            e.printStackTrace();
+            e.getMessage();
         }
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
     }

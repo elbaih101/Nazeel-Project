@@ -61,7 +61,7 @@ public Network.GetResponseBodyResponse await() {
      */
 
     public String getResponseBody(WebDriver driver, String requestUrl, Runnable requestTrigger) {
-        int timeout = 10;
+        int timeout = 30;
         ChromiumDriver driver1 = (ChromiumDriver) driver;
 //        if (driver instanceof ChromeDriver)
 //             driver1=(ChromeDriver)driver;

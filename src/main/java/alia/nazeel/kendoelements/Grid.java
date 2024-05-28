@@ -16,12 +16,13 @@ public class Grid implements WebElement
     public Grid(WebElement grid)
     {
         this.grid = grid;
-        header = grid.findElement(By.xpath(".//thead"));
-        list = grid.findElement(By.xpath(".//tbody"));
+
     }
 
     public List<WebElement> getGridRows()
     {
+        header = grid.findElement(By.xpath(".//thead"));
+        list = grid.findElement(By.xpath(".//tbody"));
         return list.findElements(By.cssSelector("tr")); // Assuming each row is a <tr> element
     }
 
