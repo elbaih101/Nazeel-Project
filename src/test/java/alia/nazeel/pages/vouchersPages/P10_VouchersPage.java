@@ -81,7 +81,7 @@ public class P10_VouchersPage {
     }
 
     public List<WebElement> promissoriesRemainigAmounts() {
-        wait.until(ExpectedConditions.urlContains("draft-vouchers"));
+        wait.until(ExpectedConditions.urlContains("promissory-notes"));
         return driver.findElements(By.xpath("//td[@data-kendo-grid-column-index=\"3\"]"));
     }
 

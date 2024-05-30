@@ -1,10 +1,13 @@
 package alia.nazeel.kendoelements;
 
 import alia.nazeel.tools.CustomWebDriverWait;
+import alia.nazeel.tools.DriverManager;
+import alia.nazeel.tools.Utils;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.openqa.selenium.*;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import java.time.Duration;
 import java.util.List;
@@ -14,7 +17,7 @@ public class KendoDateTimePicker implements WebElement {
 
     WebElement kendoDateTimePicker;
     WebElement calender;
-    CustomWebDriverWait wait =new CustomWebDriverWait(Duration.ofSeconds(5));
+    CustomWebDriverWait wait = new CustomWebDriverWait(Duration.ofSeconds(5));
     final private By inputBy = By.xpath(".//input");
     final private By dateTimePickerButton = By.xpath(".//span[@class=\"k-select\"]");
     final private By calendarBy = By.xpath("//div[contains(@class,\"k-datetime-container\")]");
@@ -22,7 +25,7 @@ public class KendoDateTimePicker implements WebElement {
     final private By setButton = By.cssSelector("button.k-time-accept");
     final private By cancelButton = By.cssSelector("button.k-time-cancel");
 
-    final private   By dateTimeContainorBy = By.cssSelector("div.k-datetime-container");
+    final private By dateTimeContainorBy = By.cssSelector("div.k-datetime-container");
     String format = "dd/MM/YYYY HH:mm a";
     KendoButtonGroup buttonGroup;
     WebElement container;
@@ -72,8 +75,17 @@ public class KendoDateTimePicker implements WebElement {
 
 
     void selectYear(String year) {
-        calender.findElement(By.cssSelector("span.k-button")).click();
-        String yearXPath = String.format("//th[@scope='col' and contains(text(), '%s')]", year);
+
+        WebElement yearButton = calender.findElement(By.cssSelector("span.k-button"));
+        yearButton.click();
+        String yearXPath = String.format("//th[@scope='col' and contains(text(), \"%s\")]", year);
+        while (ExpectedConditions.not(ExpectedConditions.visibilityOfElementLocated(By.xpath(yearXPath))).apply(DriverManager.getDriver()))
+            switch (Integer.compare(Integer.parseInt(year), Integer.parseInt(yearButton.getText().replaceAll("\\D", "")))) {
+                case -1 -> Utils.scroll("down", calender);
+                case 1 -> Utils.scroll("up", calender);
+                default -> {
+                }
+            }
         WebElement yearElement = kendoDateTimePicker.findElement(By.xpath(yearXPath));
         yearElement.click();
     }

@@ -41,7 +41,7 @@ public class P02_DashBoardPage {
     public WebElement receiptsLink;
     @FindBy(xpath = "//a[@href=\"/financial/payment-vouchers\"]")
     public WebElement paymentsLink;
-    @FindBy(xpath = "//a[@href=\"/financial/draft-vouchers\"]")
+    @FindBy(xpath = "//a[@href=\"/financial/promissory-notes\"]")
     public WebElement PromissoryLink;
     @FindBy(xpath = "//a[@href=\"/invoices\"]")
     public WebElement invoicesLink;

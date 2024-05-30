@@ -10,6 +10,7 @@ import org.openqa.selenium.edge.EdgeOptions;
 import org.openqa.selenium.interactions.Action;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.Select;
+
 import java.io.File;
 import java.time.Duration;
 import java.util.*;
@@ -36,8 +37,9 @@ public class Utils {
     /**
      * sets a given date time string into a date time field web element
      * consider the date time format it only removes  the '/' and ':' and '' and append strings in the place
+     *
      * @param dateInput the input date time WebElement
-     * @param dateTime String on form of (YYYY/MM/DD HH:MM AM) or (DD/MM/YYYY HH:mm AM)
+     * @param dateTime  String on form of (YYYY/MM/DD HH:MM AM) or (DD/MM/YYYY HH:mm AM)
      */
     public static void setDateTime(WebElement dateInput, String dateTime) {
         dateInput.click();
@@ -65,15 +67,16 @@ public class Utils {
         timeInput.sendKeys(time);
 
     }
+
     /**
      * Checks if a given time falls between two times.
      *
      * @param timeToCheck the time to check
-     * @param startTime the start time of the range
-     * @param endTime the end time of the range
+     * @param startTime   the start time of the range
+     * @param endTime     the end time of the range
      * @return true if the timeToCheck is within the range, false otherwise
      */
-    public static boolean isTimeWithinRange(DateTime timeToCheck, DateTime startTime, DateTime   endTime) {
+    public static boolean isTimeWithinRange(DateTime timeToCheck, DateTime startTime, DateTime endTime) {
 
 
         // Check if the time falls between the start and end time
@@ -83,6 +86,7 @@ public class Utils {
             return timeToCheck.isAfter(startTime) || timeToCheck.isBefore(endTime);
         }
     }
+
     /**
      * function to click on an element and move it to another desired element location
      *
@@ -350,7 +354,7 @@ public class Utils {
     }
 
 
- /**
+    /**
      * function to return pre sett edge printing and download options
      *
      * @return EdgeOptions pre configured
@@ -372,18 +376,19 @@ public class Utils {
     }
 
 
-   public static void KendoSelectByValue(WebDriver driver, WebElement select, String value) {
-    var selectElement = new Select(select);
-    List<WebElement> options = selectElement.getOptions();
-    for (int i = 0; i < options.size(); i++) {
-        WebElement element = options.get(i);
-        if (element.getAttribute("value").equals(value) || element.getAttribute("text").equals(value)) {
-            var id = select.getAttribute("id");
-            ((JavascriptExecutor) driver).executeScript(String.format("$('#%s').data('kendoDropDownList').select(%d);", id, i));
-            break;
+    public static void KendoSelectByValue(WebDriver driver, WebElement select, String value) {
+        var selectElement = new Select(select);
+        List<WebElement> options = selectElement.getOptions();
+        for (int i = 0; i < options.size(); i++) {
+            WebElement element = options.get(i);
+            if (element.getAttribute("value").equals(value) || element.getAttribute("text").equals(value)) {
+                var id = select.getAttribute("id");
+                ((JavascriptExecutor) driver).executeScript(String.format("$('#%s').data('kendoDropDownList').select(%d);", id, i));
+                break;
+            }
         }
     }
-}
+
     public static boolean isIndexInArray(int[] indicesArray, int index) {
         Set<Integer> indicesSet = new HashSet<>();
         for (int i : indicesArray) {
@@ -391,6 +396,7 @@ public class Utils {
         }
         return indicesSet.contains(index);
     }
+
     public static boolean containsString(String[] arr, String target) {
         for (String str : arr) {
             if (str.equals(target)) {
@@ -399,6 +405,7 @@ public class Utils {
         }
         return false;
     }
+
     public static boolean containsStringIgnoreCase(String[] arr, String target) {
         for (String str : arr) {
             if (str.equalsIgnoreCase(target)) {
@@ -406,13 +413,24 @@ public class Utils {
             }
         }
         return false;
-    } public static boolean containsStringThatContainsIgnoreCase(String[] arr, String target) {
-        target=target.toLowerCase();
+    }
+
+    public static boolean containsStringThatContainsIgnoreCase(String[] arr, String target) {
+        target = target.toLowerCase();
         for (String str : arr) {
             if (str.toLowerCase().contains(target)) {
                 return true;
             }
         }
         return false;
+    }
+
+
+    public static void scroll(String direction, WebElement element) {
+        JavascriptExecutor js = (JavascriptExecutor) DriverManager.getDriver();
+        switch (direction.toLowerCase()) {
+            case "up" -> js.executeScript("arguments[0].scrollTop = 0", element);
+        case "down"->js.executeScript("arguments[0].scrollTop = arguments[0].scrollHeight", element);
+        }
     }
 }
