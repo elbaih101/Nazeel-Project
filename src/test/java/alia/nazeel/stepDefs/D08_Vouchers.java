@@ -612,7 +612,7 @@ public class D08_Vouchers {
     @Given("filter receipt vouchers with {string} as {string}")
     public void filterReceiptVouchersWithAs(String arg0, String arg1) {
         vouchersPage.filterButton.click();
-        vouchersPage.fromDatePicker().selectDateTime("12/03/2021 05:10 AM");
+        vouchersPage.fromDatePicker().selectDateTime("12/03/1900 05:10 AM");
         Utils.sleep(10000);
     }
 }

@@ -9,6 +9,7 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.edge.EdgeOptions;
 import org.openqa.selenium.interactions.Action;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 
 import java.io.File;
@@ -427,10 +428,15 @@ public class Utils {
 
 
     public static void scroll(String direction, WebElement element) {
-        JavascriptExecutor js = (JavascriptExecutor) DriverManager.getDriver();
+        Actions actions =new Actions( DriverManager.getDriver());
+        actions.moveToElement(element,3,3).perform();
         switch (direction.toLowerCase()) {
-            case "up" -> js.executeScript("arguments[0].scrollTop = 0", element);
-        case "down"->js.executeScript("arguments[0].scrollTop = arguments[0].scrollHeight", element);
+            case "up" -> actions.sendKeys(Keys.PAGE_UP).perform();
+        case "down"-> actions.sendKeys(Keys.PAGE_DOWN).perform();
         }
+    }
+    public static Boolean isElementInvisible(By elementBy, WebDriver driver)
+    {
+        return ExpectedConditions.not(ExpectedConditions.visibilityOfElementLocated(elementBy)).apply(driver);
     }
 }
