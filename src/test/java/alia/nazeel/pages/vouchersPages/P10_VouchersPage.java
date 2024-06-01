@@ -119,10 +119,10 @@ public class P10_VouchersPage extends BasePage
 
     ////Filter ////
     @FindBy(xpath = "//div[@class=\"filter-form\"]//kendo-datetimepicker[.//input[@placeholder=\"From\"]]")
-    WebElement fromDatePicker;
+    public KendoDateTimePicker fromDatePicker;
 
-    public KendoDateTimePicker fromDatePicker()
-    {
-        return new KendoDateTimePicker(fromDatePicker);
-    }
+//    public KendoDateTimePicker fromDatePicker()
+//    {
+//        return new KendoDateTimePicker(fromDatePicker);
+//    }
 }
