@@ -2,19 +2,15 @@ package alia.nazeel.pages.setuppages.unit_setup_pages;
 
 
 import alia.nazeel.pages.mutlipurposes.P00_multiPurposes;
-import alia.nazeel.tools.CustomWebDriverWait;
+import alia.nazeel.templates.BasePage;
 import org.apache.commons.lang3.StringUtils;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
-
-import java.time.Duration;
 
 import java.util.HashSet;
 import java.util.List;
@@ -22,20 +18,11 @@ import java.util.Set;
 import java.util.regex.Pattern;
 
 @SuppressWarnings("unused")
-public class P08_UnitsSetupPage {
-
-    final WebDriver driver;
-    final CustomWebDriverWait wait;
-
-    final Actions actions;
-
-
-
-public P08_UnitsSetupPage(WebDriver driver) {
-        PageFactory.initElements(driver, this);
-        this.driver = driver;
-        wait = new CustomWebDriverWait(driver, Duration.ofSeconds(10));
-        actions = new Actions(driver);
+public class P08_UnitsSetupPage extends BasePage
+{
+    public P08_UnitsSetupPage(WebDriver driver)
+    {
+        super(driver);
     }
 
     @FindBy(xpath = "//ul[@role=\"listbox\"]")
@@ -51,7 +38,8 @@ public P08_UnitsSetupPage(WebDriver driver) {
     @FindBy(xpath = "//button[contains(text(),\" Edit Group Of Units \")]")
     public WebElement editGroupUnitsButton;
 
-    public WebElement addGroupUnitsButton() {
+    public WebElement addGroupUnitsButton()
+    {
         wait.until(ExpectedConditions.elementToBeClickable(groupUnitsDropList));
         driver.switchTo().activeElement();
         wait.until(ExpectedConditions.elementToBeClickable(groupUnitsDropList));
@@ -68,53 +56,67 @@ public P08_UnitsSetupPage(WebDriver driver) {
     //    public WebElement unitCardInactivFlag(WebElement unitCard) {
 //        return unitCard.findElement(By.xpath("//div[@class=\"unit-card__flags\"]//*[name()='svg']"));
 //    }
-public Set<String> unitNums (){
-    List <WebElement> unitNumsElements = driver.findElements(By.xpath("//p[contains(@class,\"unit-card__no\")]"));
-    Set<String>unitNums = new HashSet<>();
+    public Set<String> unitNums()
+    {
+        List<WebElement> unitNumsElements = driver.findElements(By.xpath("//p[contains(@class,\"unit-card__no\")]"));
+        Set<String> unitNums = new HashSet<>();
 
-    unitNumsElements.forEach(element -> unitNums.add(element.getText()));
-    return unitNums;
-}
-    public WebElement unitNum(WebElement unitCard) {
-       WebElement unitNum =unitCard.findElement(By.xpath(".//p[contains(@class,\"unit-card__no\")]"));
-        if (unitNum.getText().contains("..")){
+        unitNumsElements.forEach(element -> unitNums.add(element.getText()));
+        return unitNums;
+    }
+
+    public WebElement unitNum(WebElement unitCard)
+    {
+        WebElement unitNum = unitCard.findElement(By.xpath(".//p[contains(@class,\"unit-card__no\")]"));
+        if (unitNum.getText().contains(".."))
+        {
             actions.moveToElement(unitCard);
-            actions.moveToElement(unitCard,3,4).build().perform();
+            actions.moveToElement(unitCard, 3, 4).build().perform();
             wait.until(ExpectedConditions.visibilityOf(new P00_multiPurposes(driver).bottomToolTip));
             unitNum = driver.findElement(By.xpath("//div[contains(@class,\"p-tooltip-bottom\")]/div[@class=\"p-tooltip-text\"]"));
-            }
+        }
         return unitNum;
     }
-public List <WebElement> unitMergeIcon(WebElement unitCard){
-    return unitCard.findElements(By.xpath(".//div[contains(@class,\"unit-card unit-setup\")]//div[contains(@class,\"unit-card__flags\")]//*[name()=\"use\" and @*=\"/assets/img/svg-icons.svg#icon-link2\"]"));
-}
-    public WebElement unitType(WebElement unitCard) {
+
+    public List<WebElement> unitMergeIcon(WebElement unitCard)
+    {
+        return unitCard.findElements(By.xpath(".//div[contains(@class,\"unit-card unit-setup\")]//div[contains(@class,\"unit-card__flags\")]//*[name()=\"use\" and @*=\"/assets/img/svg-icons.svg#icon-link2\"]"));
+    }
+
+    public WebElement unitType(WebElement unitCard)
+    {
         return unitCard.findElement(By.xpath("//p[@class=\"unit-card__type\"]"));
     }
 
-    public WebElement unitEditButton(WebElement unitCard) {
+    public WebElement unitEditButton(WebElement unitCard)
+    {
         return unitCard.findElement(By.xpath(".//div[@class=\"unit-card__action--primary\"][1]"));
     }
 
-    public WebElement unitViewButton(WebElement unitCard) {
+    public WebElement unitViewButton(WebElement unitCard)
+    {
         return unitCard.findElement(By.xpath(".//div[contains(@class,\"unit-card__action--primary\")][2]"));
     }
 
-    public WebElement unitDeleteButton(WebElement unitCard) {
+    public WebElement unitDeleteButton(WebElement unitCard)
+    {
         return unitCard.findElement(By.xpath(".//div[contains(@class,\"unit-card__action--red\")]"));
     }
 
     @FindBy(xpath = "//div[contains(text(),\"Total\")]")
     WebElement totalDiv;
 
-    public int totalUnitNumber() {
+    public int totalUnitNumber()
+    {
         wait.until(ExpectedConditions.textMatches(By.xpath("//div[contains(text(),\"Total\")]"), Pattern.compile("^.*\\d$")));
 //        wait.until(new Function <WebDriver, Boolean>() {public Boolean apply(WebDriver driver){return totalDiv.getText().matches("^.*\\\\d$");}
 //        });
         String total = StringUtils.substringAfter(totalDiv.getText().trim(), "Total : ").trim();
-        try {
+        try
+        {
             return Integer.parseInt(total);
-        } catch (NumberFormatException nfe) {
+        } catch (NumberFormatException nfe)
+        {
             System.out.println("NumberFormat Exception: invalid input string");
         }
         System.out.println("Continuing execution...");
@@ -124,15 +126,18 @@ public List <WebElement> unitMergeIcon(WebElement unitCard){
     @FindBy(xpath = "//div[@role=\"dialog\"]")
     public WebElement deleteUnitDialog;
 
-    public WebElement confirmDeleteButton() {
+    public WebElement confirmDeleteButton()
+    {
         return deleteUnitDialog.findElement(By.xpath("//button[contains(text(),\"Confirm\")]"));
     }
 
-    public WebElement discardDeleteButton() {
+    public WebElement discardDeleteButton()
+    {
         return deleteUnitDialog.findElement(By.xpath("//button[contains(text(),\"Discard\")]"));
     }
 
-    public WebElement deltedUnitNumber() {
+    public WebElement deltedUnitNumber()
+    {
         return deleteUnitDialog.findElement(By.xpath("//div[contains(text(),\"Unit Number\")]/following-sibling::div"));
     }
 
@@ -143,7 +148,8 @@ public List <WebElement> unitMergeIcon(WebElement unitCard){
     @FindBy(xpath = "//input[@placeholder=\"Select Status\"]/../following-sibling::span/span")
     WebElement statusdropList;
 
-    public List<WebElement> statusList() {
+    public List<WebElement> statusList()
+    {
         wait.until(ExpectedConditions.elementToBeClickable(statusdropList));
         statusdropList.click();
         return genralListBox.findElements(By.xpath("//li[@role=\"option\"]"));
@@ -152,7 +158,8 @@ public List <WebElement> unitMergeIcon(WebElement unitCard){
     @FindBy(xpath = "//input[@placeholder=\"Select Block\"]/../following-sibling::span/span")
     WebElement blocksDropList;
 
-    public List<WebElement> blocksList() {
+    public List<WebElement> blocksList()
+    {
         wait.until(ExpectedConditions.elementToBeClickable(blocksDropList));
         blocksDropList.click();
         return genralListBox.findElements(By.xpath("//li[@role=\"option\"]"));
@@ -161,7 +168,8 @@ public List <WebElement> unitMergeIcon(WebElement unitCard){
     @FindBy(xpath = "//input[@placeholder=\"Select Floor\"]/../following-sibling::span/span")
     WebElement floorsDropList;
 
-    public List<WebElement> floorsList() {
+    public List<WebElement> floorsList()
+    {
         wait.until(ExpectedConditions.elementToBeClickable(floorsDropList));
         floorsDropList.click();
         return genralListBox.findElements(By.xpath("//li[@role=\"option\"]"));
@@ -170,7 +178,8 @@ public List <WebElement> unitMergeIcon(WebElement unitCard){
     @FindBy(xpath = "//input[@placeholder=\"Pick unit type\"]/../following-sibling::span/span")
     WebElement unitTypesDropList;
 
-    public List<WebElement> unitTypesList() {
+    public List<WebElement> unitTypesList()
+    {
         wait.until(ExpectedConditions.elementToBeClickable(unitTypesDropList));
         unitTypesDropList.click();
         return genralListBox.findElements(By.xpath("//li[@role=\"option\"]"));

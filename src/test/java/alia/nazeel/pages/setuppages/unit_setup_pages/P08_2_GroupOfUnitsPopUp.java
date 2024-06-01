@@ -1,24 +1,25 @@
 package alia.nazeel.pages.setuppages.unit_setup_pages;
 
 
+import alia.nazeel.templates.BasePage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
 
 import java.util.List;
 
 
 @SuppressWarnings("unused")
-public class P08_2_GroupOfUnitsPopUp {
+public class P08_2_GroupOfUnitsPopUp extends BasePage
+{
 
 
 
 
     public P08_2_GroupOfUnitsPopUp(WebDriver driver) {
-        PageFactory.initElements(driver, this);
+        super(driver);
     }
 
     @FindBy(xpath = "//ul[@role=\"listbox\"]")
@@ -86,7 +87,7 @@ public class P08_2_GroupOfUnitsPopUp {
     List<WebElement> featureNames;
     public WebElement featureCheckBox(String feature){
 
-        return featureNames.stream().filter(element -> element.getText().contains(feature)).toList().get(0).findElement(By.xpath("../..//input[@type=\"checkbox\"]"));
+        return featureNames.stream().filter(element -> element.getText().contains(feature)).toList().getFirst().findElement(By.xpath("../..//input[@type=\"checkbox\"]"));
 
     }
 

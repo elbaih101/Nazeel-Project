@@ -1,15 +1,16 @@
 package alia.nazeel.pages.setuppages;
 
+import alia.nazeel.templates.BasePage;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
 
 @SuppressWarnings("unused")
-public class P05_SetupPage {
+public class P05_SetupPage extends BasePage
+{
 
     public P05_SetupPage(WebDriver driver) {
-        PageFactory.initElements(driver, this);
+        super(driver);
     }
 
 

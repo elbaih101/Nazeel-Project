@@ -2,30 +2,20 @@ package alia.nazeel.pages.setuppages.financialpages;
 
 import alia.nazeel.kendoelements.KendoComboBox;
 import alia.nazeel.kendoelements.KendoMultiSelect;
-import alia.nazeel.tools.CustomWebDriverWait;
+import alia.nazeel.templates.BasePage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
 
-import java.time.Duration;
 import java.util.List;
 
-public class P25_TaxesAndFees {
-    final WebDriver driver;
-    final CustomWebDriverWait wait;
-    final Actions actions;
-
-
+public class P25_TaxesAndFees extends BasePage
+{
     public P25_TaxesAndFees(WebDriver driver) {
-        PageFactory.initElements(driver, this);
-        this.driver = driver;
-        wait = new CustomWebDriverWait(driver, Duration.ofSeconds(10));
-        actions = new Actions(driver);
+        super(driver);
     }
 
     ///// controls /////

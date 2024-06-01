@@ -1,28 +1,19 @@
 package alia.nazeel.pages.setuppages.outlets;
 
-import alia.nazeel.tools.CustomWebDriverWait;
+import alia.nazeel.templates.BasePage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
 
 
-import java.time.Duration;
 import java.util.List;
 
-public class P32_OutletItems {
-    final WebDriver driver;
-    final CustomWebDriverWait wait;
-    final Actions actions;
-
-
-    public P32_OutletItems(WebDriver driver) {
-        PageFactory.initElements(driver, this);
-        this.driver = driver;
-        wait = new CustomWebDriverWait(driver, Duration.ofSeconds(10));
-        actions = new Actions(driver);
+public class P32_OutletItems extends BasePage
+{
+    public P32_OutletItems(WebDriver driver)
+    {
+        super(driver);
     }
 
     ///// controls /////
@@ -45,31 +36,38 @@ public class P32_OutletItems {
     @FindBy(xpath = "//td[@data-kendo-grid-column-index=\"5\"]")
     List<WebElement> moreActions;
 
-    public WebElement itemEditButton(WebElement outlet) {
+    public WebElement itemEditButton(WebElement outlet)
+    {
         return outlet.findElement(By.xpath("./..//td[@data-kendo-grid-column-index=\"5\"]//button[1]"));
     }
 
-    public WebElement itemDeleteButton(WebElement outlet) {
+    public WebElement itemDeleteButton(WebElement outlet)
+    {
         return outlet.findElement(By.xpath("./..//td[@data-kendo-grid-column-index=\"5\"]//button[2]"));
     }
 
-    public WebElement itemName(WebElement outlet) {
+    public WebElement itemName(WebElement outlet)
+    {
         return outlet.findElement(By.xpath("./..//td[@data-kendo-grid-column-index=\"1\"]"));
     }
 
-    public WebElement itemOutlet(WebElement outlet) {
+    public WebElement itemOutlet(WebElement outlet)
+    {
         return outlet.findElement(By.xpath("./..//td[@data-kendo-grid-column-index=\"4\"]"));
     }
 
-    public WebElement itemPrice(WebElement outlet) {
+    public WebElement itemPrice(WebElement outlet)
+    {
         return outlet.findElement(By.xpath("./..//td[@data-kendo-grid-column-index=\"2\"]"));
     }
 
-    public WebElement itemCategory(WebElement outlet) {
+    public WebElement itemCategory(WebElement outlet)
+    {
         return outlet.findElement(By.xpath("./..//td[@data-kendo-grid-column-index=\"3\"]"));
     }
 
-    public WebElement itemStatus(WebElement outlet) {
+    public WebElement itemStatus(WebElement outlet)
+    {
         return outlet.findElement(By.xpath("./..//td[@data-kendo-grid-column-index=\"0\"]//*[name()=\"use\"]"));
     }
     //end grid //
@@ -90,32 +88,41 @@ public class P32_OutletItems {
     @FindBy(xpath = "//kendo-switch[@name=\"priceIsUserDefined\"]")
     public WebElement userDefinedPriceSwitch;
 
-    public List<WebElement> outletsList() {
+    public List<WebElement> outletsList()
+    {
         driver.findElement(By.xpath("//kendo-combobox[@name=\"outlet\"]//span[@class=\"k-select\"]")).click();
-        try {
+        try
+        {
             Thread.sleep(300);
-        } catch (InterruptedException e) {
+        } catch (InterruptedException e)
+        {
             e.printStackTrace();
         }
         return listItems;
     }
 
-    public List<WebElement> categoriesList() {
+    public List<WebElement> categoriesList()
+    {
         wait.waitLoading();
         driver.findElement(By.xpath("//kendo-combobox[@name=\"category\"]//span[@class=\"k-select\"]")).click();
-        try {
+        try
+        {
             Thread.sleep(300);
-        } catch (InterruptedException e) {
+        } catch (InterruptedException e)
+        {
             e.printStackTrace();
         }
         return listItems;
     }
 
-    public List<WebElement> itemTypesList() {
+    public List<WebElement> itemTypesList()
+    {
         driver.findElement(By.xpath("//kendo-combobox[@name=\"type\"]//span[@class=\"k-select\"]")).click();
-        try {
+        try
+        {
             Thread.sleep(300);
-        } catch (InterruptedException e) {
+        } catch (InterruptedException e)
+        {
             e.printStackTrace();
         }
         return listItems;
@@ -138,31 +145,40 @@ public class P32_OutletItems {
     @FindBy(xpath = "//div[@class=\"n-table__top-btns\"]//button[contains(@class,\"button--primary\")]")
     public WebElement filterButton;
 
-    public List<WebElement> statusesFilterList() {
+    public List<WebElement> statusesFilterList()
+    {
         driver.findElement(By.xpath("//kendo-combobox[@name=\"status\"]//span[@class=\"k-select\"]")).click();
-        try {
+        try
+        {
             Thread.sleep(300);
-        } catch (InterruptedException e) {
+        } catch (InterruptedException e)
+        {
             e.printStackTrace();
         }
         return listItems;
     }
 
-    public List<WebElement> filterOutletsList() {
+    public List<WebElement> filterOutletsList()
+    {
         driver.findElement(By.xpath("//kendo-combobox[@name=\"outlet\"]//span[@class=\"k-select\"]")).click();
-        try {
+        try
+        {
             Thread.sleep(300);
-        } catch (InterruptedException e) {
+        } catch (InterruptedException e)
+        {
             e.printStackTrace();
         }
         return listItems;
     }
 
-    public List<WebElement> categoryFilterList() {
+    public List<WebElement> categoryFilterList()
+    {
         driver.findElement(By.xpath("//kendo-combobox[@name=\"category\"]//span[@class=\"k-select\"]")).click();
-        try {
+        try
+        {
             Thread.sleep(300);
-        } catch (InterruptedException e) {
+        } catch (InterruptedException e)
+        {
             e.printStackTrace();
         }
         return listItems;

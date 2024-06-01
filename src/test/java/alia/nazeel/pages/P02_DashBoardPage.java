@@ -1,17 +1,18 @@
 package alia.nazeel.pages;
 
+import alia.nazeel.templates.BasePage;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
 
 import java.util.List;
 
 @SuppressWarnings("ALL")
-public class P02_DashBoardPage {
+public class P02_DashBoardPage extends BasePage
+{
 
     public P02_DashBoardPage(WebDriver driver) {
-        PageFactory.initElements(driver, this);
+        super(driver);
     }
 
 

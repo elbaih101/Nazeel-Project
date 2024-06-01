@@ -1,31 +1,22 @@
 package alia.nazeel.pages.reservations;
 
 import alia.nazeel.pages.mutlipurposes.P00_multiPurposes;
-import alia.nazeel.tools.CustomWebDriverWait;
+import alia.nazeel.templates.BasePage;
 import alia.nazeel.tools.Utils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
 
 
-import java.time.Duration;
 import java.util.List;
 
 @SuppressWarnings("unused")
-public class P03_ReservationsPage {
-    final WebDriver driver;
-    final CustomWebDriverWait wait;
-    final Actions actions;
-
+public class P03_ReservationsPage extends BasePage
+{
     public P03_ReservationsPage(WebDriver driver) {
-        PageFactory.initElements(driver, this);
-        this.driver = driver;
-        wait = new CustomWebDriverWait(driver, Duration.ofSeconds(10));
-        actions = new Actions(driver);
+       super(driver);
     }
 
 

@@ -1,22 +1,20 @@
 package alia.nazeel.pages.setuppages.unit_setup_pages;
 
 
+import alia.nazeel.templates.BasePage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
 
 import java.util.List;
 
 @SuppressWarnings("unused")
-public class P09_RatesPages {
-
-
-
-
-    public P09_RatesPages(WebDriver driver) {
-        PageFactory.initElements(driver, this);
+public class P09_RatesPages extends BasePage
+{
+    public P09_RatesPages(WebDriver driver)
+    {
+        super(driver);
     }
 
     @FindBy(xpath = "//button[contains(text(),\"Edit\")]")
@@ -52,32 +50,39 @@ public class P09_RatesPages {
     WebElement highWeekDaysPopUp;
 
 
-    public List<WebElement> highWeekDays() {
+    public List<WebElement> highWeekDays()
+    {
         return highWeekDaysPopUp.findElements(By.xpath(".//div[contains(@class,\"col-md-3 u-mb-15\")]"));
     }
 
-    public WebElement saveHighWeekDaysButton() {
+    public WebElement saveHighWeekDaysButton()
+    {
         return highWeekDaysPopUp.findElement(By.xpath(".//button[contains(@class,\"n-button--primary\")]"));
 
     }
 
-    public WebElement lowRate(WebElement unitType) {
+    public WebElement lowRate(WebElement unitType)
+    {
         return unitType.findElement(By.xpath("./..//td[@data-kendo-grid-column-index=\"1\"]//input[@role=\"spinbutton\"]"));
     }
 
-    public WebElement highRate(WebElement unitType) {
+    public WebElement highRate(WebElement unitType)
+    {
         return unitType.findElement(By.xpath("./..//td[@data-kendo-grid-column-index=\"2\"]//input[@role=\"spinbutton\"]"));
     }
 
-    public WebElement minRate(WebElement unitType) {
+    public WebElement minRate(WebElement unitType)
+    {
         return unitType.findElement(By.xpath("./..//td[@data-kendo-grid-column-index=\"3\"]//input[@role=\"spinbutton\"]"));
     }
 
-    public WebElement monRate(WebElement unitType) {
+    public WebElement monRate(WebElement unitType)
+    {
         return unitType.findElement(By.xpath("./..//td[@data-kendo-grid-column-index=\"4\"]//input[@role=\"spinbutton\"]"));
     }
 
-    public WebElement monMinRate(WebElement unitType) {
+    public WebElement monMinRate(WebElement unitType)
+    {
         return unitType.findElement(By.xpath("./..//td[@data-kendo-grid-column-index=\"5\"]//input[@role=\"spinbutton\"]"));
     }
 }

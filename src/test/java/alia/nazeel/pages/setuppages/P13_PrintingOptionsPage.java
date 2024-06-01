@@ -1,30 +1,18 @@
 package alia.nazeel.pages.setuppages;
 
 
-import alia.nazeel.tools.CustomWebDriverWait;
+import alia.nazeel.templates.BasePage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
 
-
-import java.time.Duration;
 import java.util.List;
 
-public class P13_PrintingOptionsPage {
-    final WebDriver driver;
-    final CustomWebDriverWait wait;
-    final Actions actions;
-
-
-
+public class P13_PrintingOptionsPage extends BasePage
+{
     public P13_PrintingOptionsPage(WebDriver driver) {
-        PageFactory.initElements(driver, this);
-        this.driver = driver;
-        wait = new CustomWebDriverWait(driver, Duration.ofSeconds(10));
-        actions = new Actions(driver);
+       super(driver);
     }
 
     @FindBy(xpath = "//button[contains(text(),\"Save Changes\")]")

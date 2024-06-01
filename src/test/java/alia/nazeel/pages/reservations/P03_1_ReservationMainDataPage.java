@@ -4,35 +4,21 @@ import alia.nazeel.kendoelements.KendoGrid;
 import alia.nazeel.kendoelements.KendoDropDownList;
 
 
-import alia.nazeel.tools.CustomWebDriverWait;
+import alia.nazeel.templates.BasePage;
 import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
 
-import java.time.Duration;
 import java.util.List;
 
 @SuppressWarnings("unused")
-public class P03_1_ReservationMainDataPage {
-    final WebDriver driver;
-    final CustomWebDriverWait wait;
-    final Actions actions;
-
-    final JavascriptExecutor js;
-
-
+public class P03_1_ReservationMainDataPage extends BasePage
+{
     public P03_1_ReservationMainDataPage(WebDriver driver) {
-        PageFactory.initElements(driver, this);
-        this.driver = driver;
-        wait = new CustomWebDriverWait(this.driver, Duration.ofSeconds(10));
-        actions = new Actions(this.driver);
-        js = (JavascriptExecutor) this.driver;
+        super(driver);
     }
 
 

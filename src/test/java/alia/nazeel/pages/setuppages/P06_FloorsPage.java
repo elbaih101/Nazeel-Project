@@ -1,21 +1,22 @@
 package alia.nazeel.pages.setuppages;
 
+import alia.nazeel.templates.BasePage;
 import org.apache.commons.lang3.StringUtils;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
 
 import java.util.List;
 
 @SuppressWarnings("unused")
-public class P06_FloorsPage {
+public class P06_FloorsPage extends BasePage
+{
 
 
     public P06_FloorsPage(WebDriver driver) {
-        PageFactory.initElements(driver, this);
+       super(driver);
     }
 
     @FindBy(xpath = "//ul[@role=\"listbox\"]")

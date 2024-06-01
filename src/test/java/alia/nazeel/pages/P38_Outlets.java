@@ -3,36 +3,28 @@ package alia.nazeel.pages;
 import alia.nazeel.kendoelements.KendoGrid;
 import alia.nazeel.kendoelements.KendoMultiSelect;
 import alia.nazeel.pages.mutlipurposes.P00_multiPurposes;
-import alia.nazeel.tools.CustomWebDriverWait;
+import alia.nazeel.templates.BasePage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
-
 
 import java.time.Duration;
 import java.util.List;
 
-public class P38_Outlets {
-
-    final WebDriver driver;
-    final CustomWebDriverWait wait;
-    final Actions actions;
-
-    public P38_Outlets(WebDriver driver) {
-        PageFactory.initElements(driver, this);
-        this.driver = driver;
-        wait = new CustomWebDriverWait(driver, Duration.ofSeconds(10));
-        actions = new Actions(driver);
+public class P38_Outlets extends BasePage
+{
+    public P38_Outlets(WebDriver driver)
+    {
+        super(driver);
     }
 
 
     @FindBy(xpath = "//div[contains(@class,\"outlet-card\")]")
     public List<WebElement> outletsList;
 
-    public WebElement outletName(WebElement outlet) {
+    public WebElement outletName(WebElement outlet)
+    {
         return outlet.findElement(By.xpath("./div"));
     }
 
@@ -48,11 +40,13 @@ public class P38_Outlets {
     WebElement itemsListComboBox;
 
 
-    public List<WebElement> itemsList() {
+    public List<WebElement> itemsList()
+    {
         return new P00_multiPurposes(driver).getListItems(itemsListComboBox);
     }
 
-    public List<WebElement> itemsCategoriesList() {
+    public List<WebElement> itemsCategoriesList()
+    {
         return new P00_multiPurposes(driver).getListItems(itemCategoriescomboBox);
     }
 
@@ -79,7 +73,8 @@ public class P38_Outlets {
      * @param item WebElement item related cell
      * @return WebElement the field of the item Span/Input
      */
-    public WebElement itemPriceField(WebElement item) {
+    public WebElement itemPriceField(WebElement item)
+    {
         wait.withTimeout(Duration.ofMillis(100));
         String locator = "..//td[@data-kendo-grid-column-index=\"2\"]/span";
         locator = item.findElements(By.xpath(locator)).isEmpty() ? "..//td[@data-kendo-grid-column-index=\"2\"]//input" : locator;
@@ -91,7 +86,8 @@ public class P38_Outlets {
      *
      * @return WebElement the field of the item Span/Input
      */
-    public WebElement itemPriceField() {
+    public WebElement itemPriceField()
+    {
         wait.withTimeout(Duration.ofMillis(100));
         String locator = "..//td[@data-kendo-grid-column-index=\"1\"]/span";
         locator = driver.findElements(By.xpath(locator)).isEmpty() ? "//td[@data-kendo-grid-column-index=\"1\"]//input" : locator;
@@ -99,46 +95,53 @@ public class P38_Outlets {
     }
 
 
-    public Double itemPriceAmount(WebElement itemPriceField) {
+    public Double itemPriceAmount(WebElement itemPriceField)
+    {
         String price = itemPriceField.getText();
         price = price.isEmpty() ? itemPriceField.getAttribute("value") : price;
         return Double.parseDouble(price.trim());
     }
 
-    public WebElement itemQuantity(WebElement item) {
+    public WebElement itemQuantity(WebElement item)
+    {
         wait.withTimeout(Duration.ofMillis(100));
         String locator = "..//td[@data-kendo-grid-column-index=\"3\"]//input";
         return item.findElement(By.xpath(locator));
     }
 
-    public Double itemSubTotalAmount(WebElement item) {
+    public Double itemSubTotalAmount(WebElement item)
+    {
         wait.withTimeout(Duration.ofMillis(100));
         String locator = "..//td[@data-kendo-grid-column-index=\"4\"]";
         String subTotal = item.findElement(By.xpath(locator)).getText();
         return Double.parseDouble(subTotal.trim());
     }
 
-    public Double itemDiscountAmount(WebElement item) {
+    public Double itemDiscountAmount(WebElement item)
+    {
         wait.withTimeout(Duration.ofMillis(100));
         String locator = "..//td[@data-kendo-grid-column-index=\"5\"]";
         String discount = item.findElement(By.xpath(locator)).getText();
         return Double.parseDouble(discount.trim());
     }
 
-    public WebElement insertDiscountButto(WebElement item) {
+    public WebElement insertDiscountButto(WebElement item)
+    {
         wait.withTimeout(Duration.ofMillis(100));
         String locator = "..//td[@data-kendo-grid-column-index=\"5\"]//*[name()=\"use\"]";
         return item.findElement(By.xpath(locator));
     }
 
-    public Double itemAmount(WebElement item) {
+    public Double itemAmount(WebElement item)
+    {
         wait.withTimeout(Duration.ofMillis(100));
         String locator = "..//td[@data-kendo-grid-column-index=\"6\"]";
         String total = item.findElement(By.xpath(locator)).getText();
         return Double.parseDouble(total.trim());
     }
 
-    public WebElement itemremoveButton(WebElement item) {
+    public WebElement itemremoveButton(WebElement item)
+    {
         wait.withTimeout(Duration.ofMillis(100));
         String locator = "..//td[@data-kendo-grid-column-index=\"7\"]//button";
         return item.findElement(By.xpath(locator));
@@ -163,48 +166,57 @@ public class P38_Outlets {
     @FindBy(className = "input-with-dropdown")
     WebElement discountComboBox;
 
-    public List<WebElement> discountTypes() {
+    public List<WebElement> discountTypes()
+    {
         return new P00_multiPurposes(driver).getListItems(discountComboBox);
     }
 
-    public WebElement discountValueField() {
+    public WebElement discountValueField()
+    {
         return discountComboBox.findElement(By.xpath(".//input"));
     }
 
     @FindBy(xpath = "//div[contains(@class,\"order-total\")]")
     WebElement orderTotals;
 
-    public Double orderSubTotal() {
+    public Double orderSubTotal()
+    {
         WebElement subTotal = orderTotals.findElement(By.xpath(".//span[(text()=\"Sub-Total\")]/following-sibling::b"));
         return Double.parseDouble((subTotal.getText()));
     }
 
-    public Double orderGenralDiscountAmount() {
+    public Double orderGenralDiscountAmount()
+    {
         WebElement subTotal = orderTotals.findElement(By.xpath(".//span[(text()=\"General Discount\")]/following-sibling::b"));
         return Double.parseDouble((subTotal.getText()));
     }
 
-    public Double orderAmountBeforeTaxes() {
+    public Double orderAmountBeforeTaxes()
+    {
         WebElement subTotal = orderTotals.findElement(By.xpath(".//span[(text()=\"Amount:\")]/following-sibling::b"));
         return Double.parseDouble((subTotal.getText()));
     }
 
-    public Double orderTaxes() {
+    public Double orderTaxes()
+    {
         WebElement subTotal = orderTotals.findElement(By.xpath(".//span[(text()=\" Tax(es) \")]/following-sibling::b"));
         return Double.parseDouble((subTotal.getText()));
     }
 
-    public boolean inclusive() {
+    public boolean inclusive()
+    {
         return !orderTotals.findElements(By.xpath(".//span[(text()=\" Tax(es) \")]/span")).isEmpty();
 
     }
 
-    public Double orderAmountAfterTaxes() {
+    public Double orderAmountAfterTaxes()
+    {
         WebElement subTotal = orderTotals.findElement(By.xpath(".//span[(text()=\"Total Amount:\")]/following-sibling::b"));
         return Double.parseDouble((subTotal.getText()));
     }
 
-    public Double orderBalance() {
+    public Double orderBalance()
+    {
         WebElement subTotal = orderTotals.findElement(By.xpath(".//span[(text()=\"Balance:\")]/following-sibling::b"));
         return Double.parseDouble((subTotal.getText()));
     }
@@ -216,7 +228,8 @@ public class P38_Outlets {
     @FindBy(name = "paymentMethod")
     WebElement paymentmethodCmpoBox;
 
-    public List<WebElement> payMethodsList() {
+    public List<WebElement> payMethodsList()
+    {
         return new P00_multiPurposes(driver).getListItems(paymentmethodCmpoBox);
     }
 
@@ -232,15 +245,19 @@ public class P38_Outlets {
     @FindBy(css = "app-transfer-order-to-reservation kendo-multiselect")
     WebElement resStatusMultiSelect;
 
-    public KendoMultiSelect resStatusMultiSelect() {
+    public KendoMultiSelect resStatusMultiSelect()
+    {
         return new KendoMultiSelect(resStatusMultiSelect);
     }
+
     @FindBy(css = "app-transfer-order-to-reservation kendo-grid")
     WebElement resGrid;
 
-    public KendoGrid resGrid() {
+    public KendoGrid resGrid()
+    {
         return new KendoGrid(resGrid);
     }
+
     @FindBy(xpath = "//app-transfer-order-to-reservation//label[contains(text(),\"Res. No.\")]//following-sibling::input")
     public WebElement reservationNumberSearchField;
     @FindBy(css = "app-transfer-order-to-reservation button")

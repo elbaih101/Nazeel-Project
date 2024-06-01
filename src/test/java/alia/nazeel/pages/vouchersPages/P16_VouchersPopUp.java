@@ -1,31 +1,20 @@
 package alia.nazeel.pages.vouchersPages;
 
 import alia.nazeel.enums.Vouchers;
+import alia.nazeel.templates.BasePage;
 import alia.nazeel.tools.Utils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
-public class P16_VouchersPopUp {
-    final WebDriver driver;
-    final WebDriverWait wait;
-    final Actions actions;
-
-
+public class P16_VouchersPopUp extends BasePage
+{
     public P16_VouchersPopUp(WebDriver driver) {
-        PageFactory.initElements(driver, this);
-        this.driver = driver;
-        wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        actions = new Actions(driver);
-    }
+ super(driver);   }
 
 
     @FindBy(xpath = "//ul[@role=\"listbox\"]//li[@role=\"option\"]")

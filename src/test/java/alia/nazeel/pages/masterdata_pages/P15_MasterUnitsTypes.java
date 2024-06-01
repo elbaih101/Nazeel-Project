@@ -1,30 +1,20 @@
 package alia.nazeel.pages.masterdata_pages;
 
-import alia.nazeel.tools.CustomWebDriverWait;
+import alia.nazeel.templates.BasePage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
 
-import java.time.Duration;
 import java.util.List;
 
-public class P15_MasterUnitsTypes {
-
-    final WebDriver driver;
-    final CustomWebDriverWait wait;
-    final Actions actions;
-
+public class P15_MasterUnitsTypes extends BasePage
+{
 
     public P15_MasterUnitsTypes(WebDriver driver) {
-        PageFactory.initElements(driver, this);
-        this.driver = driver;
-        wait = new CustomWebDriverWait(driver, Duration.ofSeconds(10));
-        actions = new Actions(driver);
+      super(driver);
     }
     @FindBy(xpath = "//ul[@role=\"listbox\"]")
     WebElement genralListBox;

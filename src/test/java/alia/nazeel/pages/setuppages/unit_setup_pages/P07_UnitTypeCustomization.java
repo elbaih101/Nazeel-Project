@@ -1,23 +1,24 @@
 package alia.nazeel.pages.setuppages.unit_setup_pages;
 
 import alia.nazeel.stepDefs.Hooks;
+import alia.nazeel.templates.BasePage;
 import org.apache.commons.lang3.StringUtils;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
 
 import java.util.List;
 
 @SuppressWarnings("unused")
-public class P07_UnitTypeCustomization {
+public class P07_UnitTypeCustomization  extends BasePage
+{
 
 
 
     public P07_UnitTypeCustomization(WebDriver driver) {
-        PageFactory.initElements(driver, this);
+        super(driver);
     }
 
 

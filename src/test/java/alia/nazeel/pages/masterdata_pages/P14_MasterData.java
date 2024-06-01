@@ -1,27 +1,15 @@
 package alia.nazeel.pages.masterdata_pages;
 
 
-import alia.nazeel.tools.CustomWebDriverWait;
+import alia.nazeel.templates.BasePage;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
 
-
-import java.time.Duration;
-
-public class P14_MasterData {
-    final WebDriver driver;
-    final CustomWebDriverWait wait;
-    final Actions actions;
-
-
+public class P14_MasterData extends BasePage
+{
     public P14_MasterData(WebDriver driver) {
-        PageFactory.initElements(driver, this);
-        this.driver = driver;
-        wait = new CustomWebDriverWait(driver, Duration.ofSeconds(10));
-        actions = new Actions(driver);
+        super(driver);
     }
 
 

@@ -1,21 +1,22 @@
 package alia.nazeel.pages.setuppages;
 
+import alia.nazeel.templates.BasePage;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
 
 import java.util.List;
 
 @SuppressWarnings("unused")
-public class P04_BlocksPage {
+public class P04_BlocksPage extends BasePage
+{
 
 
 
     public P04_BlocksPage(WebDriver driver) {
-        PageFactory.initElements(driver, this);
+        super(driver);
     }
 
 

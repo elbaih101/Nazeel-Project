@@ -1,21 +1,20 @@
 package alia.nazeel.pages;
 
 
+import alia.nazeel.templates.BasePage;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
 
 import java.util.List;
 
-public class P01_LoginPage
+public class P01_LoginPage extends BasePage
 {
 
 
     public P01_LoginPage(WebDriver driver){
-        PageFactory.initElements(driver,this);
-    }
+super(driver);      }
     @SuppressWarnings("unused")
     @FindBy(id="usern")
    public WebElement usernameField;
