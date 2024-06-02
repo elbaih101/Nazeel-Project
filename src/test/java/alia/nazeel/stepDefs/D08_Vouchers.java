@@ -265,7 +265,7 @@ public class D08_Vouchers {
             switch (guestType.toLowerCase()) {
                 case "corporate" -> {
                     vouchersPopUp.selctCorporateButton().click();
-                    selectedCorporate = new D11_Customers().selectCorporate("RANDOM", "", "", "");
+                    selectedCorporate = new D11_1_Corporates().selectCorporate("RANDOM", "", "", "");
                 }
                 case "guest" -> {
                     vouchersPopUp.selctGuestButton().click();
