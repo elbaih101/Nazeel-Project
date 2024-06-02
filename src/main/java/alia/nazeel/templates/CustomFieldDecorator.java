@@ -57,6 +57,9 @@ public class CustomFieldDecorator extends DefaultFieldDecorator
             }else if (field.getType().equals(KendoDropDownList.class))
             {
                 return proxyForKendoDropDownList(loader, locator);
+            }else if (field.getType().equals(MultiLangTextField.class))
+            {
+                return proxyForMultiLangTextField(loader, locator);
             }else if (field.getType().equals(KendoMultiSelect.class))
             {
                 return proxyForKendoMultiSelect(loader, locator);
@@ -67,6 +70,12 @@ public class CustomFieldDecorator extends DefaultFieldDecorator
         }
         return super.decorate(loader, field);
     }
+
+    private Object proxyForMultiLangTextField(ClassLoader loader, ElementLocator locator) {
+        WebElement proxy =  proxyForLocator(loader, locator);
+        return new MultiLangTextField(proxy);
+    }
+
     /**
      * Creates a KendoMultiSelect proxy for handling the annotations of Find By.
      *
