@@ -1,5 +1,7 @@
 package alia.nazeel.pojos.customers;
 
+import org.openqa.selenium.WebElement;
+
 public class Guest {
     private String name;
     private String idNo;
@@ -7,6 +9,10 @@ public class Guest {
     private String phone;
     private String nationality;
     private String status;
+    private String compNote;
+    private String propNote;
+    private String docName;
+    private WebElement Document;
 
     public Guest(String name, String idNo, String idType, String phone, String nationality, String status) {
         this.name = name;
@@ -15,6 +21,38 @@ public class Guest {
         this.phone = phone;
         this.nationality = nationality;
         this.status = status;
+    }
+
+    public String getDocName() {
+        return docName;
+    }
+
+    public void setDocName(String docName) {
+        this.docName = docName;
+    }
+
+    public WebElement getDocument() {
+        return Document;
+    }
+
+    public void setDocument(WebElement document) {
+        Document = document;
+    }
+
+    public String getCompNote() {
+        return compNote;
+    }
+
+    public void setCompNote(String compNote) {
+        this.compNote = compNote;
+    }
+
+    public String getPropNote() {
+        return propNote;
+    }
+
+    public void setPropNote(String propNote) {
+        this.propNote = propNote;
     }
 
     public String getName() {

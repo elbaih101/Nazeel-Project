@@ -665,7 +665,7 @@ public class D14_Outlets {
             wait.waitLoading();
             if (owner.equalsIgnoreCase("corporate")) {
                 outlets.selctCorporateButton.click();
-                new D11_Customers().selectCorporate("corp data related", "", "", "");
+                new D11_1_Corporates().selectCorporate("corp data related", "", "", "");
             } else {
                 outlets.selctGuestButton.click();
                 new D06_DigitalPayment().selectGuest("Random", "", "");
