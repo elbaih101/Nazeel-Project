@@ -1,18 +1,19 @@
 package alia.nazeel.pages.customers;
 
+import alia.nazeel.kendoelements.KendoComboBox;
+import alia.nazeel.kendoelements.KendoGrid;
+import alia.nazeel.kendoelements.MultiLangTextField;
 import alia.nazeel.templates.BasePage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import java.util.List;
 
-public class P22_Corporates  extends BasePage
-{
+public class P22_Corporates extends BasePage {
     public P22_Corporates(WebDriver driver) {
-       super(driver);
+        super(driver);
     }
 
 
@@ -42,14 +43,14 @@ public class P22_Corporates  extends BasePage
     @FindBy(xpath = "//input[@name=\"vatRegNo\"]")
     public WebElement vatSearchField;
 
-    public List<WebElement> filterStatusesList() {
-        driver.findElement(By.xpath("//label[contains(text(),\"Status\")]/following-sibling::kendo-combobox//span/span")).click();
-        wait.until(ExpectedConditions.visibilityOfAllElements(listItems));
-        return listItems;
-    }
+    @FindBy(xpath = "//label[contains(text(),\"Status\")]/following-sibling::kendo-combobox")
+    KendoComboBox filterStatusComboBox;
+
     //// end Filter     /////
 
     //////       Grid  //// ///
+    @FindBy(css = "app-corporates-list kendo-grid")
+    KendoGrid corporatesGrid;
     @FindBy(xpath = "//td[@data-kendo-grid-column-index=\"0\"]")
     public List<WebElement> corporates;
     @FindBy(xpath = "//td[@data-kendo-grid-column-index=\"1\"]")
@@ -103,28 +104,24 @@ public class P22_Corporates  extends BasePage
     @FindBy(xpath = "//input[@id=\"CommercialRegistrationNumber\"]")
     public WebElement cRNumberField;
 
-    public List<WebElement> discountMethods() {
-        driver.findElement(By.xpath("//label[contains(text(),\"Discount Method\")]/following-sibling::kendo-combobox//span/span/span")).click();
-        wait.until(ExpectedConditions.visibilityOfAllElements(listItems));
-        return listItems;
-    }
+    @FindBy(xpath = "//label[contains(text(),\"Discount Method\")]/following-sibling::kendo-combobox")
+    KendoComboBox discountMethodComboBx;
 
-    public List<WebElement> countries() {
-        driver.findElement(By.xpath("//label[contains(text(),\"Country\")]/following-sibling::div//span/span/span")).click();
-        wait.until(ExpectedConditions.visibilityOfAllElements(listItems));
-        return listItems;
-    }
+    @FindBy(css = "kendo-combobox[name=\"Country\"]")
+    public KendoComboBox countriesComboBox;
 
     @FindBy(xpath = "//label[contains(text(),\"City\")]/following-sibling::div//input")
     public WebElement cityFieldEn;
     @FindBy(xpath = "//label[contains(text(),\"District\")]/following-sibling::div//input")
     public WebElement districtFieldEn;
-   public WebElement arField(WebElement enField){
-       enField.findElement(By.xpath("./following-sibling::button")).click();
-       return enField.findElement(By.xpath("./../../following-sibling::div/input[2]"));
-   }
+
+    public WebElement arField(WebElement enField) {
+        enField.findElement(By.xpath("./following-sibling::button")).click();
+        return enField.findElement(By.xpath("./../../following-sibling::div/input[2]"));
+    }
+
     @FindBy(xpath = "//label[contains(text(),\"Street\")]/following-sibling::div//input")
-    public WebElement streetFieldEn;
+    public MultiLangTextField streetFieldEn;
 
     @FindBy(xpath = "//label[contains(text(),\"Building Number\")]/following-sibling::div//input")
     public WebElement bNoField;
@@ -144,12 +141,8 @@ public class P22_Corporates  extends BasePage
     @FindBy(xpath = "//input[@name=\"contactPersonPhone\"]")
     public WebElement cPersonPhoneFied;
 
-    public List<WebElement> countryCodes() {
-        driver.findElement(By.xpath("//div[@class=\"country-code-dropdown\"]//span[@class=\"k-select\"]")).click();
-        wait.until(ExpectedConditions.visibilityOfAllElements(listItems));
-        return listItems;
-    }
-
+    @FindBy(css = "kendo-combobox[name=\"countryDialcode\"]")
+    public KendoComboBox countryDialCodeComboBox;
     @FindBy(xpath = "//button[contains(@class,\"n-button n-button--primary\")]")
     public WebElement saveButton;
     //in reservation popup

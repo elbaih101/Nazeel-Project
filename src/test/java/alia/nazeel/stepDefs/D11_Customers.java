@@ -4,6 +4,8 @@ import alia.nazeel.pages.P02_DashBoardPage;
 import alia.nazeel.pages.mutlipurposes.P00_multiPurposes;
 import alia.nazeel.pages.vouchersPages.P10_VouchersPage;
 import alia.nazeel.pages.vouchersPages.P16_VouchersPopUp;
+import alia.nazeel.pojos.customers.Guest;
+import alia.nazeel.pojos.customers.Vendor;
 import alia.nazeel.tools.CustomWebDriverWait;
 import alia.nazeel.tools.Utils;
 import com.github.javafaker.Faker;
@@ -21,12 +23,9 @@ import org.joda.time.format.DateTimeFormat;
 import org.openqa.selenium.*;
 
 import org.openqa.selenium.support.ui.ExpectedConditions;
-
 import org.testng.asserts.SoftAssert;
-
 import java.time.Duration;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
@@ -53,30 +52,30 @@ public class D11_Customers {
     }
 
     @When("Creating a Corporate with name {string} and Country {string} ignoredFields {string} vat {string} bNumber {string} secBNumber {string} invalid {string}")
-    public void creatingACorporateWithNameAndCountryWithout(String name, String country, String ignoredFields, String vat, String bNumb, String secBNumb,String invalidFields) {
+    public void creatingACorporateWithNameAndCountryWithout(String name, String country, String ignoredFields, String vat, String bNumb, String secBNumb, String invalidFields) {
         wait.waitLoading();
         corporates.newCorporateButton.click();
-        fillCorporatedata(name, country, ignoredFields, vat, bNumb, secBNumb,invalidFields);
+        fillCorporatedata(name, country, ignoredFields, vat, bNumb, secBNumb, invalidFields);
 
         try {
             wait.waitLoading();
-           selectCorpPopup.saveButton.click();
+            selectCorpPopup.saveButton.click();
 
         } catch (NoSuchElementException e) {
-           wait.waitLoading();
+            wait.waitLoading();
             corporates.saveButton.click();
         }
 
 
     }
 
-    private void fillCorporatedata(String name, String country, String ignoredFields, String vat, String bNumb, String secBNumb,String invalidFields) {
+    private void fillCorporatedata(String name, String country, String ignoredFields, String vat, String bNumb, String secBNumb, String invalidFields) {
         if (!name.isEmpty()) {
             corporates.corpoateNameField.clear();
             corporates.corpoateNameField.sendKeys(name);
         }
         if (!country.isEmpty()) {
-            corporates.countries().stream().filter(c -> c.getText().toLowerCase().contains(country.toLowerCase())).findFirst().orElseThrow().click();
+            corporates.countriesComboBox.selectByTextContainsIgnoreCase(country.toLowerCase());
         }
         if (!vat.isEmpty()) {
             corporates.vatField.clear();
@@ -86,7 +85,7 @@ public class D11_Customers {
         invalidCorporateFieldsMethod(invalidFields);
     }
 
-    private void invalidCorporateFieldsMethod(String invalidFields ) {
+    private void invalidCorporateFieldsMethod(String invalidFields) {
         if (!invalidFields.toLowerCase().contains("all")) {
             if (invalidFields.toLowerCase().contains("postalcode")) {
                 corporates.postalCodeField.sendKeys((Keys.chord(Keys.CONTROL, "a", Keys.BACK_SPACE)));
@@ -102,6 +101,7 @@ public class D11_Customers {
             }
         }
     }
+
     private void ignoredFeildsMethod(String ignoredFields, String bNumb, String secBNumb) {
         if (!ignoredFields.toLowerCase().contains("all")) {
             if (!ignoredFields.toLowerCase().contains("postalcode")) {
@@ -130,11 +130,10 @@ public class D11_Customers {
                 corporates.arField(corporates.districtFieldEn).sendKeys((Keys.chord(Keys.CONTROL, "a", Keys.BACK_SPACE)));
             }
             if (!ignoredFields.toLowerCase().contains("street")) {
-                corporates.streetFieldEn.clear();
-                corporates.streetFieldEn.sendKeys(Faker.instance().address().streetName());
+                corporates.streetFieldEn.clearFirstLangField();
+                corporates.streetFieldEn.sendKEysFirstLangField(Faker.instance().address().streetName());
             } else {
-                corporates.streetFieldEn.sendKeys((Keys.chord(Keys.CONTROL, "a", Keys.BACK_SPACE)));
-                corporates.arField(corporates.streetFieldEn).sendKeys((Keys.chord(Keys.CONTROL, "a", Keys.BACK_SPACE)));
+                corporates.streetFieldEn.clear();
             }
             if (!ignoredFields.toLowerCase().contains("bnumber")) {
                 corporates.bNoField.clear();
@@ -188,7 +187,7 @@ public class D11_Customers {
     @And("Edit Corporate name {string} and Country {string} ignoredFields {string} vat {string} bNumber {string} secBNumber {string}")
     public void editCorporateNameAndCountryIgnoredFieldsVatBNumberSecBNumber(String name, String country, String ignoredFields, String vat, String bNumb, String secBNumb) {
         wait.waitLoading();
-        fillCorporatedata(name, country, ignoredFields, vat, bNumb, secBNumb,"");
+        fillCorporatedata(name, country, ignoredFields, vat, bNumb, secBNumb, "");
         wait.waitLoading();
         corporates.saveButton.click();
     }
@@ -218,29 +217,9 @@ public class D11_Customers {
         dashBoardPage.vendorssLink.click();
     }
 
-    final HashMap<String, String> vendorMap = new HashMap<>();
 
-    private void setVendorMap(String name, String phone, String email, String vat, String cR, String pCode, String desc, String address, String state) {
-        if (!phone.isEmpty())
-            vendorMap.put("phone", phone);
-        if (!email.isEmpty())
-            vendorMap.put("email", email);
-        if (!vat.isEmpty())
-            vendorMap.put("vat", vat);
-        if (!name.isEmpty())
-            vendorMap.put("name", name);
-        if (!desc.isEmpty())
-            vendorMap.put("desc", desc);
-        if (!state.isEmpty())
-            vendorMap.put("state", state);
-        if (!cR.isEmpty())
-            vendorMap.put("cR", cR);
-        if (!pCode.isEmpty())
-            vendorMap.put("pCode", pCode);
-        if (!address.isEmpty())
-            vendorMap.put("address", address);
-        //outletMap.putAll(Map.of("outlet", outlet, "ntmp", ntmp, "name", name, "desc", desc, "state", state));
-    }
+    Vendor vendor;
+
 
     private void fillVendorData(String name, String phone, String email, String vat, String cR, String pCode, String desc, String address, String state) {
         if (!phone.isEmpty()) {
@@ -298,11 +277,11 @@ public class D11_Customers {
                 vendors.addressField.sendKeys(address);
         }
 
+        vendor = new Vendor(name, phone, email, vat, desc, state, cR, pCode, address);
 
-        setVendorMap(name, phone, email, vat, cR, pCode, desc, address, state);
-        if (state.equalsIgnoreCase("new"))
-            vendorMap.put("state", "Active");
-        else if ((vendors.statusSwitch.getAttribute("class").contains("k-switch-off") && state.equalsIgnoreCase("active")) || (vendors.statusSwitch.getAttribute("class").contains("k-switch-on") && state.equalsIgnoreCase("inactive")))
+        if (state.equalsIgnoreCase("new")) {
+            vendor.setStatus("Active");
+        } else if ((vendors.statusSwitch.getAttribute("class").contains("k-switch-off") && state.equalsIgnoreCase("active")) || (vendors.statusSwitch.getAttribute("class").contains("k-switch-on") && state.equalsIgnoreCase("inactive")))
             vendors.statusSwitch.click();
     }
 
@@ -320,26 +299,26 @@ public class D11_Customers {
         if (msg.contains("successfully")) {
             if (existance.equalsIgnoreCase("added")) {
                 wait.waitLoading();
-                WebElement selectedVendor = vendors.vendorsNames.stream().filter(c -> c.getText().equalsIgnoreCase(vendorMap.get("name"))).findAny().orElseThrow();
-                asrt.assertTrue(vendors.vendorPhone(selectedVendor).getText().contains(vendorMap.get("phone")), "Expected: " + vendorMap.get("phone") + " ,Actual: " + vendors.vendorPhone(selectedVendor).getText());
-                asrt.assertTrue(vendors.vendorEmail(selectedVendor).getText().equalsIgnoreCase(vendorMap.get("email")), "Expected: " + vendorMap.get("email") + " ,Actual: " + vendors.vendorEmail(selectedVendor).getText());
-                asrt.assertTrue(vendors.vendorVAT(selectedVendor).getText().equalsIgnoreCase(vendorMap.get("vat")), "Expected: " + vendorMap.get("vat") + " ,Actual: " + vendors.vendorVAT(selectedVendor).getText());
-                asrt.assertTrue(vendors.vendorCRNo(selectedVendor).getText().equalsIgnoreCase(vendorMap.get("cR")), "Expected: " + vendorMap.get("cR") + " ,Actual: " + vendors.vendorCRNo(selectedVendor).getText());
-                asrt.assertTrue(vendors.vendorStatus(selectedVendor).getText().equalsIgnoreCase(vendorMap.get("state")), "Expected: " + vendorMap.get("state") + " ,Actual: " + vendors.vendorStatus(selectedVendor).getText());
+                WebElement selectedVendor = vendors.vendorsNames.stream().filter(c -> c.getText().equalsIgnoreCase(vendor.getName())).findAny().orElseThrow();
+                asrt.assertTrue(vendors.vendorPhone(selectedVendor).getText().contains(vendor.getPhone()), "Expected: " + vendor.getPhone() + " ,Actual: " + vendors.vendorPhone(selectedVendor).getText());
+                asrt.assertTrue(vendors.vendorEmail(selectedVendor).getText().equalsIgnoreCase(vendor.getEmail()), "Expected: " + vendor.getEmail() + " ,Actual: " + vendors.vendorEmail(selectedVendor).getText());
+                asrt.assertTrue(vendors.vendorVAT(selectedVendor).getText().equalsIgnoreCase(vendor.getVat()), "Expected: " + vendor.getVat() + " ,Actual: " + vendors.vendorVAT(selectedVendor).getText());
+                asrt.assertTrue(vendors.vendorCRNo(selectedVendor).getText().equalsIgnoreCase(vendor.getCrNo()), "Expected: " + vendor.getVat() + " ,Actual: " + vendors.vendorCRNo(selectedVendor).getText());
+                asrt.assertTrue(vendors.vendorStatus(selectedVendor).getText().equalsIgnoreCase(vendor.getStatus()), "Expected: " + vendor.getStatus() + " ,Actual: " + vendors.vendorStatus(selectedVendor).getText());
                 new D06_DigitalPayment().goToDesiredVouchersPage("Expenses");
                 wait.waitLoading();
                 new P10_VouchersPage(driver).newVoucherButton.click();
-                if (vendorMap.get("state").equalsIgnoreCase("active"))
-                    asrt.assertTrue(new P16_VouchersPopUp(driver).vendorsList().stream().anyMatch(v -> v.getText().equalsIgnoreCase(vendorMap.get("name"))));
+                if (vendor.getStatus().equalsIgnoreCase("active"))
+                    asrt.assertTrue(new P16_VouchersPopUp(driver).vendorsList().stream().anyMatch(v -> v.getText().equalsIgnoreCase(vendor.getName())));
                 else
-                    asrt.assertFalse(new P16_VouchersPopUp(driver).vendorsList().stream().anyMatch(v -> v.getText().equalsIgnoreCase(vendorMap.get("name"))));
+                    asrt.assertFalse(new P16_VouchersPopUp(driver).vendorsList().stream().anyMatch(v -> v.getText().equalsIgnoreCase(vendor.getName())));
             } else if (existance.equalsIgnoreCase("deleted")) {
                 wait.waitLoading();
-                asrt.assertFalse(vendors.vendorsNames.stream().anyMatch(c -> c.getText().equalsIgnoreCase(vendorMap.get("name"))));
+                asrt.assertFalse(vendors.vendorsNames.stream().anyMatch(c -> c.getText().equalsIgnoreCase(vendor.getName())));
                 new D06_DigitalPayment().goToDesiredVouchersPage("Expenses");
                 wait.waitLoading();
                 new P10_VouchersPage(driver).newVoucherButton.click();
-                asrt.assertFalse(new P16_VouchersPopUp(driver).vendorsList().stream().anyMatch(v -> v.getText().equalsIgnoreCase(vendorMap.get("name"))));
+                asrt.assertFalse(new P16_VouchersPopUp(driver).vendorsList().stream().anyMatch(v -> v.getText().equalsIgnoreCase(vendor.getName())));
             }
             asrt.assertAll();
         }
@@ -349,7 +328,8 @@ public class D11_Customers {
     public void eidtingVendorNamePhoneEmailVATStatus(String oName, String nName, String phone, String email, String vat, String status) {
         wait.waitLoading();
         WebElement selectedVendor = vendors.vendorsNames.stream().filter(c -> c.getText().equalsIgnoreCase(oName)).findAny().orElseThrow();
-        setVendorMap(vendors.vendorName(selectedVendor).getText(), vendors.vendorPhone(selectedVendor).getText(), vendors.vendorEmail(selectedVendor).getText(), vendors.vendorVAT(selectedVendor).getText(), vendors.vendorCRNo(selectedVendor).getText(), "", "", "", vendors.vendorStatus(selectedVendor).getText());
+        vendor = new Vendor(vendors.vendorName(selectedVendor).getText(), vendors.vendorPhone(selectedVendor).getText(), vendors.vendorEmail(selectedVendor).getText(), vendors.vendorVAT(selectedVendor).getText(), "", vendors.vendorStatus(selectedVendor).getText(), vendors.vendorCRNo(selectedVendor).getText(), "", "");
+
         vendors.vendorEditButton(selectedVendor).click();
         wait.waitLoading();
         fillVendorData(nName, phone, email, vat, "", "", "", "", status);
@@ -360,7 +340,7 @@ public class D11_Customers {
     public void deletingVendor(String name) {
         wait.waitLoading();
         WebElement selectedVendor = vendors.vendorsNames.stream().filter(c -> c.getText().equalsIgnoreCase(name)).findAny().orElseThrow();
-        setVendorMap(vendors.vendorName(selectedVendor).getText(), vendors.vendorPhone(selectedVendor).getText(), vendors.vendorEmail(selectedVendor).getText(), vendors.vendorVAT(selectedVendor).getText(), vendors.vendorCRNo(selectedVendor).getText(), "", "", "", vendors.vendorStatus(selectedVendor).getText());
+        vendor = new Vendor(vendors.vendorName(selectedVendor).getText(), vendors.vendorPhone(selectedVendor).getText(), vendors.vendorEmail(selectedVendor).getText(), vendors.vendorVAT(selectedVendor).getText(), "", vendors.vendorStatus(selectedVendor).getText(), vendors.vendorCRNo(selectedVendor).getText(), "", "");
         vendors.vendorDeleteButton(selectedVendor).click();
         vendors.confirmDeleteButton.click();
     }
@@ -405,27 +385,8 @@ public class D11_Customers {
     }
 
 
-    final HashMap<String, String> guestMap = new HashMap<>();
+    Guest guest;
 
-    private void setGuestMap(String fName, String lName, String phone, String nat, String idType, String idNum, String state) {
-        if (!phone.isEmpty())
-            guestMap.put("phone", phone);
-        if (!idType.isEmpty())
-            guestMap.put("idType", idType);
-        if (!idNum.isEmpty())
-            guestMap.put("idNum", idNum);
-        if (!fName.isEmpty()) {
-            String name = fName;
-            if (!lName.isEmpty())
-                name = name + " " + lName;
-            guestMap.put("name", name);
-        }
-        if (!nat.isEmpty())
-            guestMap.put("nat", nat);
-        if (!state.isEmpty())
-            guestMap.put("state", state);
-
-    }
 
     private void fillGuestData(String fName, String lName, String phone, String nat, String gType, String idType, String idNumb, String state, String ign, String inv) {
         if (!fName.isEmpty()) {
@@ -510,9 +471,9 @@ public class D11_Customers {
         if (inv.contains("idSerial")) {
             guests.clearSelectionButton(guests.idSerialComboBox).click();
         }
-        setGuestMap(fName, lName, phone, nat, idType, idNumb, state);
+        guest = new Guest(fName + " " + lName, idNumb, idType, phone, nat, state);
         if (state.equalsIgnoreCase("new"))
-            guestMap.put("state", "Active");
+            guest.setStatus("Active");
         else if ((guests.statusSwitch.getAttribute("class").contains("k-switch-off") && state.equalsIgnoreCase("active")) || (guests.statusSwitch.getAttribute("class").contains("k-switch-on") && state.equalsIgnoreCase("inactive")))
             guests.statusSwitch.click();
     }
@@ -533,16 +494,16 @@ public class D11_Customers {
         if (msg.contains("successfully")) {
             if (existance.equalsIgnoreCase("added")) {
                 wait.waitLoading();
-                WebElement selectedGuest = guests.idNumbers.stream().filter(c -> c.getText().equalsIgnoreCase(guestMap.get("idNum"))).findAny().orElseThrow();
-                asrt.assertTrue(guests.guestNationality(selectedGuest).getText().equalsIgnoreCase(guestMap.get("nat"))
-                        , "Expected: " + guestMap.get("nat") + " ,Actual: " + guests.guestNationality(selectedGuest).getText());
+                WebElement selectedGuest = guests.idNumbers.stream().filter(c -> c.getText().equalsIgnoreCase(guest.getIdNo())).findAny().orElseThrow();
+                asrt.assertTrue(guests.guestNationality(selectedGuest).getText().equalsIgnoreCase(guest.getNationality())
+                        , "Expected: " + guest.getNationality() + " ,Actual: " + guests.guestNationality(selectedGuest).getText());
 
-                asrt.assertTrue(guests.guestphone(selectedGuest).getText().contains(guestMap.get("phone")), "Expected: " + guestMap.get("phone") + " ,Actual: " + guests.guestphone(selectedGuest).getText());
-                asrt.assertTrue(guests.guestIDType(selectedGuest).getText().equalsIgnoreCase(guestMap.get("idType")), "Expected: " + guestMap.get("idType") + " ,Actual: " + guests.guestIDType(selectedGuest).getText());
-                asrt.assertTrue(guests.guestName(selectedGuest).getText().contains(guestMap.get("name")), "Expected: " + guestMap.get("name") + " ,Actual: " + guests.guestName(selectedGuest).getText());
+                asrt.assertTrue(guests.guestphone(selectedGuest).getText().contains(guest.getPhone()), "Expected: " + guest.getPhone() + " ,Actual: " + guests.guestphone(selectedGuest).getText());
+                asrt.assertTrue(guests.guestIDType(selectedGuest).getText().equalsIgnoreCase(guest.getIdType()), "Expected: " + guest.getIdType() + " ,Actual: " + guests.guestIDType(selectedGuest).getText());
+                asrt.assertTrue(guests.guestName(selectedGuest).getText().contains(guest.getName()), "Expected: " + guest.getName() + " ,Actual: " + guests.guestName(selectedGuest).getText());
             } else if (existance.equalsIgnoreCase("deleted")) {
                 wait.waitLoading();
-                asrt.assertFalse(guests.guestsNames.stream().anyMatch(c -> c.getText().equalsIgnoreCase(guestMap.get("idNum"))));
+                asrt.assertFalse(guests.guestsNames.stream().anyMatch(c -> c.getText().equalsIgnoreCase(guest.getIdNo())));
             }
             asrt.assertAll();
         }
@@ -567,7 +528,7 @@ public class D11_Customers {
         else
             selectedGuest = guests.idNumbers.stream().filter(c -> c.getText().equalsIgnoreCase(id)).findAny().orElseThrow();
         String[] name = guests.guestName(selectedGuest).getText().split("\\s");
-        setGuestMap(name[0], name[1], guests.guestphone(selectedGuest).getText().split("\\s")[1], guests.guestNationality(selectedGuest).getText(), guests.guestIDType(selectedGuest).getText(), guests.guestIDNumber(selectedGuest).getText(), guests.guestStatus(selectedGuest).getText());
+        guest = new Guest(name[0] + " " + name[1], guests.guestIDNumber(selectedGuest).getText(), guests.guestIDType(selectedGuest).getText(), guests.guestphone(selectedGuest).getText().split("\\s")[1], guests.guestNationality(selectedGuest).getText(), guests.guestStatus(selectedGuest).getText());
         return selectedGuest;
     }
 
@@ -678,7 +639,7 @@ public class D11_Customers {
         guests.documentNameField.sendKeys(docName);
         guests.submitDocumentButton.click();
         guests.submitButton.click();
-        guestMap.put("id", guestId);
+        guest.setIdNo(guestId);
         this.docName = docName;
 
     }
@@ -688,7 +649,7 @@ public class D11_Customers {
     @Then("Check the added document visible with the name {string}")
     public void checkTheAddedDocumentVisibleWithTheName(String docName) {
         new D03_BlocksAndFloors().checkToastMesageContainsText("Saved Successfully");
-        selectedDoc = selectDocumentFromGuest(this.docName, guestMap.get("id"));
+        selectedDoc = selectDocumentFromGuest(this.docName, guest.getIdNo());
         asrt.assertTrue(selectedDoc != null);
         asrt.assertAll();
     }
@@ -713,7 +674,7 @@ public class D11_Customers {
     @Then("Check the document no more exist")
     public void checkTheDocumentNoMoreExist() {
         new D03_BlocksAndFloors().checkToastMesageContainsText("Saved Successfully");
-        selectedDoc = selectDocumentFromGuest(docName, guestMap.get("id"));
+        selectedDoc = selectDocumentFromGuest(docName, guest.getIdNo());
         asrt.assertTrue(selectedDoc == null);
         asrt.assertAll();
     }
@@ -743,7 +704,7 @@ public class D11_Customers {
     @Then("Check all guests shown {string} as {string}")
     public void checkAllGuestsShownAs(String filter, String value) {
         wait.waitLoading();
-        List<WebElement> theList ;
+        List<WebElement> theList;
         switch (filter.toLowerCase()) {
             case "status" -> {
                 theList = guests.statuses;
@@ -791,19 +752,19 @@ public class D11_Customers {
         String searchText;
         if (corporateName.equalsIgnoreCase("RANDOM")) {
             criteriaButton = selectCorpPopup.searchCriteriasButtons.stream().filter(t -> t.getText().equalsIgnoreCase("name")).findAny().orElseThrow();
-            searchText="";
+            searchText = "";
         } else if (corpPhone.equalsIgnoreCase("") && corpEmail.equalsIgnoreCase("") && corpVAT.equalsIgnoreCase("")) {
             criteriaButton = selectCorpPopup.searchCriteriasButtons.stream().filter(t -> t.getText().equalsIgnoreCase("name")).findAny().orElseThrow();
-            searchText=corporateName;
+            searchText = corporateName;
         } else if (corporateName.equalsIgnoreCase("") && corpEmail.equalsIgnoreCase("") && corpVAT.equalsIgnoreCase("")) {
             criteriaButton = selectCorpPopup.searchCriteriasButtons.stream().filter(t -> t.getText().equalsIgnoreCase("phone")).findAny().orElseThrow();
-            searchText=corpPhone;
+            searchText = corpPhone;
         } else if (corporateName.equalsIgnoreCase("") && corpPhone.equalsIgnoreCase("") && corpVAT.equalsIgnoreCase("")) {
             criteriaButton = selectCorpPopup.searchCriteriasButtons.stream().filter(t -> t.getText().equalsIgnoreCase("email")).findAny().orElseThrow();
-            searchText=corpEmail;
-        }else {
+            searchText = corpEmail;
+        } else {
             criteriaButton = selectCorpPopup.searchCriteriasButtons.stream().filter(t -> t.getText().equalsIgnoreCase("vat no.")).findAny().orElseThrow();
-            searchText=corpEmail;
+            searchText = corpEmail;
         }
         wait.until(ExpectedConditions.elementToBeClickable(criteriaButton));
 
@@ -814,11 +775,11 @@ public class D11_Customers {
         List<WebElement> corpNames = selectCorpPopup.corporatesNAmes;
         WebElement selectedCorp = corpNames.get(new Random().nextInt(corpNames.size()));
         wait.until(ExpectedConditions.elementToBeClickable(selectedCorp));
-        String corpName =selectedCorp.getText();
+        String corpName = selectedCorp.getText();
         selectedCorp.click();
         return corpName;
 
-        }
+    }
 
 
 }
