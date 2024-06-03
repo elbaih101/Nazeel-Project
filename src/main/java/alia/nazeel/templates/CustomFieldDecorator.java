@@ -6,6 +6,7 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.pagefactory.DefaultFieldDecorator;
 import org.openqa.selenium.support.pagefactory.ElementLocator;
 import org.openqa.selenium.support.pagefactory.ElementLocatorFactory;
+import org.openqa.selenium.support.ui.Select;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,6 +36,8 @@ public class CustomFieldDecorator extends DefaultFieldDecorator
         add(KendoGrid.class);
         add(CustomWebElement.class);
         add(KendoGrid.class);
+        add(SwalPopUp.class);
+        add(Select.class);
 
     }});
 
@@ -72,21 +75,21 @@ public class CustomFieldDecorator extends DefaultFieldDecorator
      * This method creates a proxy instance of the specified class using the provided WebElement as an argument.
      * It finds a constructor that takes a WebElement as an argument and creates a new instance using that constructor.
      *
-     * @param clas  The class of the proxy instance to be created.
+     * @param clazz  The class of the proxy instance to be created.
      * @param loader The class loader to be used for loading the specified class.
      * @param locator The locator that provides the WebElement to be used for creating the proxy instance.
      * @return A new instance of the specified class, initialized with the provided WebElement.
      * @see ElementLocator
      * @see WebElement
      */
-    private <T> T CustomProxy(Class<T> clas, ClassLoader loader, ElementLocator locator)
+    private <T> T CustomProxy(Class<T> clazz, ClassLoader loader, ElementLocator locator)
     {
         try
         {
             WebElement proxy = proxyForLocator(loader, locator);
 
             // Find a constructor that takes a WebElement as an argument
-            Constructor<T> constructor = clas.getConstructor(WebElement.class);
+            Constructor<T> constructor = clazz.getConstructor(WebElement.class);
 
             // Create a new instance using the found constructor
             return constructor.newInstance(proxy);

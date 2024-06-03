@@ -6,6 +6,8 @@ import org.openqa.selenium.WebElement;
 
 public class MultiLangTextField {
 
+    String firstlangText;
+    String secondLangText;
 
     WebElement multiLangTextField;
     By secondInput = By.xpath("./../../following-sibling::div/input[2]");
@@ -41,10 +43,15 @@ public class MultiLangTextField {
     }
     public void sendKEysFirstLangField(String keys)
     {
+        firstlangText=keys;
         multiLangTextField.sendKeys(keys);
     }
     public void sendKEysSecondLangField(String keys)
     {
+        secondLangText=keys;
      secondLangField().sendKeys(keys);
     }
+   //Todo
+    public String getFirstLangText(){return firstlangText= multiLangTextField.getAttribute("value");}
+    public String getSecondLangText(){return secondLangText= secondLangField().getAttribute("value");}
 }

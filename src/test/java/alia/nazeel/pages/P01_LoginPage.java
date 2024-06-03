@@ -9,22 +9,22 @@ import org.openqa.selenium.support.FindBy;
 
 import java.util.List;
 
-public class P01_LoginPage extends BasePage
-{
+public class P01_LoginPage extends BasePage {
 
-
-    public P01_LoginPage(WebDriver driver){
-super(driver);      }
-    @SuppressWarnings("unused")
-    @FindBy(id="usern")
-   public WebElement usernameField;
+    public P01_LoginPage(WebDriver driver) {
+        super(driver);
+    }
 
     @SuppressWarnings("unused")
-    @FindBy(id="pass")
-   public WebElement passwordField;
+    @FindBy(id = "usern")
+    public WebElement usernameField;
 
     @SuppressWarnings("unused")
-    @FindBy(id="acc")
+    @FindBy(id = "pass")
+    public WebElement passwordField;
+
+    @SuppressWarnings("unused")
+    @FindBy(id = "acc")
     public WebElement accField;
 
     @SuppressWarnings("unused")
