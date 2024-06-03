@@ -1,5 +1,6 @@
 package alia.nazeel.pages.customers;
 
+import alia.nazeel.kendoelements.KendoGrid;
 import alia.nazeel.templates.BasePage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -22,6 +23,9 @@ public class P34_Vendors extends BasePage
     public WebElement newVendorButton;
 
     //grid//
+    @FindBy(css = " app-vendor-list kendo-grid")
+    KendoGrid vendorsGrid;
+
     @FindBy(xpath = "//td[@data-kendo-grid-column-index=\"0\"]")
     public List<WebElement> vendorsNames;
     @FindBy(xpath = "//td[@data-kendo-grid-column-index=\"1\"]")
