@@ -3,7 +3,7 @@ Feature: Vendors Feature
 
   Background:  login and choose property
     Given Logging in with superuser
-    And Select Property "P01404 "
+    And Select Property "P01404"
     And go to Vendors page
 
   Scenario: Check default vendor
