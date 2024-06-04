@@ -46,4 +46,17 @@ public class CustomWebDriverWait extends WebDriverWait
         }
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
     }
+    /**
+     * function to sleep the thread with desired time in millis
+     *
+     * @param milliSeconds time in millis
+     */
+    public  void sleep(int milliSeconds) {
+        try {
+            Thread.sleep(milliSeconds);
+        } catch (InterruptedException e) {
+            //noinspection CallToPrintStackTrace
+            e.printStackTrace();
+        }
+    }
 }

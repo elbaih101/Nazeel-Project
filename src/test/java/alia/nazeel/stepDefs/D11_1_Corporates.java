@@ -2,22 +2,24 @@ package alia.nazeel.stepDefs;
 
 import alia.nazeel.pages.P02_DashBoardPage;
 import alia.nazeel.pages.customers.P22_Corporates;
-import alia.nazeel.pages.customers.P34_Vendors;
-import alia.nazeel.pages.customers.P35_Guests;
 import alia.nazeel.pages.mutlipurposes.P00_3_CorporateSelectionPopUp;
+import alia.nazeel.tools.CustomAssert;
 import alia.nazeel.tools.CustomWebDriverWait;
 import alia.nazeel.tools.DriverManager;
+import alia.nazeel.tools.Utils;
 import com.github.javafaker.Faker;
+import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.testng.asserts.SoftAssert;
 
 import java.time.Duration;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 import java.util.Random;
 
 public class D11_1_Corporates {
@@ -25,12 +27,10 @@ public class D11_1_Corporates {
     final WebDriver driver = DriverManager.getDriver();
 
 
-    final SoftAssert asrt = new SoftAssert();
+    final CustomAssert asrt = new CustomAssert();
     final CustomWebDriverWait wait = new CustomWebDriverWait(driver, Duration.ofSeconds(20));
     final P02_DashBoardPage dashBoardPage = new P02_DashBoardPage(driver);
     final P22_Corporates corporates = new P22_Corporates(driver);
-    final P34_Vendors vendors = new P34_Vendors(driver);
-    final P35_Guests guests = new P35_Guests(driver);
     final P00_3_CorporateSelectionPopUp selectCorpPopup = new P00_3_CorporateSelectionPopUp(driver);
 
 
@@ -42,42 +42,102 @@ public class D11_1_Corporates {
         dashBoardPage.corporatesLink.click();
     }
 
+    @When("Checking the validation over the required Fields\\(name, Country ,VAT,first and second building numbers,) in corporate Creation")
+    public void checkingTheValidationOverTheRequiredFieldsNameCountryVATFirstAndSecondBuildingNumbersInCorporateCreation(DataTable table) {
+        List<Map<String, String>> rows = table.asMaps(String.class, String.class);
+        for (Map<String, String> columns : rows) {
+            creatingACorporateWithNameAndCountryWithout(columns.get("name"), columns.get("country"), columns.get("empty"), columns.get("vat"), columns.get("bNum"), columns.get("secBNum"), columns.get("invalid"));
+            assertToastMessageAndValidityThenClearFields(columns.get("msg"));
+        }
+    }
+
+    @Then("assert Validity of Fields")
+    public void assertValidityOfFields() {
+        asrt.assertAll();
+    }
+
+    private void assertToastMessageAndValidityThenClearFields(String message) {
+        asrt.AssertToastMessageContains(message);
+        clearCorporateData();
+    }
+
+    private void clearCorporateData() {
+        corporates.corpoateNameField.clear();
+        corporates.countriesComboBox.clearSelection();
+        corporates.vatField.clear();
+        corporates.postalCodeField.sendKeys((Keys.chord(Keys.CONTROL, "a", Keys.BACK_SPACE)));
+        corporates.countryDialCodeComboBox.clearSelection();
+        corporates.cRNumberField.clear();
+        corporates.cityField.clear();
+        corporates.districtField.clear();
+        corporates.streetField.clear();
+        corporates.bNoField.clear();
+        corporates.secNoField.clear();
+        corporates.addressField.clear();
+        corporates.emaiField.clear();
+        corporates.corPhoneField.clear();
+        corporates.cPersonNameFied.clear();
+        corporates.cPersonPhoneFied.clear();
+    }
+
+    int newButtonClicks = 0;
+
     @When("Creating a Corporate with name {string} and Country {string} ignoredFields {string} vat {string} bNumber {string} secBNumber {string} invalid {string}")
     public void creatingACorporateWithNameAndCountryWithout(String name, String country, String ignoredFields, String vat, String bNumb, String secBNumb, String invalidFields) {
         wait.waitLoading();
-        corporates.newCorporateButton.click();
+        if (newButtonClicks == 0) {
+            corporates.newCorporateButton.click();
+            newButtonClicks++;
+        }
         fillCorporatedata(name, country, ignoredFields, vat, bNumb, secBNumb, invalidFields);
 
         try {
             wait.waitLoading();
+            driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(1));
             selectCorpPopup.saveButton.click();
 
         } catch (NoSuchElementException e) {
             wait.waitLoading();
             corporates.saveButton.click();
         }
-
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
 
     }
 
     private void fillCorporatedata(String name, String country, String ignoredFields, String vat, String bNumb, String secBNumb, String invalidFields) {
-        if (!name.isEmpty()) {
+        if (!Utils.isEmptyOrNull(name)) {
             corporates.corpoateNameField.clear();
-            corporates.corpoateNameField.sendKeys(name);
+            if (!name.equalsIgnoreCase("non"))
+                corporates.corpoateNameField.sendKeys(name);
         }
-        if (!country.isEmpty()) {
-            corporates.countriesComboBox.selectByTextContainsIgnoreCase(country.toLowerCase());
+        if (!Utils.isEmptyOrNull(country)) {
+            corporates.countriesComboBox.clearSelection();
+            if (!country.equalsIgnoreCase("non"))
+                corporates.countriesComboBox.selectByTextContainsIgnoreCase(country.toLowerCase());
+
         }
-        if (!vat.isEmpty()) {
+        if (!Utils.isEmptyOrNull(vat)) {
             corporates.vatField.clear();
-            corporates.vatField.sendKeys(vat);
+            if (!vat.equalsIgnoreCase("non"))
+                corporates.vatField.sendKeys(vat);
         }
-        ignoredFeildsMethod(ignoredFields, bNumb, secBNumb);
+        if (!Utils.isEmptyOrNull(bNumb)) {
+            corporates.bNoField.clear();
+            if (!bNumb.equalsIgnoreCase("non"))
+                corporates.bNoField.sendKeys(bNumb);
+        }
+        if (!Utils.isEmptyOrNull(secBNumb)) {
+            corporates.secNoField.clear();
+            if (!secBNumb.equalsIgnoreCase("non"))
+                corporates.secNoField.sendKeys(secBNumb);
+        }
+        emptyFeildsMethod(ignoredFields);
         invalidCorporateFieldsMethod(invalidFields);
     }
 
     private void invalidCorporateFieldsMethod(String invalidFields) {
-        if (!invalidFields.toLowerCase().contains("all")) {
+        if ((!Utils.isEmptyOrNull(invalidFields) && !invalidFields.toLowerCase().contains("all"))) {
+
             if (invalidFields.toLowerCase().contains("postalcode")) {
                 corporates.postalCodeField.sendKeys((Keys.chord(Keys.CONTROL, "a", Keys.BACK_SPACE)));
                 corporates.postalCodeField.sendKeys("6548");
@@ -86,73 +146,76 @@ public class D11_1_Corporates {
                 corporates.emaiField.clear();
                 corporates.emaiField.sendKeys("123");
             }
-            if (invalidFields.toLowerCase().contains("coersonnumber")) {
+            if (invalidFields.toLowerCase().contains("cpersonnumber")) {
+                corporates.countryDialCodeComboBox.selectByTextContainsIgnoreCase("966");
                 corporates.cPersonPhoneFied.clear();
                 corporates.cPersonPhoneFied.sendKeys(Faker.instance().number().digits(2));
             }
         }
     }
 
-    private void ignoredFeildsMethod(String ignoredFields, String bNumb, String secBNumb) {
-        if (!ignoredFields.toLowerCase().contains("all")) {
-            if (!ignoredFields.toLowerCase().contains("postalcode")) {
+    private void emptyFeildsMethod(String emptyFields) {
+        if ((!Utils.isEmptyOrNull(emptyFields) && !emptyFields.toLowerCase().contains("all"))) {
+
+            if (!emptyFields.toLowerCase().contains("postalcode")) {
                 corporates.postalCodeField.clear();
                 corporates.postalCodeField.sendKeys("65487");
             } else {
                 corporates.postalCodeField.sendKeys((Keys.chord(Keys.CONTROL, "a", Keys.BACK_SPACE)));
             }
-            if (!ignoredFields.toLowerCase().contains("crnumber")) {
+            if (!emptyFields.toLowerCase().contains("crnumber")) {
                 corporates.cRNumberField.clear();
                 corporates.cRNumberField.sendKeys("987654");
-            }
-            if (!ignoredFields.toLowerCase().contains("city")) {
-                corporates.cityFieldEn.clear();
-                corporates.cityFieldEn.click();
-                corporates.cityFieldEn.sendKeys(Faker.instance().address().city());
             } else {
-                corporates.cityFieldEn.sendKeys((Keys.chord(Keys.CONTROL, "a", Keys.BACK_SPACE)));
-                corporates.arField(corporates.cityFieldEn).sendKeys((Keys.chord(Keys.CONTROL, "a", Keys.BACK_SPACE)));
+                corporates.cRNumberField.clear();
             }
-            if (!ignoredFields.toLowerCase().contains("district")) {
-                corporates.districtFieldEn.clear();
-                corporates.districtFieldEn.sendKeys(Faker.instance().address().state());
+            if (!emptyFields.toLowerCase().contains("city")) {
+                corporates.cityField.clear();
+                corporates.cityField.sendKeys(Faker.instance().address().city(), Faker.instance(Locale.forLanguageTag("ar-SA")).address().city());
             } else {
-                corporates.districtFieldEn.sendKeys((Keys.chord(Keys.CONTROL, "a", Keys.BACK_SPACE)));
-                corporates.arField(corporates.districtFieldEn).sendKeys((Keys.chord(Keys.CONTROL, "a", Keys.BACK_SPACE)));
+                corporates.cityField.clear();
             }
-            if (!ignoredFields.toLowerCase().contains("street")) {
-                corporates.streetFieldEn.clearFirstLangField();
-                corporates.streetFieldEn.sendKEysFirstLangField(Faker.instance().address().streetName());
+            if (!emptyFields.toLowerCase().contains("district")) {
+                corporates.districtField.clear();
+                corporates.districtField.sendKeys(Faker.instance().address().state(), Faker.instance(Locale.forLanguageTag("ar-SA")).address().state());
             } else {
-                corporates.streetFieldEn.clear();
+                corporates.districtField.clear();
             }
-            if (!ignoredFields.toLowerCase().contains("bnumber")) {
-                corporates.bNoField.clear();
-                corporates.bNoField.sendKeys(bNumb);
+            if (!emptyFields.toLowerCase().contains("street")) {
+                corporates.streetField.clearFirstLangField();
+                corporates.streetField.sendKeys(Faker.instance().address().streetName(), Faker.instance(Locale.forLanguageTag("ar-SA")).address().streetName());
+            } else {
+                corporates.streetField.clear();
             }
-            if (!ignoredFields.toLowerCase().contains("secnumber")) {
-                corporates.secNoField.clear();
-                corporates.secNoField.sendKeys(secBNumb);
-            }
-            if (!ignoredFields.toLowerCase().contains("address")) {
+            if (!emptyFields.toLowerCase().contains("address")) {
                 corporates.addressField.clear();
                 corporates.addressField.sendKeys(Faker.instance().address().fullAddress());
+            } else {
+                corporates.addressField.clear();
             }
-            if (!ignoredFields.toLowerCase().contains("email")) {
+            if (!emptyFields.toLowerCase().contains("email")) {
                 corporates.emaiField.clear();
-                corporates.emaiField.sendKeys(Faker.instance().internet().emailAddress());
+                corporates.emaiField.sendKeys(Faker.instance(Locale.ENGLISH).internet().emailAddress());
+            } else {
+                corporates.emaiField.clear();
             }
-            if (!ignoredFields.toLowerCase().contains("phone")) {
+            if (!emptyFields.toLowerCase().contains("phone")) {
                 corporates.corPhoneField.clear();
                 corporates.corPhoneField.sendKeys(Faker.instance().number().digits(9));
+            } else {
+                corporates.corPhones.clear();
             }
-            if (!ignoredFields.toLowerCase().contains("cperson")) {
+            if (!emptyFields.toLowerCase().contains("cperson")) {
                 corporates.cPersonNameFied.clear();
                 corporates.cPersonNameFied.sendKeys(Faker.instance().funnyName().name());
+            } else {
+                corporates.cPersonNameFied.clear();
             }
-            if (!ignoredFields.toLowerCase().contains("coersonnumber")) {
+            if (!emptyFields.toLowerCase().contains("coersonnumber")) {
                 corporates.cPersonPhoneFied.clear();
                 corporates.cPersonPhoneFied.sendKeys(Faker.instance().number().digits(9));
+            } else {
+                corporates.cPersonPhoneFied.clear();
             }
         }
     }
@@ -175,6 +238,15 @@ public class D11_1_Corporates {
 
     }
 
+    @When("Checking the validation over the required Fields\\(name, Country ,VAT,first and second building numbers,) in corporate Edit")
+    public void checkingTheValidationOverTheRequiredFieldsNameCountryVATFirstAndSecondBuildingNumbersInCorporateEdit(DataTable table) {
+        List<Map<String, String>> rows = table.asMaps(String.class, String.class);
+        for (Map<String, String> columns : rows) {
+            editCorporateNameAndCountryIgnoredFieldsVatBNumberSecBNumber(columns.get("name"), columns.get("country"), columns.get("empty"), columns.get("vat"), columns.get("bNum"), columns.get("secBNum"));
+            assertToastMessageAndValidityThenClearFields(columns.get("msg"));
+        }
+    }
+
     @And("Edit Corporate name {string} and Country {string} ignoredFields {string} vat {string} bNumber {string} secBNumber {string}")
     public void editCorporateNameAndCountryIgnoredFieldsVatBNumberSecBNumber(String name, String country, String ignoredFields, String vat, String bNumb, String secBNumb) {
         wait.waitLoading();
@@ -190,15 +262,6 @@ public class D11_1_Corporates {
         driver.findElement(By.xpath("//div[@role=\"dialog\"]//button[contains(@class,\"n-button--danger\")][2]")).click();
     }
 
-    @And("Remove postal-code")
-    public void removePostalCode() {
-        wait.waitLoading();
-
-        corporates.postalCodeField.sendKeys((Keys.chord(Keys.CONTROL, "a", Keys.BACK_SPACE)));
-
-        corporates.saveButton.click();
-        wait.waitLoading();
-    }
 
     public String selectCorporate(String corporateName, String corpPhone, String corpEmail, String corpVAT) {
         WebElement criteriaButton;
@@ -233,6 +296,5 @@ public class D11_1_Corporates {
         return corpName;
 
     }
-
 
 }

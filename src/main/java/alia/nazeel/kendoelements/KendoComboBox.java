@@ -1,13 +1,15 @@
 package alia.nazeel.kendoelements;
 
+import alia.nazeel.tools.DriverManager;
 import alia.nazeel.tools.Utils;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 
 
+
 import java.util.List;
 
-public class KendoComboBox  {
+public class KendoComboBox {
 
 
     WebElement comboBox;
@@ -50,6 +52,7 @@ public class KendoComboBox  {
         Utils.sleep(300);
         selectedItem.click();
     }
+
     public void selectBySearch(String text) {
         getSelectedinput().sendKeys(text);
         selectedItem = getListItems().stream().filter(i -> i.getText().toLowerCase().contains(text.toLowerCase())).findFirst().orElseThrow();
@@ -66,23 +69,28 @@ public class KendoComboBox  {
 
     public void selectByTextContainsIgnoreCase(String text) {
         open();
-        selectedItem = getListItems().stream().filter(i -> i.getText().toLowerCase().contains(text.toLowerCase())).findFirst().orElseThrow();
         Utils.sleep(300);
+        selectedItem = getListItems().stream().filter(i -> i.getText().toLowerCase().contains(text.toLowerCase())).findFirst().orElseThrow();
         selectedItem.click();
     }
 
 
     public void selectByIndex(int index) {
         open();
-        selectedItem = getListItems().get(index);
         Utils.sleep(300);
+        selectedItem = getListItems().get(index);
         selectedItem.click();
     }
 
-    public void clearSelection(WebDriver driver) {
-        Actions action = (Actions) driver;
-        WebElement clear = comboBox.findElement(By.xpath(".//span[contains(@class,\"k-clear-value\")]"));
-        action.moveToElement(comboBox, 3, 4).click().perform();
+    public void clearSelection( ) {
+        By clearBy = By.xpath(".//span[contains(@class,\"k-clear-value\")]");
+        WebDriver driver = DriverManager.getDriver();
+        if (!Utils.isElementInvisible(clearBy,driver)) {
+            WebElement clear = comboBox.findElement(clearBy);
+            Actions action = (Actions) driver;
+            action.moveToElement(comboBox, 3, 4).click().perform();
+        } else
+            getSelectedinput().sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.BACK_SPACE));
     }
 
 }

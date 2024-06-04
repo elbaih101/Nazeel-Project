@@ -37,8 +37,8 @@ public class CustomFieldDecorator extends DefaultFieldDecorator
         add(CustomWebElement.class);
         add(KendoGrid.class);
         add(SwalPopUp.class);
+        add(MultiLangTextField.class);
         add(Select.class);
-
     }});
 
 
@@ -47,6 +47,12 @@ public class CustomFieldDecorator extends DefaultFieldDecorator
         super(factory);
     }
 
+    /**
+     *
+     * @param loader The class loader that was used for the page object
+     * @param field The field that may be decorated.
+     * @return decorated Object of the element locater and theClass of custom elment
+     */
     @Override
     public Object decorate(ClassLoader loader, Field field)
     {

@@ -10,6 +10,7 @@ public class MultiLangTextField {
     String secondLangText;
 
     WebElement multiLangTextField;
+    By menuBy = By.xpath("./../../following-sibling::div");
     By secondInput = By.xpath("./../../following-sibling::div/input[2]");
     By secondLangInputButtonBy = By.xpath("./following-sibling::button");
 
@@ -17,21 +18,28 @@ public class MultiLangTextField {
         this.multiLangTextField = multiLangTextField;
     }
 
-    public void sendKEys(String... text) {
-        sendKEysFirstLangField(text[0]);
+    public void sendKeys(String... text) {
+        sendKeysFirstLangField(text[0]);
         if (text.length > 1) {
             sendKEysSecondLangField(text[1]);
         }
     }
 
     public void clear() {
-        multiLangTextField.sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.BACK_SPACE));
-        secondLangField().sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.BACK_SPACE));
+        clearFirstLangField();
+        clearSecondLangField();
+
     }
 
     WebElement secondLangField() {
-        multiLangTextField.findElement(secondLangInputButtonBy).click();
+        if (!multiLangTextField.findElement(menuBy).getAttribute("class").contains("show")) {
+            clicktheMultiTextButton();
+        }
         return multiLangTextField.findElement(secondInput);
+    }
+
+    private void clicktheMultiTextButton() {
+        multiLangTextField.findElement(secondLangInputButtonBy).click();
     }
 
     public void clearFirstLangField() {
@@ -40,18 +48,28 @@ public class MultiLangTextField {
 
     public void clearSecondLangField() {
         secondLangField().sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.BACK_SPACE));
+        clicktheMultiTextButton();
     }
-    public void sendKEysFirstLangField(String keys)
-    {
-        firstLangText=keys;
+
+    public void sendKeysFirstLangField(String keys) {
+        firstLangText = keys;
         multiLangTextField.sendKeys(keys);
     }
-    public void sendKEysSecondLangField(String keys)
-    {
-        secondLangText=keys;
-     secondLangField().sendKeys(keys);
+
+    public void sendKEysSecondLangField(String keys) {
+        secondLangText = keys;
+        secondLangField().sendKeys(keys);
+        clicktheMultiTextButton();
     }
-   //Todo
-    public String getFirstLangText(){return firstLangText= multiLangTextField.getAttribute("value");}
-    public String getSecondLangText(){return secondLangText= secondLangField().getAttribute("value");}
+
+    //Todo
+    public String getFirstLangText() {
+        return firstLangText = multiLangTextField.getAttribute("value");
+    }
+
+    public String getSecondLangText() {
+        secondLangText = secondLangField().getAttribute("value");
+        clicktheMultiTextButton();
+        return secondLangText;
+    }
 }

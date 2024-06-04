@@ -111,17 +111,13 @@ public class P22_Corporates extends BasePage {
     public KendoComboBox countriesComboBox;
 
     @FindBy(xpath = "//label[contains(text(),\"City\")]/following-sibling::div//input")
-    public WebElement cityFieldEn;
+    public MultiLangTextField cityField;
     @FindBy(xpath = "//label[contains(text(),\"District\")]/following-sibling::div//input")
-    public WebElement districtFieldEn;
+    public MultiLangTextField districtField;
 
-    public WebElement arField(WebElement enField) {
-        enField.findElement(By.xpath("./following-sibling::button")).click();
-        return enField.findElement(By.xpath("./../../following-sibling::div/input[2]"));
-    }
 
     @FindBy(xpath = "//label[contains(text(),\"Street\")]/following-sibling::div//input")
-    public MultiLangTextField streetFieldEn;
+    public MultiLangTextField streetField;
 
     @FindBy(xpath = "//label[contains(text(),\"Building Number\")]/following-sibling::div//input")
     public WebElement bNoField;
@@ -143,7 +139,7 @@ public class P22_Corporates extends BasePage {
 
     @FindBy(css = "kendo-combobox[name=\"countryDialcode\"]")
     public KendoComboBox countryDialCodeComboBox;
-    @FindBy(xpath = "//button[contains(@class,\"n-button n-button--primary\")]")
+    @FindBy(xpath = "//app-corporate-form//button[contains(@class,\"n-button n-button--primary\")]")
     public WebElement saveButton;
     //in reservation popup
 

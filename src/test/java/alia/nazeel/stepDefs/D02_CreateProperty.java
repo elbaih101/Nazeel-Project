@@ -80,31 +80,31 @@ public class D02_CreateProperty {
         }
         wait.waitLoading();
         //close the announcement
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(2));
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(1));
         try {
-
+            wait.waitLoading();
             dashBoardPage.closeAnnouncementButton.click();
         } catch (NoSuchElementException e) {
             System.out.println("no announcements to close");
         }
         try {
+            wait.waitLoading();
             dashBoardPage.closeSubscriptionsAlertButton.click();
-
         } catch (NoSuchElementException e) {
             System.out.println("no subscriptions alert");
         }
 
         //clicking on later to bypass user verification
-            try {
-                loginPage.verificationButton.click();
-            } catch (NoSuchElementException e) {
-                System.out.println("User is verified");
-            }
-            try {
-                dashBoardPage.contractAgreementButton.click();
-            } catch (NoSuchElementException e) {
-                System.out.println("no agreement contract");
-            }
+        try {
+            loginPage.verificationButton.click();
+        } catch (NoSuchElementException e) {
+            System.out.println("User is verified");
+        }
+        try {
+            dashBoardPage.contractAgreementButton.click();
+        } catch (NoSuchElementException e) {
+            System.out.println("no agreement contract");
+        }
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
     }
 

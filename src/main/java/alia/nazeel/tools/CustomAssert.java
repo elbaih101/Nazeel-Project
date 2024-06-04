@@ -1,11 +1,16 @@
 package alia.nazeel.tools;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.asserts.SoftAssert;
+import java.time.Duration;
 import java.util.List;
 import java.util.function.Predicate;
 
 public class CustomAssert extends SoftAssert {
+
+    CustomWebDriverWait wait = new CustomWebDriverWait(Duration.ofSeconds(10));
 
     /**
      * checks if a string contains another string
@@ -66,5 +71,11 @@ public class CustomAssert extends SoftAssert {
         assertTrue(a.stream().noneMatch(condition), msg);
     }
 
+    public void AssertToastMessageContains(String mesage) {
+        List<WebElement> toastMsgs = DriverManager.getDriver().findElements(By.className("toast-message"));
+        wait.until(ExpectedConditions.visibilityOfAllElements(toastMsgs));
+        this.assertTrue(toastMsgs.getFirst().isDisplayed());
+        this.assertTrue(toastMsgs.getFirst().getText().trim().toLowerCase().contains(mesage.toLowerCase()), "actual : " + toastMsgs.getFirst().getText().trim().toLowerCase() + "\nExpected : " + mesage.toLowerCase() + "\n");
+    }
 
 }

@@ -428,15 +428,24 @@ public class Utils {
 
 
     public static void scroll(String direction, WebElement element) {
-        Actions actions =new Actions( DriverManager.getDriver());
-        actions.moveToElement(element,3,3).perform();
+        Actions actions = new Actions(DriverManager.getDriver());
+        actions.moveToElement(element, 3, 3).perform();
         switch (direction.toLowerCase()) {
             case "up" -> actions.sendKeys(Keys.PAGE_UP).perform();
-        case "down"-> actions.sendKeys(Keys.PAGE_DOWN).perform();
+            case "down" -> actions.sendKeys(Keys.PAGE_DOWN).perform();
         }
     }
-    public static Boolean isElementInvisible(By elementBy, WebDriver driver)
-    {
-        return ExpectedConditions.not(ExpectedConditions.visibilityOfElementLocated(elementBy)).apply(driver);
+
+    public static Boolean isElementInvisible(By elementBy, WebDriver driver) {
+        return ExpectedConditions.invisibilityOfElementLocated(elementBy).apply(driver);
     }
+
+    public static Boolean isElementInvisible(WebElement element, WebDriver driver) {
+        return ExpectedConditions.not(ExpectedConditions.visibilityOf(element)).apply(driver);
+    }
+
+    public static boolean isEmptyOrNull(String string) {
+        return (string == null || string.isEmpty());
+    }
+
 }
