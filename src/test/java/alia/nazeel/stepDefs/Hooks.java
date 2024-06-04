@@ -31,7 +31,7 @@ public class Hooks {
         DriverManager.initializeDriver(Drivers.Chrome, Driver_Mode.UI);
         this.driver = DriverManager.getDriver();
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
-        driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(30));
+        driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(20));
         driver.get(stageUrl);
 
     }

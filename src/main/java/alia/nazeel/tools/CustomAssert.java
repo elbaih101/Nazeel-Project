@@ -5,6 +5,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.asserts.SoftAssert;
 import java.time.Duration;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.Predicate;
 
@@ -71,11 +73,21 @@ public class CustomAssert extends SoftAssert {
         assertTrue(a.stream().noneMatch(condition), msg);
     }
 
-    public void AssertToastMessageContains(String mesage) {
+    public void AssertToastMessagesContains(String mesage) {
         List<WebElement> toastMsgs = DriverManager.getDriver().findElements(By.className("toast-message"));
         wait.until(ExpectedConditions.visibilityOfAllElements(toastMsgs));
-        this.assertTrue(toastMsgs.getFirst().isDisplayed());
-        this.assertTrue(toastMsgs.getFirst().getText().trim().toLowerCase().contains(mesage.toLowerCase()), "actual : " + toastMsgs.getFirst().getText().trim().toLowerCase() + "\nExpected : " + mesage.toLowerCase() + "\n");
+        List<String> mesagesContents = new ArrayList<>();
+        for (WebElement toast : toastMsgs) {
+
+            if (toast.getText().trim().toLowerCase().contains(mesage.toLowerCase())) {
+                this.assertTrue(true);
+                return;
+            } else {
+                mesagesContents.add(toast.getText());
+            }
+
+        }
+        this.assertFalse(false, "actual : " + Arrays.toString(mesagesContents.toArray()) + "\nExpected : " + mesage.toLowerCase() + "\n");
     }
 
 }

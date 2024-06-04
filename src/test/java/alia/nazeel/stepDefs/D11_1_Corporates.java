@@ -57,7 +57,7 @@ public class D11_1_Corporates {
     }
 
     private void assertToastMessageAndValidityThenClearFields(String message) {
-        asrt.AssertToastMessageContains(message);
+        asrt.AssertToastMessagesContains(message);
         clearCorporateData();
     }
 

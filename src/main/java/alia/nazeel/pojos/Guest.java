@@ -1,4 +1,4 @@
-package alia.nazeel.pojos.customers;
+package alia.nazeel.pojos;
 
 import org.openqa.selenium.WebElement;
 

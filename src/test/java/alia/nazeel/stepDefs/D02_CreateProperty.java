@@ -57,7 +57,7 @@ public class D02_CreateProperty {
     String createdProperty = JsonDataTools.getValueFromJsonFile("src/main/resources/testdata/property.json", "propertyName");
 
     @And("Select Property {string}")
-    public void selectProperty(String propertyName) throws InterruptedException {
+    public void selectProperty(String propertyName) {
 
         if (propertyName.equalsIgnoreCase("created"))
             propertyName = createdProperty;
@@ -69,7 +69,7 @@ public class D02_CreateProperty {
             loginPage.propertyNameField.sendKeys(propertyName);
             actions.sendKeys(Keys.ENTER);
             actions.perform();
-            Thread.sleep(2000);
+            wait.waitLoading();
             for (WebElement company :
                     loginPage.companysList) {
                 if (company.getText().contains(propertyName))
@@ -82,13 +82,11 @@ public class D02_CreateProperty {
         //close the announcement
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(1));
         try {
-            wait.waitLoading();
             dashBoardPage.closeAnnouncementButton.click();
         } catch (NoSuchElementException e) {
             System.out.println("no announcements to close");
         }
         try {
-            wait.waitLoading();
             dashBoardPage.closeSubscriptionsAlertButton.click();
         } catch (NoSuchElementException e) {
             System.out.println("no subscriptions alert");

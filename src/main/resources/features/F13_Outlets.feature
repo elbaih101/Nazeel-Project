@@ -9,47 +9,44 @@ Feature: Outlets Feature
     Background: go to outlets Setup Page
       Given go to outlets Setup Page
 
-    Scenario Outline: creating outlets
-      When creating outlet with opState "<opState>" and code "<code>" and name "<name>" description "<desc>"
-      Then Check msg "<msg>" and the outlet in the grid
-      Examples:
+    Scenario: creating outlets
+      When Checkig thevalidity of required fields of Outlet creation
         | opState | code | name                | desc | msg                                                                 |
         | Open    | 1    |                     | 1    | Name is required                                                    |
         | Open    | 2    | data Related Outlet |      | Name exist before                                                   |
         |         | 1    | 1                   | 1    | Operating status is required                                        |
         | Closed  |      | 1                   | 1    | Outlet code is required                                             |
-        | Open    | 1    | 1                   | 1    | Added Successfully                                                  |
         | Open    | 999  | 2                   | 2    | Repeated outlet code detected, each outlet must has it unique code. |
+        | Open    | 1    | 1                   | 1    | Added Successfully                                                  |
+      Then Check validity of Outlet fields and outlet
 
-    Scenario Outline: Filter Outlets
-      When Filtering With "<filter>" as "<value>"
-      Then check all visible records "<filter>" as "<value>"
-      Examples:
+    Scenario: Filter Outlets
+      When Filtering With the belw table Checl the filtered Criteria for Outlets
         | filter   | value               |
         | status   | Active              |
         | name     | data Related Outlet |
         | code     | 999                 |
         | opStatus | Closed              |
+        | status   | Inactive            |
+      Then assert all filtering success
 
-    Scenario Outline:editing Outlets
-      When editing Outlet "<oName>" opState "<opState>" and code "<code>" and name "<nName>" description "<desc>" state "<state>"
-      Then Check msg "<msg>" and the outlet in the grid
-      Examples:
+    Scenario:editing Outlets
+      When Checkig thevalidity of required fields of Outlet editing
         | oName | opState | code | nName               | state    | desc          | msg                                                                 |
-        | 1     |         |      | non                 |          |               | Name is required                                                    |
-        | 1     | non     |      |                     |          |               | Operating status is required                                        |
-        | 1     |         | non  |                     |          |               | Outlet code is required                                             |
-        | 1     |         | 999  |                     |          |               | Repeated outlet code detected, each outlet must has it unique code. |
-        | 1     |         |      | data Related Outlet |          |               | Name exist before                                                   |
+        | 1     | open    | 2    | non                 | Active   |               | Name is required                                                    |
+        | 1     | non     | 2    | 2                   | Active   |               | Operating status is required                                        |
+        | 1     | open    | non  | 2                   | Active   |               | Outlet code is required                                             |
+        | 1     | open    | 999  | 2                   | Active   |               | Repeated outlet code detected, each outlet must has it unique code. |
+        | 1     | open    |      | data Related Outlet | Active   |               | Name exist before                                                   |
         | 1     | Closed  | 2    | 2                   | Inactive | edited outlet | Updated Successfully                                                |
+      Then Check validity of Outlet fields and outlet
 
-    Scenario Outline: deleting non related Data outlet
-      When deleting outlet "<outlet>"
-      Then Check msg "<msg>" and outlet "<outlet>" is deleted
-      Examples:
+    Scenario: deleting Outlets Constrains
+      When deleting Outlets Check Constrains
         | outlet              | msg                                              |
-        | 2                   | Deleted Successfully                             |
         | data Related Outlet | Outlet Related To Catogries Could not be Deleted |
+        | 2                   | Deleted Successfully                             |
+      Then Check Outlet deletion validation
 
   Rule:Outlet Categories
     Background:goto Outlets Categories Page

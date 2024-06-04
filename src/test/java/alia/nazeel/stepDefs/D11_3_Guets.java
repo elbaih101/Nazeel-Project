@@ -6,7 +6,7 @@ import alia.nazeel.pages.customers.P34_Vendors;
 import alia.nazeel.pages.customers.P35_Guests;
 import alia.nazeel.pages.mutlipurposes.P00_3_CorporateSelectionPopUp;
 import alia.nazeel.pages.mutlipurposes.P00_multiPurposes;
-import alia.nazeel.pojos.customers.Guest;
+import alia.nazeel.pojos.Guest;
 import alia.nazeel.tools.CustomWebDriverWait;
 import alia.nazeel.tools.DriverManager;
 import alia.nazeel.tools.Utils;

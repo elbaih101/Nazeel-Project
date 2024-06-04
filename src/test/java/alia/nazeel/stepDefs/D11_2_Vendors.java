@@ -8,7 +8,7 @@ import alia.nazeel.pages.mutlipurposes.P00_3_CorporateSelectionPopUp;
 import alia.nazeel.pages.mutlipurposes.P00_multiPurposes;
 import alia.nazeel.pages.vouchersPages.P10_VouchersPage;
 import alia.nazeel.pages.vouchersPages.P16_VouchersPopUp;
-import alia.nazeel.pojos.customers.Vendor;
+import alia.nazeel.pojos.Vendor;
 import alia.nazeel.tools.CustomWebDriverWait;
 import alia.nazeel.tools.DriverManager;
 import io.cucumber.java.en.And;

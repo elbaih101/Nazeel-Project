@@ -1,5 +1,7 @@
 package alia.nazeel.pages.setuppages.outlets;
 
+import alia.nazeel.kendoelements.KendoComboBox;
+import alia.nazeel.kendoelements.MultiLangTextField;
 import alia.nazeel.templates.BasePage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -65,22 +67,12 @@ public class P30_OutletsSetup extends BasePage
     }
     //end grid //
 
-
-    /// pop up ///
-    public List<WebElement> opStatusesList() {
-        driver.findElement(By.xpath("//div[@role=\"dialog\"]//kendo-combobox//span[@class=\"k-select\"]")).click();
-        try {
-            Thread.sleep(300);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        return listItems;
-    }
-
+@FindBy(css = "div[role=\"dialog\"] kendo-combobox[name=\"operating-status\"]")
+public KendoComboBox opStatus;
     @FindBy(xpath = "//div[@role=\"dialog\"]//input[@name=\"outlet-code\"]")
     public WebElement outletCodeField;
     @FindBy(xpath = "//div[@role=\"dialog\"]//input[contains(@class,\"dropdown-toggle form-control\")]")
-    public WebElement outletNameField;
+    public MultiLangTextField outletNameField;
     @FindBy(name = "text-area")
     public WebElement descriptionField;
     @FindBy(xpath = "//div[@role=\"dialog\"]//button[@type=\"submit\"]")
@@ -88,8 +80,6 @@ public class P30_OutletsSetup extends BasePage
     @FindBy(xpath = "//kendo-switch[@name=\"status\"]")
     public WebElement statusSwitch;
 
-    @FindBy(xpath = "//div[@role=\"dialog\"]//span[@title=\"clear\"]")
-    public WebElement clearOpStateSelection;
     @FindBy(xpath = "//div[@class=\"swal2-actions\"]//button[contains(@class,\"confirm\")]")
     public WebElement popUpCOnfirmButton;
     /// end pop up ///
@@ -98,29 +88,15 @@ public class P30_OutletsSetup extends BasePage
     @FindBy(xpath = "//div[@class=\"n-table__top-btns\"]//button[contains(@class,\"button--primary\")]")
     public WebElement filterButton;
 
-    public List<WebElement> statusesFilterList() {
-        driver.findElement(By.xpath("//kendo-combobox[@name=\"status\"]//span[@class=\"k-select\"]")).click();
-        try {
-            Thread.sleep(300);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        return listItems;
-    }
+    @FindBy(xpath = "//kendo-combobox[@name=\"status\"]")
+    public KendoComboBox statusFilter;
 
-    public List<WebElement> opstatusesFilterList() {
-        driver.findElement(By.xpath("//kendo-combobox[@name=\"operating-status\"]//span[@class=\"k-select\"]")).click();
-        try {
-            Thread.sleep(300);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        return listItems;
-    }
+    @FindBy(xpath = "//kendo-combobox[@name=\"operating-status\"]")
+    public KendoComboBox opStatusFilter;
 
     @FindBy(id = "name")
     public WebElement nameFilterField;
-    @FindBy(name = "outlet-code")
+    @FindBy(css = "[name = \"outlet-code\"] input")
     public WebElement outletFilterCodeField;
 
     @FindBy(xpath = "//button[@class=\"button button--primary\"]")
