@@ -9,7 +9,9 @@ import org.slf4j.LoggerFactory;
 
 
 import java.time.Duration;
+import java.util.Arrays;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 
 public class KendoComboBox {
@@ -75,8 +77,9 @@ public class KendoComboBox {
         Utils.sleep(300);
         try {
                     selectedItem = getListItems().stream().filter(i -> i.getText().toLowerCase().contains(text.toLowerCase())).findFirst().orElseThrow();
-        } catch (NoClassDefFoundError e) {
-            logger.error(e.getMessage()+"\n"+comboBox.getAccessibleName()+comboBox.getAttribute("class"));
+        } catch (NoSuchElementException e) {
+             logger.error(e.getMessage()+"\n"+comboBox.getTagName()+"[class='"+comboBox.getAttribute("class")+"']"+ Arrays.toString(e.getStackTrace()));
+             return;
         }
         selectedItem.click();
     }

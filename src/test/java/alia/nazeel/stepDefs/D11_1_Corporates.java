@@ -42,11 +42,16 @@ public class D11_1_Corporates {
         dashBoardPage.corporatesLink.click();
     }
 
-    @When("Checking the validation over the required Fields\\(name, Country ,VAT,first and second building numbers,) in corporate Creation")
-    public void checkingTheValidationOverTheRequiredFieldsNameCountryVATFirstAndSecondBuildingNumbersInCorporateCreation(DataTable table) {
+    @When("Checking the validation over the required Fields\\(name, Country ,VAT,first and second building numbers,) in corporate {string}")
+    public void checkingTheValidationOverTheRequiredFieldsNameCountryVATFirstAndSecondBuildingNumbersInCorporateCreation(String direction, DataTable table) {
         List<Map<String, String>> rows = table.asMaps(String.class, String.class);
         for (Map<String, String> columns : rows) {
-            creatingACorporateWithNameAndCountryWithout(columns.get("name"), columns.get("country"), columns.get("empty"), columns.get("vat"), columns.get("bNum"), columns.get("secBNum"), columns.get("invalid"));
+            switch (direction.toLowerCase()) {
+                case "creation" ->
+                        creatingACorporateWithNameAndCountryWithout(columns.get("name"), columns.get("country"), columns.get("empty"), columns.get("vat"), columns.get("bNum"), columns.get("secBNum"), columns.get("invalid"));
+                case "editing" ->
+                        editCorporateNameAndCountryIgnoredFieldsVatBNumberSecBNumber(columns.get("name"), columns.get("country"), columns.get("empty"), columns.get("vat"), columns.get("bNum"), columns.get("secBNum"));
+            }
             assertToastMessageAndValidityThenClearFields(columns.get("msg"));
         }
     }
@@ -71,8 +76,8 @@ public class D11_1_Corporates {
         corporates.cityField.clear();
         corporates.districtField.clear();
         corporates.streetField.clear();
-        corporates.bNoField.clear();
-        corporates.secNoField.clear();
+        corporates.bNoField.sendKeys(Keys.chord(Keys.CONTROL,"a",Keys.BACK_SPACE));
+        corporates.secNoField.sendKeys(Keys.chord(Keys.CONTROL,"a",Keys.BACK_SPACE));
         corporates.addressField.clear();
         corporates.emaiField.clear();
         corporates.corPhoneField.clear();
@@ -136,7 +141,9 @@ public class D11_1_Corporates {
     }
 
     private void invalidCorporateFieldsMethod(String invalidFields) {
-        if ((!Utils.isEmptyOrNull(invalidFields) && !invalidFields.toLowerCase().contains("all"))) {
+        if (invalidFields == null)
+            invalidFields = "";
+        if ((!invalidFields.toLowerCase().contains("all"))) {
 
             if (invalidFields.toLowerCase().contains("postalcode")) {
                 corporates.postalCodeField.sendKeys((Keys.chord(Keys.CONTROL, "a", Keys.BACK_SPACE)));
@@ -155,7 +162,9 @@ public class D11_1_Corporates {
     }
 
     private void emptyFeildsMethod(String emptyFields) {
-        if ((!Utils.isEmptyOrNull(emptyFields) && !emptyFields.toLowerCase().contains("all"))) {
+        if (emptyFields == null)
+            emptyFields = "";
+        if ((!emptyFields.toLowerCase().contains("all"))) {
 
             if (!emptyFields.toLowerCase().contains("postalcode")) {
                 corporates.postalCodeField.clear();
@@ -238,14 +247,6 @@ public class D11_1_Corporates {
 
     }
 
-    @When("Checking the validation over the required Fields\\(name, Country ,VAT,first and second building numbers,) in corporate Edit")
-    public void checkingTheValidationOverTheRequiredFieldsNameCountryVATFirstAndSecondBuildingNumbersInCorporateEdit(DataTable table) {
-        List<Map<String, String>> rows = table.asMaps(String.class, String.class);
-        for (Map<String, String> columns : rows) {
-            editCorporateNameAndCountryIgnoredFieldsVatBNumberSecBNumber(columns.get("name"), columns.get("country"), columns.get("empty"), columns.get("vat"), columns.get("bNum"), columns.get("secBNum"));
-            assertToastMessageAndValidityThenClearFields(columns.get("msg"));
-        }
-    }
 
     @And("Edit Corporate name {string} and Country {string} ignoredFields {string} vat {string} bNumber {string} secBNumber {string}")
     public void editCorporateNameAndCountryIgnoredFieldsVatBNumberSecBNumber(String name, String country, String ignoredFields, String vat, String bNumb, String secBNumb) {

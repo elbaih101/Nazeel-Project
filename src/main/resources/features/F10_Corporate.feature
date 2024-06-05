@@ -15,7 +15,7 @@ Feature: corporates Feature
 #      Then Check Zatca Logo is in Required Corporate Fields
 
     Scenario: create new corporate
-      When Checking the validation over the required Fields(name, Country ,VAT,first and second building numbers,) in corporate Creation
+      When Checking the validation over the required Fields(name, Country ,VAT,first and second building numbers,) in corporate "Creation"
         | name              | country     | empty | vat             | bNum | secBNum | invalid       | msg                                                                    |
         | zeko              |             | all   |                 |      |         |               | Country is required                                                    |
         | corp data related |             |       | 332166498745613 | 6541 | 5236    |               | Name exist before                                                      |
@@ -37,7 +37,7 @@ Feature: corporates Feature
       And click on select corporate
 
     Scenario: create new corporate
-      When Checking the validation over the required Fields(name, Country ,VAT,first and second building numbers,) in corporate Creation
+      When Checking the validation over the required Fields(name, Country ,VAT,first and second building numbers,) in corporate "Creation"
         | name              | country | empty | vat             | bNum | secBNum | invalid | msg                                                                 |
         | zeko              |         | all   |                 |      |         |         | Country is required                                                 |
         | corp data related |         |       | 332166498745613 | 6541 | 5236    |         | Name exist before                                                   |
@@ -71,7 +71,7 @@ Feature: corporates Feature
       And go to corporates page
 
     Scenario: create new corporate related to zatca
-      When Checking the validation over the required Fields(name, Country ,VAT,first and second building numbers,) in corporate Creation
+      When Checking the validation over the required Fields(name, Country ,VAT,first and second building numbers,) in corporate "Creation"
         | name   | country | empty      | invalid    | vat | bNum | secBNum | msg                                                                                                                                                        |
         | maanga | Saudi   | all        |            |     |      |         | Please Select City\nDistrict Is Required\nStreet Is Required\nPostal Code Is Required\nBuilding Number Is Required\nAdditional Building Number Is Required |
         | manga  | Saudi   |            |            |     |      |         | Building Number Is Required\nAdditional Building Number Is Required                                                                                        |
@@ -86,14 +86,14 @@ Feature: corporates Feature
     Scenario: edit corporate zatca connected
       #When Creating a Corporate with name "automated1" and Country "Saudi" ignoredFields "" vat "369874512654893" bNumber "6548" secBNumber "9874"
       Given open edit mode for corporate "string"
-      When Checking the validation over the required Fields(name, Country ,VAT,first and second building numbers,) in corporate Edit
+      When Checking the validation over the required Fields(name, Country ,VAT,first and second building numbers,) in corporate "Editing"
         | name        | country | empty      | vat | bNum | secBNum | msg                                                                 |
         | ayclam fady | Saudi   |            |     | 654  | 13      | Building Number Max Length is 4 digits                              |
         | ayclam fady | Saudi   | district   |     | 6548 | 6548    | District Is Required                                                |
         | ayclam fady | Saudi   | street     |     | 6548 | 6549    | Street Is Required                                                  |
         | ayclam fady | Saudi   | city       |     | 6548 | 3215    | Please Select City                                                  |
         | ayclam fady | Saudi   | postalcode |     | 9874 | 9874    | Postal Code Is Required                                             |
-        | ayclam fady | Saudi   | non        |     | non  | non     | Building Number Is Required\nAdditional Building Number Is Required |
+        | ayclam fady | Saudi   |            |     | non  | non     | Building Number Is Required\nAdditional Building Number Is Required |
         | Zest new    | Saudi   |            |     | 6548 | 8456    | Name exist before                                                   |
       Then assert Validity of Fields
 #      When  Edit Corporate name "<name>" and Country "<country>" ignoredFields "<ignored>" vat "<vat>" bNumber "<bNum>" secBNumber "<secBNum>"
@@ -111,10 +111,8 @@ Feature: corporates Feature
       And click on select corporate
 
 
-    Scenario Outline: create new corporate
-      When Creating a Corporate with name "<name>" and Country "<country>" ignoredFields "<ignored>" vat "<vat>" bNumber "<bNum>" secBNumber "<secBNum>" invalid ""
-      Then Check toast mesage contains text "<msg>"
-      Examples:
+    Scenario: create new corporate
+      When Checking the validation over the required Fields(name, Country ,VAT,first and second building numbers,) in corporate "Creation"
         | name   | country | ignored    | vat | bNum | secBNum | msg                                                                                                                                                        |
         | maanga | Saudi   | all        |     |      |         | Please Select City\nDistrict Is Required\nStreet Is Required\nPostal Code Is Required\nBuilding Number Is Required\nAdditional Building Number Is Required |
         | manga  | Saudi   |            |     |      |         | Building Number Is Required\nAdditional Building Number Is Required                                                                                        |
@@ -123,5 +121,5 @@ Feature: corporates Feature
         | manga  | Saudi   | city       |     | 6548 | 3215    | Please Select City                                                                                                                                         |
         | manga  | Saudi   | district   |     | 6548 | 6548    | District Is Required                                                                                                                                       |
         | manga  | Saudi   | street     |     | 6548 | 6549    | Street Is Required                                                                                                                                         |
-
+      Then assert Validity of Fields
 
