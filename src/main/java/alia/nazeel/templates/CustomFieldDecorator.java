@@ -38,6 +38,7 @@ public class CustomFieldDecorator extends DefaultFieldDecorator
         add(KendoGrid.class);
         add(SwalPopUp.class);
         add(MultiLangTextField.class);
+        add(KendoSwitch.class);
         add(Select.class);
     }});
 

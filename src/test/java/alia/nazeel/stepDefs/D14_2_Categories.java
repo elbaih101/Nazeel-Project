@@ -50,7 +50,7 @@ public class D14_2_Categories {
                 case "creation" ->
                         creatingCategoryOnOutletWithNTMPCategAsAndDescription(columns.get("name"), columns.get("outlet"), columns.get("ntmp"), columns.get("desc"));
                 case "editing" ->
-                        editingCategoryOutletAndNtmpAndNameDescriptionState(columns.get("oName"), columns.get("outlet"), columns.get("ntmp"), columns.get("nName"), columns.get("desc"), columns.get("state"));
+                        editingCategoryOutletAndNtmpAndNameDescriptionState(columns.get("oName"), columns.get("outlet"), columns.get("ntmp"), columns.get("nName"), columns.get("desc"),columns.get("state"));
             }
             checkMsgAndCategorey(columns.get("msg"));
         }

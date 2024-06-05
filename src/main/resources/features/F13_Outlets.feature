@@ -96,47 +96,44 @@ Feature: Outlets Feature
       Given  go to items setup
 
     @Outlet_Items  @Item_suggested_price
-    Scenario Outline: creating outlet Item
-      When creating item with name "<name>" and type "<type>" and outlet "<outlet>" and category "<categ>" description "<desc>" price "<price>" taxstate "<tax>"
-      Then Check msg "<msg>" and the item
-      Examples:
-        | name   | type    | outlet              | categ              | desc                    | price       | tax      | msg                    |
-        |        | Product | data Related Outlet | data Related Categ | item 1 categ 2 outlet 2 | 15          | applied  | Name is required       |
-        | item 1 |         | data Related Outlet | data Related Categ | item 1 categ 2 outlet 2 | userdefined |          | Item Type is required  |
-        | item 1 | Service |                     | data Related Categ | item 1 categ 2 outlet 2 | free        |          | Outlet is required     |
-        | item 1 | Service | data Related Outlet |                    | item 1 categ 2 outlet 2 | free        |          | Category is required   |
-        | item 1 | Product | data Related Outlet | data Related Categ | item 1 categ 2 outlet 2 |             | exempted | Item Price is required |
-        | item 1 | Service | data Related Outlet | data Related Categ | item 1 categ 2 outlet 2 | 15          | applied  | Added Successfully     |
-        | item 1 | Product | data Related Outlet | data Related Categ | item 1 categ 2 outlet 2 | 20          |          | Name exist before      |
-        | item 2 | Service | data Related Outlet | data Related Categ | item 2 categ 2 outlet 2 | userdefined | exempted | Added Successfully     |
+    Scenario: creating outlet Item
+      When  validating the Fields in Item "Creation"
+        | name              | type    | outlet              | categ              | desc                    | price       | tax      | msg                    |
+        | item 1            | Service |                     |                    | item 1 categ 2 outlet 2 | free        |          | Outlet is required     |
+        | item 1            | Service | data Related Outlet |                    | item 1 categ 2 outlet 2 | free        |          | Category is required   |
+        |                   | Product | data Related Outlet | data Related Categ | item 1 categ 2 outlet 2 | 15          | applied  | Name is required       |
+        | item 1            |         | data Related Outlet | data Related Categ | item 1 categ 2 outlet 2 | userdefined |          | Item Type is required  |
+        | item 1            | Product | data Related Outlet | data Related Categ | item 1 categ 2 outlet 2 |             | exempted | Item Price is required |
+        | data related item | Service | data Related Outlet | data Related Categ | item 1 categ 2 outlet 2 | 15          | applied  | Name exist before      |
+        | item 1            | Service | data Related Outlet | data Related Categ | item 1 categ 2 outlet 2 | 15          | applied  | Added Successfully     |
+      Then assert theValidity of theFields and the Item
 
 
-    Scenario Outline: edit Item
-      When editing item "<oName>" name "<nName>" and type "<type>" and outlet "<outlet>" and category "<categ>" description "<desc>" price "<price>" taxstate "<tax>" state "<state>"
-      Then Check msg "<msg>" and the item
-      Examples:
-        | oName  | nName  | type    | outlet | categ | desc              | price | tax     | state    | msg                    |
-        | item 2 | non    |         |        |       |                   |       |         |          | Name is required       |
-        | item 2 |        | non     |        |       |                   |       |         |          | Item Type is required  |
-        | item 2 |        |         | non    |       |                   |       |         |          | Outlet is required     |
-        | item 2 |        |         |        | non   |                   |       |         |          | Category is required   |
-        | item 2 |        |         |        |       | non               |       |         |          | Item Price is required |
-        | item 2 | item 1 |         |        |       |                   |       |         |          | Name exist before      |
-        | item 2 | item 3 | product |        |       | item3 from item 2 | 50    | applied | Inactive | Updated Successfully   |
 
-    Scenario Outline: Filter Items
-      When Filter Items With "<filter>" as "<value>"
-      Then Check all items records "<filter>" as "<value>"
-      Examples:
-        | filter   | value              |
-        | status   | inactive           |
-        | Outlet   | 2                  |
-        | name     | 3                  |
-        | price    | 0                  |
-        | Category | data Related Categ |
+    Scenario: edit Item
+      When  validating the Fields in Item "Editing"
+        | oName  | nName             | type    | outlet              | categ              | desc              | price | tax     | state    | msg                    |
+        | item 1 | non               | service | data Related Outlet | data Related Categ |                   | 5     |         | Active   | Name is required       |
+        | item 1 | item 1            | non     | data Related Outlet | data Related Categ |                   | 5     |         | Active   | Item Type is required  |
+        | item 1 | item 1            | service | data Related Outlet | non                |                   | 5     |         | Active   | Category is required   |
+        | item 1 | item 1            | service | data Related Outlet | data Related Categ | non               | non   |         | Active   | Item Price is required |
+        | item 1 | data related item | service | data Related Outlet | data Related Categ |                   | 5     |         | Active   | Name exist before      |
+        | item 1 | item 1            | service | non                 | data Related Categ |                   | 5     |         | Active   | Outlet is required     |
+        | item 1 | item 1            | product | data Related Outlet | data Related Categ | item1 from item 1 | 50    | applied | Inactive | Updated Successfully   |
+      Then assert theValidity of theFields and the Item
+
+    Scenario: Filter Items
+      When filtering Items with below table Check the filtered criteria for Categories
+        | filter   | value                                    |
+        | status   | inactive                                 |
+        | Outlet   | data Related Outlet                      |
+        | name     | data related item                        |
+        | price    | 0                                        |
+        | Category | data Related Outlet - data Related Categ |
+      Then Check the Validity of Items Search Criteria
 
     Scenario: delete item
-      When deleting item "item 3"
+      When deleting item "item 1"
       Then Check msg "Deleted Successfully" and item "item 3"
 
 

@@ -4,14 +4,17 @@ import alia.nazeel.tools.DriverManager;
 import alia.nazeel.tools.Utils;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
-
+import java.time.Duration;
 import java.util.List;
+
 
 public class KendoComboBox {
 
-
+    Logger logger = LoggerFactory.getLogger(KendoComboBox.class);
     WebElement comboBox;
     final By dropDownButtonBy = By.xpath(".//span[@class=\"k-select\"]");
     final By listItemsBy = By.xpath("//ul[@role=\"listbox\"]//li[@role=\"option\"]");
@@ -33,11 +36,11 @@ public class KendoComboBox {
         return comboBox.findElement(comboBoxInput);
     }
 
-    public void getDropDownButton() {
+    void getDropDownButton() {
         dropDownButton = comboBox.findElement(dropDownButtonBy);
     }
 
-    public void open() {
+    void open() {
         getDropDownButton();
         dropDownButton.click();
     }
@@ -70,7 +73,11 @@ public class KendoComboBox {
     public void selectByTextContainsIgnoreCase(String text) {
         open();
         Utils.sleep(300);
-        selectedItem = getListItems().stream().filter(i -> i.getText().toLowerCase().contains(text.toLowerCase())).findFirst().orElseThrow();
+        try {
+                    selectedItem = getListItems().stream().filter(i -> i.getText().toLowerCase().contains(text.toLowerCase())).findFirst().orElseThrow();
+        } catch (NoClassDefFoundError e) {
+            logger.error(e.getMessage()+"\n"+comboBox.getAccessibleName()+comboBox.getAttribute("class"));
+        }
         selectedItem.click();
     }
 
@@ -82,10 +89,11 @@ public class KendoComboBox {
         selectedItem.click();
     }
 
-    public void clearSelection( ) {
+    public void clearSelection() {
         By clearBy = By.xpath(".//span[contains(@class,\"k-clear-value\")]");
         WebDriver driver = DriverManager.getDriver();
-        if (!Utils.isElementInvisible(clearBy,driver)) {
+        driver.manage().timeouts().implicitlyWait(Duration.ofMillis(300));
+        if (!Utils.isElementInvisible(clearBy, driver)) {
             WebElement clear = comboBox.findElement(clearBy);
             Actions action = (Actions) driver;
             action.moveToElement(comboBox, 3, 4).click().perform();
