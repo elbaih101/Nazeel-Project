@@ -43,7 +43,7 @@ public class D14_1_Outlets {
         setupPage.outletSetupLink.click();
     }
 
-    @When("Checkig thevalidity of required fields of Outlet creation")
+    @When("Checking the validity of required fields of Outlet creation")
     public void checkigThevalidityOfRequiredFieldsOfOutletCreation(DataTable table) {
         List<Map<String, String>> rows = table.asMaps(String.class, String.class);
         for (Map<String, String> columns : rows) {
@@ -72,7 +72,7 @@ public class D14_1_Outlets {
         }
     }
 
-    @When("Filtering With the belw table Checl the filtered Criteria for Outlets")
+    @When("Filtering With the below table Check the filtered Criteria for Outlets")
     public void filteringWithTheBelwTableCheclTheFilteredCriteriaForOutlets(DataTable table) {
         List<Map<String, String>> rows = table.asMaps(String.class, String.class);
         for (Map<String, String> columns : rows) {
@@ -263,9 +263,9 @@ public class D14_1_Outlets {
 
 
     public void checkOutletIsDeleted(String msg, String name) {
+        wait.waitLoading();
         new D03_BlocksAndFloors().checkToastMesageContainsText(msg);
         if (msg.contains("Successfully")) {
-            wait.waitLoading();
             asrt.assertFalse(outletsSetup.names.stream().anyMatch(o -> o.getText().equalsIgnoreCase(name)));
         }
     }

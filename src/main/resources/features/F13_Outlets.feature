@@ -10,7 +10,7 @@ Feature: Outlets Feature
       Given go to outlets Setup Page
 
     Scenario: creating outlets
-      When Checkig thevalidity of required fields of Outlet creation
+      When Checking the validity of required fields of Outlet creation
         | opState | code | name                | desc | msg                                                                 |
         | Open    | 1    |                     | 1    | Name is required                                                    |
         | Open    | 2    | data Related Outlet |      | Name exist before                                                   |
@@ -21,7 +21,7 @@ Feature: Outlets Feature
       Then Check validity of Outlet fields and outlet
 
     Scenario: Filter Outlets
-      When Filtering With the belw table Checl the filtered Criteria for Outlets
+      When Filtering With the below table Check the filtered Criteria for Outlets
         | filter   | value               |
         | status   | Active              |
         | name     | data Related Outlet |
@@ -51,45 +51,43 @@ Feature: Outlets Feature
   Rule:Outlet Categories
     Background:goto Outlets Categories Page
       Given go to categories Page
-    Scenario Outline:
-      When creating category "<name>" on outlet "<outlet>" with NTMP Categ as "<ntmp>" and description "<desc>"
-      Then Check msg "<msg>" and Categorey
-      Examples:
+
+    Scenario:Category Creation
+      When Checking the validity of required fields of Category "creation"
         | name               | outlet              | ntmp    | desc            | msg                       |
         |                    | data Related Outlet | Other   | added categ     | English Name Is required  |
         | data Related Categ | data Related Outlet | Laundry | dublicate categ | Name exist before         |
         | categ 1            |                     | Other   | added categ     | Outlet is required        |
         | categ 1            | data Related Outlet |         | added categ     | NTMP Category is required |
         | categ 1            | data Related Outlet | Other   | added categ     | Added Successfully        |
+      Then Check validity of Category fields and Category
 
-    Scenario Outline: Filter Categories
-      When Filtering categs With "<filter>" as "<value>"
-      Then check all visible categs records "<filter>" as "<value>"
-      Examples:
+    Scenario:editing Categories
+      When Checking the validity of required fields of Category "Editing"
+        | oName   | outlet              | ntmp                             | desc           | nName              | state    | msg                       |
+        | categ 1 | data Related Outlet | Other                            | edited desc    | non                | Active   | English Name Is required  |
+        | categ 1 | non                 | Other                            | edited desc    | categ 1            | Active   | Outlet is required        |
+        | categ 1 | data Related Outlet | non                              | edited desc    | categ 1            | Active   | NTMP Category is required |
+        | categ 1 | data Related Outlet | Other                            | edited desc    | data Related Categ | Active   | Name exist before         |
+        | categ 1 | closed outlet       | Pick & Drop (Transport Services) | Edited Categ 3 | categ 1            | inactive | Updated Successfully      |
+      Then Check validity of Category fields and Category
+
+    Scenario: Filter Categories
+      When filtering ctegories with below table Check the filtered criteria for Categories
         | filter | value         |
         | status | Active        |
         | name   | categ 1       |
         | outlet | closed outlet |
         | ntmp   | Other         |
+      Then check the Search Criteria Validity
 
-    Scenario Outline:editing Categories
-      When editing Category "<oName>" outlet "<outlet>" and ntmp "<ntmp>" and name "<nName>" description "<desc>" state "<state>"
-      Then Check msg "<msg>" and Categorey
-      Examples:
-        | oName   | outlet        | ntmp                             | desc           | nName              | state    | msg                       |
-        | categ 1 |               |                                  |                | non                |          | English Name Is required  |
-        | categ 1 | non           |                                  |                |                    |          | Outlet is required        |
-        | categ 1 |               | non                              |                |                    |          | NTMP Category is required |
-        | categ 1 |               |                                  |                | data Related Categ |          | Name exist before         |
-        | categ 1 | closed outlet | Pick & Drop (Transport Services) | Edited Categ 3 |                    | inactive | Updated Successfully      |
 
-    Scenario Outline: delete non related data category
-      When deleting category "<categ>"
-      Then Check msg "<msg>" and category "<categ>"
-      Examples:
+    Scenario: delete non related data category
+      When deleting Categs and check cnstarins
         | categ              | msg                                                |
-        | categ 1            | Deleted Successfully                               |
         | data Related Categ | Can not delete this category, it has related items |
+        | categ 1            | Deleted Successfully                               |
+      Then  Check categs deletion Constrains validity
 
         #Can not delete this category, it has related items
 
