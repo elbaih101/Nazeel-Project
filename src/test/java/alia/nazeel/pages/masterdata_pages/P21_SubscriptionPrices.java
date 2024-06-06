@@ -1,26 +1,22 @@
 package alia.nazeel.pages.masterdata_pages;
 
 
+import alia.nazeel.kendoelements.KendoComboBox;
 import alia.nazeel.templates.BasePage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-
 
 import java.util.List;
 
-public class P21_SubscriptionPrices extends BasePage
-{
+public class P21_SubscriptionPrices extends BasePage {
 
 
     public P21_SubscriptionPrices(WebDriver driver) {
-       super(driver);
+        super(driver);
     }
 
-    @FindBy(xpath = "//ul[@role=\"listbox\"]//li[@role=\"option\"]")
-    List<WebElement> listItems;
 
     @FindBy(xpath = "//button[contains(@class,\"n-button--green\")]")
     public WebElement newPriceButton;
@@ -45,29 +41,15 @@ public class P21_SubscriptionPrices extends BasePage
     @FindBy(xpath = "//label[contains(text(),\"Period\")]/following-sibling::kendo-numerictextbox//input")
     public WebElement filterPeriodField;
 
-    public List<WebElement> filterServicesList() {
-        driver.findElement(By.xpath("//label[contains(text(),\"Service\")]/following-sibling::kendo-combobox//span/span/span")).click();
-        wait.until(ExpectedConditions.visibilityOfAllElements(listItems));
-        return listItems;
-    }
+    @FindBy(xpath = "//label[contains(text(),\"Service\")]/following-sibling::kendo-combobox")
+    public KendoComboBox servicFilter;
 
-    public List<WebElement> filterStatusesList() {
-        driver.findElement(By.xpath("//label[contains(text(),\"Status\")]/following-sibling::kendo-combobox//span/span/span")).click();
-        wait.until(ExpectedConditions.visibilityOfAllElements(listItems));
-        return listItems;
-    }
-
-    public List<WebElement> filterTypesList() {
-        driver.findElement(By.xpath("//label[contains(text(),\"Type\")]/following-sibling::kendo-combobox//span/span/span")).click();
-        wait.until(ExpectedConditions.visibilityOfAllElements(listItems));
-        return listItems;
-    }
-
-    public List<WebElement> popUpServicesList() {
-        subscriptiosPricespopup.findElement(By.xpath(".//label[contains(text(),\"Service\")]/following-sibling::kendo-combobox//span/span/span")).click();
-        wait.until(ExpectedConditions.visibilityOfAllElements(listItems));
-        return listItems;
-    }
+    @FindBy(xpath = "//label[contains(text(),\"Status\")]/following-sibling::kendo-combobox")
+    public KendoComboBox statusFilter;
+    @FindBy(xpath = "//label[contains(text(),\"Type\")]/following-sibling::kendo-combobox")
+    public KendoComboBox typeFilter;
+    @FindBy(css = "kendo-combobox[name=\"NewStatus\"]")
+    public KendoComboBox serviceComboBox;
 
     public WebElement subscriptionPeriodField() {
         return subscriptiosPricespopup.findElement(By.xpath(".//input[@role=\"spinbutton\"]"));

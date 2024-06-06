@@ -44,7 +44,7 @@ public class D10_Supscriptions {
     public void addingPriceForWithSubscriptionPeriodAndPrice(String type, String service, String period, String price) {
         wait.waitLoading();
         subscriptionPrices.newPriceButton.click();
-        subscriptionPrices.popUpServicesList().stream().filter(serv -> serv.getText().toLowerCase().contains(service.toLowerCase())).toList().getFirst().click();
+        subscriptionPrices.serviceComboBox.selectByTextContainsIgnoreCase(service);
 
         if (!service.equalsIgnoreCase(Services.Nazeel.toString())) {
             wait.waitLoading();
@@ -131,13 +131,13 @@ public class D10_Supscriptions {
     public void filterRecordsWithTypeAndAndPeriodAndStatus(String type, String service, String period, String status) {
         subscriptionPrices.filterButton.click();
         if (!type.isEmpty()) {
-            subscriptionPrices.filterTypesList().stream().filter(t -> t.getText().toLowerCase().equalsIgnoreCase(type)).toList().getFirst().click();
+            subscriptionPrices.typeFilter.selectByTextContainsIgnoreCase(type);
         }
         if (!service.isEmpty()) {
-            subscriptionPrices.filterServicesList().stream().filter(t -> t.getText().toLowerCase().equalsIgnoreCase(service)).toList().getFirst().click();
+            subscriptionPrices.servicFilter.selectByTextContainsIgnoreCase(service);
         }
         if (!status.isEmpty()) {
-            subscriptionPrices.filterStatusesList().stream().filter(t -> t.getText().toLowerCase().equalsIgnoreCase(status)).toList().getFirst().click();
+            subscriptionPrices.statusFilter.selectByTextContainsIgnoreCase(status);
         }
         if (!period.isEmpty()) {
             subscriptionPrices.filterPeriodField.clear();
