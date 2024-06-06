@@ -37,7 +37,6 @@ public class D11_2_Vendors {
     Vendor vendor;
 
 
-
     @And("go to Vendors page")
     public void goToVendorsPage() {
         wait.waitLoading();
@@ -47,7 +46,6 @@ public class D11_2_Vendors {
     }
 
 
-
     private void fillVendorData(String name, String phone, String email, String vat, String cR, String pCode, String desc, String address, String state) {
         if (!phone.isEmpty()) {
             if (phone.equalsIgnoreCase("non")) {
@@ -55,12 +53,12 @@ public class D11_2_Vendors {
                 vendors.dialcodeField.sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.BACK_SPACE));
             } else if (phone.equalsIgnoreCase("dialonly")) {
                 vendors.mobileField.sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.BACK_SPACE));
-                vendors.dialCodes().getFirst().click();
+                vendors.dialCode.selectByIndex(0);
             } else if (phone.equalsIgnoreCase("nodial")) {
                 vendors.dialcodeField.sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.BACK_SPACE));
                 vendors.mobileField.sendKeys("336987");
             } else {
-                vendors.dialCodes().getFirst().click();
+                vendors.dialCode.selectByIndex(0);
                 vendors.mobileField.sendKeys(phone);
             }
         }
@@ -184,8 +182,7 @@ public class D11_2_Vendors {
         vendors.filterButton.click();
         switch (filter.toLowerCase()) {
             case "name" -> vendors.nameFilterField.sendKeys(value);
-            case "status" ->
-                    vendors.statusesFilterList().stream().filter(s -> s.getText().equalsIgnoreCase(value)).findAny().orElseThrow().click();
+            case "status" -> vendors.statusFilter.selectByTextContainsIgnoreCase(value);
             case "vat" -> vendors.vATFilterField.sendKeys(value);
             case "crno" -> vendors.cRNoFilterField.sendKeys(value);
         }

@@ -18,8 +18,6 @@ public class P00_3_CorporateSelectionPopUp extends BasePage
 
     @FindBy(xpath = "//app-reservation-corporate//button[contains(@class,\"n-button--green\")]")
     public WebElement newCorporateButton;
-    @FindBy(xpath = "//ul[@role=\"listbox\"]//li[@role=\"option\"]")
-    List<WebElement> listItems;
     @FindBy(xpath = "//app-reservation-corporate//input")
     public WebElement searchFiled;
     @FindBy(xpath = "//app-reservation-corporate//button[contains(@class,\"n-button n-button--primary\")]")

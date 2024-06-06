@@ -17,8 +17,6 @@ public class P22_Corporates extends BasePage {
     }
 
 
-    @FindBy(xpath = "//ul[@role=\"listbox\"]//li[@role=\"option\"]")
-    List<WebElement> listItems;
     @FindBy(xpath = "//button[contains(@class,\"n-button--green\")]")
     public WebElement newCorporateButton;
     ////   Filter
@@ -50,7 +48,8 @@ public class P22_Corporates extends BasePage {
 
     //////       Grid  //// ///
     @FindBy(css = "app-corporates-list kendo-grid")
-    KendoGrid corporatesGrid;
+    public KendoGrid corporatesGrid;
+
     @FindBy(xpath = "//td[@data-kendo-grid-column-index=\"0\"]")
     public List<WebElement> corporates;
     @FindBy(xpath = "//td[@data-kendo-grid-column-index=\"1\"]")

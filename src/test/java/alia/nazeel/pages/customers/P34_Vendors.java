@@ -1,5 +1,6 @@
 package alia.nazeel.pages.customers;
 
+import alia.nazeel.kendoelements.KendoComboBox;
 import alia.nazeel.kendoelements.KendoGrid;
 import alia.nazeel.templates.BasePage;
 import org.openqa.selenium.By;
@@ -17,8 +18,6 @@ public class P34_Vendors extends BasePage
     }
 
     ///// controls /////
-    @FindBy(xpath = "//ul[@role=\"listbox\"]//li[@role=\"option\"]")
-    List<WebElement> listItems;
     @FindBy(xpath = "//button[contains(@class,\"n-button--green\")]")
     public WebElement newVendorButton;
 
@@ -88,10 +87,8 @@ public class P34_Vendors extends BasePage
     @FindBy(xpath = "//input[@placeholder=\"Vendor Name\"]")
     public WebElement vendorNameField;
 
-    public List<WebElement> dialCodes() {
-        driver.findElement(By.xpath("//kendo-combobox[@name=\"dialCode\"]//span[@class=\"k-select\"]")).click();
-        return listItems;
-    }
+    @FindBy(xpath = "//kendo-combobox[@name=\"dialCode\"]")
+    public KendoComboBox dialCode;
 
     @FindBy(name = "mobileNumber")
     public WebElement mobileField;
@@ -123,16 +120,9 @@ public class P34_Vendors extends BasePage
     @FindBy(xpath = "//div[@class=\"n-table__top-btns\"]//button[contains(@class,\"button--primary\")]")
     public WebElement filterButton;
 
-    public List<WebElement> statusesFilterList() {
-        driver.findElement(By.xpath("//kendo-combobox[@id=\"status\"]//span[@class=\"k-select\"]")).click();
-        try {
-            Thread.sleep(300);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        return listItems;
-    }
 
+    @FindBy(xpath = "//kendo-combobox[@id=\"status\"]")
+    public KendoComboBox statusFilter;
     @FindBy(name="NameEn")
     public WebElement nameFilterField;
     @FindBy(name="order")
