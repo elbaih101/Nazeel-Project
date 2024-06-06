@@ -127,12 +127,12 @@ public class D11_1_Corporates {
                 corporates.vatField.sendKeys(vat);
         }
         if (!Utils.isEmptyOrNull(bNumb)) {
-            corporates.bNoField.clear();
+            corporates.bNoField.sendKeys((Keys.chord(Keys.CONTROL, "a", Keys.BACK_SPACE)));
             if (!bNumb.equalsIgnoreCase("non"))
                 corporates.bNoField.sendKeys(bNumb);
         }
         if (!Utils.isEmptyOrNull(secBNumb)) {
-            corporates.secNoField.clear();
+            corporates.secNoField.sendKeys((Keys.chord(Keys.CONTROL, "a", Keys.BACK_SPACE)));
             if (!secBNumb.equalsIgnoreCase("non"))
                 corporates.secNoField.sendKeys(secBNumb);
         }
