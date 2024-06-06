@@ -1,18 +1,13 @@
 @CorporateSetup @Group4
 Feature: corporates Feature
-
-  Background:
+ Background:
     Given Logging in with superuser
 
 
   Rule:Non Zatca Subscribed
-    Background:
+    Background: logging in to the property and navigating to corporates
       Given Select Property "P01404"
       And go to corporates page
-# FIXME the AZTCA LOGO
-#    Scenario: Check Zatca Logo on Requiered Fields
-#      Given open the new Corporate Page
-#      Then Check Zatca Logo is in Required Corporate Fields
 
     Scenario: create new corporate
       When Checking the validation over the required Fields(name, Country ,VAT,first and second building numbers,) in corporate "Creation"
@@ -22,15 +17,21 @@ Feature: corporates Feature
         |                   | Saudi       | all   |                 |      |         |               | Name Is Requird                                                        |
         | ghaly             | Saudi       | all   | 564             |      |         |               | vat regestration no should be 15 digits that begins and ends with 3    |
         | ghaly             | Saudi       | all   | 987654123654987 |      |         |               | vat regestration no should be 15 digits that begins and ends with 3    |
-        | ghaly             | Saudi       | non   | 332166498745613 | 9876 | 6597    | email         |                                                                        |
+        | ghaly             | Saudi       | non   | 332166498745613 | 9876 | 6597    | email         | Invalid Email                                                          |
         | ghaly             | Saudi       | non   | 332166498745613 | 9876 | 6597    | cpersonnumber | The mobile number must be a maximum of 9 digits without the first zero |
         | shenga            | Afghanistan | non   | 654             | 6541 | 5236    |               | Corporate Added Successfully                                           |
       Then assert Validity of Fields
-#      When Creating a Corporate with name "<name>" and Country "<country>" ignoredFields "<ignored>" vat "<vat>" bNumber "<bNum>" secBNumber "<secBNum>" invalid ""
 
+    Scenario Outline: delete corporate
+      Given delete corporate "<name>"
+      Then Check toast mesage contains text "<msg>"
+      Examples:
+        | name              | msg                                                      |
+        | corp data related | Sorry, this item has related data and can not be deleted |
+        | shenga            | Deleted Successfully                                     |
 
   Rule:Non Zatca Subscribed Reservation Popup
-    Background:
+    Background: logging in to the property and navigating to reservation
       Given Select Property "P01404"
       And open reservations Page
       And Click on Add new Reservation
@@ -46,24 +47,8 @@ Feature: corporates Feature
         | ghaly             | Saudi   | all   | 987654123654987 |      |         |         | vat regestration no should be 15 digits that begins and ends with 3 |
       Then assert Validity of Fields
 
-#    Scenario Outline: create new corporate reservation page
-#      When Creating a Corporate with name "<name>" and Country "<country>" ignoredFields "<ignored>" vat "<vat>" bNumber "<bNum>" secBNumber "<secBNum>" invalid ""
-#      Then Check toast mesage contains text "<msg>"
-#      Examples:
-#        | name              | country | ignored | vat             | bNum | secBNum | msg                                                                 |
-#        |                   | Saudi   | all     |                 |      |         | Name Is Requird                                                     |
-#        | zeko              |         | all     |                 |      |         | Country is required                                                 |
-#        | corp data related | Saudi   |         | 332166498745613 | 6541 | 5236    | Name exist before                                                   |
-#        | ghaly             | Saudi   | all     | 564             |      |         | vat regestration no should be 15 digits that begins and ends with 3 |
-#        | ghaly             | Saudi   | all     | 987654123654987 |      |         | VAT Number Should Begin And End By 3                                |
 
-    Scenario Outline: delete corporate
-      Given delete corporate "<name>"
-      Then Check toast mesage contains text "<msg>"
-      Examples:
-        | name              | msg                                                      |
-        | corp data related | Sorry, this item has related data and can not be deleted |
-        | shenga            | Deleted Successfully                                     |
+
 
   Rule: Zatca Subscribed
     Background:

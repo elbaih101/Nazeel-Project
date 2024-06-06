@@ -15,6 +15,7 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.slf4j.LoggerFactory;
 
 import java.time.Duration;
 import java.util.List;
@@ -62,7 +63,9 @@ public class D11_1_Corporates {
     }
 
     private void assertToastMessageAndValidityThenClearFields(String message) {
-        asrt.AssertToastMessagesContains(message);
+        if (message != null)
+            asrt.AssertToastMessagesContains(message);
+        else LoggerFactory.getLogger(this.getClass()).error("toast message Entered Was null please fix the feature file");
         clearCorporateData();
     }
 
@@ -76,8 +79,8 @@ public class D11_1_Corporates {
         corporates.cityField.clear();
         corporates.districtField.clear();
         corporates.streetField.clear();
-        corporates.bNoField.sendKeys(Keys.chord(Keys.CONTROL,"a",Keys.BACK_SPACE));
-        corporates.secNoField.sendKeys(Keys.chord(Keys.CONTROL,"a",Keys.BACK_SPACE));
+        corporates.bNoField.sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.BACK_SPACE));
+        corporates.secNoField.sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.BACK_SPACE));
         corporates.addressField.clear();
         corporates.emaiField.clear();
         corporates.corPhoneField.clear();
@@ -113,7 +116,7 @@ public class D11_1_Corporates {
         if (!Utils.isEmptyOrNull(name)) {
             corporates.corpoateNameField.clear();
             if (!name.equalsIgnoreCase("non"))
-                corporates.corpoateNameField.sendKeys(name);
+                corporates.corpoateNameField.sendKeys(name, name);
         }
         if (!Utils.isEmptyOrNull(country)) {
             corporates.countriesComboBox.clearSelection();

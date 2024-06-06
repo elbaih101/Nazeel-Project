@@ -90,7 +90,7 @@ public class P22_Corporates extends BasePage {
     //// corporate Details ///
 
     @FindBy(xpath = "//label[contains(text(),\"Corporate Name \")]/following-sibling::div//input")
-    public WebElement corpoateNameField;
+    public MultiLangTextField corpoateNameField;
 
     @FindBy(id = "postalCode")
     public WebElement postalCodeField;

@@ -86,7 +86,7 @@ public class D02_CreateProperty {
         } catch (NoSuchElementException e) {
             System.out.println("no announcements to close");
         }
-        try {wait.until(ExpectedConditions.visibilityOf(dashBoardPage.closeSubscriptionsAlertButton));
+        try {wait.waitLoading();
             dashBoardPage.closeSubscriptionsAlertButton.click();
         } catch (NoSuchElementException e) {
             System.out.println("no subscriptions alert");
