@@ -1,5 +1,6 @@
 package alia.nazeel.pages;
 
+import alia.nazeel.kendoelements.KendoComboBox;
 import alia.nazeel.kendoelements.KendoGrid;
 import alia.nazeel.kendoelements.KendoMultiSelect;
 import alia.nazeel.pages.mutlipurposes.P00_multiPurposes;
@@ -35,20 +36,10 @@ public class P38_Outlets extends BasePage
     @FindBy(name = "item-name")
     public WebElement filterItemNameFeld;
     @FindBy(name = "outletItemsPages.category")
-    WebElement itemCategoriescomboBox;
+   public KendoComboBox itemCategoriescomboBox;
     @FindBy(xpath = "//kendo-combobox[@textfield=\"outletNameItemNamePrice\"]")
-    WebElement itemsListComboBox;
+    public KendoComboBox itemsListComboBox;
 
-
-    public List<WebElement> itemsList()
-    {
-        return new P00_multiPurposes(driver).getListItems(itemsListComboBox);
-    }
-
-    public List<WebElement> itemsCategoriesList()
-    {
-        return new P00_multiPurposes(driver).getListItems(itemCategoriescomboBox);
-    }
 
     @FindBy(xpath = "//td[@data-kendo-grid-column-index=\"1\"]")
     public List<WebElement> selectedItemsNames;

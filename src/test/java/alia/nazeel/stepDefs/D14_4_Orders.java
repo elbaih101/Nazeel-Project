@@ -29,7 +29,6 @@ public class D14_4_Orders {
 
     final WebDriver driver = DriverManager.getDriver();
     final JavascriptExecutor js = (JavascriptExecutor) driver;
-    //Actions actions = new Actions(driver);
     final CustomAssert asrt = new CustomAssert();
     final CustomWebDriverWait wait = new CustomWebDriverWait(driver, Duration.ofSeconds(20));
     final P02_DashBoardPage dashBoardPage = new P02_DashBoardPage(driver);
