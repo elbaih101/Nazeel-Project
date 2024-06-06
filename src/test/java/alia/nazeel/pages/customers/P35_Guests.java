@@ -1,18 +1,19 @@
 package alia.nazeel.pages.customers;
 
+import alia.nazeel.kendoelements.KendoComboBox;
+import alia.nazeel.kendoelements.KendoDateTimePicker;
+import alia.nazeel.kendoelements.KendoDropDownList;
+import alia.nazeel.kendoelements.KendoSwitch;
 import alia.nazeel.templates.BasePage;
-import alia.nazeel.tools.Utils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 
 
 import java.util.List;
 
-public class P35_Guests extends BasePage
-{
+public class P35_Guests extends BasePage {
     public P35_Guests(WebDriver driver) {
         super(driver);
     }
@@ -33,30 +34,14 @@ public class P35_Guests extends BasePage
     public WebElement nameFilterField;
     @FindBy(xpath = "//label[contains(text(),\"Mobile\")]/following-sibling::input")
     public WebElement mobileFilterField;
-
-    public List<WebElement> filterStatusesList() {
-        driver.findElement(By.xpath("//kendo-combobox[@id=\"status\"]//span[@class=\"k-select\"]")).click();
-        wait.until(ExpectedConditions.visibilityOfAllElements(listItems));
-        return listItems;
-    }
-
-    public List<WebElement> filterNationalityList() {
-        driver.findElement(By.xpath("//kendo-combobox[@id=\"nationality\"]//span[@class=\"k-select\"]")).click();
-        wait.until(ExpectedConditions.visibilityOfAllElements(listItems));
-        return listItems;
-    }
-
-    public List<WebElement> filterGuestClassList() {
-        driver.findElement(By.xpath("//kendo-combobox[@id=\"guestClass\"]//span[@class=\"k-select\"]")).click();
-        wait.until(ExpectedConditions.visibilityOfAllElements(listItems));
-        return listItems;
-    }
-
-    public List<WebElement> filterIdTypeList() {
-        driver.findElement(By.xpath("//kendo-combobox[@id=\"idType\"]//span[@class=\"k-select\"]")).click();
-        wait.until(ExpectedConditions.visibilityOfAllElements(listItems));
-        return listItems;
-    }
+    @FindBy(xpath = "//kendo-combobox[@id=\"status\"]")
+    public KendoComboBox statusFilter;
+    @FindBy(xpath = "//kendo-combobox[@id=\"nationality\"]")
+    public KendoComboBox nationalityFilter;
+    @FindBy(xpath = "//kendo-combobox[@id=\"guestClass\"]")
+    public KendoComboBox guestClassFilter;
+    @FindBy(xpath = "//kendo-combobox[@id=\"idType\"]")
+    public KendoComboBox idTypeFilter;
 
     @FindBy(id = "guestNumber")
     public WebElement gusetNumberFilterField;
@@ -125,8 +110,8 @@ public class P35_Guests extends BasePage
 
     //// guest data ////
 
-    @FindBy(name="status")
-    public WebElement statusSwitch;
+    @FindBy(name = "status")
+    public KendoSwitch statusSwitch;
     @FindBy(xpath = "//input[@placeholder=\"Type first name\"]")
     public WebElement firstNameField;
 
@@ -138,50 +123,31 @@ public class P35_Guests extends BasePage
     @FindBy(xpath = "//input[@placeholder=\"Type last name\"]")
     public WebElement lastNameField;
     @FindBy(xpath = "//label[contains(text(),\"Gregorian\")]/following-sibling::kendo-datepicker//input")
-    public WebElement dateOfBirthField;
+    public KendoDateTimePicker dateOfBirth;
 
 
     @FindBy(xpath = "//kendo-combobox[@name=\"gender\"]")
-    public WebElement genderComboBox;
+    public KendoComboBox genderComboBox;
     @FindBy(xpath = "//kendo-combobox[@name=\"nationality\"]")
-    public WebElement nationalityComboBox;
+    public KendoComboBox nationalityComboBox;
     @FindBy(xpath = "//kendo-combobox[@name=\"GuestType\"]")
-    public WebElement guestTypeComboBox;
+    public KendoComboBox guestTypeComboBox;
     @FindBy(xpath = "//kendo-combobox[@name=\"idType\"]")
-    public WebElement idTypeComboBox;
+    public KendoComboBox idTypeComboBox;
     @FindBy(xpath = "//kendo-combobox[@name=\"idSerial\"]")
-    public WebElement idSerialComboBox;
-
-    public List<WebElement> getListItems(WebElement comboBox) {
-        comboBox.findElement(By.xpath(".//span[@class=\"k-select\"]")).click();
-       Utils.sleep(300);
-        return listItems;
-    }
-
-    public WebElement clearSelectionButton(WebElement comboBox) {
-       WebElement clear =comboBox.findElement(By.xpath(".//span[contains(@class,\"k-clear-value\")]"));
-        actions.moveToElement(comboBox, 3, 4).perform();
-        return clear;
-    }
+    public KendoComboBox idSerialComboBox;
 
     @FindBy(id = "idNumber")
     public WebElement idNumberField;
 
-    public List<WebElement> classesList() {
-        driver.findElement(By.xpath("//kendo-dropdownlist[@name=\"guestClass\"]//span[@class=\"k-select\"]")).click();
-        return listItems;
-    }
+    @FindBy(xpath = "//kendo-dropdownlist[@name=\"guestClass\"]")
+    public KendoDropDownList guestClass;
 
     @FindBy(xpath = "//div[@class=\"img-upload img-upload--light\"]")
     public WebElement imageField;
 
-    public List<WebElement> dialCodes() {
-        driver.findElement(By.xpath("//kendo-combobox[@name=\"dialCode\"]//span[@class=\"k-select\"]")).click();
-        return listItems;
-    }
-
-    @FindBy(xpath = "//kendo-combobox[@name=\"dialCode\"]//input")
-    public WebElement dialcodeField;
+    @FindBy(xpath = "//kendo-combobox[@name=\"dialCode\"]")
+    public KendoComboBox dialCode;
     @FindBy(name = "mobileNumber")
     public WebElement mobileField;
     @FindBy(id = "email")
@@ -213,23 +179,25 @@ public class P35_Guests extends BasePage
     @FindBy(xpath = "//button[contains(text(),\"Save Changes\")]")
     public WebElement saveNotesButton;
 
-    @FindBy(className="guest-note__content")
-    public List<WebElement>notesContentes;
+    @FindBy(className = "guest-note__content")
+    public List<WebElement> notesContentes;
 
-    public WebElement noteHeader(WebElement noteContent){
+    public WebElement noteHeader(WebElement noteContent) {
         return noteContent.findElement(By.xpath("./preceding-sibling::div[@class=\"guest-note__header\"]"));
     }
 
     public WebElement noteEditButton(WebElement noteContent) {
-        WebElement moreActions=  noteContent.findElement(By.xpath("./preceding-sibling::div[@class=\"guest-note__header\"]//div[contains(@class,\"guest-note__more\")]"));
+        WebElement moreActions = noteContent.findElement(By.xpath("./preceding-sibling::div[@class=\"guest-note__header\"]//div[contains(@class,\"guest-note__more\")]"));
         moreActions.click();
-         return moreActions.findElement(By.xpath("./..//div[contains(text(),\"Edit\")]"));
+        return moreActions.findElement(By.xpath("./..//div[contains(text(),\"Edit\")]"));
     }
+
     public WebElement notedeleteButton(WebElement noteContent) {
-        WebElement moreActions=  noteContent.findElement(By.xpath("./preceding-sibling::div[@class=\"guest-note__header\"]//div[contains(@class,\"guest-note__more\")]"));
+        WebElement moreActions = noteContent.findElement(By.xpath("./preceding-sibling::div[@class=\"guest-note__header\"]//div[contains(@class,\"guest-note__more\")]"));
         moreActions.click();
-         return moreActions.findElement(By.xpath("./..//div[contains(text(),\"Delete\")]"));
+        return moreActions.findElement(By.xpath("./..//div[contains(text(),\"Delete\")]"));
     }
+
     @FindBy(xpath = "//div[@role=\"dialog\"]//textarea")
     public WebElement editNoteField;
     @FindBy(xpath = "//div[@role=\"dialog\"]//button[contains(text(),\"Save Changes\")]")
@@ -243,7 +211,7 @@ public class P35_Guests extends BasePage
 
     @FindBy(xpath = "//th//button")
     public WebElement addDocumentButton;
-    @FindBy(id="file-upload")
+    @FindBy(id = "file-upload")
     public WebElement documentUploadField;
     @FindBy(xpath = "//input[@name=\"document-name\"]")
     public WebElement documentNameField;
@@ -258,20 +226,18 @@ public class P35_Guests extends BasePage
     @FindBy(xpath = "//td[@data-kendo-grid-column-index=\"3\"]")
     List<WebElement> documentMoreActions;
 
-    public WebElement documentDownloadButton(WebElement document){
+    public WebElement documentDownloadButton(WebElement document) {
         document.findElement(By.xpath("../..//td//button")).click();
         return document.findElement(By.xpath(".//div[contains(text(),\"Download\")]"));
     }
-    public WebElement documentDeleteButton(WebElement document){
+
+    public WebElement documentDeleteButton(WebElement document) {
         document.findElement(By.xpath("../..//td//button")).click();
         return document.findElement(By.xpath("./..//div[contains(text(),\"Delete\")]"));
     }
+
     @FindBy(xpath = "//button[contains(@class,\"button--danger\") and contains(text(),\"Yes\")]")
     public WebElement confirmDeleteDocumentButton;
-
-
-
-
 
 
     //// end guest Documents ////

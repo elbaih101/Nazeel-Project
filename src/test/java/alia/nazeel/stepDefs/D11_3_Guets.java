@@ -48,9 +48,6 @@ public class D11_3_Guets {
     }
 
 
-
-
-
     private void fillGuestData(String fName, String lName, String phone, String nat, String gType, String idType, String idNumb, String state, String ign, String inv) {
         if (!fName.isEmpty()) {
             guests.firstNameField.sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.BACK_SPACE));
@@ -71,34 +68,34 @@ public class D11_3_Guets {
             }
         }
         if (!ign.contains("bDate")) {
-            Utils.setDate(guests.dateOfBirthField, "12/3/1999");
+            guests.dateOfBirth.setDateTime("12/3/1999");
         }
         if (inv.contains("bDate")) {
-            Utils.setDate(guests.dateOfBirthField, DateTime.now().toString(DateTimeFormat.forPattern("dd/MM/yyyy")));
+            guests.dateOfBirth.setDateTime(DateTime.now().toString(DateTimeFormat.forPattern("dd/MM/yyyy")));
         }
         if (!ign.contains("Gender")) {
-            guests.getListItems(guests.genderComboBox).getFirst().click();
+            guests.genderComboBox.selectByIndex(0);
         }
         if (!nat.isEmpty()) {
             if (nat.equalsIgnoreCase("non")) {
-                guests.clearSelectionButton(guests.nationalityComboBox).click();
+                guests.nationalityComboBox.clearSelection();
             } else {
-                guests.getListItems(guests.nationalityComboBox).stream().filter(id -> id.getText().equalsIgnoreCase(nat)).findAny().orElseThrow().click();
+                guests.nationalityComboBox.selectByTextIgnoreCase(nat);
             }
         }
         if (!gType.isEmpty()) {
             if (gType.equalsIgnoreCase("non")) {
-                guests.clearSelectionButton(guests.guestTypeComboBox).click();
+                guests.guestTypeComboBox.clearSelection();
             } else {
-                guests.getListItems(guests.guestTypeComboBox).getFirst().click();
+                guests.guestTypeComboBox.selectByIndex(0);
             }
         }
 
         if (!idType.isEmpty()) {
             if (idType.equalsIgnoreCase("non")) {
-                guests.clearSelectionButton(guests.idTypeComboBox).click();
+                guests.idTypeComboBox.clearSelection();
             } else {
-                guests.getListItems(guests.idTypeComboBox).stream().filter(id -> id.getText().equalsIgnoreCase(idType)).findAny().orElseThrow().click();
+                guests.idTypeComboBox.selectByTextIgnoreCase(idType);
             }
         }
         if (!idNumb.isEmpty()) {
@@ -110,34 +107,34 @@ public class D11_3_Guets {
         if (!phone.isEmpty()) {
             if (phone.equalsIgnoreCase("non")) {
                 guests.mobileField.sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.BACK_SPACE));
-                guests.dialcodeField.sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.BACK_SPACE));
+                guests.dialCode.clearSelection();
             } else if (phone.equalsIgnoreCase("dialonly")) {
                 guests.mobileField.sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.BACK_SPACE));
-                guests.dialCodes().getFirst().click();
+                guests.dialCode.selectByIndex(0);
             } else if (phone.equalsIgnoreCase("nodial")) {
-                guests.dialcodeField.sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.BACK_SPACE));
+                guests.dialCode.clearSelection();
                 guests.mobileField.sendKeys("336987897");
             } else {
-                guests.dialCodes().getFirst().click();
+                guests.dialCode.selectByIndex(0);
                 guests.mobileField.sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.BACK_SPACE));
                 guests.mobileField.sendKeys(phone);
             }
         }
 
         if (!ign.contains("idSerial")) {
-            guests.getListItems(guests.idSerialComboBox).getFirst().click();
+            guests.idSerialComboBox.selectByIndex(0);
         }
         if (inv.contains("Gender")) {
-            guests.clearSelectionButton(guests.genderComboBox).click();
+            guests.genderComboBox.clearSelection();
         }
 
         if (inv.contains("idSerial")) {
-            guests.clearSelectionButton(guests.idSerialComboBox).click();
+            guests.idSerialComboBox.clearSelection();
         }
         guest = new Guest(fName + " " + lName, idNumb, idType, phone, nat, state);
         if (state.equalsIgnoreCase("new"))
             guest.setStatus("Active");
-        else if ((guests.statusSwitch.getAttribute("class").contains("k-switch-off") && state.equalsIgnoreCase("active")) || (guests.statusSwitch.getAttribute("class").contains("k-switch-on") && state.equalsIgnoreCase("inactive")))
+        else if ((!guests.statusSwitch.isOn() && state.equalsIgnoreCase("active")) || (guests.statusSwitch.isOn() && state.equalsIgnoreCase("inactive")))
             guests.statusSwitch.click();
     }
 
@@ -213,7 +210,7 @@ public class D11_3_Guets {
         guests.companyNotesField.sendKeys(compNote);
         guests.addCompanyNoteButton.click();
         new D03_BlocksAndFloors().checkToastMesageContainsText("Saved Successed");
-       guest.setCompNote(compNote);
+        guest.setCompNote(compNote);
         guests.propertyNotesField.sendKeys(propNote);
         guests.addPropertyNoteButton.click();
         new D03_BlocksAndFloors().checkToastMesageContainsText("Saved Successed");
@@ -235,7 +232,6 @@ public class D11_3_Guets {
         asseertGuestNote(guest.getPropNote()).forEach(asrt::assertTrue);
         asrt.assertAll();
     }
-
 
 
     @When("editing a company note {string} to be {string} to guest with id {string}")
@@ -267,7 +263,6 @@ public class D11_3_Guets {
         wait.waitLoading();
         return guests.notesContentes.stream().filter(c -> c.getText().contains(oldNote)).findAny().orElseThrow();
     }
-
 
 
     @When("deleting guest Note {string} to guest with id {string}")
@@ -303,7 +298,6 @@ public class D11_3_Guets {
         guest.setDocName(docName);
 
     }
-
 
 
     @Then("Check the added document visible with the name {string}")
@@ -345,16 +339,12 @@ public class D11_3_Guets {
         wait.waitLoading();
         guests.filterButton.click();
         switch (filter.toLowerCase()) {
-            case "status" ->
-                    guests.filterStatusesList().stream().filter(s -> s.getText().equalsIgnoreCase(value)).findAny().orElseThrow().click();
+            case "status" -> guests.statusFilter.selectByTextContainsIgnoreCase(value);
             case "name" -> guests.nameFilterField.sendKeys(value);
             case "phone" -> guests.mobileFilterField.sendKeys(value);
-            case "nationality" ->
-                    guests.filterNationalityList().stream().filter(s -> s.getText().equalsIgnoreCase(value)).findAny().orElseThrow().click();
-            case "class" ->
-                    guests.filterGuestClassList().stream().filter(s -> s.getText().equalsIgnoreCase(value)).findAny().orElseThrow().click();
-            case "idtype" ->
-                    guests.filterIdTypeList().stream().filter(s -> s.getText().equalsIgnoreCase(value)).findAny().orElseThrow().click();
+            case "nationality" -> guests.nationalityFilter.selectByTextContainsIgnoreCase(value);
+            case "class" -> guests.guestClassFilter.selectByTextContainsIgnoreCase(value);
+            case "idtype" -> guests.idTypeFilter.selectByTextContainsIgnoreCase(value);
             case "idnum" -> guests.iDFilterField.sendKeys(value);
         }
         wait.waitLoading();
