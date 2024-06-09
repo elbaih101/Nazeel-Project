@@ -1,6 +1,7 @@
 package alia.nazeel.pages.reservations;
 
 
+import alia.nazeel.kendoelements.KendoComboBox;
 import alia.nazeel.templates.BasePage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -10,14 +11,15 @@ import org.openqa.selenium.support.FindBy;
 
 import java.util.List;
 
-public class P03_6_EndReservationPopUp extends BasePage
-{
+public class P03_6_EndReservationPopUp extends BasePage {
     public P03_6_EndReservationPopUp(WebDriver driver) {
         super(driver);
     }
 
     @FindBy(xpath = "//ul[@role=\"listbox\"]")
     public WebElement genralListBox;
+    final String baseXpath = "//checkout-wizard//kendo-dialog";
+
     @FindBy(xpath = "//div[@role=\"dialog\"]")
     WebElement endReservationPopup;
 
@@ -36,27 +38,19 @@ public class P03_6_EndReservationPopUp extends BasePage
         return endReservationPopup.findElement(By.xpath(".//input[@id=\"amount\"]"));
     }
 
-    public List<WebElement> paymentMethods() {
-        endReservationPopup.findElement(By.xpath(".//label[contains(text(),\"Payment\")]/following-sibling::kendo-combobox//span/span/span")).click();
-        return genralListBox.findElements(By.xpath("//li[@role=\"option\"]"));
-    }
+    @FindBy(xpath = baseXpath + "//label[contains(text(),\"Payment\")]/following-sibling::kendo-combobox")
+    public KendoComboBox paymentMethodComboBoc;
 
-    public WebElement confirmationButton() {
-        return endReservationPopup.findElement(By.xpath(".//button[contains(@class,\"button--primary ng-star-inserted\")]"));
-    }
+    @FindBy(xpath = baseXpath+"//button[contains(@class,\"button--primary ng-star-inserted\")]")
+    public WebElement confirmationButton;
+    @FindBy(xpath = baseXpath+"//div[contains(@class,\"skip\")]")
+    public List<WebElement> skipButton;
+    @FindBy(xpath = baseXpath+"//button[contains(@class,\"n-button--danger\")]")
+    public WebElement confirmCancelButton;
 
-    public List<WebElement> skipButton() {
-        return endReservationPopup.findElements(By.xpath(".//div[contains(@class,\"skip\")]"));
-    }
+    @FindBy(xpath = baseXpath+"//label[contains(text(),\"reason\")]/following-sibling::kendo-combobox")
+    public KendoComboBox reasons;
 
-    public WebElement confirmCancelButton() {
-        return endReservationPopup.findElement(By.xpath(".//button[contains(@class,\"n-button--danger\")]"));
-    }
-
-    public List<WebElement> reasons() {
-        endReservationPopup.findElement(By.xpath(".//label[contains(text(),\"reason\")]/following-sibling::kendo-combobox//span/span/span")).click();
-        return genralListBox.findElements(By.xpath("//li[@role=\"option\"]"));
-    }
 
     @FindBy(xpath = "//checkout-wizard//div[contains(text(),\"Penalty\")]")
     public WebElement penaltyTabHeader;
