@@ -1,29 +1,24 @@
 package alia.nazeel.pages.reservations;
 
-import alia.nazeel.kendoelements.KendoGrid;
 import alia.nazeel.kendoelements.KendoDropDownList;
-
-
+import alia.nazeel.kendoelements.KendoGrid;
+import alia.nazeel.kendoelements.SwalPopUp;
 import alia.nazeel.templates.BasePage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-
 
 import java.util.List;
 
 @SuppressWarnings("unused")
-public class P03_1_ReservationMainDataPage extends BasePage
-{
+public class P03_1_ReservationMainDataPage extends BasePage {
     public P03_1_ReservationMainDataPage(WebDriver driver) {
         super(driver);
     }
 
 
-    @FindBy(xpath = "//ul[@role=\"listbox\"]")
-    WebElement genralListBox;
+
     @FindBy(xpath = "//div[contains(text(),\"Financial & Payments\")]")
     public WebElement financialAndPaymentsPage;
     @FindBy(xpath = "//label[contains(text(),\"Reservation type\")]/following-sibling::div/kendo-buttongroup/button")
@@ -48,26 +43,11 @@ public class P03_1_ReservationMainDataPage extends BasePage
     //http://staging.nazeel.net:9002/reservations/wizard/add
 
     @FindBy(xpath = "//label[contains(text(),\"Reservation source \")]//following-sibling::kendo-dropdownlist")
-    public WebElement reservationSourceDropList;
+    public KendoDropDownList reservationSourceDropList;
 
-    public List<WebElement> reservationSources() {
-       wait.waitLoading();
-        wait.until(ExpectedConditions.elementToBeClickable(reservationSourceDropList));
-        reservationSourceDropList.click();
-        return genralListBox.findElements(By.xpath("//li[@role=\"option\"]"));
-    }
-
-
-    @FindBy(xpath = "//kendo-popup//div[contains(text(),\"test3\")]")
-    public WebElement test3ReservationSource;
 
     @FindBy(xpath = "//label[contains(text(),\"Visit purpose\")]//following-sibling::kendo-dropdownlist")
-    public WebElement visitPurposeDropList;
-
-    @FindBy(xpath = "//kendo-popup//li[contains(text(),\"Family or friends\")]")
-    public WebElement familyOrFriendsSelection;
-
-
+    public KendoDropDownList visitPurposeDropList;
 
     @FindBy(xpath = "//span[contains(text(),\"Select guest now\")]/..")
     public WebElement selectGestButton;
@@ -118,11 +98,7 @@ public class P03_1_ReservationMainDataPage extends BasePage
     @FindBy(xpath = "//app-reservation-time-picker//a")
     public WebElement setTimeButton;
     @FindBy(xpath = "//span[contains(text(),\"Rental type\")]/../../following-sibling::div//kendo-dropdownlist")
-    WebElement rentalPeriodDropList;
-
-    public KendoDropDownList rentalPeriodDropList() {
-        return new KendoDropDownList(rentalPeriodDropList);
-    }
+    public KendoDropDownList rentalPeriodDropList;
 
     @FindBy(xpath = "//label[contains(text(),\"Period \")]/../following-sibling::div//input")
     public WebElement rentalPeriodField;
@@ -151,11 +127,10 @@ public class P03_1_ReservationMainDataPage extends BasePage
     }
 /////end units ///////
 
+
     ///unit change confirmation popup ///
-    @FindBy(xpath = "//div[contains(@class,\"swal2-container\")]//button[contains(text(),\"OK\")]")
-    public WebElement confirmChangeUnitButton;
-    @FindBy(id = "swal2-content")
-    public WebElement confirmChangeUnitMessage;
+    @FindBy(css = "div.swal2-container")
+    public SwalPopUp alert;
     ///////end popup //////
 
     //unitsRates page popup////

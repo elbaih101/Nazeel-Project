@@ -66,20 +66,12 @@ public class D01_Reservations {
 
     @And("Select Reservation source {string} and visit purpose {string}")
     public void selectReservationSourceAndPurpose(String source, String purpose) {
-
-        List<WebElement> reservationSources = reservationMainDataPage.reservationSources();
-        WebElement selectedSource;
         if (source.equalsIgnoreCase("RANDOM")) {
-            selectedSource = reservationSources.getFirst();
+            reservationMainDataPage.reservationSourceDropList.selectByIndex(0);
         } else {
-            selectedSource = reservationSources.stream().filter(element -> element.getText().contains(source)).toList().getFirst();
+            reservationMainDataPage.reservationSourceDropList.selectByTextContainsIgnoreCase(source);
         }
-        wait.until(ExpectedConditions.visibilityOf(selectedSource));
-        selectedSource.click();
-
-        reservationMainDataPage.visitPurposeDropList.click();
-        wait.until(ExpectedConditions.visibilityOf(reservationMainDataPage.familyOrFriendsSelection));
-        reservationMainDataPage.familyOrFriendsSelection.click();
+        reservationMainDataPage.visitPurposeDropList.selectByIndex(0);
     }
 
     @And("open unit selection Popup")
@@ -259,9 +251,10 @@ public class D01_Reservations {
         //FixMe some error happens here causing failure
         if (state.equalsIgnoreCase("confirmed"))
             clickOnSaveReservationButton();
-        else if (state.toLowerCase().contains("in")){
+        else if (state.toLowerCase().contains("in")) {
             wait.waitLoading();
-        reservationMainDataPage.checkInButton.click();}
+            reservationMainDataPage.checkInButton.click();
+        }
         whenReservationSummaryDialougeAppearsClickOnSaveReservatuonButton();
     }
 
@@ -484,7 +477,7 @@ public class D01_Reservations {
         for (String discType : discountsTypes) {
             financialPage.discountsList().stream().filter(d -> d.getText().equalsIgnoreCase(discType)).findFirst().orElseThrow().click();
             Double discountAmount = Nazeel_Calculations.getDiscountAmount(financialPage.reservationRent(), discountValue, discType);
-            Double reservationRentTaxes = Nazeel_Calculations.reservationRentTaxes(financialPage.reservationRent(), discountAmount, discType, appliedTaxes,taxCalcMethod);
+            Double reservationRentTaxes = Nazeel_Calculations.reservationRentTaxes(financialPage.reservationRent(), discountAmount, discType, appliedTaxes, taxCalcMethod);
             Double subTotal = discType.contains("From Balance") ? financialPage.reservationRent() : financialPage.reservationRent() - discountAmount;
             Double total;
             asrt.assertTrue(reservationRentTaxes.equals(financialPage.reservationTaxes()), "Calculated Tax = " + reservationRentTaxes + "\n Found Taxes = " + financialPage.reservationTaxes());
@@ -606,7 +599,7 @@ public class D01_Reservations {
         if (sDate.equalsIgnoreCase("lastmonth"))
             sDate = DateTime.now().minusMonths(1).toString(DateTimeFormat.forPattern("dd/MM/YYYY"));
         clickOnAddNewReservation();
-        reservationMainDataPage.rentalPeriodDropList().selectByText("Monthly");
+        reservationMainDataPage.rentalPeriodDropList.selectByText("Monthly");
         wait.waitLoading();
         fillReservationData("single", "Random", "Random", "Random", "Random", sDate, "");
         reservationMainDataPage.rentalPeriodField.sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.BACK_SPACE));
@@ -619,11 +612,11 @@ public class D01_Reservations {
     @And("Change the unit on the reservation")
     public void changeTheUnitOnTheReservation() {
         reservationMainDataPage.unitChangeButton(reservationMainDataPage.resUnits().getFirst()).click();
-        wait.until(ExpectedConditions.visibilityOf(reservationMainDataPage.confirmChangeUnitMessage));
+        wait.until(ExpectedConditions.visibilityOf(reservationMainDataPage.alert.getContent()));
         String firstsegment = "Are you sure you want to change this unit";
         String secondSement = "Guests assigned to this unit will be moved to the new one\nYou will no longer be able to change calender view for this reservation";
-        asrt.assertTrue(Pattern.matches(Pattern.quote(firstsegment) + ".*" + Pattern.quote(secondSement), reservationMainDataPage.confirmChangeUnitMessage.getText()));
-        reservationMainDataPage.confirmChangeUnitButton.click();
+        asrt.assertTrue(Pattern.matches(Pattern.quote(firstsegment) + ".*" + Pattern.quote(secondSement), reservationMainDataPage.alert.getContent().getText()));
+        reservationMainDataPage.alert.confirm();
         selectAUnit("Random");
         wait.until(ExpectedConditions.visibilityOf(unitSelectionPopup.applyChangeUnitButton));
         unitSelectionPopup.applyChangeUnitButton.click();
