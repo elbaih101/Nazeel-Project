@@ -673,7 +673,7 @@ public class D01_Reservations {
     }
 
     private void selectDependent(String dep) {
-        guestList.reservationRooms().selectByIndex(0);
+        guestList.reservationRooms.selectByIndex(0);
         guestList.nameButton.click();
         guestList.searchField.sendKeys(dep.equalsIgnoreCase("random") ? "depndent guest" : dep);
         guestList.searchButton.click();
