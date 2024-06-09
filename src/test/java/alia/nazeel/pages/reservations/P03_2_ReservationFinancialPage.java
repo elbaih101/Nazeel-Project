@@ -1,15 +1,12 @@
 package alia.nazeel.pages.reservations;
 
+import alia.nazeel.kendoelements.KendoComboBox;
 import alia.nazeel.templates.BasePage;
 import org.apache.commons.lang3.StringUtils;
-import alia.nazeel.pages.mutlipurposes.P00_multiPurposes;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-
-
-import java.util.List;
 
 @SuppressWarnings("unused")
 public class P03_2_ReservationFinancialPage extends BasePage
@@ -90,11 +87,8 @@ public class P03_2_ReservationFinancialPage extends BasePage
     @FindBy(name="discount-amount")
     public WebElement discountAmountField;
     @FindBy(name="discount-method")
-    public WebElement discountMethodComboBox;
+    public KendoComboBox discountMethodComboBox;
 
-     public List<WebElement>discountsList(){
-         return new P00_multiPurposes(driver).getListItems(discountMethodComboBox);
-     }
      @FindBy(xpath = "//div[contains(@class,\"table__tag--red\")]")
      public WebElement tableTagAlert;
 

@@ -183,40 +183,36 @@ public class D01_Reservations {
             endReservationPopUp.confirmEndButton.click();
             while (!endReservationPopUp.header().isEmpty())
 
-                if (!endReservationPopUp.skipButton().isEmpty()) {
-                    wait.until(ExpectedConditions.refreshed(ExpectedConditions.elementToBeClickable(endReservationPopUp.skipButton().getFirst())));
+                if (!endReservationPopUp.skipButton.isEmpty()) {
+                    wait.until(ExpectedConditions.refreshed(ExpectedConditions.elementToBeClickable(endReservationPopUp.skipButton.getFirst())));
                     wait.waitLoading();
-                    endReservationPopUp.skipButton().getFirst().click();
+                    endReservationPopUp.skipButton.getFirst().click();
                 } else {
 
-                    List<WebElement> methods = endReservationPopUp.paymentMethods();
-                    wait.until(ExpectedConditions.visibilityOfAllElements(methods));
-                    methods.stream().filter(method -> method.getText().contains("Cash")).toList().getFirst().click();
+                    endReservationPopUp.paymentMethodComboBoc.selectByTextContainsIgnoreCase("cash");
                     wait.waitLoading();
-                    endReservationPopUp.confirmationButton().click();
+                    endReservationPopUp.confirmationButton.click();
                     wait.waitLoading();
                 }
         } else if (status.toLowerCase().contains("canceled")) {
-            endReservationPopUp.confirmCancelButton().click();
+            endReservationPopUp.confirmCancelButton.click();
             while (!endReservationPopUp.header().isEmpty())
 
-                if (!endReservationPopUp.skipButton().isEmpty()) {
-                    wait.until(ExpectedConditions.refreshed(ExpectedConditions.elementToBeClickable(endReservationPopUp.skipButton().getFirst())));
+                if (!endReservationPopUp.skipButton.isEmpty()) {
+                    wait.until(ExpectedConditions.refreshed(ExpectedConditions.elementToBeClickable(endReservationPopUp.skipButton.getFirst())));
                     wait.waitLoading();
-                    endReservationPopUp.skipButton().getFirst().click();
+                    endReservationPopUp.skipButton.getFirst().click();
                 } else {
-                    endReservationPopUp.reasons().getFirst().click();
-                    endReservationPopUp.confirmationButton().click();
-                    if (!endReservationPopUp.skipButton().isEmpty()) {
-                        wait.until(ExpectedConditions.refreshed(ExpectedConditions.elementToBeClickable(endReservationPopUp.skipButton().getFirst())));
+                    endReservationPopUp.reasons.selectByIndex(0);
+                    endReservationPopUp.confirmationButton.click();
+                    if (!endReservationPopUp.skipButton.isEmpty()) {
+                        wait.until(ExpectedConditions.refreshed(ExpectedConditions.elementToBeClickable(endReservationPopUp.skipButton.getFirst())));
                         wait.waitLoading();
-                        endReservationPopUp.skipButton().getFirst().click();
+                        endReservationPopUp.skipButton.getFirst().click();
                     } else {
-                        List<WebElement> methods = endReservationPopUp.paymentMethods();
-                        wait.until(ExpectedConditions.visibilityOfAllElements(methods));
-                        methods.stream().filter(method -> method.getText().contains("Cash")).toList().getFirst().click();
+                        endReservationPopUp.paymentMethodComboBoc.selectByTextContainsIgnoreCase("Cash");
                         wait.waitLoading();
-                        endReservationPopUp.confirmationButton().click();
+                        endReservationPopUp.confirmationButton.click();
                         wait.until(ExpectedConditions.refreshed(ExpectedConditions.visibilityOf(endReservationPopUp.amountField())));
                     }
                 }
@@ -470,12 +466,12 @@ public class D01_Reservations {
         P03_2_ReservationFinancialPage financialPage = new P03_2_ReservationFinancialPage(driver);
         financialPage.discountAmountField.sendKeys(Double.toString(discountValue));
         List<String> discountsTypes = new ArrayList<>();
-        for (WebElement dicType : financialPage.discountsList()) {
+        for (WebElement dicType : financialPage.discountMethodComboBox.getListItems()) {
             discountsTypes.add(dicType.getText());
         }
         financialPage.discountAmountField.click();
         for (String discType : discountsTypes) {
-            financialPage.discountsList().stream().filter(d -> d.getText().equalsIgnoreCase(discType)).findFirst().orElseThrow().click();
+            financialPage.discountMethodComboBox.getListItems().stream().filter(d -> d.getText().equalsIgnoreCase(discType)).findFirst().orElseThrow().click();
             Double discountAmount = Nazeel_Calculations.getDiscountAmount(financialPage.reservationRent(), discountValue, discType);
             Double reservationRentTaxes = Nazeel_Calculations.reservationRentTaxes(financialPage.reservationRent(), discountAmount, discType, appliedTaxes, taxCalcMethod);
             Double subTotal = discType.contains("From Balance") ? financialPage.reservationRent() : financialPage.reservationRent() - discountAmount;
