@@ -21,13 +21,11 @@ import java.util.List;
  * PageFactory.initElements(new CustomFieldDecorator(new DefaultElementLocatorFactory(driver)), this);
  * enabling the user of creating custom FindBys Annotations for The Custom WebElements
  */
-public class CustomFieldDecorator extends DefaultFieldDecorator
-{
+public class CustomFieldDecorator extends DefaultFieldDecorator {
     private static final Logger logger = LoggerFactory.getLogger(CustomFieldDecorator.class);
     // Just add the new Custom Web Element Class to this List and it Should work like charm
     //Note The Custom WebElement Should have a constructor that takes a WebElement
-    List<Class<?>> elements = Collections.unmodifiableList(new ArrayList<>()
-    {{
+    List<Class<?>> elements = Collections.unmodifiableList(new ArrayList<>() {{
         add(KendoGrid.class);
         add(KendoDateTimePicker.class);
         add(KendoButtonGroup.class);
@@ -43,56 +41,50 @@ public class CustomFieldDecorator extends DefaultFieldDecorator
     }});
 
 
-    public CustomFieldDecorator(ElementLocatorFactory factory)
-    {
+    public CustomFieldDecorator(ElementLocatorFactory factory) {
         super(factory);
     }
 
     /**
-     *
      * @param loader The class loader that was used for the page object
-     * @param field The field that may be decorated.
+     * @param field  The field that may be decorated.
      * @return decorated Object of the element locater and theClass of custom elment
      */
     @Override
-    public Object decorate(ClassLoader loader, Field field)
-    {
-        if (field.isAnnotationPresent(FindBy.class))
-        {
+    public Object decorate(ClassLoader loader, Field field) {
+        if (field.isAnnotationPresent(FindBy.class)) {
             ElementLocator locator = factory.createLocator(field);
 
-            if (locator == null)
-            {
+            if (locator == null) {
                 return null;
             }
             /*
              * Here We enter the required new Custom Elements and Then Get their proxies
              **/
-            for (Class<?> element : elements)
-            {
-                if (field.getType().equals(element))
-                {
+            for (Class<?> element : elements) {
+                if (field.getType().equals(element)) {
                     return CustomProxy(element, loader, locator);
+                } else if (List.class.equals(element)) {
+                    return CustomListProxy(element,loader,locator);
                 }
             }
         }
         return super.decorate(loader, field);
     }
+
     /**
      * This method creates a proxy instance of the specified class using the provided WebElement as an argument.
      * It finds a constructor that takes a WebElement as an argument and creates a new instance using that constructor.
      *
-     * @param clazz  The class of the proxy instance to be created.
-     * @param loader The class loader to be used for loading the specified class.
+     * @param clazz   The class of the proxy instance to be created.
+     * @param loader  The class loader to be used for loading the specified class.
      * @param locator The locator that provides the WebElement to be used for creating the proxy instance.
      * @return A new instance of the specified class, initialized with the provided WebElement.
      * @see ElementLocator
      * @see WebElement
      */
-    private <T> T CustomProxy(Class<T> clazz, ClassLoader loader, ElementLocator locator)
-    {
-        try
-        {
+    private <T> T CustomProxy(Class<T> clazz, ClassLoader loader, ElementLocator locator) {
+        try {
             WebElement proxy = proxyForLocator(loader, locator);
 
             // Find a constructor that takes a WebElement as an argument
@@ -100,11 +92,28 @@ public class CustomFieldDecorator extends DefaultFieldDecorator
 
             // Create a new instance using the found constructor
             return constructor.newInstance(proxy);
-        } catch (Exception e)
-        {
+        } catch (Exception e) {
             // Handle exceptions such as NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException
-          logger.error(e.getMessage(), e);
-        throw new RuntimeException("Failed to create proxy instance", e);
+            logger.error(e.getMessage(), e);
+            throw new RuntimeException("Failed to create proxy instance", e);
+        }
+    }
+
+    private <T> List<T> CustomListProxy(Class<T> clazz, ClassLoader loader, ElementLocator locator) {
+        try {
+            List<WebElement> proxy = proxyForListLocator(loader, locator);
+            List<T> customElements = new ArrayList<>();
+            // Find a constructor that takes a WebElement as an argument
+            Constructor<T> constructor = clazz.getConstructor(WebElement.class);
+            for (WebElement element : proxy) {
+                customElements.add(constructor.newInstance(element));
+            }
+            // Create a new instance using the found constructor
+            return customElements;
+        } catch (Exception e) {
+            // Handle exceptions such as NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException
+            logger.error(e.getMessage(), e);
+            throw new RuntimeException("Failed to create proxy instance", e);
         }
     }
 }

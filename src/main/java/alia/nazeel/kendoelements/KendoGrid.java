@@ -7,25 +7,38 @@ import org.openqa.selenium.support.ui.Select;
 import java.util.List;
 
 
-public class KendoGrid  {
+public class KendoGrid {
     final WebElement grid;
-    WebElement list;
+    private WebElement list;
     WebElement header;
-    WebElement pager;
+    private final By lastCellBy = By.xpath("..//td[last()]");
 
     public KendoGrid(WebElement grid) {
         this.grid = grid;
 
     }
 
-    public List<WebElement> getGridRows() {
+    WebElement getHeader() {
         header = grid.findElement(By.xpath(".//thead"));
+        return header;
+    }
+
+    public WebElement getHeaderCellContains(String text) {
+        List<WebElement> columnsHeads = header.findElements(By.tagName("th"));
+        for (WebElement head : columnsHeads) {
+            if (head.getText().toLowerCase().contains(text))
+                return head;
+        }
+        return null;
+    }
+
+    public List<WebElement> getGridRows() {
         list = grid.findElement(By.xpath(".//tbody"));
         return list.findElements(By.cssSelector("tr")); // Assuming each row is a <tr> element
     }
 
     WebElement getPager() {
-        return pager = grid.findElement(By.cssSelector("kendo-pager"));
+        return grid.findElement(By.cssSelector("kendo-pager"));
     }
 
     public void selectPageSize(int pageSize) {
@@ -107,31 +120,37 @@ public class KendoGrid  {
         cell.sendKeys(value);
     }
 
+    public WebElement getLastCell(WebElement record) {
+        return record.findElement(lastCellBy);
+    }
+
     public void clickEditRecordButton(WebElement record) {
-        WebElement actionsCell = record.findElement(By.xpath(".//td[last()]"));
+        WebElement actionsCell = record.findElement(lastCellBy);
         actionsCell.findElement(By.xpath(".//button[.//*[name()=\"use\" and contains(@*,\"icon-edit\")]]")).click();
     }
 
     public void clickViewRecordButton(WebElement record) {
-        WebElement actionsCell = record.findElement(By.xpath(".//td[last()]"));
+        WebElement actionsCell = record.findElement(lastCellBy);
         actionsCell.findElement(By.xpath(".//button[.//*[name()=\"use\" and contains(@*,\"icon-eye\")]]")).click();
     }
 
     public void clickPrintRecordButton(WebElement record) {
-        WebElement actionsCell = record.findElement(By.xpath(".//td[last()]"));
+        WebElement actionsCell = record.findElement(lastCellBy);
         actionsCell.findElement(By.xpath(".//button[.//*[name()=\"use\" and contains(@*,\"icon-print\")]]")).click();
     }
+
     public void clickChangeRecordButton(WebElement record) {
-        WebElement actionsCell = record.findElement(By.xpath(".//td[last()]"));
+        WebElement actionsCell = record.findElement(lastCellBy);
         actionsCell.findElement(By.xpath(".//button[.//*[name()=\"use\" and contains(@*,\"icon-change\")]]")).click();
     }
+
     public void clickDeleteRecordButton(WebElement record) {
-        WebElement actionsCell = record.findElement(By.xpath(".//td[last()]"));
+        WebElement actionsCell = record.findElement(lastCellBy);
         actionsCell.findElement(By.xpath(".//button[.//*[name()=\"use\" and contains(@*,\"icon-delete\")]]")).click();
     }
 
     public WebElement clickRecordMoreMenuButton(WebElement record) {
-        WebElement actionsCell = record.findElement(By.xpath(".//td[last()]"));
+        WebElement actionsCell = record.findElement(lastCellBy);
 
         WebElement moreActionButton = actionsCell.findElement(By.xpath(".//div[.//*[name()=\"use\" and contains(@*,\"icon-more\")]]"));
         moreActionButton.click();

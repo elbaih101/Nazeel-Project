@@ -79,4 +79,7 @@ public class P05_SetupPage extends BasePage
     @FindBy(xpath = "//a[@href=\"/items-addons/items-setup\"]")
     public WebElement itemsLink;
 
+    @FindBy(css = "a[href=\"/subscription-management/service-management\"]")
+    public WebElement subscriptionsLink;
+
 }

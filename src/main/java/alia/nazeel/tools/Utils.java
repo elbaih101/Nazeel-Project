@@ -15,6 +15,8 @@ import org.openqa.selenium.support.ui.Select;
 import java.io.File;
 import java.time.Duration;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Class containing various utility methods for WebDriver operations.
@@ -447,5 +449,26 @@ public class Utils {
     public static boolean isEmptyOrNull(String string) {
         return (string == null || string.isEmpty());
     }
+    public static int[] findElement2D(int[][] array, int target) {
+        for (int i = 0; i < array.length; i++) {
+            for (int j = 0; j < array[i].length; j++) {
+                if (array[i][j] == target) {
+                    return new int[] {i, j};
+                }
+            }
+        }
+        return null; // Element not found
+    }
+    public static List<Integer> extractIntegers(String input) {
+        List<Integer> result = new ArrayList<>();
+        Pattern pattern = Pattern.compile("\\d+"); // Regex to match sequences of digits
+        Matcher matcher = pattern.matcher(input);
 
+        while (matcher.find()) {
+            // Convert the matched sequence to an integer and add to the list
+            result.add(Integer.parseInt(matcher.group()));
+        }
+
+        return result;
+    }
 }

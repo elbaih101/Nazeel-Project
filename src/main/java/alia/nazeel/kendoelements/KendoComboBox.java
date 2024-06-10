@@ -26,8 +26,8 @@ public class KendoComboBox {
     WebElement selectedItem;
 
 
-    public KendoComboBox(WebElement list) {
-        this.comboBox = list;
+    public KendoComboBox(WebElement comboBox) {
+        this.comboBox = comboBox;
     }
 
     public KendoComboBox() {
@@ -102,6 +102,9 @@ public class KendoComboBox {
             action.moveToElement(comboBox, 3, 4).click().perform();
         } else
             getSelectedinput().sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.BACK_SPACE));
+    }
+    public WebElement findElementBy(By by){
+        return comboBox.findElement(by);
     }
 
 }
