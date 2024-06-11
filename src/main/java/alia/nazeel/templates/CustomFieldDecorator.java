@@ -63,6 +63,9 @@ public class CustomFieldDecorator extends DefaultFieldDecorator {
 
             // Handle custom elements
             for (Class<?> clazz : elementsClasses) {
+//              Todo make all elements extend th custom webelement thus making it easy rather than adding them using a loop it will make it faster and better
+//                field.getType().isAssignableFrom(CustomWebElement.class);
+
                 if (field.getType().equals(clazz)) {
                     return CustomProxy(clazz, loader, locator);
                 }
