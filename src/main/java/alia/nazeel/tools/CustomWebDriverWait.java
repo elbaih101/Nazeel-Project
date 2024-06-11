@@ -7,12 +7,15 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Sleeper;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.Clock;
 import java.time.Duration;
 
 public class CustomWebDriverWait extends WebDriverWait
 {
+    Logger logger= LoggerFactory.getLogger(this.getClass());
 
     public CustomWebDriverWait(WebDriver driver, Duration timeout)
     {
@@ -33,16 +36,18 @@ public class CustomWebDriverWait extends WebDriverWait
     }
 
     public void waitLoading() {
+        String loadingBarXpath="//ngx-loading-bar/*";
+        String loadingPageXpath="//app-loading-page/*";
         WebDriver driver =DriverManager.getDriver();
         try {
            driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(1));
             // Wait until the loading animation disappears or becomes stale
             this.withTimeout(Duration.ofSeconds(20))
                     .ignoring(NoSuchElementException.class, StaleElementReferenceException.class)
-                    .until(ExpectedConditions.invisibilityOf( driver.findElement(By.xpath("//app-loading-page/*"))));
+                    .until(ExpectedConditions.invisibilityOf( driver.findElement(By.xpath(loadingBarXpath))));
         } catch (Exception e) {
             // Handle any exceptions or logging here
-            e.getMessage();
+            logger.warn("the loading page might not be found "+e.getMessage());
         }
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
     }
