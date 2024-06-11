@@ -2,24 +2,26 @@ package alia.nazeel.stepDefs;
 
 import alia.nazeel.enums.Services;
 import alia.nazeel.pages.P02_DashBoardPage;
+import alia.nazeel.pages.masterdata_pages.P14_MasterData;
 import alia.nazeel.pages.masterdata_pages.P21_SubscriptionPrices;
-
+import alia.nazeel.pages.setuppages.P05_SetupPage;
+import alia.nazeel.pages.setuppages.subscriptions.P36_1_RenewSubscription;
+import alia.nazeel.pages.setuppages.subscriptions.P36_Subscriptions;
 import alia.nazeel.tools.CustomWebDriverWait;
+import alia.nazeel.tools.DriverManager;
+import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import alia.nazeel.tools.DriverManager;
-import alia.nazeel.pages.masterdata_pages.P14_MasterData;
-
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-
 import org.testng.asserts.SoftAssert;
 
 import java.time.Duration;
 import java.util.List;
+import java.util.Map;
 
 public class D10_Supscriptions {
 
@@ -28,8 +30,11 @@ public class D10_Supscriptions {
     final SoftAssert asrt = new SoftAssert();
     final CustomWebDriverWait wait = new CustomWebDriverWait(driver, Duration.ofSeconds(20));
     final P02_DashBoardPage dashBoardPage = new P02_DashBoardPage(driver);
+    final P05_SetupPage setupPage = new P05_SetupPage(driver);
     final P14_MasterData masterData = new P14_MasterData(driver);
     final P21_SubscriptionPrices subscriptionPrices = new P21_SubscriptionPrices(driver);
+    final P36_Subscriptions subscriptions =new P36_Subscriptions(driver);
+     P36_1_RenewSubscription renewSubscriptionPage =new P36_1_RenewSubscription(driver);
 
 
     @And("go to subscriptions prices page")
@@ -149,15 +154,47 @@ public class D10_Supscriptions {
     @Then("all Records Visible in grid are Type {string} and Service {string} and Period {string}  and status {string}")
     public void allRecordsVisibleInGridAreTypeAndAndPeriodAndStatus(String type, String service, String period, String status) {
         wait.waitLoading();
-        if (!status.isEmpty()){
-        asrt.assertFalse(subscriptionPrices.statuses.stream().anyMatch(stat->!stat.getText().toLowerCase().contains(status.toLowerCase())));}
-        if(!service.isEmpty()){
-        asrt.assertFalse(subscriptionPrices.services.stream().anyMatch(ser->!ser.getText().toLowerCase().contains(service.toLowerCase())));}
-        if (!type.isEmpty()){
-        asrt.assertFalse(subscriptionPrices.types.stream().anyMatch(ty->!ty.getText().toLowerCase().contains(type.toLowerCase())));}
-        if (!period.isEmpty()){
-        asrt.assertFalse(subscriptionPrices.periods.stream().anyMatch(per->!per.getText().contains(period)));}
+        if (!status.isEmpty()) {
+            asrt.assertFalse(subscriptionPrices.statuses.stream().anyMatch(stat -> !stat.getText().toLowerCase().contains(status.toLowerCase())));
+        }
+        if (!service.isEmpty()) {
+            asrt.assertFalse(subscriptionPrices.services.stream().anyMatch(ser -> !ser.getText().toLowerCase().contains(service.toLowerCase())));
+        }
+        if (!type.isEmpty()) {
+            asrt.assertFalse(subscriptionPrices.types.stream().anyMatch(ty -> !ty.getText().toLowerCase().contains(type.toLowerCase())));
+        }
+        if (!period.isEmpty()) {
+            asrt.assertFalse(subscriptionPrices.periods.stream().anyMatch(per -> !per.getText().contains(period)));
+        }
         asrt.assertAll();
 
     }
+
+    @Given("go to subscriptions Setup Page")
+    public void goToSubscriptionsSetupPage() {
+        wait.waitLoading();
+        dashBoardPage.setupPageLink.click();
+        wait.waitLoading();
+        setupPage.subscriptionsLink.click();
+    }
+
+    @Given("open new Subscription Page")
+    public void openNewSubscriptionPage() {
+        wait.waitLoading();
+        subscriptions.newSubscriptionButton.click();
+    }
+
+    @Then("Check the subscriptions periods and prices for the below table exist")
+    public void checkTheSubscriptionsPeriodsAndPricesForTheBelowTableExist(DataTable table) {
+        List<Map<String, String>> rows =table.asMaps(String.class,String.class);
+        wait.waitLoading();
+        for (Map<String, String> columns : rows) {
+            WebElement  selectedService= renewSubscriptionPage.selectService(columns.get("service"));
+            renewSubscriptionPage.selectPeriod(selectedService,columns.get("period"));
+            asrt.assertTrue(Float.parseFloat(renewSubscriptionPage.getServicePrice(selectedService))==Float.parseFloat(columns.get("price")));
+
+        }
+    }
+
+
 }

@@ -4,12 +4,11 @@ import alia.nazeel.kendoelements.KendoComboBox;
 import alia.nazeel.kendoelements.KendoGrid;
 import alia.nazeel.templates.BasePage;
 import alia.nazeel.tools.Utils;
-import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
+import org.slf4j.LoggerFactory;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -21,9 +20,9 @@ public class P36_1_RenewSubscription extends BasePage {
         super(driver);
     }
 
-    int[][] dimension;
+    int[][] dimension = new int[3][5];
     @FindBy(css = "subscription-renew> kendo-grid")
-    List<KendoGrid> mainServices;
+    List<WebElement> mainServiceselement;
     @FindBy(xpath = "//subscription-renew//div[contains(@class,\"page-header\")]//div[@class=\"n-button\"]")
     public WebElement walletBalanceDiv;
     @FindBy(xpath = "//kendo-panelbar-item[.//*[starts-with(text(),\"Subscriped\")]]")
@@ -31,16 +30,31 @@ public class P36_1_RenewSubscription extends BasePage {
     @FindBy(xpath = "//kendo-panelbar-item[.//*[starts-with(text(),\"Not Subscriped\")]]")
     WebElement notSubscripedPanel;
 
-
-    public List<KendoGrid> subscripedServices() {
-        if (!subscripedPanel.getAttribute("class").contains("k-state-expanded"))
-            subscripedPanel.click();
-        List<WebElement> list = subscripedPanel.findElements(By.xpath("//kendo-grid"));
+    public List<KendoGrid> mainServicesGrids() {
+        wait.waitLoading();
         List<KendoGrid> grids = new ArrayList<>();
-        for (WebElement e : list) {
+        for (WebElement e : mainServiceselement) {
             grids.add(new KendoGrid(e));
         }
         return grids;
+    }
+
+    public List<KendoGrid> subscripedServices() {
+        try {
+            driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(1));
+            if (!subscripedPanel.getAttribute("class").contains("k-state-expanded"))
+                subscripedPanel.click();
+            List<WebElement> list = subscripedPanel.findElements(By.xpath("//kendo-grid"));
+            List<KendoGrid> grids = new ArrayList<>();
+            for (WebElement e : list) {
+                grids.add(new KendoGrid(e));
+            }
+            return grids;
+        } catch (NoSuchElementException e) {
+            LoggerFactory.getLogger(this.getClass()).error("no subscribed extras");
+        }
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(1));
+        return new ArrayList<>();
     }
 
     public List<KendoGrid> unSubscripedServices() {
@@ -59,19 +73,21 @@ public class P36_1_RenewSubscription extends BasePage {
         AtomicReference<WebElement> service = new AtomicReference<>();
         int i = 0;
         int j = 0;
-        for (KendoGrid kendoGrid : mainServices) {
-            for (WebElement n : kendoGrid.getGridCells(1)) {
-                if (n.getText().toLowerCase().contains(serviceName.toLowerCase())) {
-                    kendoGrid.getGridCell(n, 0).findElement(By.xpath(".//input")).click();
-                    service.set(n);
-                    dimension[i][j] = 1;
-                    return service.get();
+        if (serviceName.toLowerCase().contains("nazeel") || serviceName.toLowerCase().contains("sms"))
+            for (KendoGrid kendoGrid : mainServicesGrids()) {
+                for (WebElement n : kendoGrid.getGridCells(1)) {
+                    if (n.getText().toLowerCase().contains(serviceName.toLowerCase())) {
+                        kendoGrid.getGridCell(n, 0).findElement(By.xpath(".//input")).click();
+                        service.set(n);
+                        dimension[i][j] = 1;
+                        return service.get();
+                    }
                 }
+                j++;
             }
-            j++;
-        }
         i++;
         j = 0;
+
         for (KendoGrid kendoGrid : subscripedServices()) {
             for (WebElement n : kendoGrid.getGridCells(1)) {
                 if (n.getText().toLowerCase().contains(serviceName.toLowerCase())) {
@@ -103,8 +119,8 @@ public class P36_1_RenewSubscription extends BasePage {
     public void selectPeriod(WebElement service, String text) {
 
         KendoGrid selectedGrid = getSelectedGrid();
-        int columnIndex = Integer.parseInt(selectedGrid.getHeaderCellContains("subscription period").getAttribute("aria-colindex")) + 1;
-        KendoComboBox periodComboBox = new KendoComboBox(selectedGrid.getGridCell(service, columnIndex).findElement(By.cssSelector("kendo-combobox")));
+        int columnIndex = Integer.parseInt(selectedGrid.getHeaderCellContains("subscription period").getAttribute("aria-colindex")) - 1;
+        KendoComboBox periodComboBox = new KendoComboBox(selectedGrid.getGridCell(service, columnIndex).findElement(By.xpath(".//kendo-combobox")));
         if (text.toLowerCase().contains("day")) {
             periodComboBox.selectByTextContainsIgnoreCase("day");
             periodComboBox.findElementBy(By.xpath("./following-sibling::kendo-numerictextbox//input")).sendKeys(Utils.extractIntegers(text).getFirst().toString());
@@ -114,9 +130,7 @@ public class P36_1_RenewSubscription extends BasePage {
 
 
     public void addBalance(WebElement service, String balance) {
-                KendoGrid selectedGrid = getSelectedGrid();
-        int columnIndex = Integer.parseInt(selectedGrid.getHeaderCellContains("added balance").getAttribute("aria-colindex")) + 1;
-        WebElement balanceField = selectedGrid.getGridCell(service, columnIndex);
+        WebElement balanceField = getField("added balance", service);
         if (balanceField != null) {
             balanceField.sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.BACK_SPACE));
             balanceField.sendKeys(balance);
@@ -125,9 +139,7 @@ public class P36_1_RenewSubscription extends BasePage {
 
     public void setPrice(WebElement service, String price) {
 
-        KendoGrid selectedGrid = getSelectedGrid();
-        int columnIndex = Integer.parseInt(selectedGrid.getHeaderCellContains("Price").getAttribute("aria-colindex")) + 1;
-        WebElement priceField = selectedGrid.getGridCell(service, columnIndex);
+        WebElement priceField = getField("Price", service);
         assert priceField != null;
         priceField.sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.BACK_SPACE));
         priceField.sendKeys(price);
@@ -135,19 +147,26 @@ public class P36_1_RenewSubscription extends BasePage {
 
     public void setVat(WebElement service, String vat) {
 
-        KendoGrid selectedGrid = getSelectedGrid();
-        int columnIndex = Integer.parseInt(selectedGrid.getHeaderCellContains("vat").getAttribute("aria-colindex")) + 1;
-        WebElement vatField = selectedGrid.getGridCell(service, columnIndex);
+        WebElement vatField = getField("vat", service);
         assert vatField != null;
         vatField.sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.BACK_SPACE));
         vatField.sendKeys(vat);
     }
 
+    public String getServicePrice(WebElement selectedService) {
+        String price = getField("Price", selectedService).findElement(By.cssSelector("input")).getAttribute("aria-valuenow");
+        return price.replaceAll(",", "");
+    }
+
+    public WebElement getField(String headerName, WebElement service) {
+        KendoGrid selectedGrid = getSelectedGrid();
+        int columnIndex = Integer.parseInt(selectedGrid.getHeaderCellContains(headerName).getAttribute("aria-colindex")) - 1;
+        return selectedGrid.getGridCell(service, columnIndex);
+    }
+
     public void sendComment(WebElement service, String comment) {
 
-        KendoGrid selectedGrid = getSelectedGrid();
-        int columnIndex = Integer.parseInt(selectedGrid.getHeaderCellContains("comment").getAttribute("aria-colindex")) + 1;
-        WebElement commentField = selectedGrid.getGridCell(service, columnIndex);
+        WebElement commentField = getField("comment", service);
         assert commentField != null;
         commentField.sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.BACK_SPACE));
         commentField.sendKeys(comment);
@@ -159,7 +178,7 @@ public class P36_1_RenewSubscription extends BasePage {
         List<KendoGrid> selectedGridGroup = new ArrayList<>();
         KendoGrid selectedGrid;
         switch (Objects.requireNonNull(coordinates)[0]) {
-            case 0 -> selectedGridGroup = mainServices;
+            case 0 -> selectedGridGroup = mainServicesGrids();
 
             case 1 -> selectedGridGroup = subscripedServices();
 

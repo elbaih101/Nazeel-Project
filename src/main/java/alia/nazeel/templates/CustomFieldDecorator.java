@@ -12,6 +12,8 @@ import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -25,7 +27,7 @@ public class CustomFieldDecorator extends DefaultFieldDecorator {
     private static final Logger logger = LoggerFactory.getLogger(CustomFieldDecorator.class);
     // Just add the new Custom Web Element Class to this List and it Should work like charm
     //Note The Custom WebElement Should have a constructor that takes a WebElement
-    List<Class<?>> elements = Collections.unmodifiableList(new ArrayList<>() {{
+    List<Class<?>> elementsClasses = Collections.unmodifiableList(new ArrayList<>() {{
         add(KendoGrid.class);
         add(KendoDateTimePicker.class);
         add(KendoButtonGroup.class);
@@ -58,14 +60,24 @@ public class CustomFieldDecorator extends DefaultFieldDecorator {
             if (locator == null) {
                 return null;
             }
-            /*
-             * Here We enter the required new Custom Elements and Then Get their proxies
-             **/
-            for (Class<?> element : elements) {
-                if (field.getType().equals(element)) {
-                    return CustomProxy(element, loader, locator);
-                } else if (List.class.equals(element)) {
-                    return CustomListProxy(element,loader,locator);
+
+            // Handle custom elements
+            for (Class<?> clazz : elementsClasses) {
+                if (field.getType().equals(clazz)) {
+                    return CustomProxy(clazz, loader, locator);
+                }
+
+                // Handle List<CustomWebElement>
+                else if (List.class.isAssignableFrom(field.getType())) {
+                    // Extract the generic type of the List
+                    Type genericType = field.getGenericType();
+                    if (genericType instanceof ParameterizedType parameterizedType) {
+                        Type listType = ((ParameterizedType) genericType).getActualTypeArguments()[0];
+                            if (clazz.equals(listType)) {
+                                return CustomListProxy(clazz, loader, locator);
+                            }
+
+                    }
                 }
             }
         }

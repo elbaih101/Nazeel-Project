@@ -9,31 +9,31 @@ import java.util.List;
 
 public class KendoGrid {
     final WebElement grid;
-    private WebElement list;
+    final private WebElement list;
     WebElement header;
     private final By lastCellBy = By.xpath("..//td[last()]");
 
     public KendoGrid(WebElement grid) {
         this.grid = grid;
-
+        list = grid.findElement(By.xpath(".//tbody"));
+        header = grid.findElement(By.xpath(".//thead"));
     }
 
     WebElement getHeader() {
-        header = grid.findElement(By.xpath(".//thead"));
         return header;
     }
 
     public WebElement getHeaderCellContains(String text) {
         List<WebElement> columnsHeads = header.findElements(By.tagName("th"));
         for (WebElement head : columnsHeads) {
-            if (head.getText().toLowerCase().contains(text))
+            if (head.getText().toLowerCase().contains(text.toLowerCase()))
                 return head;
         }
         return null;
     }
 
     public List<WebElement> getGridRows() {
-        list = grid.findElement(By.xpath(".//tbody"));
+
         return list.findElements(By.cssSelector("tr")); // Assuming each row is a <tr> element
     }
 
