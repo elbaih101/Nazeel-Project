@@ -55,10 +55,14 @@ Feature: subscriptions
   Rule:Subscriptions bu admin user
     Background:go to subscriptions Page
       Given go to subscriptions Setup Page
+
     Scenario: Check the Subscriptions got their prices from master data
       Given open new Subscription Page
-      Then  Check the subscriptions periods and prices for the below table exist
-        | service       | period    | price   |
-        | Nazeel        | 12 Months | 3000.00 |
-        | Fatoora/ZATCA | 12 Months | 2000    |
+      Then  Check the subscriptions periods and prices and expiry dates for the below table exist
+        | service       | period             | price                |
+        | Fatoora/ZATCA | 12 Months          | 2000                 |
+        | Nazeel        | 12 Months          | 3000.00              |
+        | Nazeel        | Custom (Per Day) 2 | enabled Free to edit |
+
+
   #  todo :: containue the subscription from end user

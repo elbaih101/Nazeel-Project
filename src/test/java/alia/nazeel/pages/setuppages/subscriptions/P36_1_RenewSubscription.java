@@ -4,11 +4,13 @@ import alia.nazeel.kendoelements.KendoComboBox;
 import alia.nazeel.kendoelements.KendoGrid;
 import alia.nazeel.templates.BasePage;
 import alia.nazeel.tools.Utils;
+import org.joda.time.Period;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
 import org.slf4j.LoggerFactory;
 
 import java.time.Duration;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -20,7 +22,7 @@ public class P36_1_RenewSubscription extends BasePage {
         super(driver);
     }
 
-    int[][] dimension = new int[3][5];
+    int[][] dimension = new int[3][2];
     @FindBy(css = "subscription-renew> kendo-grid")
     List<WebElement> mainServiceselement;
     @FindBy(xpath = "//subscription-renew//div[contains(@class,\"page-header\")]//div[@class=\"n-button\"]")
@@ -44,7 +46,7 @@ public class P36_1_RenewSubscription extends BasePage {
             driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(1));
             if (!subscripedPanel.getAttribute("class").contains("k-state-expanded"))
                 subscripedPanel.click();
-            List<WebElement> list = subscripedPanel.findElements(By.xpath("//kendo-grid"));
+            List<WebElement> list = subscripedPanel.findElements(By.xpath(".//kendo-grid"));
             List<KendoGrid> grids = new ArrayList<>();
             for (WebElement e : list) {
                 grids.add(new KendoGrid(e));
@@ -60,7 +62,7 @@ public class P36_1_RenewSubscription extends BasePage {
     public List<KendoGrid> unSubscripedServices() {
         if (!notSubscripedPanel.getAttribute("class").contains("k-state-expanded"))
             notSubscripedPanel.click();
-        List<WebElement> list = notSubscripedPanel.findElements(By.xpath("//kendo-grid"));
+        List<WebElement> list = notSubscripedPanel.findElements(By.xpath(".//kendo-grid"));
         List<KendoGrid> grids = new ArrayList<>();
         for (WebElement e : list) {
             grids.add(new KendoGrid(e));
@@ -77,7 +79,9 @@ public class P36_1_RenewSubscription extends BasePage {
             for (KendoGrid kendoGrid : mainServicesGrids()) {
                 for (WebElement n : kendoGrid.getGridCells(1)) {
                     if (n.getText().toLowerCase().contains(serviceName.toLowerCase())) {
-                        kendoGrid.getGridCell(n, 0).findElement(By.xpath(".//input")).click();
+                        WebElement selectionCheckBox = kendoGrid.getGridCell(n, 0).findElement(By.xpath(".//input"));
+                        if (!selectionCheckBox.isSelected())
+                            selectionCheckBox.click();
                         service.set(n);
                         dimension[i][j] = 1;
                         return service.get();
@@ -123,7 +127,10 @@ public class P36_1_RenewSubscription extends BasePage {
         KendoComboBox periodComboBox = new KendoComboBox(selectedGrid.getGridCell(service, columnIndex).findElement(By.xpath(".//kendo-combobox")));
         if (text.toLowerCase().contains("day")) {
             periodComboBox.selectByTextContainsIgnoreCase("day");
-            periodComboBox.findElementBy(By.xpath("./following-sibling::kendo-numerictextbox//input")).sendKeys(Utils.extractIntegers(text).getFirst().toString());
+            text = Utils.extractIntegers(text).getFirst().toString();
+            if (!text.isEmpty()){
+                periodComboBox.findElementBy(By.xpath("./following-sibling::kendo-numerictextbox//input")).sendKeys(Keys.chord(Keys.CONTROL,"a",Keys.BACK_SPACE));
+                periodComboBox.findElementBy(By.xpath("./following-sibling::kendo-numerictextbox//input")).sendKeys(text);}
         } else
             periodComboBox.selectByTextContainsIgnoreCase(text);
     }
@@ -162,6 +169,26 @@ public class P36_1_RenewSubscription extends BasePage {
         KendoGrid selectedGrid = getSelectedGrid();
         int columnIndex = Integer.parseInt(selectedGrid.getHeaderCellContains(headerName).getAttribute("aria-colindex")) - 1;
         return selectedGrid.getGridCell(service, columnIndex);
+    }
+
+    public Period getSubscriptionPEriod(WebElement service) {
+        Period period;
+        String periodString;
+        WebElement periodField = getField("Period", service);
+
+        periodString = periodField.findElement(By.xpath(".//kendo-combobox//input")).getAttribute("value");
+
+        if (periodString.contains("Day")) {
+            periodString = periodField.findElement(By.xpath(".//kendo-numerictextbox//input")).getAttribute("value");
+            periodString = String.format("P%sD", periodString);
+        } else {
+            periodString = Utils.extractIntegers(periodString).getFirst().toString();
+            periodString = String.format("P%sM", periodString);
+        }
+        period = Period.parse(periodString);
+
+        return period;
+
     }
 
     public void sendComment(WebElement service, String comment) {

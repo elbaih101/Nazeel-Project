@@ -45,9 +45,9 @@ public class CustomWebDriverWait extends WebDriverWait
             this.withTimeout(Duration.ofSeconds(20))
                     .ignoring(NoSuchElementException.class, StaleElementReferenceException.class)
                     .until(ExpectedConditions.invisibilityOf( driver.findElement(By.xpath(loadingBarXpath))));
-        } catch (Exception e) {
+        } catch (NoSuchElementException e) {
             // Handle any exceptions or logging here
-            logger.warn("the loading page might not be found "+e.getMessage());
+            logger.error("the loading page might not be found ");
         }
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
     }

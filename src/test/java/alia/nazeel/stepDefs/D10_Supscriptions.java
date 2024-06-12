@@ -14,6 +14,11 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.joda.time.DateTime;
+import org.joda.time.Period;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -33,8 +38,8 @@ public class D10_Supscriptions {
     final P05_SetupPage setupPage = new P05_SetupPage(driver);
     final P14_MasterData masterData = new P14_MasterData(driver);
     final P21_SubscriptionPrices subscriptionPrices = new P21_SubscriptionPrices(driver);
-    final P36_Subscriptions subscriptions =new P36_Subscriptions(driver);
-     P36_1_RenewSubscription renewSubscriptionPage =new P36_1_RenewSubscription(driver);
+    final P36_Subscriptions subscriptions = new P36_Subscriptions(driver);
+    P36_1_RenewSubscription renewSubscriptionPage = new P36_1_RenewSubscription(driver);
 
 
     @And("go to subscriptions prices page")
@@ -184,16 +189,37 @@ public class D10_Supscriptions {
         subscriptions.newSubscriptionButton.click();
     }
 
-    @Then("Check the subscriptions periods and prices for the below table exist")
+    @Then("Check the subscriptions periods and prices and expiry dates for the below table exist")
     public void checkTheSubscriptionsPeriodsAndPricesForTheBelowTableExist(DataTable table) {
-        List<Map<String, String>> rows =table.asMaps(String.class,String.class);
+        List<Map<String, String>> rows = table.asMaps(String.class, String.class);
         wait.waitLoading();
+        DateTimeFormatter dateTimeFormatter = DateTimeFormat.forPattern("dd/MM/YYYY");
         for (Map<String, String> columns : rows) {
-            WebElement  selectedService= renewSubscriptionPage.selectService(columns.get("service"));
-            renewSubscriptionPage.selectPeriod(selectedService,columns.get("period"));
-            asrt.assertTrue(Float.parseFloat(renewSubscriptionPage.getServicePrice(selectedService))==Float.parseFloat(columns.get("price")));
+            WebElement selectedService = renewSubscriptionPage.selectService(columns.get("service"));
+            String periodString = columns.get("period");
+            Period period;
+            renewSubscriptionPage.selectPeriod(selectedService, periodString);
+            if (!periodString.contains("Day")) {
+                asrt.assertTrue(Float.parseFloat(renewSubscriptionPage.getServicePrice(selectedService)) == Float.parseFloat(columns.get("price")));
+            } else {
+                asrt.assertTrue(renewSubscriptionPage.getField("Price", selectedService).isEnabled());
+            }
+
+            String currentExpiryDateString = renewSubscriptionPage.getField("Expiry Date", selectedService).getText();
+            DateTime cureentExpiryDate = null;
+            if (!currentExpiryDateString.isEmpty())
+                cureentExpiryDate = dateTimeFormatter.parseDateTime(currentExpiryDateString);
+
+            DateTime newExpryDate = dateTimeFormatter.parseDateTime(renewSubscriptionPage.getField("New Expiry Date", selectedService).findElement(By.xpath(".//input")).getAttribute("value"));
+            Period subscriptionPEriod = renewSubscriptionPage.getSubscriptionPEriod(selectedService);
+
+            if (cureentExpiryDate == null || cureentExpiryDate.isBeforeNow()) {
+                asrt.assertTrue(newExpryDate.equals(DateTime.now().plus(subscriptionPEriod)));
+            } else
+                asrt.assertTrue(newExpryDate.equals(cureentExpiryDate.plus(subscriptionPEriod)));
 
         }
+        asrt.assertAll();
     }
 
 

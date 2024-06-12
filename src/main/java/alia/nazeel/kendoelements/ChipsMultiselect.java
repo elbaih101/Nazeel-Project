@@ -1,21 +1,22 @@
 package alia.nazeel.kendoelements;
 
+import alia.nazeel.templates.CustomWebElement;
 import alia.nazeel.tools.Utils;
 import org.openqa.selenium.*;
 
 import java.util.List;
 
-public class ChipsMultiselect {
+public class ChipsMultiselect extends CustomWebElement {
 
     WebElement chipsMultiSelect;
     List<WebElement> chips;
 
     public ChipsMultiselect(WebElement chipsMultiSelect) {
-        this.chipsMultiSelect = chipsMultiSelect;
+     super(chipsMultiSelect);
+     this.chipsMultiSelect =super.element;
     }
 
-    public ChipsMultiselect() {
-    }
+
 
     public List<WebElement> getChips() {
         return chips = chipsMultiSelect.findElements(By.xpath(".//div[contains(@class,\"multiselect__item\")]"));
