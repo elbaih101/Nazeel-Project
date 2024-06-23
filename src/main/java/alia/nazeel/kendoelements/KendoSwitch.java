@@ -1,12 +1,14 @@
 package alia.nazeel.kendoelements;
 
+import alia.nazeel.templates.CustomWebElement;
 import org.openqa.selenium.WebElement;
 
-public class KendoSwitch {
+public class KendoSwitch extends CustomWebElement {
     WebElement zwitch;
 
 
     public KendoSwitch(WebElement zwitch) {
+        super(zwitch);
         this.zwitch = zwitch;
     }
 

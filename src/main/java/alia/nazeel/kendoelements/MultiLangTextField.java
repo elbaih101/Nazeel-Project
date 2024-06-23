@@ -1,10 +1,11 @@
 package alia.nazeel.kendoelements;
 
+import alia.nazeel.templates.CustomWebElement;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 
-public class MultiLangTextField {
+public class MultiLangTextField extends CustomWebElement {
 
     String firstLangText;
     String secondLangText;
@@ -15,6 +16,7 @@ public class MultiLangTextField {
     By secondLangInputButtonBy = By.xpath("./following-sibling::button");
 
     public MultiLangTextField(WebElement multiLangTextField) {
+        super(multiLangTextField);
         this.multiLangTextField = multiLangTextField;
     }
 

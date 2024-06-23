@@ -1,5 +1,6 @@
 package alia.nazeel.kendoelements;
 
+import alia.nazeel.templates.CustomWebElement;
 import alia.nazeel.tools.Utils;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.Select;
@@ -7,13 +8,14 @@ import org.openqa.selenium.support.ui.Select;
 import java.util.List;
 
 
-public class KendoGrid {
+public class KendoGrid extends CustomWebElement {
     final WebElement grid;
     final private WebElement list;
     WebElement header;
     private final By lastCellBy = By.xpath("..//td[last()]");
 
     public KendoGrid(WebElement grid) {
+        super(grid);
         this.grid = grid;
         list = grid.findElement(By.xpath(".//tbody"));
         header = grid.findElement(By.xpath(".//thead"));

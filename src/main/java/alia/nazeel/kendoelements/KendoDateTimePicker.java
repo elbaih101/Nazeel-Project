@@ -1,5 +1,6 @@
 package alia.nazeel.kendoelements;
 
+import alia.nazeel.templates.CustomWebElement;
 import alia.nazeel.tools.CustomWebDriverWait;
 import alia.nazeel.tools.DriverManager;
 import alia.nazeel.tools.Utils;
@@ -12,7 +13,7 @@ import org.openqa.selenium.WebElement;
 
 import java.time.Duration;
 
-public class KendoDateTimePicker
+public class KendoDateTimePicker extends CustomWebElement
 {
 
 
@@ -34,13 +35,11 @@ public class KendoDateTimePicker
 
     public KendoDateTimePicker(WebElement kendoDateTimePicker)
     {
+        super(kendoDateTimePicker);
         this.kendoDateTimePicker = kendoDateTimePicker;
     }
 
 
-    public KendoDateTimePicker()
-    {
-    }
 
     public void setDateTime(String dateTime)
     {

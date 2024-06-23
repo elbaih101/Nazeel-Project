@@ -1,16 +1,18 @@
 package alia.nazeel.kendoelements;
 
+import alia.nazeel.templates.CustomWebElement;
 import org.openqa.selenium.*;
 
 import java.util.List;
 
-public class KendoButtonGroup
+public class KendoButtonGroup extends CustomWebElement
 {
     WebElement buttonGroup;
     By buttonGroupBy = new By.ByTagName("kendo-buttongroup");
     final By buttonsBy = By.xpath(".//button");
 
     public KendoButtonGroup(WebElement element) {
+        super(element);
         this.buttonGroup =element;
     }
 

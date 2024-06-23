@@ -1,5 +1,6 @@
 package alia.nazeel.kendoelements;
 
+import alia.nazeel.templates.CustomWebElement;
 import alia.nazeel.tools.DriverManager;
 import alia.nazeel.tools.Utils;
 import org.openqa.selenium.*;
@@ -14,7 +15,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 
-public class KendoComboBox {
+public class KendoComboBox extends CustomWebElement {
 
     Logger logger = LoggerFactory.getLogger(KendoComboBox.class);
     WebElement comboBox;
@@ -27,11 +28,8 @@ public class KendoComboBox {
 
 
     public KendoComboBox(WebElement comboBox) {
+        super(comboBox);
         this.comboBox = comboBox;
-    }
-
-    public KendoComboBox() {
-
     }
 
     public WebElement getSelectedinput() {

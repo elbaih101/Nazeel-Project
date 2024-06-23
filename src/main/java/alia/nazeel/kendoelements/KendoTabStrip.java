@@ -1,20 +1,22 @@
 package alia.nazeel.kendoelements;
 
+import alia.nazeel.templates.CustomWebElement;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
 import java.util.List;
 
-public class KendoTabStrip {
+public class KendoTabStrip extends CustomWebElement {
 
 
     WebElement strip;
     List<WebElement> tabs;
     WebElement tabPanel;
 
-    public KendoTabStrip(WebElement stip) {
-        this.strip = stip;
-        tabs = stip.findElements(By.cssSelector("li"));
+    public KendoTabStrip(WebElement strip) {
+        super(strip);
+        this.strip = strip;
+        tabs = strip.findElements(By.cssSelector("li"));
     }
 
 

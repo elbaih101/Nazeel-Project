@@ -1,12 +1,13 @@
 package alia.nazeel.kendoelements;
 
+import alia.nazeel.templates.CustomWebElement;
 import alia.nazeel.tools.Utils;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
 
 import java.util.List;
 
-public class KendoDropDownList {
+public class KendoDropDownList extends CustomWebElement  {
 
     WebElement dropDownlist;
     final By dropDownButtonBy = By.xpath(".//span[@class=\"k-select\"]");
@@ -16,12 +17,10 @@ public class KendoDropDownList {
     WebElement selectedItem;
 
     public KendoDropDownList(WebElement list) {
+        super(list);
         this.dropDownlist = list;
     }
 
-    public KendoDropDownList() {
-
-    }
 
     public void getDropDownButton() {
         dropDownButton = dropDownlist.findElement(dropDownButtonBy);

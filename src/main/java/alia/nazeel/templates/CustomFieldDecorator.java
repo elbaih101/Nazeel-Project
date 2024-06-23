@@ -1,12 +1,10 @@
 package alia.nazeel.templates;
 
-import alia.nazeel.kendoelements.*;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.pagefactory.DefaultFieldDecorator;
 import org.openqa.selenium.support.pagefactory.ElementLocator;
 import org.openqa.selenium.support.pagefactory.ElementLocatorFactory;
-import org.openqa.selenium.support.ui.Select;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,7 +13,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -25,22 +22,25 @@ import java.util.List;
  */
 public class CustomFieldDecorator extends DefaultFieldDecorator {
     private static final Logger logger = LoggerFactory.getLogger(CustomFieldDecorator.class);
+    //any custom Element Class have to extend from the CustomWebElement Class
+    //ignore below comments are to be deleted
+
     // Just add the new Custom Web Element Class to this List and it Should work like charm
     //Note The Custom WebElement Should have a constructor that takes a WebElement
-    List<Class<?>> elementsClasses = Collections.unmodifiableList(new ArrayList<>() {{
-        add(KendoGrid.class);
-        add(KendoDateTimePicker.class);
-        add(KendoButtonGroup.class);
-        add(KendoComboBox.class);
-        add(ChipsMultiselect.class);
-        add(KendoGrid.class);
-        add(CustomWebElement.class);
-        add(KendoGrid.class);
-        add(SwalPopUp.class);
-        add(MultiLangTextField.class);
-        add(KendoSwitch.class);
-        add(Select.class);
-    }});
+//    List<Class<?>> elementsClasses = Collections.unmodifiableList(new ArrayList<>() {{
+//        add(KendoGrid.class);
+//        add(KendoDateTimePicker.class);
+//        add(KendoButtonGroup.class);
+//        add(KendoComboBox.class);
+//        add(ChipsMultiselect.class);
+//        add(KendoGrid.class);
+//        add(CustomWebElement.class);
+//        add(KendoGrid.class);
+//        add(SwalPopUp.class);
+//        add(MultiLangTextField.class);
+//        add(KendoSwitch.class);
+//        add(Select.class);
+//    }});
 
 
     public CustomFieldDecorator(ElementLocatorFactory factory) {
@@ -62,28 +62,25 @@ public class CustomFieldDecorator extends DefaultFieldDecorator {
             }
 
             // Handle custom elements
-            for (Class<?> clazz : elementsClasses) {
-//              Todo make all elements extend th custom webelement thus making it easy rather than adding them using a loop it will make it faster and better
-//                field.getType().isAssignableFrom(CustomWebElement.class);
+            if (CustomWebElement.class.isAssignableFrom(field.getType())) {
+                return CustomProxy(field.getType(), loader, locator);
+            }
 
-                if (field.getType().equals(clazz)) {
-                    return CustomProxy(clazz, loader, locator);
-                }
-
-                // Handle List<CustomWebElement>
-                else if (List.class.isAssignableFrom(field.getType())) {
-                    // Extract the generic type of the List
-                    Type genericType = field.getGenericType();
-                    if (genericType instanceof ParameterizedType parameterizedType) {
-                        Type listType = ((ParameterizedType) genericType).getActualTypeArguments()[0];
-                            if (clazz.equals(listType)) {
-                                return CustomListProxy(clazz, loader, locator);
-                            }
-
+            // Handle List<CustomWebElement>
+            else if (List.class.isAssignableFrom(field.getType())) {
+                // Extract the generic type of the List
+                Type genericType = field.getGenericType();
+                if (genericType instanceof ParameterizedType parameterizedType) {
+                    Type listType = ((ParameterizedType) genericType).getActualTypeArguments()[0];
+                    Class<?> type = (Class<?>) listType;
+                    if (CustomWebElement.class.isAssignableFrom(type)) {
+                        return CustomListProxy(type, loader, locator);
                     }
+
                 }
             }
         }
+
         return super.decorate(loader, field);
     }
 

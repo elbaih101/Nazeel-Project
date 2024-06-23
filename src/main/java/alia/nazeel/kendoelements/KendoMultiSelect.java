@@ -1,12 +1,13 @@
 package alia.nazeel.kendoelements;
 
+import alia.nazeel.templates.CustomWebElement;
 import alia.nazeel.tools.Utils;
 import org.openqa.selenium.*;
 
 import java.util.List;
 
 
-public class KendoMultiSelect
+public class KendoMultiSelect extends CustomWebElement
 {
     WebElement multiSelect;
     final By listItemsBy = By.xpath("//ul[@role=\"listbox\"]//li[@role=\"option\"]");
@@ -16,13 +17,10 @@ public class KendoMultiSelect
 
     public KendoMultiSelect(WebElement multiSelect)
     {
+        super(multiSelect);
         this.multiSelect = multiSelect;
     }
 
-    public KendoMultiSelect()
-    {
-
-    }
 
 
      void open()

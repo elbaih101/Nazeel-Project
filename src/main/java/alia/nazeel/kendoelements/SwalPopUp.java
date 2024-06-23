@@ -1,9 +1,10 @@
 package alia.nazeel.kendoelements;
 
+import alia.nazeel.templates.CustomWebElement;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
-public class SwalPopUp {
+public class SwalPopUp extends CustomWebElement {
 
     WebElement popup;
     By contentBy = By.id("swal2-content");
@@ -13,6 +14,7 @@ public class SwalPopUp {
     WebElement content;
 
     public SwalPopUp(WebElement popup) {
+        super(popup);
         this.popup = popup;
     }
 
