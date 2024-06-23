@@ -10,15 +10,14 @@ import java.util.List;
 
 public class KendoGrid extends CustomWebElement {
     final WebElement grid;
-    final private WebElement list;
+    WebElement list;
     WebElement header;
     private final By lastCellBy = By.xpath("..//td[last()]");
 
     public KendoGrid(WebElement grid) {
         super(grid);
         this.grid = grid;
-        list = grid.findElement(By.xpath(".//tbody"));
-        header = grid.findElement(By.xpath(".//thead"));
+
     }
 
     WebElement getHeader() {
@@ -33,9 +32,12 @@ public class KendoGrid extends CustomWebElement {
         }
         return null;
     }
-
+    public void initGrid(){
+        list = grid.findElement(By.xpath(".//tbody"));
+        header = grid.findElement(By.xpath(".//thead"));
+    }
     public List<WebElement> getGridRows() {
-
+        initGrid();
         return list.findElements(By.cssSelector("tr")); // Assuming each row is a <tr> element
     }
 
@@ -76,6 +78,7 @@ public class KendoGrid extends CustomWebElement {
     }
 
     public List<WebElement> getGridCells(int columnIndex) {
+        initGrid();
         return list.findElements(By.xpath(".//td[@data-kendo-grid-column-index='" + columnIndex + "']")); // Assuming each column is a <td> element
     }
 

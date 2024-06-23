@@ -12,10 +12,9 @@ public class ChipsMultiselect extends CustomWebElement {
     List<WebElement> chips;
 
     public ChipsMultiselect(WebElement chipsMultiSelect) {
-     super(chipsMultiSelect);
-     this.chipsMultiSelect =super.element;
+        super(chipsMultiSelect);
+        this.chipsMultiSelect = super.element;
     }
-
 
 
     public List<WebElement> getChips() {

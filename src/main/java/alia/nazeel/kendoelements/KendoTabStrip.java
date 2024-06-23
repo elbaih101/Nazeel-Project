@@ -16,11 +16,14 @@ public class KendoTabStrip extends CustomWebElement {
     public KendoTabStrip(WebElement strip) {
         super(strip);
         this.strip = strip;
-        tabs = strip.findElements(By.cssSelector("li"));
+
     }
 
-
+    void initTabs(){
+        tabs = strip.findElements(By.cssSelector("li"));
+    }
     public void selectTabByIndex(int index) {
+        initTabs();
         tabs.get(index).click();
         setTabPanel();
     }
@@ -30,6 +33,7 @@ public class KendoTabStrip extends CustomWebElement {
     }
 
     public void selectTabByText(String text) {
+        initTabs();
         tabs.stream().filter(t -> t.getText().equals(text)).findFirst().orElseThrow().click();
         setTabPanel();
     }
