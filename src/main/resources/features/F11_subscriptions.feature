@@ -60,9 +60,9 @@ Feature: subscriptions
       Given open new Subscription Page
       Then  Check the subscriptions periods and prices and expiry dates for the below table exist
         | service       | period             | price                |
-        | Fatoora/ZATCA | 12 Months          | 2000                 |
         | Nazeel        | 12 Months          | 3000.00              |
         | Nazeel        | Custom (Per Day) 2 | enabled Free to edit |
+        | Fatoora/ZATCA | 12 Months          | 2000                 |
 
 
   #  todo :: containue the subscription from end user
