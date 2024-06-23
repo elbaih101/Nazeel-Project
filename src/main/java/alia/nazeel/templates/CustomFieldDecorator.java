@@ -72,9 +72,9 @@ public class CustomFieldDecorator extends DefaultFieldDecorator {
                 Type genericType = field.getGenericType();
                 if (genericType instanceof ParameterizedType parameterizedType) {
                     Type listType = ((ParameterizedType) genericType).getActualTypeArguments()[0];
-                    Class<?> type = (Class<?>) listType;
-                    if (CustomWebElement.class.isAssignableFrom(type)) {
-                        return CustomListProxy(type, loader, locator);
+                    Class<?> typeClass = (Class<?>) listType;
+                    if (CustomWebElement.class.isAssignableFrom(typeClass)) {
+                        return CustomListProxy(typeClass, loader, locator);
                     }
 
                 }
