@@ -86,7 +86,7 @@ public class P08_1_NewUnitPage extends BasePage
 
     @FindBy(xpath = "//button[contains(@class,\"n-button--primary \")]")
     public WebElement addUnitButton;
-    @FindBy(xpath = "//button[contains(@class,\"n-button--primary-border \")]")
+    @FindBy(xpath = "//app-unit-setup-form//button[contains(@class,\"n-button--primary-border \")]")
     public WebElement save_addMoreButton;
 
 

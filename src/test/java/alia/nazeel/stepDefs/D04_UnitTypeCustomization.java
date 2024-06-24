@@ -166,11 +166,10 @@ public class D04_UnitTypeCustomization {
             masterUnitsTypes.nameSearchField.sendKeys(typeName);
         }
         if (!status.isEmpty()) {
-            masterUnitsTypes.statuses().stream().filter(element -> element.getText().equalsIgnoreCase(status)).toList().getFirst().click();
+            masterUnitsTypes.satausSearchDropList.selectByTextContainsIgnoreCase(status);
         }
         masterUnitsTypes.searchButton.click();
         wait.waitLoading();
-        wait.until(ExpectedConditions.refreshed(ExpectedConditions.visibilityOfAllElements(masterUnitsTypes.typesNames)));
     }
 
     @Then("Check the grid contains only types with names {string} and statues {string}")
@@ -248,13 +247,9 @@ public class D04_UnitTypeCustomization {
         wait.waitLoading();
         js.executeScript("arguments[0].click();", masterUnitsTypes.editButton(type));
         if (status.equalsIgnoreCase("inactive")) {
-            if (masterUnitsTypes.statusButton().getAttribute("aria-checked").contains("true")) {
-                masterUnitsTypes.statusButton().click();
-            }
+                masterUnitsTypes.statusButton().switchOf();
         } else if (status.equalsIgnoreCase("active")) {
-            if (masterUnitsTypes.statusButton().getAttribute("aria-checked").contains("false")) {
-                masterUnitsTypes.statusButton().click();
-            }
+                masterUnitsTypes.statusButton().switchOn();
         }
         masterUnitsTypes.submitButton().click();
         clickOnFilterButtonAndEnterNameOfTypeAndStatusAndClickSearch(name, "");

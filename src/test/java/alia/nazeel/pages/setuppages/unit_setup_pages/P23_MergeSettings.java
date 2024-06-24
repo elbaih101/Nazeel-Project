@@ -61,7 +61,7 @@ public class P23_MergeSettings extends BasePage
         return listItems;
     }
 
-    @FindBy(xpath = "//button[contains(@class,\"n-button n-button--primary\")]")
+    @FindBy(xpath = "//app-unit-merge-form//button[contains(@class,\"n-button n-button--primary\")]")
     public WebElement saveButton;
 
     //// grid ////

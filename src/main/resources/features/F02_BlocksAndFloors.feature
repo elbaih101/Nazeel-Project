@@ -59,7 +59,7 @@ Feature: Blocks And Floors
       And go to Blocks Page
       And check the number of floors is incremented by 1 for block "1"
 
-    Scenario: check number of floors is decreases when adding new floor to the block
+    Scenario: check number of floors is decreases when removing floor from a block
       And note the number of floors in the grid for block "1"
       Then go to Floors Page
       When click on floor with name "added floor" more menu button

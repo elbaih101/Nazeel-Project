@@ -142,7 +142,7 @@ public class P08_UnitsSetupPage extends BasePage
     }
 
     //////////////// filter menue /////////////
-    @FindBy(xpath = "//button[contains(text(),\"Search\")]")
+    @FindBy(xpath = "//app-unit-setup//button[contains(text(),\"Search\")]")
     public WebElement filterSearchButton;
 
     @FindBy(xpath = "//input[@placeholder=\"Select Status\"]/../following-sibling::span/span")

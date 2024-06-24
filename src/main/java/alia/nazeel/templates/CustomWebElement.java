@@ -13,6 +13,7 @@ public class CustomWebElement
 
     public CustomWebElement(WebElement element) {
         this.element = element;
+        // make sure all the child classes doesnt have any operations inside them only initialization
     }
 
     public  boolean isEnabled() {

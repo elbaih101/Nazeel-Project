@@ -2,6 +2,7 @@ package alia.nazeel.pages.setuppages.financialpages;
 
 import alia.nazeel.kendoelements.KendoComboBox;
 import alia.nazeel.kendoelements.KendoMultiSelect;
+import alia.nazeel.kendoelements.KendoSwitch;
 import alia.nazeel.templates.BasePage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -12,8 +13,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import java.util.List;
 
-public class P25_TaxesAndFees extends BasePage
-{
+public class P25_TaxesAndFees extends BasePage {
     public P25_TaxesAndFees(WebDriver driver) {
         super(driver);
     }
@@ -44,23 +44,30 @@ public class P25_TaxesAndFees extends BasePage
         wait.until(ExpectedConditions.visibilityOfAllElements(listItems));
         return listItems;
     }
+
     /////end controls /////
     //filters//
-    @FindBy(id="status")
+    @FindBy(id = "status")
     WebElement statusComboBox;
-    public KendoComboBox statusComboBox(){
-        return  new KendoComboBox(statusComboBox);
+
+    public KendoComboBox statusComboBox() {
+        return new KendoComboBox(statusComboBox);
     }
+
     @FindBy(tagName = "kendo-multiselect")
     WebElement appliedOnMultiSelect;
-    public KendoMultiSelect appliedOnMultiSelect(){
+
+    public KendoMultiSelect appliedOnMultiSelect() {
         return new KendoMultiSelect(appliedOnMultiSelect);
     }
+
     @FindBy(xpath = "//label[contains(text(),\"Method\")]/following-sibling::kendo-combobox")
     WebElement methodComboBox;
-    public KendoComboBox methodComboBox(){
-        return  new KendoComboBox(methodComboBox);
+
+    public KendoComboBox methodComboBox() {
+        return new KendoComboBox(methodComboBox);
     }
+
     @FindBy(css = "input[placeholder=\"Tax Name\"]")
     public WebElement taxNameFilterField;
     //end filters //
@@ -142,25 +149,17 @@ public class P25_TaxesAndFees extends BasePage
     @FindBy(xpath = "//button[@tabindex=\"-1\"]")
     public WebElement feesButton;
 
-    public List<WebElement> taxes_FeesList() {
-        driver.findElement(By.xpath("//kendo-combobox[@name=\"tax\"]//span[@class=\"k-select\"]")).click();
-        wait.until(ExpectedConditions.visibilityOfAllElements(listItems));
-        return listItems;
-    }
+    @FindBy(xpath = "//kendo-combobox[@name=\"tax\"]")
+    public KendoComboBox taxes_FeesList;
+    @FindBy(xpath = "//kendo-combobox[@name=\"method\"]")
+    public KendoComboBox methodsList;
 
-    public List<WebElement> methodsList() {
-        driver.findElement(By.xpath("//kendo-combobox[@name=\"method\"]//span[@class=\"k-select\"]")).click();
-        wait.until(ExpectedConditions.visibilityOfAllElements(listItems));
-        return listItems;
-    }
     @FindBy(xpath = "//input[@placeholder=\"Select the method\"]")
     public WebElement methodField;
 
-    public List<WebElement> appliedForList() {
-        driver.findElement(By.xpath("//kendo-multiselect[@name=\"applied-for\"]")).click();
-        wait.until(ExpectedConditions.visibilityOfAllElements(listItems));
-        return listItems;
-    }
+    @FindBy(xpath = "//kendo-multiselect[@name=\"applied-for\"]")
+    public KendoMultiSelect appliedForList;
+
 
     @FindBy(xpath = "//kendo-multiselect[@name=\"applied-for\"]//li")
     public List<WebElement> selectedAppliedFor;
@@ -175,19 +174,12 @@ public class P25_TaxesAndFees extends BasePage
     public WebElement useForExpensesSwitch;
 
     @FindBy(xpath = "//kendo-switch[@name=\"enable-chargedon\"]")
-    public WebElement chargedOnSwitch;
+    public KendoSwitch chargedOnSwitch;
     @FindBy(xpath = "//div[@role=\"dialog\"]//button[contains(@class,\"n-button--primary\")]")
     public List<WebElement> popUpConfirmButton;
 
-    public List<WebElement> chargedOnList() {
-        driver.findElement(By.xpath("//kendo-multiselect[@name=\"activeCustomizedFees\"]")).click();
-        try {
-            Thread.sleep(300);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        return listItems;
-    }
+    @FindBy(xpath ="//kendo-multiselect[@name=\"activeCustomizedFees\"]" )
+    public KendoMultiSelect chargedOnList;
 
     @FindBy(xpath = "//kendo-multiselect[@name=\"activeCustomizedFees\"]//li")
     public List<WebElement> selectedChrgdOn;
@@ -197,9 +189,9 @@ public class P25_TaxesAndFees extends BasePage
         return selected.findElement(By.xpath("./span[@aria-label=\"delete\"]"));
     }
 
-    @FindBy(xpath = "//button[contains(@class,\"button--primary\")]")
+    @FindBy(xpath = "//tax-customization-form//button[contains(@class,\"button--primary\")]")
     public WebElement submitButon;
 
-    @FindBy(xpath = "//button[contains(@class,\"n-button--danger \")]")
+    @FindBy(xpath = "//tax-customization-form//button[contains(@class,\"n-button--danger \")]")
     public WebElement confirmDeleteButton;
 }

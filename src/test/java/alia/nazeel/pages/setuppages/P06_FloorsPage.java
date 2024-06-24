@@ -117,9 +117,9 @@ public class P06_FloorsPage extends BasePage
     //////// new floor popup //////////////
     @FindBy(xpath = "//div[@role=\"dialog\"]//label[contains(text(),\"Block\")]/..//span/span/span")
     WebElement blocksDroplistButton;
-    @FindBy(xpath = "//div[1]/input")
+    @FindBy(xpath = "//kendo-dialog//div[1]/input")
     public WebElement floorNameField;
-    @FindBy(xpath = "//div[1]/textarea[@name=\"text-area\"]")
+    @FindBy(xpath = "//kendo-dialog//div[1]/textarea[@name=\"text-area\"]")
     public WebElement descriptionField;
     @FindBy(xpath = "//Button[contains(text(),\" Add Floor \")]")
     public WebElement addFloorButton;

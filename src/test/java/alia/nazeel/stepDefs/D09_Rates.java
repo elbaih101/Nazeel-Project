@@ -97,6 +97,7 @@ public class D09_Rates {
 
     @When("selecting week day {string}")
     public void selectingWeekDay(String day) {
+      //fixme doesnot select
         ratesPages.highWeekDaysButton.click();
         wait.waitLoading();
         WebElement selectedDay = ratesPages.highWeekDays().get(week.get(day));

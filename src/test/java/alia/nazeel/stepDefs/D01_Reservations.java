@@ -275,6 +275,7 @@ public class D01_Reservations {
     public void selectStartDateAndEndDate(String sDate, String eDate) {
         wait.waitLoading();
         if (!sDate.isEmpty())
+            //FixMe org.openqa.selenium.NoSuchElementException: no such element: Unable to locate element: {"method":"xpath","selector":"//label[contains(text(),"Check-in")]/following-sibling::div//kendo-datepicker//input"}
             Utils.setDate(reservationMainDataPage.startDateField, sDate);
         if (!eDate.isEmpty())
             Utils.setDate(reservationMainDataPage.endDateField, eDate);

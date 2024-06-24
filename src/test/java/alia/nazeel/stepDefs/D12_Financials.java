@@ -76,14 +76,14 @@ public class D12_Financials {
             }
         }
         if (!name.isEmpty()) {
-            taxesAndFees.taxes_FeesList().stream().filter(li -> li.getText().contains(name)).findFirst().orElseThrow().click();
+            taxesAndFees.taxes_FeesList.selectByTextContainsIgnoreCase(name);
             taxMap.put("name", name);
         }
         if (!method.isEmpty()) {
 
             taxesAndFees.methodField.sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.BACK_SPACE));
             if (!method.equalsIgnoreCase("non")) {
-                taxesAndFees.methodsList().stream().filter(me -> me.getText().contains(method)).findAny().orElseThrow().click();
+                taxesAndFees.methodsList.selectByTextContainsIgnoreCase(method);
 
             }
             taxMap.put("method", method);
@@ -97,16 +97,14 @@ public class D12_Financials {
             taxMap.put("amount", amount);
         }
         if (!aplOn.isEmpty()) {
-            if (!taxesAndFees.selectedAppliedFor.isEmpty()) {
-                if (aplOn.equalsIgnoreCase("non")) {
-                    for (WebElement item : taxesAndFees.selectedAppliedFor) {
-                        taxesAndFees.deleteselctedButtton(item).click();
 
-                    }
+            if (taxesAndFees.appliedForList.selectionExist()) {
+                if (aplOn.equalsIgnoreCase("non")) {
+                    taxesAndFees.appliedForList.unselectAll();
                 }
             } else {
                 if (!aplOn.equalsIgnoreCase("non")) {
-                    taxesAndFees.appliedForList().stream().filter(ap -> ap.getText().contains(aplOn)).findAny().orElseThrow().click();
+                    taxesAndFees.appliedForList.selectByTextContainsIgnoreCase(aplOn);
                 }
             }
             taxMap.put("aplOn", aplOn);
@@ -134,28 +132,16 @@ public class D12_Financials {
             taxMap.put("eDate", eDate);
         }
         if (!chrgOn.isEmpty()) {
-            if (!taxesAndFees.selectedChrgdOn.isEmpty()) {
-                if (chrgOn.equalsIgnoreCase("non")) {
-                    if (taxesAndFees.useForExpensesSwitch.getAttribute("class").contains("k-switch-on")) {
-                        taxesAndFees.chargedOnSwitch.click();
-                    }
-                } else {
-                    for (WebElement item : taxesAndFees.selectedAppliedFor) {
-                        taxesAndFees.deleteselctedButtton(item).click();
-                    }
-                    taxesAndFees.chargedOnList().stream().filter(co -> co.getText().contains(chrgOn)).findAny().orElseThrow().click();
 
-                }
+            if (chrgOn.equalsIgnoreCase("non")) {
+                taxesAndFees.chargedOnSwitch.switchOf();
             } else {
-                if (!chrgOn.equalsIgnoreCase("non")) {
-                    if (!taxesAndFees.useForExpensesSwitch.getAttribute("class").contains("k-switch-on")) {
-                        taxesAndFees.chargedOnSwitch.click();
-                    }
-                    taxesAndFees.chargedOnList().stream().filter(co -> co.getText().contains(chrgOn)).findAny().orElseThrow().click();
-                }
-
-
+                taxesAndFees.chargedOnSwitch.switchOn();
+                if (taxesAndFees.appliedForList.selectionExist())
+                    taxesAndFees.chargedOnList.unselectAll();
+                taxesAndFees.chargedOnList.selectByTextContainsIgnoreCase(chrgOn);
             }
+
             taxMap.put("chrgOn", chrgOn);
         }
         taxMap.put("stat", "Active");
@@ -232,6 +218,7 @@ public class D12_Financials {
         }
     }
 
+    //fixme reservation creation date should match the tax date
     @And("Check the tax {string} application on the reservations")
     public void checkTheTaxIsAppliedOnTheReservations(String taxName) {
         if (!(taxMap.get("aplOn").equalsIgnoreCase("non") || taxMap.get("amount").equalsIgnoreCase("non") || taxMap.get("method").equalsIgnoreCase("non") || taxMap.get("sDate").equalsIgnoreCase("non") || dateFormater.parseDateTime(taxMap.get("eDate")).isBefore(dateFormater.parseDateTime(taxMap.get("sDate"))))) {
@@ -242,8 +229,8 @@ public class D12_Financials {
                 if (taxMap.get("method").contains("Percentage")) {
                     asrt.assertTrue(taxesPopUp.taxMethod(selectedTax).getText().contains("%"));
                 }
-                asrt.assertEquals(taxMap.get("sDate"), taxesPopUp.taxStartDate(selectedTax).getText());
-                asrt.assertEquals(taxMap.get("eDate"), taxesPopUp.taxEndDate(selectedTax).getText());
+                asrt.assertEquals( taxesPopUp.taxStartDate(selectedTax).getText(),taxMap.get("sDate"));
+                asrt.assertEquals(taxesPopUp.taxEndDate(selectedTax).getText(),taxMap.get("eDate"));
             } else {
                 asrt.assertFalse(taxesPopUp.taxesNames.stream().anyMatch(t -> t.getText().contains(taxMap.get("name"))), "Expected Tax: " + taxName + "to be not applied");
             }

@@ -268,6 +268,7 @@ final JavascriptExecutor js =(JavascriptExecutor) driver;
 
     @Then("check new floor with name {string} and discription {string}")
     public void checkNewFloorWithNameAndDiscription(String name, String descripton) {
+        wait.waitLoading();
         if (floorsPage.floorsNames.stream().anyMatch(webElement -> webElement.getText().contains(name))) {
             asrt.assertEquals(floorsPage.floorDescription(name).getText().trim(), descripton, "descriptions doesnt match ");
             asrt.assertTrue(Integer.parseInt(floorsPage.floorOrder(name).getText()) > Integer.parseInt(floorsPage.floorOrder("1").getText()));

@@ -121,4 +121,8 @@ public class KendoMultiSelect extends CustomWebElement
                 listItems.get(i).click();
         }
     }
+    public boolean selectionExist(){
+        boolean bol = multiSelect.findElements(By.xpath(".//li")).isEmpty();
+        return !bol;
+    }
 }

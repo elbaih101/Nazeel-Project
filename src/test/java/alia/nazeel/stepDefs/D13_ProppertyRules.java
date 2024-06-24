@@ -84,6 +84,7 @@ public class D13_ProppertyRules {
 
     private WebElement getSwitch(String name) {
         WebElement swit;
+        wait.waitLoading();
         switch (name.toLowerCase()) {
             case "previousdayclac" -> swit = reservationRules.previousDayClacSwitch;
             case "autoextenddaily" -> swit = reservationRules.autoExtendDailySwitch;
@@ -261,14 +262,10 @@ public class D13_ProppertyRules {
 
     private void fillPenaltyData(String name, String categ, String type, String amount, String calcOf, String desc, String state) {
         if (!name.isEmpty()) {
-            penalties.penaltyNameField.sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.BACK_SPACE));
-            if (!state.equalsIgnoreCase("new")) {
-                penalties.arabicButton.click();
-                penalties.penaltyArNameField.sendKeys(Keys.chord(Keys.CONTROL, "a", Keys.BACK_SPACE));
-            }
+            penalties.penaltyNameField.clear();
             //Utils.setAttribute(js,penalties.penaltyArNameField,"value","");
             if (!name.equalsIgnoreCase("non"))
-                penalties.penaltyNameField.sendKeys(name);
+                penalties.penaltyNameField.sendKeys(name,name);
         }
         if (!categ.isEmpty()) {
             if (categ.equalsIgnoreCase("non"))

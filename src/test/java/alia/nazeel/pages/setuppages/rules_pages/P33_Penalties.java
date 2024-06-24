@@ -1,5 +1,6 @@
 package alia.nazeel.pages.setuppages.rules_pages;
 
+import alia.nazeel.kendoelements.MultiLangTextField;
 import alia.nazeel.templates.BasePage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -168,12 +169,9 @@ public class P33_Penalties extends BasePage
     // end filter ///
 
     /// data entery ///
-    @FindBy(xpath = "//input[@type=\"text\"][1]")
-    public WebElement penaltyNameField;
-    @FindBy(xpath = "//input[@type=\"text\"]/following-sibling::button[contains(@class,\"en_button\")]")
-    public WebElement arabicButton;
-    @FindBy(xpath = "//input[@type=\"text\"][2]")
-    public WebElement penaltyArNameField;
+    @FindBy(xpath = "//app-penalty-form//input[@type=\"text\"][1]")
+    public MultiLangTextField penaltyNameField;
+
     @FindBy(name = "text-area")
     public WebElement descriptionField;
     @FindBy(xpath = "//button[@type=\"submit\" and text()=\" Save \"]")

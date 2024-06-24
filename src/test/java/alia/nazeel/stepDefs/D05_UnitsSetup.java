@@ -43,6 +43,7 @@ public class D05_UnitsSetup {
 
     @And("go to unit Setup page")
     public void goToUnitSetupPage() {
+//FixMe org.openqa.selenium.ElementClickInterceptedException: element click intercepted: Element <a href="/setup" class="n-topbar__item n-topbar__item--selected">...</a> is not clickable at point (1279, 34). Other element would receive the click: <div class="k-overlay ng-tns-c488-7 ng-trigger ng-trigger-overlayAppear"></div>
         dashBoardPage.setupPageLink.click();
         setupPagec.unitsDroplist.click();
         setupPagec.unitSetupLink.click();
@@ -276,6 +277,7 @@ public class D05_UnitsSetup {
     }
 
     // FIXME : Revise below function after edits to the method
+    //insert logic to delete the rooms numbers one by one until reach the otal units
     @Then("check the newly added units")
     public void checkTheNewlyAddedUnits() {
         Set<String> newUnitsNumber = new HashSet<>();
@@ -683,6 +685,7 @@ public class D05_UnitsSetup {
 
     @And("the merge setting bet the two numbers is visible on the grid with class {string}")
     public void theMergeSettingBetTheTwoNumbersIsVisibleOnTheGrid(String uClass) {
+        //FixMe java.util.NoSuchElementException
         WebElement createdMergeSetting = mergeSettings.unitsNumbers.stream().filter(m -> m.getText().contains(tobemergedUnits.getFirst()) && m.getText().contains(tobemergedUnits.get(1))).findFirst().orElseThrow();
         asrt.assertTrue(createdMergeSetting.isDisplayed());
         asrt.assertTrue(mergeSettings.mergeRecordUnitsClasses(createdMergeSetting).getText().contains(uClass));
@@ -734,6 +737,7 @@ public class D05_UnitsSetup {
             mergeSettings.unitSearchField.sendKeys(uNum);
         } else {
             retreavedMergeUnits.add(StringUtils.substringAfter(mergeSettings.unitsNumbers.getFirst().getText(), "- "));
+            //fixme org.openqa.selenium.ElementNotInteractableException: element not interactable
             mergeSettings.unitSearchField.sendKeys(retreavedMergeUnits.getFirst());
         }
         mergeSettings.searchButton.click();

@@ -57,6 +57,7 @@ public class P27_ReservationRules extends BasePage
 
     @FindBy(xpath = "//label[contains(text(),\"Allowance\")]/parent::div/following-sibling::kendo-dropdownlist")
     public WebElement unitAllowanceDropList;
+
     public List<WebElement> unitAllownces() {
         driver.findElement(By.xpath("//label[contains(text(),\"Allowance\")]/parent::div/following-sibling::kendo-dropdownlist")).click();
         try {
@@ -94,7 +95,7 @@ public class P27_ReservationRules extends BasePage
     @FindBy(xpath = "//label[contains(text(),\"No Show Time\")]/following-sibling::kendo-timepicker//input")
     public WebElement autoNoShowTimeField;
 
-
+//FixMe  org.openqa.selenium.NoSuchElementException: no such element: Unable to locate element: {"method":"xpath","selector":"//span[contains(@class,"switch-label--sm") and contains(text(),"Rejected OTA")]/preceding-sibling::kendo-switch"}
     @FindBy(xpath = "//span[contains(@class,\"switch-label--sm\") and contains(text(),\"Rejected OTA\")]/preceding-sibling::kendo-switch")
     public WebElement autoRejectOTASwitch;
 
@@ -120,7 +121,7 @@ public class P27_ReservationRules extends BasePage
     public WebElement resetSequenceSwitch;
     /// End Other Settings ///
 
-    @FindBy(xpath = "//button[contains(@class,\"n-button--primary\")]")
+    @FindBy(xpath = "//reservation-settings//button[contains(@class,\"n-button--primary\")]")
     public WebElement submitButton;
     //// error msg ///
     @FindBy(id = "swal2-content")
