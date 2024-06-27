@@ -77,7 +77,7 @@ public class P16_VouchersPopUp extends BasePage
     }
 
     public WebElement selctGuestButton() {
-        return voucherPopUp.findElement(By.xpath(".//*[name()=\"use\" and contains(@*,\"icon-user\")]/.."));
+        return voucherPopUp.findElement(By.xpath(".//*[name()=\"use\" and contains(@*,\"icon-user\") or contains(@*,\"icon-search\")]/.."));
     } public WebElement selctCorporateButton() {
         return voucherPopUp.findElement(By.xpath(".//*[name()=\"use\" and contains(@*,\"corporate\")]/.."));
     }
@@ -86,13 +86,15 @@ public class P16_VouchersPopUp extends BasePage
 //        if (voucherType.equalsIgnoreCase(Vouchers.Receipt.toString())) {
 //            return voucherPopUp.findElement(By.xpath(".//label[contains(text(),\"Received From\")]/following-sibling::div//input"));
 //    }
-        if (voucherType.equalsIgnoreCase(Vouchers.Refund.toString()) || voucherType.equalsIgnoreCase(Vouchers.SDRefund.toString()) || voucherType.equalsIgnoreCase(Vouchers.DropCash.toString())) {
+        if (voucherType.equalsIgnoreCase(Vouchers.Refund.toString()) || voucherType.equalsIgnoreCase(Vouchers.SDRefund.toString()) ) {
             return voucherPopUp.findElement(By.xpath(".//label[contains(text(),\"Paid to / Vendor\")]/following-sibling::div//input"));
         } else if (voucherType.equalsIgnoreCase(Vouchers.GenReceipt.toString()) || voucherType.equalsIgnoreCase(Vouchers.SAReceipt.toString()) || voucherType.equalsIgnoreCase(Vouchers.Receipt.toString())|| voucherType.equalsIgnoreCase(Vouchers.SD.toString())) {
             return voucherPopUp.findElement(By.xpath(".//label[contains(text(),\"Received From\")]/following-sibling::div//input"));
         } else if (voucherType.equalsIgnoreCase(Vouchers.Expenses.toString())) {
             return voucherPopUp.findElement(By.xpath(".//label[contains(text(),\"Vendor\")]/following-sibling::kendo-combobox//input"));
-        } else {
+        }else if ( voucherType.equalsIgnoreCase(Vouchers.DropCash.toString()))
+        {return voucherPopUp.findElement(By.xpath(".//label[contains(text(),\"Paid to\")]/following-sibling::div//input"));}
+        else{
             return voucherPopUp.findElement(By.xpath(".//label[contains(text(),\"Reserved To\")]/../following-sibling::input"));
         }
 

@@ -159,9 +159,9 @@ public class P35_Guests extends BasePage {
     @FindBy(id = "address")
     public WebElement addressField;
 
-    @FindBy(xpath = "//button[@type=\"submit\"]")
+    @FindBy(xpath = "//guest-form//button[@type=\"submit\"]")
     public WebElement submitButton;
-    @FindBy(xpath = "//button[contains(@class,\"n-button--danger\") and contains(text(),\"Confirm\")]")
+    @FindBy(xpath = "//guest-form//button[contains(@class,\"n-button--danger\") and contains(text(),\"Confirm\")]")
     public WebElement confirmDeleteButton;
     ////// end guest data ///
 

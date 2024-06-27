@@ -107,23 +107,21 @@ public class P03_1_ReservationMainDataPage extends BasePage {
     @FindBy(xpath = "//select-units-wizard//th[8]//div[contains(@class,\"header-action\")]//*[name()=\"use\" and contains(@*,\"icon-add\") ]")
     public WebElement addUnitButton;
 
-    @FindBy(xpath = "//label[contains(text(),\"Unit(s) \")]/../following-sibling::kendo-grid//kendo-grid-list")
-    WebElement unitsGrid;
+    @FindBy(xpath = "//label[contains(text(),\"Unit(s) \")]/../following-sibling::kendo-grid")
+    public KendoGrid unitsGrid;
 
-    KendoGrid getResUnitsGrid() {
-        return new KendoGrid(unitsGrid);
-    }
+
 
     public List<WebElement> resUnits() {
-        return getResUnitsGrid().getGridCells(0);
+        return unitsGrid.getGridCells(0);
     }
 
     public List<WebElement> unitsTypes() {
-        return getResUnitsGrid().getGridCells(1);
+        return unitsGrid.getGridCells(1);
     }
 
     public WebElement unitChangeButton(WebElement unit) {
-        return getResUnitsGrid().getGridCell(unit, 7).findElement(By.xpath(".//button//*[name()=\"use\" and contains(@*,\"icon-change-unit\")]/.."));
+        return unitsGrid.getGridCell(unit, 7).findElement(By.xpath(".//button//*[name()=\"use\" and contains(@*,\"icon-change-unit\")]/.."));
     }
 /////end units ///////
 

@@ -6,6 +6,7 @@ import alia.nazeel.templates.BasePage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
 
 
@@ -18,7 +19,8 @@ public class P03_6_EndReservationPopUp extends BasePage {
 
     @FindBy(xpath = "//ul[@role=\"listbox\"]")
     public WebElement genralListBox;
-    final String baseXpath = "//checkout-wizard//kendo-dialog";
+    final String checkOutWizardPath = "//checkout-wizard//kendo-dialog";
+    final String cancelWizardPath = "//cancel-noshow-wizard//kendo-dialog";
 
     @FindBy(xpath = "//div[@role=\"dialog\"]")
     WebElement endReservationPopup;
@@ -38,17 +40,21 @@ public class P03_6_EndReservationPopUp extends BasePage {
         return endReservationPopup.findElement(By.xpath(".//input[@id=\"amount\"]"));
     }
 
-    @FindBy(xpath = baseXpath + "//label[contains(text(),\"Payment\")]/following-sibling::kendo-combobox")
+    @FindBy(xpath = checkOutWizardPath + "//label[contains(text(),\"Payment\")]/following-sibling::kendo-combobox")
     public KendoComboBox paymentMethodComboBoc;
 
-    @FindBy(xpath = baseXpath+"//button[contains(@class,\"button--primary ng-star-inserted\")]")
+    @FindAll({@FindBy(xpath = checkOutWizardPath + "//button[contains(@class,\"button--primary ng-star-inserted\")]"),
+            @FindBy(xpath = cancelWizardPath + "//button[contains(@class,\"button--primary ng-star-inserted\")]")})
     public WebElement confirmationButton;
-    @FindBy(xpath = baseXpath+"//div[contains(@class,\"skip\")]")
+    @FindAll({@FindBy(xpath = checkOutWizardPath + "//div[contains(@class,\"skip\")]"),
+            @FindBy(xpath = cancelWizardPath + "//div[contains(@class,\"skip\")]")})
     public List<WebElement> skipButton;
-    @FindBy(xpath = baseXpath+"//button[contains(@class,\"n-button--danger\")]")
+    @FindBy(xpath = "//app-cancel-reservation-warning-popup//button[contains(@class,\"n-button--danger\")]")
     public WebElement confirmCancelButton;
 
-    @FindBy(xpath = baseXpath+"//label[contains(text(),\"reason\")]/following-sibling::kendo-combobox")
+    @FindAll({@FindBy(xpath = checkOutWizardPath + "//label[contains(text(),\"reason\")]/following-sibling::kendo-combobox"),
+            @FindBy(xpath = cancelWizardPath + "//label[contains(text(),\"reason\")]/following-sibling::kendo-combobox")
+    })
     public KendoComboBox reasons;
 
 

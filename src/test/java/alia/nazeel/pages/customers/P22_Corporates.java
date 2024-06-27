@@ -88,7 +88,7 @@ public class P22_Corporates extends BasePage {
 
     //// corporate Details ///
 
-    @FindBy(xpath = "//label[contains(text(),\"Corporate Name \")]/following-sibling::div//input")
+    @FindBy(xpath = "//input[@placeholder=\"Type corporate name\"]")
     public MultiLangTextField corpoateNameField;
 
     @FindBy(id = "postalCode")

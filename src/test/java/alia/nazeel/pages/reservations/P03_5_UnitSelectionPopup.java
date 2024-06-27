@@ -50,7 +50,8 @@ public class P03_5_UnitSelectionPopup extends BasePage
 
     public WebElement availableUnits() {
         this.driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(1));
-        WebElement availableCards = unitCards.stream().filter(card -> card.findElements(By.xpath(".//div[contains(@class,\"card__comments-flag\")]//*[name()='use' and contains(@*,\"lock\")]")).isEmpty()).findFirst().orElseThrow();
+       List <WebElement> vacantCards =unitCards.stream().filter(card->!card.findElements(By.xpath(".//div[@class=\"unit-card__icon unit-card__icon--vacant\"]")).isEmpty()).toList();
+        WebElement availableCards = vacantCards.stream().filter(card -> card.findElements(By.xpath(".//div[contains(@class,\"card__comments-flag\")]//*[name()='use' and contains(@*,\"lock\")]")).isEmpty()).findFirst().orElseThrow();
         this.driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
         return availableCards;
     }

@@ -17,7 +17,7 @@ public class P03_2_ReservationFinancialPage extends BasePage
 
     @FindBy(xpath = "//h2")
     WebElement reservationNumberHeader;
-    @FindBy(xpath = "//th/div/button[contains(@class,\"arrow\")]")
+    @FindBy(xpath = "//receipt-vouchers//button[contains(@class,\"arrow\")]")
     WebElement moreAddOptionsButton;
     @FindBy(xpath = "//button[contains(text(),\"Add\")]")
     public WebElement addVoucherButton;

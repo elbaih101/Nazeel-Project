@@ -149,8 +149,8 @@ public class P38_Outlets extends BasePage
     public WebElement genralDisocuntButton;
     @FindBy(id = "complimentary")
     public WebElement complimentaryCheckBox;
-    @FindBy(xpath = "//button[contains(text(),\"Walk-In order\")]")
-    public WebElement walkinOrderButton;
+    @FindBy(xpath = "//div[contains(text(),\" Create Close Order \")]")
+    public WebElement closedOrderButton;
     @FindBy(xpath = "//button[contains(text(),\"Transfer to Res\")]")
     public WebElement transToResButton;
 
