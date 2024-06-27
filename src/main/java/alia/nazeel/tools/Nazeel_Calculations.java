@@ -21,7 +21,7 @@ public class Nazeel_Calculations {
      * @param appliedTaxes   List<Tax>Pojos of applied taxes and its values </>
      * @return double of the tax value applied on the rent amount
      */
-    public static Double reservationRentTaxes(double rentAmount, double discountAmount, String discountType, List<Tax> appliedTaxes,int calcMethod) {
+    public static Double reservationRentTaxes(double rentAmount, double discountAmount, String discountType, List<Tax> appliedTaxes, int calcMethod) {
         double taxValue = 0.0;
         double taxPercentage = 0.0;
 //        Double discountAmount = getDiscountAmount(rentAmount, discountValue, discountType);
@@ -45,9 +45,9 @@ public class Nazeel_Calculations {
             else
                 taxValue = ((rentAmount - discountAmount) * taxPercentage) / (1 + taxPercentage);
         } else {
-            if (calcMethod==2)
-                discountAmount=0;
-            taxValue = taxValue + ((rentAmount-discountAmount) * taxPercentage);
+            if (calcMethod == 2)
+                discountAmount = 0;
+            taxValue = taxValue + ((rentAmount - discountAmount) * taxPercentage);
         }
         taxValue = round(taxValue, 4);
         return taxValue;
@@ -90,8 +90,12 @@ public class Nazeel_Calculations {
 
     public static int getTaxCalculationMethod(WebDriver driver, Runnable runnable) {
         API api = new API();
-        JsonObject json = JsonParser.parseString(api.getResponseBody(driver, "api/financial/tax-calculator", runnable)).getAsJsonObject();
-        return json.getAsJsonArray("data").get(0).getAsJsonObject().get("calculation").getAsInt();
+        String responseBody = api.getResponseBody(driver, "api/financial/tax-calculator", runnable);
+        if (!responseBody.equals("null")) {
+            JsonObject json = JsonParser.parseString(responseBody).getAsJsonObject();
+            return json.getAsJsonArray("data").get(0).getAsJsonObject().get("calculation").getAsInt();
+        } else
+            return 0;
     }
 
 

@@ -5,8 +5,9 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chromium.ChromiumDriver;
 import org.openqa.selenium.devtools.DevTools;
-import org.openqa.selenium.devtools.v125.network.Network;
+import org.openqa.selenium.devtools.v126.network.Network;
 import org.openqa.selenium.edge.EdgeDriver;
+import org.slf4j.LoggerFactory;
 
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
@@ -87,7 +88,9 @@ public Network.GetResponseBodyResponse await() {
         devTools.disconnectSession();
         devTools.close();
         if (asyncResponse.get() == null) {
-            throw new RuntimeException("no body found");
+
+            LoggerFactory.getLogger(this.getClass()).error("no body found");
+            return "null";
         }
         return asyncResponse.get().getBody();
 
