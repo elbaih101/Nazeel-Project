@@ -37,17 +37,17 @@ public class CustomWebDriverWait extends WebDriverWait
 
     public void waitLoading() {
         String loadingBarXpath="//ngx-loading-bar/*";
-        String loadingPageXpath="//app-loading-page/*";
+        String loadingPageXpath="//app-loading-page//div[@class=\"page-loading\"]";
         WebDriver driver =DriverManager.getDriver();
         try {
            driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(1));
             // Wait until the loading animation disappears or becomes stale
             this.withTimeout(Duration.ofSeconds(20))
                     .ignoring(NoSuchElementException.class, StaleElementReferenceException.class)
-                    .until(ExpectedConditions.invisibilityOf( driver.findElement(By.xpath(loadingBarXpath))));
+                    .until(ExpectedConditions.invisibilityOfAllElements( driver.findElements(By.xpath(loadingBarXpath+" | "+loadingPageXpath))));
         } catch (NoSuchElementException e) {
             // Handle any exceptions or logging here
-            logger.error("the loading page might not be found ");
+            logger.error( "the loading page might not be found "+e.getMessage());
         }
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
     }

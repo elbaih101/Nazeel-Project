@@ -1,7 +1,9 @@
 package alia.nazeel.templates;
 
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.FindBys;
 import org.openqa.selenium.support.pagefactory.DefaultFieldDecorator;
 import org.openqa.selenium.support.pagefactory.ElementLocator;
 import org.openqa.selenium.support.pagefactory.ElementLocatorFactory;
@@ -54,7 +56,7 @@ public class CustomFieldDecorator extends DefaultFieldDecorator {
      */
     @Override
     public Object decorate(ClassLoader loader, Field field) {
-        if (field.isAnnotationPresent(FindBy.class)) {
+        if (field.isAnnotationPresent(FindBy.class)||field.isAnnotationPresent(FindBys.class)||field.isAnnotationPresent(FindAll.class)) {
             ElementLocator locator = factory.createLocator(field);
 
             if (locator == null) {
