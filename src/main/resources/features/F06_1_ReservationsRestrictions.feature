@@ -18,7 +18,7 @@ Feature:restrictions on reservations
       When Click on Add new Reservation
       And fill "single" Reservation Data with Source "RANDOM" purpose "RANDOM" Unit "RANDOM" Guest "RANDOM" startDate "02/01/2030" endDate "03/01/2030"
       And Save reservation as "CheckedIn"
-      Then Check the failedPopUp with msg "'Save resevation failed\n-\nYou do not have the privilege to add or modify future reservations"
+      Then Check the failedPopUp with msg "'Save resevation failed\\n-\\nYou do not have the privilege to add or modify future reservations"
 
     Scenario Outline: change check in and out times privilages
       Given open a reservation of state "<resState>"

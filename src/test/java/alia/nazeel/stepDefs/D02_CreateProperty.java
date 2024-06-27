@@ -51,6 +51,7 @@ public class D02_CreateProperty {
 
     @Given("Logging in with superuser")
     public void loggingInWithSuperuser() {
+        wait.waitLoading();
         Hooks.superUserLogin(driver, "baih", "Aa@123456");
     }
 

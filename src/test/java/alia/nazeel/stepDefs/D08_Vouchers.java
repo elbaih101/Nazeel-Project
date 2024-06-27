@@ -319,12 +319,12 @@ public class D08_Vouchers {
 
     @Given("create all vouchers Types")
     public void createVouchers() {
-        successfullyCreateAVoucherOfTypeAmountPaymentMethodMaturityDate("promissory", "200", "Cash", "15/12/2025", "", "guest");
-        successfullyCreateAVoucherOfTypeAmountPaymentMethodMaturityDate("Receipt", "200", "Cash", "", "", "guest");
-        successfullyCreateAVoucherOfTypeAmountPaymentMethodMaturityDate("SD", "200", "Cash", "", "", "guest");
+        successfullyCreateAVoucherOfTypeAmountPaymentMethodMaturityDate("promissory", "50", "Cash", "15/12/2025", "", "guest");
+        successfullyCreateAVoucherOfTypeAmountPaymentMethodMaturityDate("Receipt", "50", "Cash", "", "", "guest");
+        successfullyCreateAVoucherOfTypeAmountPaymentMethodMaturityDate("SD", "50", "Cash", "", "", "guest");
         openRefundVouchersTab();
-        successfullyCreateAVoucherOfTypeAmountPaymentMethodMaturityDate("Refund", "200", "Cash", "", "", "guest");
-        successfullyCreateAVoucherOfTypeAmountPaymentMethodMaturityDate("SDRefund", "200", "Cash", "", "", "guest");
+        successfullyCreateAVoucherOfTypeAmountPaymentMethodMaturityDate("Refund", "50", "Cash", "", "", "guest");
+        successfullyCreateAVoucherOfTypeAmountPaymentMethodMaturityDate("SDRefund", "50", "Cash", "", "", "guest");
 
     }
 
@@ -501,14 +501,13 @@ public class D08_Vouchers {
         if (!toDate.equalsIgnoreCase("dropdate")) {
             Utils.setDate(cashDrawerPage.dateTo(), toDate);
         } else {
-            Utils.setDate(cashDrawerPage.dateTo(), toDate);
+            Utils.setDate(cashDrawerPage.dateTo(), dropCashDate);
         }
-        cashDrawerPage.timeTo().clear();
-
         Utils.setTime(cashDrawerPage.timeTo(), dropCashTime);
         JsonDataTools.writeValueToJsonFile("src/main/resources/testdata/VouchersRelatedData.json", "dropCashTime", newDateTime.toString(timeFormatter));
         JsonDataTools.writeValueToJsonFile("src/main/resources/testdata/VouchersRelatedData.json", "dropCashDate", newDateTime.toString(dateFormmater));
         cashDrawerPage.checkButton().click();
+        wait.waitLoading();
         cashDrawerPage.customAmountRadioButton().click();
         cashDrawerPage.customAmountField().clear();
         cashDrawerPage.customAmountField().sendKeys("1");

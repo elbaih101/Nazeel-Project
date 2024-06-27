@@ -65,7 +65,7 @@ public class D06_DigitalPayment {
 //                wait.waitLoading();
 //                dashBoardPage.vouchersDropList.click();
 //            }
-           js.executeScript("arguments[0].click();",dashBoardPage.receiptsLink);
+            js.executeScript("arguments[0].click();", dashBoardPage.receiptsLink);
 //            dashBoardPage.receiptsLink.click();
         } else if (vType.equalsIgnoreCase("payment") || vType.equalsIgnoreCase(Vouchers.Refund.toString()) || vType.equalsIgnoreCase(Vouchers.SDRefund.toString()) || vType.equalsIgnoreCase(Vouchers.Expenses.toString())) {
             dashBoardPage.dashBoardLink.click();
@@ -101,7 +101,7 @@ public class D06_DigitalPayment {
             digitalPaymentPage.securityDepositTab().click();
         } else
             digitalPaymentPage.generateLinkTab().click();
-
+        p032ReservationFinancialPage.digialPaymentButton().click();
         List<WebElement> collectViaList = digitalPaymentPage.collectViaList();
         WebElement selectedService;
         if (service.equalsIgnoreCase("RANDOM")) {
@@ -166,7 +166,7 @@ public class D06_DigitalPayment {
         try {
 
             guestSelectionPopUp.confirmButton().click();
-        }catch (ElementClickInterceptedException e){
+        } catch (ElementClickInterceptedException e) {
             if (!e.getMessage().contains("kendo-dialog-actions class=\"k-dialog-buttongroup")) {
                 e.printStackTrace();
             }
@@ -406,7 +406,8 @@ public class D06_DigitalPayment {
         clickGenerateAndCheckToastMessage("Saved Successfully");
         checkTheLinkIsGeneratedInTheLinkField();
     }
-//FixME : this statuc variable may casue issues pay attenttion
+
+    //FixME : this statuc variable may casue issues pay attenttion
     public static String promissoryNo;
 
 

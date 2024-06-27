@@ -106,7 +106,7 @@ public class D14_4_Orders {
     @And("submiting the order as {string} for a {string} issue date {string}")
     public void submitingTheOrderAsForA(String orderType, String owner, String issueDate) {
         if (orderType.toLowerCase().contains("walk")) {
-            outlets.walkinOrderButton.click();
+            outlets.closedOrderButton.click();
             wait.waitLoading();
             if (owner.equalsIgnoreCase("corporate")) {
                 outlets.selctCorporateButton.click();

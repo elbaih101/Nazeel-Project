@@ -37,7 +37,7 @@ Feature: Vouchers
       Then Check all Created Vouchers edit mode and edit payment method to "mada" and check msg "Updated Successfully"
 
     Scenario: Check edit mode for payed digital vouchers on a reservation
-      Given create PayTabs link for receipt Voucher with "ReceiptVoucher" and generate link with "PayTabs" amount 200 and purpose ""
+      Given create PayTabs link for receipt Voucher with "ReceiptVoucher" and generate link with "PayTabs" amount 50 and purpose ""
       And open the link and pay it successfully
       And Close the open popup
       Then Check "GenReceipt" Voucher with state "Generated" edit mode

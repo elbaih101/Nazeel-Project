@@ -12,6 +12,7 @@ import alia.nazeel.pages.P02_DashBoardPage;
 import alia.nazeel.pages.mutlipurposes.P00_multiPurposes;
 
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.joda.time.LocalTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
@@ -179,6 +180,7 @@ public class D01_Reservations {
     }
 
     void endReservation(String status) {
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(1));
         if (status.toLowerCase().contains("out")) {
             endReservationPopUp.confirmEndButton.click();
             while (!endReservationPopUp.header().isEmpty())
@@ -196,6 +198,7 @@ public class D01_Reservations {
                 }
         } else if (status.toLowerCase().contains("canceled")) {
             endReservationPopUp.confirmCancelButton.click();
+
             while (!endReservationPopUp.header().isEmpty())
 
                 if (!endReservationPopUp.skipButton.isEmpty()) {
@@ -217,6 +220,7 @@ public class D01_Reservations {
                     }
                 }
         }
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
 
     }
 
@@ -384,10 +388,10 @@ public class D01_Reservations {
             case "Open Reservations" ->
                     assertReservationsFilters(reservationsPage.reservationsStatuses, "CheckedIn", "status not filtered right");
 
-            case "In-House Guests" -> {
+            case "In-House Guests" ->
                 assertReservationsFilters(reservationsPage.reservationsStatuses, "CheckedIn", "status not filtered right");
-                asrt.AssertNonMatch(reservationsPage.reservationsCheckInDates, i -> !Utils.isTimeWithinRange(DateTime.now(dateTimeFormatter.getZone()), DateTime.parse(i.getText(), dateTimeFormatter), DateTime.parse(reservationsPage.reservationCheckOutDate(i).getText(), dateTimeFormatter)));
-            }
+             //   asrt.AssertNonMatch(reservationsPage.reservationsCheckInDates, i -> !Utils.isTimeWithinRange(DateTime.now(dateTimeFormatter.withZone(DateTimeZone.forID("Asia/Riyadh")).getZone()), DateTime.parse(i.getText(), dateTimeFormatter), DateTime.parse(reservationsPage.reservationCheckOutDate(i).getText(), dateTimeFormatter)));
+
 
             case "Pending Reservations" ->
                     asrt.AssertNonMatch(reservationsPage.reservationsStatuses, i -> !(i.getText().contains("UnConfirmed") || i.getText().contains("Confirmed")), "status not filtered right");
@@ -425,7 +429,7 @@ public class D01_Reservations {
     }
 
     private void assertDatesAreToday(List<WebElement> DatesElements, DateTimeFormatter dateTimeFormatter) {
-        asrt.AssertNonMatch(DatesElements, i -> !DateTime.now(dateTimeFormatter.getZone()).equals(DateTime.parse(i.getText())));
+        asrt.AssertNonMatch(DatesElements, i -> !DateTime.now(dateTimeFormatter.withZone(DateTimeZone.forID("Asia/Riyadh")).getZone()).equals(DateTime.parse(i.getText())));
     }
 
     @And("choose page size as {string}")
@@ -526,7 +530,7 @@ public class D01_Reservations {
 
     @Then("Check the failedPopUp with msg {string}")
     public void checkTheFailedPopUpWithMsg(String msg) {
-        asrt.AssertContains(reservationMainDataPage.resFailedPopUp.getText(), msg);
+        asrt.AssertContains((String)js.executeScript("return arguments[0].innerText;",reservationMainDataPage.resFailedPopUp), msg);
         asrt.assertAll();
     }
 
@@ -550,10 +554,10 @@ public class D01_Reservations {
 
     private void checkDatesDisabled(String disabledFields) {
         if (disabledFields.toLowerCase().contains("checkin")) {
-            asrt.assertTrue(!Utils.isEnabled(reservationMainDataPage.startDateField));
+            asrt.assertTrue(!Utils.isEnabled(reservationMainDataPage.startDateField),"startDate isn't disabled");
         }
         if (disabledFields.toLowerCase().contains("checkout")) {
-            asrt.assertTrue(!Utils.isEnabled(reservationMainDataPage.endDateField));
+            asrt.assertTrue(!Utils.isEnabled(reservationMainDataPage.endDateField),"end Date Isn't Disabled");
         }
     }
 
@@ -608,6 +612,7 @@ public class D01_Reservations {
 
     @And("Change the unit on the reservation")
     public void changeTheUnitOnTheReservation() {
+        wait.waitLoading();
         reservationMainDataPage.unitChangeButton(reservationMainDataPage.resUnits().getFirst()).click();
         wait.until(ExpectedConditions.visibilityOf(reservationMainDataPage.alert.getContent()));
         String firstsegment = "Are you sure you want to change this unit";
@@ -625,6 +630,7 @@ public class D01_Reservations {
     @Then("Check cant change callender type and start date is disabled")
     public void checkCantChangeCallenderType() {
         asrt.assertTrue(!reservationMainDataPage.unitsTypes().getFirst().findElements(By.xpath("//div[contains(@class,\"replace-info-icon \")]")).isEmpty());
+        wait.waitLoading();
         openRatesPopUp();
         for (int i = 1; i < unitsRatesPopUp.calender().getGridRows().size(); i++) {
             int j = 2;

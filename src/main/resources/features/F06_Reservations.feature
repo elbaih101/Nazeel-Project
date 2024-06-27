@@ -25,6 +25,7 @@ Feature: Making Reservation with Nazeel PMS (web application)
     Scenario: single Checked in Reservation
       Given  Create "single" "confirmed" Reservation withSource "RANDOM" purpose "RANDOM" Unit "RANDOM" Guest "RANDOM" startDate "" endDate ""
       And Choose Reservation Status as "Checked-In"
+            #Fixme  org.openqa.selenium.StaleElementReferenceException: stale element reference: stale element not found in the current frame
       And verify toast message appears with text "Saved Successfully" and the reservation status to be "Checked In"
 
     Scenario: Check out a reservation

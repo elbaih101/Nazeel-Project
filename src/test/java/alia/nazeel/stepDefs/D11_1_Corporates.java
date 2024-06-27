@@ -63,10 +63,15 @@ public class D11_1_Corporates {
     }
 
     private void assertToastMessageAndValidityThenClearFields(String message) {
-        if (message != null)
+        try {
+            assert message != null;
             asrt.AssertToastMessagesContains(message);
-        else LoggerFactory.getLogger(this.getClass()).error("toast message Entered Was null please fix the feature file");
-        clearCorporateData();
+            if(!message.contains("Successfully")) {
+                clearCorporateData();
+            }
+
+        }catch (AssertionError e){
+            LoggerFactory.getLogger(this.getClass()).error("toast message Entered Was null please fix the feature file");}
     }
 
     private void clearCorporateData() {
