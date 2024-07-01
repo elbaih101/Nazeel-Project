@@ -61,12 +61,12 @@ public class P00_2_GuestSelectionPopUp extends BasePage
     public WebElement confirmButton() {
         return guestFormDialogContainer.findElement(By.xpath(".//button[contains(text(),\"Confirm\")]"));
     }
+    public WebElement newGuestButton() {
+        return guestFormDialogContainer.findElement(By.xpath(".//button[contains(@class,\"n-button--green\")]"));
+    }
 
     @FindBy(xpath = "//button[contains(text(),\"Ignore Discount\")]")
     public List<WebElement> ignoreDiscountButton;
     @FindBy(xpath = "//button[contains(text(),\"Apply Discount\")]")
     public WebElement applyDiscountButton;
-
-
-
 }

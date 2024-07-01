@@ -31,7 +31,6 @@ Feature: Unit Setup
 #    Scenario: add new unit type
 #      When add anew unit type with name "zeka"
 #      Then Check the type "zeka" is visible in the grid
-  # TODO :: add full cycle to create unit from created type
 
   Scenario: edit type  status
     Given click on edit button for type "zeka" and change status to "inactive"

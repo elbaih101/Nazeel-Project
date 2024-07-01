@@ -18,7 +18,6 @@ public class P03_1_ReservationMainDataPage extends BasePage {
     }
 
 
-
     @FindBy(xpath = "//div[contains(text(),\"Financial & Payments\")]")
     public WebElement financialAndPaymentsPage;
     @FindBy(xpath = "//label[contains(text(),\"Reservation type\")]/following-sibling::div/kendo-buttongroup/button")
@@ -39,20 +38,18 @@ public class P03_1_ReservationMainDataPage extends BasePage {
     public WebElement renttotal;
 
 
-    //waitfor that
-    //http://staging.nazeel.net:9002/reservations/wizard/add
-
     @FindBy(xpath = "//label[contains(text(),\"Reservation source \")]//following-sibling::kendo-dropdownlist")
     public KendoDropDownList reservationSourceDropList;
 
 
     @FindBy(xpath = "//label[contains(text(),\"Visit purpose\")]//following-sibling::kendo-dropdownlist")
     public KendoDropDownList visitPurposeDropList;
+    @FindBy(xpath = "//app-guests-step//button[.//span[contains(text(),\"Add quick info for now\")]]")
+    public WebElement quickGuestButton;
 
     @FindBy(xpath = "//span[contains(text(),\"Select guest now\")]/..")
     public WebElement selectGestButton;
     @FindBy(xpath = "//app-guests-step//div[contains(@class,\"primary-link\")]/span")
-
     public WebElement dpendentsButton;
     @FindBy(id = "guestFormDialogContainer")
     public WebElement guestFormDialogContainer;
@@ -109,7 +106,6 @@ public class P03_1_ReservationMainDataPage extends BasePage {
 
     @FindBy(xpath = "//label[contains(text(),\"Unit(s) \")]/../following-sibling::kendo-grid")
     public KendoGrid unitsGrid;
-
 
 
     public List<WebElement> resUnits() {

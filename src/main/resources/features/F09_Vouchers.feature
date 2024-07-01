@@ -4,8 +4,6 @@ Feature: Vouchers
   Background:  login and choose property
     Given Logging in with superuser
     And Select Property "P01406"
-    # TODO NO show Scenario
-
 
   @corporate_vouchers,orders
   Scenario: create SA receipt Voucher for a corporate

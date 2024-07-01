@@ -8,6 +8,7 @@ import alia.nazeel.templates.BasePage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
 
 
@@ -122,7 +123,7 @@ public class P35_Guests extends BasePage {
     public WebElement middleNameField;
     @FindBy(xpath = "//input[@placeholder=\"Type last name\"]")
     public WebElement lastNameField;
-    @FindBy(xpath = "//label[contains(text(),\"Gregorian\")]/following-sibling::kendo-datepicker//input")
+    @FindBy(xpath = "//label[contains(text(),\"Gregorian\")]/following-sibling::kendo-datepicker")
     public KendoDateTimePicker dateOfBirth;
 
 
@@ -159,7 +160,7 @@ public class P35_Guests extends BasePage {
     @FindBy(id = "address")
     public WebElement addressField;
 
-    @FindBy(xpath = "//guest-form//button[@type=\"submit\"]")
+    @FindAll({@FindBy(xpath = "//guest-form//button[@type=\"submit\"]"),@FindBy(xpath = "//guest-details//button[@type=\"submit\"]")})
     public WebElement submitButton;
     @FindBy(xpath = "//guest-form//button[contains(@class,\"n-button--danger\") and contains(text(),\"Confirm\")]")
     public WebElement confirmDeleteButton;

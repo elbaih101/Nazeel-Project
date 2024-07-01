@@ -397,4 +397,8 @@ public class D11_3_Guets {
         asrt.assertAll();
     }
 
+    @And("open guest selection popup")
+    public void openGuestSelectionPopup() {
+       new D01_Reservations().clickOnSelectguestNowButton();
+    }
 }

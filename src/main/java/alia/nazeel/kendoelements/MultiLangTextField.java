@@ -64,7 +64,6 @@ public class MultiLangTextField extends CustomWebElement {
         clicktheMultiTextButton();
     }
 
-    //Todo
     public String getFirstLangText() {
         return firstLangText = multiLangTextField.getAttribute("value");
     }
